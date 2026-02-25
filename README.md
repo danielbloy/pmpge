@@ -35,10 +35,13 @@ to take a look.
 
 ## Project structure
 
-The structure of the project is arranged in the following files (listed in
+The structure of the `pgzge`project is arranged in the following files (listed in
 order of importance):
 
 * core - required for every `pgzge` project as it provides the `Game` and `GameObject` classes.
+
+Some sample games written using the `pgzge` framework can be found in `games` and examples
+demonstrating how to use the framework can be found in `examples`.
 
 ## Setting up a Development Environment
 

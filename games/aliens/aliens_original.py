@@ -1,5 +1,3 @@
-# This version of aliens is a close to the original source material as possible.
-# Original source material: https://codeclubadventures.co.uk/python/pygame/aliens/
 import os
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'

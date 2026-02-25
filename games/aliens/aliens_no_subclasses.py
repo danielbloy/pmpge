@@ -1,6 +1,3 @@
-# This version of aliens has been modified to demonstrate additional techniques,
-# particularly how to create different types of Sprite without using subclasses.
-# Original source material: https://codeclubadventures.co.uk/python/pygame/aliens/
 import os
 from typing import Any
 
@@ -28,6 +25,7 @@ WHITE = (255, 255, 255)
 CYAN = (0, 255, 255)
 YELLOW = (255, 255, 0)
 
+# Step 2: Adding the starfield
 STARS_MIN_SPEED = 75
 STARS_MAX_SPEED = 150
 STARS_TOTAL = 200
@@ -85,6 +83,7 @@ def create_starfield(n) -> GameObject:
         activate_handler=activate,
         draw_handler=draw,
         update_handler=update)
+
     pgzge.add_child(game_object)
     return game_object
 
@@ -103,7 +102,7 @@ def create_title_screen() -> GameObject:
         obj.draw_press_space = True
         obj.press_space_transition = time.time() + 0.5
 
-    def draw(obj, surface):
+    def draw(obj, surface: Any):
         screen.draw.text("HIGH SCORE",  # NOTE: Code modified to use screen directly.
                          midtop=(WIDTH / 2, 0),
                          color=RED,
@@ -153,11 +152,94 @@ def create_title_screen() -> GameObject:
         activate_handler=activate,
         draw_handler=draw,
         update_handler=update)
+
     pgzge.add_child(game_object)
     return game_object
 
 
 title_screen = create_title_screen()
+
+# Step 4: Add a game HUD
+LOWER_BORDER_HEIGHT = 40
+UPPER_BORDER_HEIGHT = 50
+LOWER_BORDER_START = HEIGHT - LOWER_BORDER_HEIGHT
+
+
+def create_game_hud() -> GameObject:
+    def activate(obj):
+        obj.draw_one_up = True
+        obj.one_up_transition = time.time() + 0.5
+        obj.show_stage = True
+        obj.show_stage_left = 2.0
+
+    def draw(obj, surface: Any):
+        screen.draw.text("HIGH SCORE",  # NOTE: Code modified to use screen directly.
+                         midtop=(WIDTH / 2, 0),
+                         color=RED,
+                         fontsize=36)
+        screen.draw.text(f"{high_score}",  # NOTE: Code modified to use screen directly.
+                         midtop=(WIDTH / 2, 30),
+                         color=WHITE,
+                         fontsize=36)
+
+        if obj.draw_one_up:
+            screen.draw.text("1UP",  # NOTE: Code modified to use screen directly.
+                             topleft=(20, 0),
+                             color=RED,
+                             fontsize=36)
+
+        screen.draw.text(f"{score}",  # NOTE: Code modified to use screen directly.
+                         topleft=(20, 30),
+                         color=WHITE,
+                         fontsize=36)
+
+        if obj.show_stage:
+            screen.draw.text(f"STAGE {stage}",  # NOTE: Code modified to use screen directly.
+                             midtop=(WIDTH / 2, 300),
+                             color=CYAN,
+                             fontsize=36)
+
+        for i in range(lives):
+            screen.blit('player', (5 + (37 * i), LOWER_BORDER_START + 4))
+
+        for i in range(stage):
+            screen.blit('stage_marker',
+                        ((WIDTH - 5) - (16 * (i + 1)), LOWER_BORDER_START + 4))
+
+    def update(obj, dt):
+        obj.show_stage_left -= dt
+        obj.show_stage = obj.show_stage_left > 0
+
+        now = time.time()
+        if obj.one_up_transition < now:
+            obj.one_up_transition = now + 0.5
+            obj.draw_one_up = not obj.draw_one_up
+
+    game_object = GameObject(
+        active=False,  # NOTE: Code modified to explicitly set active to False.
+        activate_handler=activate,
+        draw_handler=draw,
+        update_handler=update)
+
+    pgzge.add_child(game_object)
+    return game_object
+
+
+game_hud = create_game_hud()
+
+
+def new_game(dt):
+    global score, lives, stage
+    if title_screen.active and keyboard.space:
+        score = 0
+        lives = 3
+        stage = 1
+
+        title_screen.active = False
+        game_hud.active = True
+
+
+pgzge.add_update_func(new_game)  # NOTE: modified from `update_funcs.append(new_game)`.
 
 
 def draw():

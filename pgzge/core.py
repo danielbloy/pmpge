@@ -4,12 +4,13 @@ from typing import Self, Any
 
 class GameObject:
     """
-    GameObject is the base class for all objects in the game. It provides a simple parent/child structure
-    for updating and drawing GameObjects as well as a simple way to manage active and visible states.
+    GameObject is the base class for all objects in the game. It provides a simple parent/child
+    structure for updating and drawing GameObjects as well as a simple way to manage active and
+    visible states.
 
     A GameObject has the following properties:
-        * name: The name of this object. Used when locating an object by name. Must not contain the `/`
-                or `.` characters.
+        * name: The name of this object. Used when locating an object by name. Must not contain the
+                `/` or `.` characters.
         * active: This has to be True for the GameObject to be updated or drawn (visible and
                   enabled also need to be True). The value of active is propagated to all children.
                   Changing active will also trigger the corresponding handlers.
@@ -25,23 +26,28 @@ class GameObject:
                   multiple parents.
         * children: A list of child GameObjects. These will be updated and drawn only if this
                     GameObject is active.
-        * draw_handlers: Draw handlers are called during `draw_hierarchy()` if the GameObject is active and visible.
-        * update_handlers: Update handlers are called during `update_hierarchy()` if the GameObject is active and enabled.
+        * draw_handlers: Draw handlers are called during `draw_hierarchy()` if the GameObject is
+          active and visible.
+        * update_handlers: Update handlers are called during `update_hierarchy()` if the GameObject
+          is active and enabled.
         * activate_handlers = Activate handlers are called when active changes from False to True.
-        * deactivate_handlers = Deactivate handlers are called when active changes from True to False.
-        * destroy_handlers = Destroy handlers are called when `destroy()` is called on the GameObject.
+        * deactivate_handlers = Deactivate handlers are called when active changes from True to
+          False.
+        * destroy_handlers = Destroy handlers are called when `destroy()` is called on the
+          GameObject.
 
-        The `update_hierarchy()` and `draw_hierarchy()` methods propagate down the hierarchy if active is
-        True and regardless of visible and active which only apply to this GameObject instance.
-        i.e. a child can be enabled and visible even if the parent is not.
+        The `update_hierarchy()` and `draw_hierarchy()` methods propagate down the hierarchy if
+        active is True and regardless of visible and active which only apply to this GameObject
+        instance, i.e. a child can be enabled and visible even if the parent is not.
 
-        Destroy, activate and deactivate are propagated to all children irrespective of whether active is
-        True or False. All handlers are called before passing to the children except for destroy which
+        Destroy, activate and deactivate are propagated to all children irrespective of whether
+        active is True or False. All handlers are called before passing to the children except for
         propagates to the children first. In the case of draw, update, activate and deactivate, the
-        `draw()`, `update()`, `activate()` and `deactivate()` methods are called before any handlers.
+        `draw()`, `update()`, `activate()` and `deactivate()` methods are called before any
+        handlers.
 
-        The handlers can be used to provide instance specific behaviour without having to make a subclass
-        and override the relevant method.
+        The handlers can be used to provide instance specific behaviour without having to make a
+        subclass and override the relevant method.
     """
 
     def __init__(self,
@@ -61,9 +67,10 @@ class GameObject:
                  deactivate_handlers: list[Callable[[Self], None]] = None,
                  destroy_handlers: list[Callable[[Self], None]] = None):
         """
-        Initialises a GameObjects properties with the provided arguments. All arguments are optional and
-        have a corresponding property. The only point of note is that the active property is set twice to
-        force on of the activate() or deactivate() methods and corresponding events handlers to be called.
+        Initialises a GameObjects properties with the provided arguments. All arguments are optional
+        and have a corresponding property. The only point of note is that the active property is set
+        twice to force on of the activate() or deactivate() methods and corresponding events
+        handlers to be called.
 
         """
         self.__parent: Self | None = None
@@ -94,8 +101,8 @@ class GameObject:
     @property
     def name(self) -> bool | None:
         """
-        The name of this GameObject or None if the GameObject has no name. It should not contain the `/` or
-        `.`` characters. It is used when locating an object by name.
+        The name of this GameObject or None if the GameObject has no name. It should not contain the
+        `/` or `.`` characters. It is used when locating an object by name.
 
         :return: The name of this GameObject or None if the GameObject has no name.
         """
@@ -111,9 +118,9 @@ class GameObject:
     @active.setter
     def active(self, value: bool) -> None:
         """
-        Setting active to True or False will activate or deactivate the object (only if the new active state
-        is different to the current active state). The active value is propagated to all children. In the
-        case where this object is `destroyed` then no action is taken.
+        Setting active to True or False will activate or deactivate the object (only if the new
+        active state is different to the current active state). The active value is propagated to
+        all children. In the case where this object is `destroyed` then no action is taken.
         """
         # Cannot activate a destroyed GameObject.
         if self.__destroyed:
@@ -139,39 +146,41 @@ class GameObject:
 
     def activated(self) -> None:
         """
-        This is called when the GameObject is activated. It provides an easy way for subclasses to provide
-        activation code without using handlers.
+        This is called when the GameObject is activated. It provides an easy way for subclasses to
+        provide activation code without using handlers.
         """
         pass
 
     def deactivated(self) -> None:
         """
-        This is called when the GameObject is deactivated. It provides an easy way for subclasses to provide
-        deactivation code without using handlers.
+        This is called when the GameObject is deactivated. It provides an easy way for subclasses to
+        provide deactivation code without using handlers.
         """
         pass
 
     def activate(self) -> Self:
         """
-        Activates the GameObject. This will trigger the activate handlers and propagate the active state to
-        all children. This is a shorthand version of `self.active = True` but also returns the GameObject.
+        Activates the GameObject. This will trigger the activate handlers and propagate the active
+        state to all children. This is a shorthand version of `self.active = True` but also returns
+        the GameObject.
         """
         self.active = True
         return self
 
     def deactivate(self) -> Self:
         """
-        Deactivates the GameObject. This will trigger the deactivate handlers and propagate the active state to
-        all children. This is a shorthand version of `self.active = False` but also returns the GameObject.
+        Deactivates the GameObject. This will trigger the deactivate handlers and propagate the
+        active state to all children. This is a shorthand version of `self.active = False` but also
+        returns the GameObject.
         """
         self.active = False
         return self
 
     def reset(self) -> Self:
         """
-        Convenience method to toggle the active state of the GameObject to trigger the corresponding handlers.
-        If the GameObject is active, it will be deactivated and then activated again. If the GameObject is
-        deactivated, it will be activated and then deactivated again.
+        Convenience method to toggle the active state of the GameObject to trigger the corresponding
+        handlers. If the GameObject is active, it will be deactivated and then activated again. If
+        the GameObject is deactivated, it will be activated and then deactivated again.
         """
         if self.active:
             self.deactivate().activate()
@@ -189,8 +198,8 @@ class GameObject:
 
     def destroy(self) -> None:
         """
-        Destroys the object, propagating to all children before the handlers for this object are triggered.
-        This will deactivate the object prior to destruction.
+        Destroys the object, propagating to all children before the handlers for this object are
+        triggered. This will deactivate the object prior to destruction.
         """
 
         # Propagate the destroy state to all children.
@@ -241,8 +250,9 @@ class GameObject:
 
     def remove_child(self, child: Self) -> Self:
         """
-        Removes a GameObject as a child of this GameObject. If the childs parent is not this GameObject
-         then an error will be raised (an exception to this is if the child has no parent).
+        Removes a GameObject as a child of this GameObject. If the childs parent is not this
+        GameObject then an error will be raised (an exception to this is if the child has no
+        parent).
         """
         # If this child does not have a parent, ignore.
         if not child or not child.__parent:
@@ -259,7 +269,8 @@ class GameObject:
         """
         Draws the GameObject (if `active` and `visible`) and propagates to children (if `active`).
         The surface is passed down through all objects but does not need to be a Pygame surface. It
-        can be any object you like provided it has a `fill()` method that accepts am RGB colour tuple.
+        can be any object you like provided it has a `fill()` method that accepts am RGB colour
+        tuple.
         """
         if not self.active:
             return self
@@ -276,8 +287,9 @@ class GameObject:
 
     def draw(self, surface: Any) -> None:
         """
-        This is called when the GameObject is drawn. It provides an easy way for subclasses to provide
-        draw code without using handlers and without having to remember to call the superclass.
+        This is called when the GameObject is drawn. It provides an easy way for subclasses to
+        provide draw code without using handlers and without having to remember to call the
+        superclass.
         """
         pass
 
@@ -315,8 +327,9 @@ class GameObject:
 
     def update(self, dt: float) -> None:
         """
-        This is called when the GameObject is updated. It provides an easy way for subclasses to provide
-        update code without using handlers and without having to remember to call the superclass.
+        This is called when the GameObject is updated. It provides an easy way for subclasses to
+        provide update code without using handlers and without having to remember to call the
+        superclass.
         """
         pass
 
@@ -373,9 +386,9 @@ class GameObject:
 
 class Game:
     """
-    Game is the root of the GameObject hierarchy. It provides a simple way to manage the root GameObject
-    as well as provide custom draw and update functions that are called before the root GameObject is
-    drawn or updated.
+    Game is the root of the GameObject hierarchy. It provides a simple way to manage the root
+    GameObject as well as provide custom draw and update functions that are called before the root
+    GameObject is drawn or updated.
     """
 
     def __init__(self, background_color: tuple[int, int, int] = (0, 0, 0)):
@@ -428,7 +441,8 @@ class Game:
         then from the root GameObject.
 
         The surface is passed down through all objects but does not need to be a Pygame surface. It
-        can be any object you like provided it has a `fill()` method that accepts am RGB colour tuple.
+        can be any object you like provided it has a `fill()` method that accepts am RGB colour
+        tuple.
         """
         surface.fill(self.background_color)
         for draw_func in self.__draw_funcs:

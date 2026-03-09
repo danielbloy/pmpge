@@ -1,5 +1,8 @@
 import os
 
+from sprites import Sprites, MoveWithKeyboard, StayInBounds, DrawImage, DrawText, \
+    RelativeToParent
+
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
 import pgzrun
@@ -46,7 +49,8 @@ class StarField(GameObject):
 
     def draw(self, surface):
         for star in self.stars:
-            screen.draw.filled_circle((star[0], star[1]), 1, WHITE)  # NOTE: Code modified to use screen directly.
+            screen.draw.filled_circle((star[0], star[1]), 1,
+                                      WHITE)  # NOTE: Code modified to use screen directly.
 
     def update(self, dt):
         # STEP A: Move stars down the screen
@@ -138,7 +142,8 @@ class TitleScreen(GameObject):
                          color=YELLOW,
                          fontsize=36)
 
-        screen.draw.text("INSPIRED BY GALAGA FROM NAMCO LTD.",  # NOTE: Code modified to use screen directly.
+        screen.draw.text("INSPIRED BY GALAGA FROM NAMCO LTD.",
+                         # NOTE: Code modified to use screen directly.
                          midtop=(WIDTH / 2, 650),
                          color=WHITE,
                          fontsize=36)
@@ -234,9 +239,33 @@ def new_game(dt):
 
 pgzge.add_update_func(new_game)  # NOTE: modified from `update_funcs.append(new_game)`.
 
+PLAYER_SHIP_HEIGHT = 32
+PLAYER_SHIP_WIDTH = 32
+PLAYER_SHIP_MAX_LEFT = (PLAYER_SHIP_WIDTH / 2)
+PLAYER_SHIP_MAX_RIGHT = WIDTH - (PLAYER_SHIP_WIDTH / 2)
+PLAYER_SHIP_START_HEIGHT = LOWER_BORDER_START - (PLAYER_SHIP_HEIGHT / 2)
+
+sprites = Sprites()
+
+sprites.kinds.new('player')
+player = sprites.new('player',
+                     WIDTH / 2, PLAYER_SHIP_START_HEIGHT,
+                     DrawImage('player'))
+
+player.merge(MoveWithKeyboard(200, 0, keyboard))
+player.merge(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, HEIGHT))
+game_hud.add_child(player)
+
+player.add_child(
+    sprites.new(
+        'position', 0, 0,
+        RelativeToParent(16, 16),
+        DrawText(lambda obj: f"{(int(obj.x), int(obj.y))}"))
+)
+
 
 def draw():
-    pgzge.draw(screen.surface)
+    pgzge.draw(screen)
 
 
 def update(dt):

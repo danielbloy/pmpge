@@ -1,6 +1,7 @@
 import os
 
-from sprites import Sprites, MoveWithKeyboard, StayInBounds, DrawImage, DrawText, \
+from sprites import Sprites, MoveWithKeyboard, StayInBounds, DrawImage, new_kind, new_sprite, \
+    Motion, DrawText, \
     RelativeToParent
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
@@ -261,7 +262,28 @@ player.add_child(
         'position', 0, 0,
         RelativeToParent(16, 16),
         DrawText(lambda obj: f"{(int(obj.x), int(obj.y))}"))
+).add_child(
+    sprites.new(
+        'lives', 0, 0,
+        RelativeToParent(16, -16),
+        DrawText(f"{lives}"))
 )
+
+player.image = 'alien_a_2'
+
+player_kind = new_kind("player_kind")
+
+sprite = new_sprite(player_kind,
+                    WIDTH / 2, PLAYER_SHIP_START_HEIGHT,
+                    DrawImage('alien_a_1'),
+                    Motion(15, -25))
+sprite.add_child(
+    sprites.new(
+        'position', 0, 0,
+        RelativeToParent(16, 16),
+        DrawText(lambda obj: f"{(int(obj.x), int(obj.y))}"))
+)
+pgzge.add_child(sprite)
 
 
 def draw():

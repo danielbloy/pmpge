@@ -1,3 +1,4 @@
+import time
 from collections.abc import Callable
 from typing import Self, Any
 
@@ -5,6 +6,20 @@ from pgzero.keyboard import Keyboard
 from pgzero.loaders import images
 
 from pgzge.core import GameObject
+
+# TODO: Explain the difference between traits and merging.
+# TODO: Strictly speaking the merge does not need to be in sprite and is generic. It could
+#       even go at the GameObject level. However, let's keep it separate from GO to avoid
+#       GO becoming too big and complex. I also can't think of a major case for doing this
+#       at the GO level.
+# TODO: Sprites are all about lifetime, size, position and behaviours
+# TODO: Add size, width, height, topleft, topright etc. properties
+# TODO: Add hitbox for collision detection
+# TODO: Add hit_points for collision detection
+# TODO: Add acceleration and ax, ay properties
+# TODO: Add friction and fx and fy properties?
+# TODO: Add bounding box property
+
 
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
@@ -153,7 +168,7 @@ class Sprites:
         return sprite
 
 
-# TODO: Should all the classes below be postfixed with Mixin?
+# TODO: Should all the classes below be post-fixed with Mixin?
 
 class Position:
     def __init__(self, x, y: float):
@@ -299,3 +314,44 @@ class DrawText:
             background=self.background,
             fontname=self.fontname,
             fontsize=self.fontsize)
+
+
+# TODO: Make this a sprite but with handlers rather than subclassing to remove the boilerplate.
+class ImageSprite:
+    def __init__(self,
+                 images,  # TODO: Type
+
+                 ):
+        self.images = images
+        self.fps = 2
+        self.next_frame = -1
+        self.frame = -1
+
+        self.actor = Actor(images[0], position)
+        self.add_activate_handler(sprite_activation_handler)
+
+        self.add_update_handler(image_sprite_update_handler)
+        self.add_draw_handler(image_sprite_draw_handler)
+
+    def animate(self) -> Self:
+        now = time.time_ns()
+
+        if now > self.next_frame:
+            self.frame = (self.frame + 1) % len(self.images)
+            self.set_animation_frame(self.frame)
+            self.next_frame = now + (1_000_000_000 / self.fps)
+
+        return self
+
+    def set_animation_frame(self, frame):
+        self.actor.image = self.images[frame]
+
+    def sprite_activation_handler(self: GameObject):
+        self.next_frame = -1
+        self.frame = -1
+
+    def image_sprite_draw_handler(self, draw):
+        self.actor.draw()
+
+    def image_sprite_update_handler(self: GameObject, dt: float):
+        self.animate()

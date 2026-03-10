@@ -23,7 +23,7 @@ class GameObject:
         * visible: If this is True and active is also True, the object will be drawn. This is not
                    propagated to children.
         * parent: The parent GameObject. This is None if the GameObject has no parent. A GameObject
-                  can only have one parent and it is an error to add a GameObject as a child to
+                  can only have one parent. It is an error to add a GameObject as a child to
                   multiple parents.
         * children: A list of child GameObjects. These will be updated and drawn only if this
                     GameObject is active.
@@ -47,7 +47,7 @@ class GameObject:
         deactivate, the `draw()`, `update()`, `activate()` and `deactivate()` methods are called
         before any handlers.
 
-        The handlers can be used to provide instance specific behaviour without having to make a
+        The handlers can be used to provide instance-specific behaviour without having to make a
         subclass and override the relevant method.
     """
 

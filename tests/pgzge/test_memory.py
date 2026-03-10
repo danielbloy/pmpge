@@ -1,6 +1,6 @@
 from pympler import asizeof
 
-from core import GameObject
+from pgzge.core import GameObject
 
 
 class TestGameObjectSize:

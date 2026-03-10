@@ -1,6 +1,8 @@
 from core import GameObject
 
 
+# TODO: Add hitbox to sprite for collision detection
+
 class SpriteCollisions(GameObject):
 
     def __init__(self):

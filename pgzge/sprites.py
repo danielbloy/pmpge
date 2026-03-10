@@ -12,12 +12,7 @@ from pgzge.core import GameObject
 #       even go at the GameObject level. However, let's keep it separate from GO to avoid
 #       GO becoming too big and complex. I also can't think of a major case for doing this
 #       at the GO level.
-# TODO: Sprites are all about lifetime, size, position and behaviours
 # TODO: Add size, width, height, topleft, topright etc. properties
-# TODO: Add hitbox for collision detection
-# TODO: Add hit_points for collision detection
-# TODO: Add acceleration and ax, ay properties
-# TODO: Add friction and fx and fy properties?
 # TODO: Add bounding box property
 
 
@@ -134,6 +129,10 @@ class Kinds:
 
 
 class Sprites:
+    """
+    Sprites have position and are made up of mixins to provide additional functionality.
+    """
+
     def __init__(self, kinds: Kinds = Kinds()):
         self.kinds = kinds
         self.sprites: dict[str, list[GameObject]] = {}
@@ -208,7 +207,7 @@ class RelativeToParent:
             self.y = self.offset_y
 
 
-class Motion:
+class Velocity:
     def __init__(self, vx, vy: int):
         self.vx: int = vx
         self.vy: int = vy
@@ -216,6 +215,35 @@ class Motion:
     def update(self, dt: float):
         self.x += dt * self.vx
         self.y += dt * self.vy
+
+
+class Acceleration:
+    def __init__(self, ax, ay: int):
+        self.ax: int = ax
+        self.ay: int = ay
+
+    def update(self, dt: float):
+        self.vx += dt * self.ax
+        self.vy += dt * self.ay
+
+
+class Friction:
+    """
+    Friction is an opposing force against the motion of a sprite. If a sprite has a velocity, then
+    its friction will slow the sprite down until the velocity becomes zero. This is similar to
+    a negative acceleration, but friction stops once the sprite stops.
+    """
+
+    def __init__(self, fx, fy: int):
+        self.fx: int = fx
+        self.fy: int = fy
+
+    def update(self, dt: float):
+        if self.vx > 0:
+            self.vx -= dt * self.fx
+
+        if self.fy > 0:
+            self.vy -= dt * self.fy
 
 
 class MoveWithKeyboard:
@@ -289,6 +317,29 @@ class DrawImage:
         surface.blit(self._surface, (self.x - self._offset_x, self.y - self._offset_y))
 
 
+class DrawAnimatedImage:
+    # TODO: This needs implementing properly
+    def __init__(self, images: list[str]):
+        self.images = images
+        self.fps = 2
+        self.next_frame = -1
+        self.frame = -1
+
+    def activated(self: GameObject):
+        self.next_frame = -1
+        self.frame = -1
+
+    def draw(self, surface: Any):
+        pass
+
+    def update(self, dt: float):
+        now = time.time_ns()
+
+        if now > self.next_frame:
+            self.frame = (self.frame + 1) % len(self.images)
+            self.next_frame = now + (1_000_000_000 / self.fps)
+
+
 class DrawText:
     def __init__(self,
                  text: str | Callable[[GameObject], str],
@@ -314,44 +365,3 @@ class DrawText:
             background=self.background,
             fontname=self.fontname,
             fontsize=self.fontsize)
-
-
-# TODO: Make this a sprite but with handlers rather than subclassing to remove the boilerplate.
-class ImageSprite:
-    def __init__(self,
-                 images,  # TODO: Type
-
-                 ):
-        self.images = images
-        self.fps = 2
-        self.next_frame = -1
-        self.frame = -1
-
-        self.actor = Actor(images[0], position)
-        self.add_activate_handler(sprite_activation_handler)
-
-        self.add_update_handler(image_sprite_update_handler)
-        self.add_draw_handler(image_sprite_draw_handler)
-
-    def animate(self) -> Self:
-        now = time.time_ns()
-
-        if now > self.next_frame:
-            self.frame = (self.frame + 1) % len(self.images)
-            self.set_animation_frame(self.frame)
-            self.next_frame = now + (1_000_000_000 / self.fps)
-
-        return self
-
-    def set_animation_frame(self, frame):
-        self.actor.image = self.images[frame]
-
-    def sprite_activation_handler(self: GameObject):
-        self.next_frame = -1
-        self.frame = -1
-
-    def image_sprite_draw_handler(self, draw):
-        self.actor.draw()
-
-    def image_sprite_update_handler(self: GameObject, dt: float):
-        self.animate()

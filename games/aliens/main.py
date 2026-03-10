@@ -1,7 +1,7 @@
 import os
 
 from sprites import Sprites, MoveWithKeyboard, StayInBounds, DrawImage, new_kind, new_sprite, \
-    Motion, DrawText, \
+    Velocity, DrawText, \
     RelativeToParent
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
@@ -276,7 +276,7 @@ player_kind = new_kind("player_kind")
 sprite = new_sprite(player_kind,
                     WIDTH / 2, PLAYER_SHIP_START_HEIGHT,
                     DrawImage('alien_a_1'),
-                    Motion(15, -25))
+                    Velocity(15, -25))
 sprite.add_child(
     sprites.new(
         'position', 0, 0,

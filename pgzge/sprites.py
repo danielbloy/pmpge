@@ -1,8 +1,6 @@
-# TOOD: This still needs some refinement.
 from collections.abc import Callable
 from typing import Self, Any
 
-# TODO: Try to remove all dependencies on pgzero
 from pgzero.keyboard import Keyboard
 from pgzero.loaders import images
 
@@ -14,6 +12,8 @@ WHITE = (255, 255, 255)
 CYAN = (0, 255, 255)
 YELLOW = (255, 255, 0)
 
+
+# TODO: Sprites still needs some refinement to simplify their use, especially Kinds.
 
 class Sprite(GameObject):
 
@@ -152,6 +152,8 @@ class Sprites:
 
         return sprite
 
+
+# TODO: Should all the classes below be postfixed with Mixin?
 
 class Position:
     def __init__(self, x, y: float):

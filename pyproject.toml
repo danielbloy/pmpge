@@ -3,6 +3,6 @@ requires = ["setuptools >= 77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "spam-eggs"
+name = "pgzge"
 version = "2026.3.0"
 requires-python = ">= 3.12, <= 3.13"

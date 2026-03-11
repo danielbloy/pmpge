@@ -1,6 +1,6 @@
 # See: https://packaging.python.org/en/latest/overview/
 [build-system]
-requires = ["setuptools >= 77.0.3"]
+requires = ["setuptools >= 82.0.1"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -23,3 +23,6 @@ classifiers = [
 [tool.setuptools]
 packages = ["pgzge"]
 
+# This means you don't have to install the package for testing.
+[tool.pytest.ini_options]
+pythonpath = "."

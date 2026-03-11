@@ -1,6 +1,6 @@
 from pympler import asizeof
 
-import pgzge.core as core
+from pgzge.core import GameObject
 
 
 class TestGameObjectSize:
@@ -14,18 +14,18 @@ class TestGameObjectSize:
     """
 
     def test_empty_object(self):
-        obj = core.GameObject()
+        obj = GameObject()
         print(f'Empty object: {asizeof.asizeof(obj)}')
 
     def test_with_name(self):
-        obj = core.GameObject("root-object")
+        obj = GameObject("root-object")
         print(f'Object with name: {asizeof.asizeof(obj)}')
 
     def test_with_two_children(self):
-        obj = core.GameObject(children=[core.GameObject(), core.GameObject()])
+        obj = GameObject(children=[GameObject(), GameObject()])
         print(f'Object with two children: {asizeof.asizeof(obj)}')
 
     def test_with_four_children(self):
-        obj = core.GameObject(
-            children=[core.GameObject(), core.GameObject(), core.GameObject(), core.GameObject()])
+        obj = GameObject(
+            children=[GameObject(), GameObject(), GameObject(), GameObject()])
         print(f'Object with four children: {asizeof.asizeof(obj)}')

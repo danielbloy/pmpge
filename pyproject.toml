@@ -1,3 +1,4 @@
+# See: https://packaging.python.org/en/latest/overview/
 [build-system]
 requires = ["setuptools >= 77.0.3"]
 build-backend = "setuptools.build_meta"
@@ -6,3 +7,20 @@ build-backend = "setuptools.build_meta"
 name = "pgzge"
 version = "2026.3.0"
 requires-python = ">= 3.12, <= 3.13"
+description = "Pygame Zero Game Engine"
+readme = "README.md"
+license = "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License."
+license-files = ["LICEN[CS]E*"]
+classifiers = [
+    # How mature is this project? Common values are
+    #   3 - Alpha
+    #   4 - Beta
+    #   5 - Production/Stable
+    "Development Status :: 2 - Pre-Alpha",
+    # Specify the Python versions you support here.
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[tool.setuptools]
+packages = ["pgzge"]

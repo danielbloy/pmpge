@@ -8,6 +8,7 @@ name = "pgzge"
 version = "2026.3.0"
 requires-python = ">= 3.12, <= 3.13"
 description = "Pygame Zero Game Engine"
+readme = "README.md"
 classifiers = [
     # How mature is this project? Common values are
     #   3 - Alpha
@@ -19,6 +20,8 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
 ]
 
+[tool.setuptools]
+packages = ["pgzge"]
+
 [tool.pytest.ini_options]
 pythonpath = "."
-

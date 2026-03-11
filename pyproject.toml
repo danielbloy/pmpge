@@ -8,8 +8,6 @@ name = "pgzge"
 version = "2026.3.0"
 requires-python = ">= 3.12, <= 3.13"
 description = "Pygame Zero Game Engine"
-readme = "README.md"
-license = "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License."
 classifiers = [
     # How mature is this project? Common values are
     #   3 - Alpha

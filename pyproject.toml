@@ -22,7 +22,3 @@ classifiers = [
 
 [tool.setuptools]
 packages = ["pgzge"]
-
-# This means you don't have to install the package for testing.
-[tool.pytest.ini_options]
-pythonpath = "."

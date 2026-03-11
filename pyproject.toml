@@ -23,5 +23,3 @@ classifiers = [
 [tool.setuptools]
 packages = ["pgzge"]
 
-[tool.pytest.ini_options]
-pythonpath = "."

@@ -6,11 +6,9 @@ from pgzge.core import GameObject
 class TestGameObjectSize:
     """
     The purpose of this test class is to evaluate the size of a GameObject instance.
-    The aim is to understand how much memory is used by a GameObject instance.
-    Whilst we expect most applications of GameObject will be in games written in
-    Desktop environments, there is no real reason why the engine could not be adapted
-    to run in more constrained environments such as CircuitPython (assuming we break
-    the dependencies on Pygame)..
+    Whilst we expect most applications of GameObject will be for games written using
+    Pygame Zero on a full-computer environment, there may be a desire to port this
+    over to work in a more constrained environment such as CircuitPython.
     """
 
     def test_empty_object(self):

@@ -77,7 +77,7 @@ class GameObject:
         self.__name: str | None = name
         self.visible: bool = visible
         self.enabled: bool = enabled
-        self.__children: list[Self] = children.copy() if children else []
+        self.__children: list[Self] = []
         self.__destroyed: bool = False
 
         # Copy across the handler lists first.
@@ -99,12 +99,17 @@ class GameObject:
         self.__deactivate_handlers.append(deactivate_handler) if deactivate_handler else None
         self.__destroy_handlers.append(destroy_handler) if destroy_handler else None
 
+        # Now add the parent and children read in time for the activation.
+        if parent:
+            parent.add_child(self)
+
+        if children:
+            for child in children:
+                self.add_child(child)
+
         # This forces the active or deactivate events to be called.
         self.__active: bool = not active
         self.active = active
-
-        if parent:
-            parent.add_child(self)
 
     @property
     def name(self) -> bool | None:

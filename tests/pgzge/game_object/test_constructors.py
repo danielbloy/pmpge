@@ -1,4 +1,4 @@
-from core import GameObject
+from pgzge.core import GameObject
 from tests.pgzge.game_object.test_utilities import TestHandlers
 
 

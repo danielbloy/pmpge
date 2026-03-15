@@ -1,3 +1,5 @@
+import pytest
+
 from pgzge.core import GameObject
 from tests.pgzge.game_object.test_utilities import TestHandlers
 
@@ -55,13 +57,11 @@ class TestGameObjectConstructors:
 
         handlers = TestHandlers()
         go = GameObject(
-            activate_handler=lambda obj: handlers.activate(obj),
-            deactivate_handler=lambda obj: handlers.deactivate(obj))
+            activate_handler=handlers.activate,
+            deactivate_handler=handlers.deactivate)
 
         self.validate_properties(go)
-        assert handlers.activate_called == go
-        assert handlers.activate_called_count == 1
-        assert handlers.deactivate_called is None
+        handlers.validate(activate=go, activate_count=1)
 
     def test_deactivate_is_called(self):
         """
@@ -73,13 +73,11 @@ class TestGameObjectConstructors:
         handlers = TestHandlers()
         go = GameObject(
             active=False,
-            activate_handler=lambda obj: handlers.activate(obj),
-            deactivate_handler=lambda obj: handlers.deactivate(obj))
+            activate_handler=handlers.activate,
+            deactivate_handler=handlers.deactivate)
 
         self.validate_properties(go, active=False)
-        assert handlers.activate_called is None
-        assert handlers.deactivate_called is go
-        assert handlers.deactivate_called_count == 1
+        handlers.validate(deactivate=go, deactivate_count=1)
 
     def test_enabled(self):
         """
@@ -119,68 +117,57 @@ class TestGameObjectConstructors:
         # Active/active, no handler called
         child1_handlers = TestHandlers()
         child1 = GameObject(
-            activate_handler=lambda obj: child1_handlers.activate(obj),
-            deactivate_handler=lambda obj: child1_handlers.deactivate(obj))
+            activate_handler=child1_handlers.activate,
+            deactivate_handler=child1_handlers.deactivate)
         child1_handlers.reset()
 
         handlers = TestHandlers()
         go = GameObject(name="parent", children=[child1],
-                        activate_handler=lambda obj: handlers.activate(obj),
-                        deactivate_handler=lambda obj: handlers.deactivate(obj))
+                        activate_handler=handlers.activate,
+                        deactivate_handler=handlers.deactivate)
 
         self.validate_properties(go, name="parent", children=[child1])
-        assert handlers.activate_called == go
-        assert handlers.activate_called_count == 1
-        assert handlers.deactivate_called is None
+        handlers.validate(activate=go, activate_count=1)
 
         assert child1.parent == go
-        assert child1_handlers.activate_called is None
-        assert child1_handlers.deactivate_called is None
+        child1_handlers.validate()
 
         # Deactivate/activate, handler called
         child1_handlers = TestHandlers()
         child1 = GameObject(
             active=False,
-            activate_handler=lambda obj: child1_handlers.activate(obj),
-            deactivate_handler=lambda obj: child1_handlers.deactivate(obj))
+            activate_handler=child1_handlers.activate,
+            deactivate_handler=child1_handlers.deactivate)
         child1_handlers.reset()
 
         handlers = TestHandlers()
         go = GameObject(name="parent", children=[child1],
-                        activate_handler=lambda obj: handlers.activate(obj),
-                        deactivate_handler=lambda obj: handlers.deactivate(obj))
+                        activate_handler=handlers.activate,
+                        deactivate_handler=handlers.deactivate)
 
         self.validate_properties(go, name="parent", children=[child1], )
-        assert handlers.activate_called == go
-        assert handlers.activate_called_count == 1
-        assert handlers.deactivate_called is None
+        handlers.validate(activate=go, activate_count=1)
 
         assert child1.parent == go
-        assert child1_handlers.activate_called is child1
-        assert child1_handlers.activate_called_count == 1
-        assert child1_handlers.deactivate_called is None
+        child1_handlers.validate(activate=child1, activate_count=1)
 
         # Activate/deactivate, handler called
         child1_handlers = TestHandlers()
         child1 = GameObject(
-            activate_handler=lambda obj: child1_handlers.activate(obj),
-            deactivate_handler=lambda obj: child1_handlers.deactivate(obj))
+            activate_handler=child1_handlers.activate,
+            deactivate_handler=child1_handlers.deactivate)
         child1_handlers.reset()
 
         handlers = TestHandlers()
         go = GameObject(name="parent", active=False, children=[child1],
-                        activate_handler=lambda obj: handlers.activate(obj),
-                        deactivate_handler=lambda obj: handlers.deactivate(obj))
+                        activate_handler=handlers.activate,
+                        deactivate_handler=handlers.deactivate)
 
         self.validate_properties(go, name="parent", active=False, children=[child1])
-        assert handlers.activate_called is None
-        assert handlers.deactivate_called is go
-        assert handlers.deactivate_called_count == 1
+        handlers.validate(deactivate=go, deactivate_count=1)
 
         assert child1.parent == go
-        assert child1_handlers.activate_called is None
-        assert child1_handlers.deactivate_called is child1
-        assert child1_handlers.deactivate_called_count == 1
+        child1_handlers.validate(deactivate=child1, deactivate_count=1)
 
     def test_multiple_children(self):
         """
@@ -190,48 +177,40 @@ class TestGameObjectConstructors:
         child1_handlers = TestHandlers()
         child1 = GameObject(
             active=False,
-            activate_handler=lambda obj: child1_handlers.activate(obj),
-            deactivate_handler=lambda obj: child1_handlers.deactivate(obj))
+            activate_handler=child1_handlers.activate,
+            deactivate_handler=child1_handlers.deactivate)
         child1_handlers.reset()
 
         child2_handlers = TestHandlers()
         child2 = GameObject(
             active=True,
-            activate_handler=lambda obj: child2_handlers.activate(obj),
-            deactivate_handler=lambda obj: child2_handlers.deactivate(obj))
+            activate_handler=child2_handlers.activate,
+            deactivate_handler=child2_handlers.deactivate)
         child2_handlers.reset()
 
         child3_handlers = TestHandlers()
         child3 = GameObject(
             active=False,
-            activate_handler=lambda obj: child3_handlers.activate(obj),
-            deactivate_handler=lambda obj: child3_handlers.deactivate(obj))
+            activate_handler=child3_handlers.activate,
+            deactivate_handler=child3_handlers.deactivate)
         child3_handlers.reset()
 
         handlers = TestHandlers()
         go = GameObject(name="another parent", children=[child1, child2, child3],
-                        activate_handler=lambda obj: handlers.activate(obj),
-                        deactivate_handler=lambda obj: handlers.deactivate(obj))
+                        activate_handler=handlers.activate,
+                        deactivate_handler=handlers.deactivate)
 
         self.validate_properties(go, name="another parent", children=[child1, child2, child3])
-
-        assert handlers.activate_called == go
-        assert handlers.activate_called_count == 1
-        assert handlers.deactivate_called is None
+        handlers.validate(activate=go, activate_count=1)
 
         assert child1.parent == go
-        assert child1_handlers.activate_called is child1
-        assert child1_handlers.activate_called_count == 1
-        assert child1_handlers.deactivate_called is None
+        child1_handlers.validate(activate=child1, activate_count=1)
 
         assert child2.parent == go
-        assert child2_handlers.activate_called is None
-        assert child2_handlers.deactivate_called is None
+        child2_handlers.validate()
 
         assert child3.parent == go
-        assert child3_handlers.activate_called is child3
-        assert child3_handlers.activate_called_count == 1
-        assert child3_handlers.deactivate_called is None
+        child3_handlers.validate(activate=child3, activate_count=1)
 
     def test_children_list_is_copied(self):
         """
@@ -263,14 +242,12 @@ class TestGameObjectConstructors:
         handlers = TestHandlers()
         go = GameObject(name="frank", enabled=True, visible=False, active=True,
                         children=[child1],
-                        activate_handler=lambda obj: handlers.activate(obj),
-                        deactivate_handler=lambda obj: handlers.deactivate(obj))
+                        activate_handler=handlers.activate,
+                        deactivate_handler=handlers.deactivate)
 
         self.validate_properties(go, name="frank", enabled=True, visible=False, active=True,
                                  children=[child1])
-        assert handlers.activate_called == go
-        assert handlers.activate_called_count == 1
-        assert handlers.deactivate_called is None
+        handlers.validate(activate=go, activate_count=1)
         assert child1.parent == go
 
         handlers.reset()
@@ -279,14 +256,12 @@ class TestGameObjectConstructors:
         child3 = GameObject(name="child3")
         go = GameObject(name="rob", enabled=False, visible=True, active=False,
                         children=[child1, child2, child3],
-                        activate_handler=lambda obj: handlers.activate(obj),
-                        deactivate_handler=lambda obj: handlers.deactivate(obj))
+                        activate_handler=handlers.activate,
+                        deactivate_handler=handlers.deactivate)
 
         self.validate_properties(go, name="rob", enabled=False, visible=True, active=False,
                                  children=[child1, child2, child3])
-        assert handlers.activate_called is None
-        assert handlers.deactivate_called is go
-        assert handlers.deactivate_called_count == 1
+        handlers.validate(deactivate=go, deactivate_count=1)
         assert child1.parent == go
         assert child2.parent == go
         assert child3.parent == go
@@ -297,23 +272,252 @@ class TestGameObjectConstructors:
         """
         handlers = TestHandlers()
         go = GameObject(
-            draw_handler=lambda obj, surface: handlers.draw(obj, surface),
-            update_handler=lambda obj, dt: handlers.update(obj, dt),
-            activate_handler=lambda obj: handlers.activate(obj),
-            deactivate_handler=lambda obj: handlers.deactivate(obj),
-            destroy_handler=lambda obj: handlers.destroy(obj))
+            draw_handler=handlers.draw,
+            update_handler=handlers.update,
+            activate_handler=handlers.activate,
+            deactivate_handler=handlers.deactivate,
+            destroy_handler=handlers.destroy)
 
-        assert handlers.draw_called is None
-        assert handlers.update_called is None
-        assert handlers.activate_called == go
-        assert handlers.activate_called_count == 1
-        assert handlers.deactivate_called is None
-        assert handlers.destroy_called is None
+        handlers.validate(activate=go, activate_count=1)
 
-    # TODO: Simple validation of draw handler
-    # TODO: Simple validation of update handler
-    # TODO: Simple validation of destroy handler
+    def test_try_to_add_child_with_parent(self):
+        """
+        This trys to add a child that already has a parent (it should error).
+        """
+        child1 = GameObject(name="child1")
+        child2 = GameObject(name="child2")
 
-    # TODO: Validate multiple activate and deactivate handlers get called.
-    # TODO: Validate a list of handlers and an individual handler can be passed together.
-    # TODO: Validate the draw, update, activate, deactivate and destroy lists care copied.
+        parent1 = GameObject(name="parent1", children=[child2])
+
+        with pytest.raises(ValueError):
+            parent2 = GameObject(name="parent2", children=[child1, child2])
+
+    def test_draw_handler_called(self):
+        """
+        This is a basic test that ensures the draw handler is called.
+        """
+        handlers = TestHandlers()
+        go = GameObject(draw_handler=handlers.draw,
+                        update_handler=handlers.update,
+                        activate_handler=handlers.activate,
+                        deactivate_handler=handlers.deactivate,
+                        destroy_handler=handlers.destroy)
+
+        handlers.validate(activate=go, activate_count=1)
+        handlers.reset()
+
+        go.draw_hierarchy("surface")
+        handlers.validate(draw=(go, "surface"), draw_count=1)
+
+    def test_update_handler_called(self):
+        """
+        This is a basic test that ensures the update handler is called.
+        """
+        handlers = TestHandlers()
+        go = GameObject(draw_handler=handlers.draw,
+                        update_handler=handlers.update,
+                        activate_handler=handlers.activate,
+                        deactivate_handler=handlers.deactivate,
+                        destroy_handler=handlers.destroy)
+
+        handlers.validate(activate=go, activate_count=1)
+        handlers.reset()
+
+        go.update_hierarchy(0.1)
+        handlers.validate(update=(go, 0.1), update_count=1)
+
+    def test_destroy_handler_called(self):
+        """
+        This is a basic test that ensures the destroy handler is called.
+        """
+        handlers = TestHandlers()
+        go = GameObject(draw_handler=handlers.draw,
+                        update_handler=handlers.update,
+                        activate_handler=handlers.activate,
+                        deactivate_handler=handlers.deactivate,
+                        destroy_handler=handlers.destroy)
+
+        handlers.validate(activate=go, activate_count=1)
+        handlers.reset()
+
+        go.destroy()  # This will also deactivate the GameObject
+        handlers.validate(deactivate=go, deactivate_count=1, destroy=go, destroy_count=1)
+
+    def test_activate_draw_update_deactivate_destroy_handlers_called(self):
+        """
+        This is a basic test that ensures all the handlers are called.
+        """
+        handlers = TestHandlers()
+        go = GameObject(
+            draw_handler=handlers.draw,
+            update_handler=handlers.update,
+            activate_handler=handlers.activate,
+            deactivate_handler=handlers.deactivate,
+            destroy_handler=handlers.destroy)
+
+        handlers.validate(activate=go, activate_count=1)
+
+        handlers.reset()
+        go.draw_hierarchy("surface")
+        handlers.validate(draw=(go, "surface"), draw_count=1)
+
+        handlers.reset()
+        go.update_hierarchy(0.1)
+        handlers.validate(update=(go, 0.1), update_count=1)
+
+        handlers.reset()
+        go.destroy()  # This will also deactivate the GameObject
+        handlers.validate(deactivate=go, deactivate_count=1, destroy=go, destroy_count=1)
+
+    def test_multiple_activate_handlers_called(self):
+        """
+        This is a basic test that ensures multiple activate handlers are called.
+        We also test that all handlers are merged into a single list.
+        """
+        handlers = TestHandlers()
+        handlers1 = TestHandlers()
+        handlers2 = TestHandlers()
+        go = GameObject(
+            activate_handlers=[handlers1.activate, handlers2.activate, handlers2.activate],
+            draw_handler=handlers.draw,
+            update_handler=handlers.update,
+            activate_handler=handlers.activate,
+            deactivate_handler=handlers.deactivate,
+            destroy_handler=handlers.destroy)
+
+        handlers.validate(activate=go, activate_count=1)
+        handlers1.validate(activate=go, activate_count=1)
+        handlers2.validate(activate=go, activate_count=2)
+
+    def test_multiple_deactivate_handlers_called(self):
+        """
+        This is a basic test that ensures multiple deactivate handlers are called.
+        We also test that all handlers are merged into a single list.
+        """
+        handlers = TestHandlers()
+        handlers1 = TestHandlers()
+        handlers2 = TestHandlers()
+        go = GameObject(
+            active=False,
+            deactivate_handlers=[handlers1.deactivate, handlers2.deactivate, handlers2.deactivate],
+            draw_handler=handlers.draw,
+            update_handler=handlers.update,
+            activate_handler=handlers.activate,
+            deactivate_handler=handlers.deactivate,
+            destroy_handler=handlers.destroy)
+
+        handlers.validate(deactivate=go, deactivate_count=1)
+        handlers1.validate(deactivate=go, deactivate_count=1)
+        handlers2.validate(deactivate=go, deactivate_count=2)
+
+    def test_multiple_draw_handlers_called(self):
+        """
+        This is a basic test that ensures multiple draw handlers are called.
+        We also test that all handlers are merged into a single list.
+        """
+        handlers = TestHandlers()
+        handlers1 = TestHandlers()
+        handlers2 = TestHandlers()
+        go = GameObject(
+            draw_handlers=[handlers1.draw, handlers2.draw, handlers2.draw],
+            draw_handler=handlers.draw,
+            update_handler=handlers.update,
+            activate_handler=handlers.activate,
+            deactivate_handler=handlers.deactivate,
+            destroy_handler=handlers.destroy)
+
+        handlers.reset()
+        go.draw_hierarchy("surface")
+        handlers.validate(draw=(go, "surface"), draw_count=1)
+        handlers1.validate(draw=(go, "surface"), draw_count=1)
+        handlers2.validate(draw=(go, "surface"), draw_count=2)
+
+    def test_multiple_update_handlers_called(self):
+        """
+        This is a basic test that ensures the update handler is called.
+        We also test that all handlers are merged into a single list.
+        """
+        handlers = TestHandlers()
+        handlers1 = TestHandlers()
+        handlers2 = TestHandlers()
+        go = GameObject(
+            update_handlers=[handlers1.update, handlers2.update, handlers2.update],
+            draw_handler=handlers.draw,
+            update_handler=handlers.update,
+            activate_handler=handlers.activate,
+            deactivate_handler=handlers.deactivate,
+            destroy_handler=handlers.destroy)
+
+        handlers.reset()
+        go.update_hierarchy(0.1)
+        handlers.validate(update=(go, 0.1), update_count=1)
+        handlers1.validate(update=(go, 0.1), update_count=1)
+        handlers2.validate(update=(go, 0.1), update_count=2)
+
+    def test_multiple_destroy_handlers_called(self):
+        """
+        This is a basic test that ensures the destroy handler is called.
+        We also test that all handlers are merged into a single list.
+        """
+        handlers = TestHandlers()
+        handlers1 = TestHandlers()
+        handlers2 = TestHandlers()
+        go = GameObject(
+            destroy_handlers=[handlers1.destroy, handlers2.destroy, handlers2.destroy],
+            draw_handler=handlers.draw,
+            update_handler=handlers.update,
+            activate_handler=handlers.activate,
+            deactivate_handler=handlers.deactivate,
+            destroy_handler=handlers.destroy)
+
+        handlers.reset()
+        go.destroy()  # This will also deactivate the GameObject
+        handlers.validate(deactivate=go, deactivate_count=1, destroy=go, destroy_count=1)
+        handlers1.validate(destroy=go, destroy_count=1)
+        handlers2.validate(destroy=go, destroy_count=2)
+
+    def test_validate_handlers_copied(self):
+        """
+        This ensures that the lists of handlers passed in is copied so the calling
+        code cannot mutate it later.
+        """
+        handlers = TestHandlers()
+        activate_handlers = [handlers.activate, handlers.activate, handlers.activate]
+        deactivate_handlers = [handlers.deactivate, handlers.deactivate, handlers.deactivate]
+        draw_handlers = [handlers.draw, handlers.draw, handlers.draw]
+        update_handlers = [handlers.update, handlers.update, handlers.update]
+        destroy_handlers = [handlers.destroy, handlers.destroy, handlers.destroy]
+
+        go = GameObject(
+            active=False,
+            activate_handlers=activate_handlers,
+            deactivate_handlers=deactivate_handlers,
+            draw_handlers=draw_handlers,
+            update_handlers=update_handlers,
+            destroy_handlers=destroy_handlers)
+
+        handlers.validate(deactivate=go, deactivate_count=3)
+
+        # Modify the original list by adding another handler. This should not impact
+        # the GameObject instance go.
+        activate_handlers.append(handlers.activate)
+        deactivate_handlers.append(handlers.deactivate)
+        draw_handlers.append(handlers.draw)
+        update_handlers.append(handlers.update)
+        destroy_handlers.append(handlers.destroy)
+
+        handlers.reset()
+        go.activate()
+        handlers.validate(activate=go, activate_count=3)
+
+        handlers.reset()
+        go.draw_hierarchy("surface")
+        handlers.validate(draw=(go, "surface"), draw_count=3)
+
+        handlers.reset()
+        go.update_hierarchy(0.2)
+        handlers.validate(update=(go, 0.2), update_count=3)
+
+        handlers.reset()
+        go.destroy()  # This will also deactivate the GameObject
+        handlers.validate(deactivate=go, deactivate_count=3, destroy=go, destroy_count=3)

@@ -46,3 +46,25 @@ class TestHandlers:
     def destroy(self, obj):
         self.destroy_called = obj
         self.destroy_called_count += 1
+
+    def validate(self,
+                 draw=None,
+                 draw_count=0,
+                 update=None,
+                 update_count=0,
+                 activate=None,
+                 activate_count=0,
+                 deactivate=None,
+                 deactivate_count=0,
+                 destroy=None,
+                 destroy_count=0):
+        assert self.draw_called == draw
+        assert self.draw_called_count == draw_count
+        assert self.update_called == update
+        assert self.update_called_count == update_count
+        assert self.activate_called == activate
+        assert self.activate_called_count == activate_count
+        assert self.deactivate_called == deactivate
+        assert self.deactivate_called_count == deactivate_count
+        assert self.destroy_called == destroy
+        assert self.destroy_called_count == destroy_count

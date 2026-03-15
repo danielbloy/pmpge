@@ -55,6 +55,7 @@ class GameObject:
                  active: bool = True,
                  enabled: bool = True,
                  visible: bool = True,
+                 parent: Self | None = None,
                  children: list[Self] = None,
                  draw_handler: Callable[[Self, Any], None] = None,
                  update_handler: Callable[[Self, float], None] = None,
@@ -71,13 +72,16 @@ class GameObject:
         and have a corresponding property. The only point of note is that the active property is set
         twice to force on of the activate() or deactivate() methods and corresponding events
         handlers to be called.
-
         """
         self.__parent: Self | None = None
         self.__name: str | None = name
         self.visible: bool = visible
         self.enabled: bool = enabled
-        self.__children: list[Self] = children.copy() if children else []
+        self.__children: list[Self] = []
+        self.__destroyed: bool = False
+
+        # Copy across the handler lists first; this creates empty lists if there are no
+        # handler lists specified.
         self.__draw_handlers: list[
             Callable[[Self, Any], None]] = draw_handlers.copy() if draw_handlers else []
         self.__update_handlers: list[
@@ -88,12 +92,22 @@ class GameObject:
             Callable[[Self], None]] = deactivate_handlers.copy() if deactivate_handlers else []
         self.__destroy_handlers: list[
             Callable[[Self], None]] = destroy_handlers.copy() if destroy_handlers else []
+
+        # Now add the individual handlers.
         self.__draw_handlers.append(draw_handler) if draw_handler else None
         self.__update_handlers.append(update_handler) if update_handler else None
         self.__activate_handlers.append(activate_handler) if activate_handler else None
         self.__deactivate_handlers.append(deactivate_handler) if deactivate_handler else None
         self.__destroy_handlers.append(destroy_handler) if destroy_handler else None
-        self.__destroyed: bool = False
+
+        # Now add the parent and children read in time for the activation.
+        if parent:
+            parent.add_child(self)
+
+        if children:
+            for child in children:
+                self.add_child(child)
+
         # This forces the active or deactivate events to be called.
         self.__active: bool = not active
         self.active = active

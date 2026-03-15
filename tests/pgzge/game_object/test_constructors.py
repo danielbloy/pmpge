@@ -137,7 +137,7 @@ class TestGameObjectConstructors:
         assert child1_handlers.activate_called is None
         assert child1_handlers.deactivate_called is None
 
-        # Deactive/active, handler called
+        # Deactivate/activate, handler called
         child1_handlers = TestHandlers()
         child1 = GameObject(
             active=False,
@@ -160,7 +160,7 @@ class TestGameObjectConstructors:
         assert child1_handlers.activate_called_count == 1
         assert child1_handlers.deactivate_called is None
 
-        # Active/deactive, handler called
+        # Activate/deactivate, handler called
         child1_handlers = TestHandlers()
         child1 = GameObject(
             activate_handler=lambda obj: child1_handlers.activate(obj),
@@ -176,7 +176,7 @@ class TestGameObjectConstructors:
         assert handlers.activate_called is None
         assert handlers.deactivate_called is go
         assert handlers.deactivate_called_count == 1
-        
+
         assert child1.parent == go
         assert child1_handlers.activate_called is None
         assert child1_handlers.deactivate_called is child1
@@ -184,41 +184,112 @@ class TestGameObjectConstructors:
 
     def test_multiple_children(self):
         """
-        Validate that multiple children can be set at once.
+        Validate that multiple children can be set at once. This also validates that the
+        activate/deactivate handlers are called on the children correctly too.
         """
-        child1 = GameObject()
-        child2 = GameObject()
-        go = GameObject(name="another parent", children=[child1, child2])
-        self.validate_properties(go, name="another parent", children=[child1, child2])
-        assert child1.parent == go
-        assert child2.parent == go
+        child1_handlers = TestHandlers()
+        child1 = GameObject(
+            active=False,
+            activate_handler=lambda obj: child1_handlers.activate(obj),
+            deactivate_handler=lambda obj: child1_handlers.deactivate(obj))
+        child1_handlers.reset()
 
-        # TODO: Test that activate and deactivate propagate through to children at construction time.
+        child2_handlers = TestHandlers()
+        child2 = GameObject(
+            active=True,
+            activate_handler=lambda obj: child2_handlers.activate(obj),
+            deactivate_handler=lambda obj: child2_handlers.deactivate(obj))
+        child2_handlers.reset()
+
+        child3_handlers = TestHandlers()
+        child3 = GameObject(
+            active=False,
+            activate_handler=lambda obj: child3_handlers.activate(obj),
+            deactivate_handler=lambda obj: child3_handlers.deactivate(obj))
+        child3_handlers.reset()
+
+        handlers = TestHandlers()
+        go = GameObject(name="another parent", children=[child1, child2, child3],
+                        activate_handler=lambda obj: handlers.activate(obj),
+                        deactivate_handler=lambda obj: handlers.deactivate(obj))
+
+        self.validate_properties(go, name="another parent", children=[child1, child2, child3])
+
+        assert handlers.activate_called == go
+        assert handlers.activate_called_count == 1
+        assert handlers.deactivate_called is None
+
+        assert child1.parent == go
+        assert child1_handlers.activate_called is child1
+        assert child1_handlers.activate_called_count == 1
+        assert child1_handlers.deactivate_called is None
+
+        assert child2.parent == go
+        assert child2_handlers.activate_called is None
+        assert child2_handlers.deactivate_called is None
+
+        assert child3.parent == go
+        assert child3_handlers.activate_called is child3
+        assert child3_handlers.activate_called_count == 1
+        assert child3_handlers.deactivate_called is None
+
+    def test_children_list_is_copied(self):
+        """
+        This ensures that if the list passed in containing the children is mutated, it
+        does not affect parent objects child list.
+        """
+        # Construct the children and parent.
+        child1 = GameObject(name="child1")
+        child2 = GameObject(name="child2")
+        child3 = GameObject(name="child3")
+        children = [child1, child2, child3]
+        go = GameObject(name="parent", children=children)
+
+        self.validate_properties(go, name="parent", children=[child1, child2, child3])
+
+        # Now we modify the original list passed in.
+        child4 = GameObject(name="child4")
+        children.remove(child1)
+        children.append(child4)
+
+        # Now validate the parent GameObject has not changed.
+        self.validate_properties(go, name="parent", children=[child1, child2, child3])
 
     def test_combination_of_properties(self):
         """
         Validate that multiple properties can be set at once.
         """
-        # TODO: Add parent and children to this test.
+        child1 = GameObject(name="child1")
         handlers = TestHandlers()
         go = GameObject(name="frank", enabled=True, visible=False, active=True,
+                        children=[child1],
                         activate_handler=lambda obj: handlers.activate(obj),
                         deactivate_handler=lambda obj: handlers.deactivate(obj))
 
-        self.validate_properties(go, name="frank", enabled=True, visible=False, active=True)
+        self.validate_properties(go, name="frank", enabled=True, visible=False, active=True,
+                                 children=[child1])
         assert handlers.activate_called == go
         assert handlers.activate_called_count == 1
         assert handlers.deactivate_called is None
+        assert child1.parent == go
 
         handlers.reset()
+        child1 = GameObject(name="child1")
+        child2 = GameObject(name="child2")
+        child3 = GameObject(name="child3")
         go = GameObject(name="rob", enabled=False, visible=True, active=False,
+                        children=[child1, child2, child3],
                         activate_handler=lambda obj: handlers.activate(obj),
                         deactivate_handler=lambda obj: handlers.deactivate(obj))
 
-        self.validate_properties(go, name="rob", enabled=False, visible=True, active=False)
+        self.validate_properties(go, name="rob", enabled=False, visible=True, active=False,
+                                 children=[child1, child2, child3])
         assert handlers.activate_called is None
         assert handlers.deactivate_called is go
         assert handlers.deactivate_called_count == 1
+        assert child1.parent == go
+        assert child2.parent == go
+        assert child3.parent == go
 
     def test_no_other_handlers_called(self):
         """
@@ -245,6 +316,4 @@ class TestGameObjectConstructors:
 
     # TODO: Validate multiple activate and deactivate handlers get called.
     # TODO: Validate a list of handlers and an individual handler can be passed together.
-
-    # TODO: Validate children cannot be changed through property or modifying list
-    # TODO: Validate each of the other handlers work.
+    # TODO: Validate the draw, update, activate, deactivate and destroy lists care copied.

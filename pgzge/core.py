@@ -80,7 +80,8 @@ class GameObject:
         self.__children: list[Self] = []
         self.__destroyed: bool = False
 
-        # Copy across the handler lists first.
+        # Copy across the handler lists first; this creates empty lists if there are no
+        # handler lists specified.
         self.__draw_handlers: list[
             Callable[[Self, Any], None]] = draw_handlers.copy() if draw_handlers else []
         self.__update_handlers: list[

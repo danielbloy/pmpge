@@ -4,63 +4,67 @@ from pgzge.core import GameObject
 from tests.pgzge.game_object.test_utilities import TestHandlers
 
 
+def validate_properties(
+        go: GameObject,
+        name: str | None = None,
+        active=True,
+        enabled=True,
+        visible=True,
+        destroyed=False,
+        parent=None,
+        children=None):
+    """
+    Validate the properties of the GameObject class.
+    """
+
+    if children is None:
+        children = []
+
+    assert go.name is name
+    assert go.active is active
+    assert go.enabled is enabled
+    assert go.visible is visible
+    assert go.destroyed is destroyed
+    assert go.parent is parent
+    assert go.children == children
+
+
 class TestGameObjectConstructors:
     """
     This suite of tests is to validate the GameObject constructor with its
     many optional arguments.
     """
 
-    @staticmethod
-    def validate_properties(
-            go: GameObject,
-            name: str | None = None,
-            active=True,
-            enabled=True,
-            visible=True,
-            destroyed=False,
-            parent=None,
-            children=None):
-        if children is None:
-            children = []
-
-        assert go.name is name
-        assert go.active is active
-        assert go.enabled is enabled
-        assert go.visible is visible
-        assert go.destroyed is destroyed
-        assert go.parent is parent
-        assert go.children == children
-
     def test_empty_constructor(self):
         """
         Validate the default GameObject state.
         """
         go = GameObject()
-        self.validate_properties(go)
+        validate_properties(go)
 
     def test_name(self):
         """
         Validate that the name property is set correctly.
         """
         go = GameObject(name="test")
-        self.validate_properties(go, name="test")
+        validate_properties(go, name="test")
 
         go = GameObject(name="daniel.bloy")
-        self.validate_properties(go, name="daniel.bloy")
+        validate_properties(go, name="daniel.bloy")
 
     def test_activate_is_called(self):
         """
         Validate that the activate handler is called when the GameObject is constructed.
         """
         go = GameObject()
-        self.validate_properties(go)
+        validate_properties(go)
 
         handlers = TestHandlers()
         go = GameObject(
             activate_handler=handlers.activate,
             deactivate_handler=handlers.deactivate)
 
-        self.validate_properties(go)
+        validate_properties(go)
         handlers.validate(activate=go, activate_count=1)
 
     def test_deactivate_is_called(self):
@@ -68,7 +72,7 @@ class TestGameObjectConstructors:
         Validate that the deactivate handler is called when the GameObject is constructed.
         """
         go = GameObject(active=False)
-        self.validate_properties(go, active=False)
+        validate_properties(go, active=False)
 
         handlers = TestHandlers()
         go = GameObject(
@@ -76,7 +80,7 @@ class TestGameObjectConstructors:
             activate_handler=handlers.activate,
             deactivate_handler=handlers.deactivate)
 
-        self.validate_properties(go, active=False)
+        validate_properties(go, active=False)
         handlers.validate(deactivate=go, deactivate_count=1)
 
     def test_enabled(self):
@@ -84,20 +88,20 @@ class TestGameObjectConstructors:
         Validate that the enabled property is set correctly.
         """
         go = GameObject(enabled=True)
-        self.validate_properties(go, enabled=True)
+        validate_properties(go, enabled=True)
 
         go = GameObject(enabled=False)
-        self.validate_properties(go, enabled=False)
+        validate_properties(go, enabled=False)
 
     def test_visible(self):
         """
         Validate that the visible property is set correctly.
         """
         go = GameObject(visible=True)
-        self.validate_properties(go, visible=True)
+        validate_properties(go, visible=True)
 
         go = GameObject(visible=False)
-        self.validate_properties(go, visible=False)
+        validate_properties(go, visible=False)
 
     def test_parent(self):
         """
@@ -106,7 +110,7 @@ class TestGameObjectConstructors:
         """
         parent = GameObject("parent")
         go = GameObject(parent=parent)
-        self.validate_properties(go, parent=parent)
+        validate_properties(go, parent=parent)
         assert parent.children == [go]
 
     def test_single_child(self):
@@ -126,7 +130,7 @@ class TestGameObjectConstructors:
                         activate_handler=handlers.activate,
                         deactivate_handler=handlers.deactivate)
 
-        self.validate_properties(go, name="parent", children=[child1])
+        validate_properties(go, name="parent", children=[child1])
         handlers.validate(activate=go, activate_count=1)
 
         assert child1.parent == go
@@ -145,7 +149,7 @@ class TestGameObjectConstructors:
                         activate_handler=handlers.activate,
                         deactivate_handler=handlers.deactivate)
 
-        self.validate_properties(go, name="parent", children=[child1], )
+        validate_properties(go, name="parent", children=[child1], )
         handlers.validate(activate=go, activate_count=1)
 
         assert child1.parent == go
@@ -163,7 +167,7 @@ class TestGameObjectConstructors:
                         activate_handler=handlers.activate,
                         deactivate_handler=handlers.deactivate)
 
-        self.validate_properties(go, name="parent", active=False, children=[child1])
+        validate_properties(go, name="parent", active=False, children=[child1])
         handlers.validate(deactivate=go, deactivate_count=1)
 
         assert child1.parent == go
@@ -200,7 +204,8 @@ class TestGameObjectConstructors:
                         activate_handler=handlers.activate,
                         deactivate_handler=handlers.deactivate)
 
-        self.validate_properties(go, name="another parent", children=[child1, child2, child3])
+        validate_properties(go, name="another parent",
+                            children=[child1, child2, child3])
         handlers.validate(activate=go, activate_count=1)
 
         assert child1.parent == go
@@ -224,7 +229,7 @@ class TestGameObjectConstructors:
         children = [child1, child2, child3]
         go = GameObject(name="parent", children=children)
 
-        self.validate_properties(go, name="parent", children=[child1, child2, child3])
+        validate_properties(go, name="parent", children=[child1, child2, child3])
 
         # Now we modify the original list passed in.
         child4 = GameObject(name="child4")
@@ -232,7 +237,7 @@ class TestGameObjectConstructors:
         children.append(child4)
 
         # Now validate the parent GameObject has not changed.
-        self.validate_properties(go, name="parent", children=[child1, child2, child3])
+        validate_properties(go, name="parent", children=[child1, child2, child3])
 
     def test_combination_of_properties(self):
         """
@@ -245,8 +250,8 @@ class TestGameObjectConstructors:
                         activate_handler=handlers.activate,
                         deactivate_handler=handlers.deactivate)
 
-        self.validate_properties(go, name="frank", enabled=True, visible=False, active=True,
-                                 children=[child1])
+        validate_properties(go, name="frank", enabled=True, visible=False, active=True,
+                            children=[child1])
         handlers.validate(activate=go, activate_count=1)
         assert child1.parent == go
 
@@ -259,8 +264,8 @@ class TestGameObjectConstructors:
                         activate_handler=handlers.activate,
                         deactivate_handler=handlers.deactivate)
 
-        self.validate_properties(go, name="rob", enabled=False, visible=True, active=False,
-                                 children=[child1, child2, child3])
+        validate_properties(go, name="rob", enabled=False, visible=True, active=False,
+                            children=[child1, child2, child3])
         handlers.validate(deactivate=go, deactivate_count=1)
         assert child1.parent == go
         assert child2.parent == go

@@ -204,9 +204,22 @@ class GameObject:
         return self
 
     @property
-    def destroyed(self) -> bool:
+    def alive(self) -> bool:
         """
-        Returns whether this object has been destroyed or not.
+        Returns whether this object is alive or not. This is the opposite of is_destroyed.
+        """
+        return not self.__destroyed
+
+    @property
+    def is_destroyed(self) -> bool:
+        """
+        Returns whether this object has been destroyed or not. Whilst it's not ideal to have this
+        property called, is_destroyed(), we need to reserve the name destroyed() for subclasses
+        to override for a destroy handler. If we don't do this, users can end up with a less than
+        helpful error message and our target audience is children and teachers in code clubs who
+        may not be the most experience Python developers.
+
+        To placate myself, I have added the alive property which is the opposite of destroyed.
         """
         return self.__destroyed
 
@@ -226,8 +239,16 @@ class GameObject:
         self.deactivate()
         self.__destroyed = True
 
+        self.destroyed()
         for handler in self.__destroy_handlers:
             handler(self)
+
+    def destroyed(self) -> None:
+        """
+        This is called when the GameObject is destroyed. It provides an easy way for subclasses to
+        provide destruction code without using handlers.
+        """
+        pass
 
     @property
     def parent(self) -> Self | None:
@@ -316,14 +337,14 @@ class GameObject:
         # Remove any destroyed children.
         destroyed_children = [
             child for child in self.__children
-            if child.destroyed
+            if child.__destroyed
         ]
         for child in destroyed_children:
             child.__parent = None
 
         self.__children = [
             child for child in self.__children
-            if not child.destroyed
+            if not child.__destroyed
         ]
 
         if not self.active:

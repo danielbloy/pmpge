@@ -457,7 +457,7 @@ class TestGameObjectConstructors:
 
     def test_validate_handlers_copied(self):
         """
-        This ensures that the lists of handlers passed in is copied so the calling
+        This ensures that the lists of handlers passed in are copied so the calling
         code cannot mutate it later.
         """
         handlers = TestHandlers()

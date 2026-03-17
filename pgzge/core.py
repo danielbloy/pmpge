@@ -370,52 +370,67 @@ class GameObject:
 
     def add_draw_handler(self, handler: Callable[[Self, Any], None]) -> Self:
         """Adds a `draw` handler."""
+        # noinspection PyTypeChecker
         self.__draw_handlers.append(handler) if handler else None
         return self
 
     def remove_draw_handler(self, handler: Callable[[Self, Any], None]) -> Self:
         """Removes a `draw` handler."""
-        self.__draw_handlers.remove(handler) if handler else None
+        if handler and handler in self.__draw_handlers:
+            # noinspection PyTypeChecker
+            self.__draw_handlers.remove(handler)
         return self
 
     def add_update_handler(self, handler: Callable[[Self, float], None]) -> Self:
         """Adds a `update` handler."""
+        # noinspection PyTypeChecker
         self.__update_handlers.append(handler) if handler else None
         return self
 
     def remove_update_handler(self, handler: Callable[[Self, float], None]) -> Self:
         """Removes a `update` handler."""
-        self.__update_handlers.remove(handler) if handler else None
+        if handler and handler in self.__update_handlers:
+            # noinspection PyTypeChecker
+            self.__update_handlers.remove(handler)
         return self
 
     def add_activate_handler(self, handler: Callable[[Self], None]) -> Self:
         """Adds a `activate` handler."""
+        # noinspection PyTypeChecker
         self.__activate_handlers.append(handler) if handler else None
         return self
 
     def remove_activate_handler(self, handler: Callable[[Self], None]) -> Self:
         """Removes a `activate` handler."""
-        self.__activate_handlers.remove(handler) if handler else None
+        if handler and handler in self.__activate_handlers:
+            # noinspection PyTypeChecker
+            self.__activate_handlers.remove(handler)
         return self
 
     def add_deactivate_handler(self, handler: Callable[[Self], None]) -> Self:
         """Adds a `deactivate` handler."""
+        # noinspection PyTypeChecker
         self.__deactivate_handlers.append(handler) if handler else None
         return self
 
     def remove_deactivate_handler(self, handler: Callable[[Self], None]) -> Self:
         """Removes a `deactivate` handler."""
-        self.__deactivate_handlers.remove(handler) if handler else None
+        if handler and handler in self.__deactivate_handlers:
+            # noinspection PyTypeChecker
+            self.__deactivate_handlers.remove(handler)
         return self
 
     def add_destroy_handler(self, handler: Callable[[Self], None]) -> Self:
         """Adds a `destroy` handler."""
+        # noinspection PyTypeChecker
         self.__destroy_handlers.append(handler) if handler else None
         return self
 
     def remove_destroy_handler(self, handler: Callable[[Self], None]) -> Self:
         """Removes a `destroy` handler."""
-        self.__destroy_handlers.remove(handler) if handler else None
+        if handler and handler in self.__destroy_handlers:
+            # noinspection PyTypeChecker
+            self.__destroy_handlers.remove(handler)
         return self
 
 

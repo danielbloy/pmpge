@@ -2,6 +2,7 @@
 
 
 # TODO: test propagation of active property to children
+# TODO: Ensure handlers are called in the correct order
 # TODO: Test reset propagates to children
 # TODO: Test destroy propagates to children
 # TODO: Test add_child()

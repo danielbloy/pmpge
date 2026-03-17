@@ -28,9 +28,7 @@ class TestProperties:
         test_parent_and_child.py.
         """
         handlers = TestHandlers()
-        go = GameObject(
-            activate_handler=handlers.activate,
-            deactivate_handler=handlers.deactivate)
+        go = handlers.create_game_object()
 
         assert go.active is True
         handlers.validate(activate=go, activate_count=1)
@@ -67,18 +65,40 @@ class TestProperties:
         handlers.validate(activate=go, activate_count=1)
 
     def test_reset(self):
-        assert False
+        """
+        Validates that reset() works from both the active and inactive states.
+        """
+        handlers = TestHandlers()
+        go = handlers.create_game_object()
+
+        assert go.active is True
+        handlers.validate(activate=go, activate_count=1)
+
+        # Now reset, we should get deactivated and then reactivated.
+        handlers.reset()
+        go.reset()
+        assert go.active is True
+        handlers.validate(activate=go, activate_count=1, deactivate=go, deactivate_count=1,
+                          called_order=["deactivate", "activate"])
+
+        # Now deactivate and reset, we should get deactivated and then activated.
+        go.active = False
+        handlers.reset()
+        go.reset()
+        assert go.active is False
+        handlers.validate(activate=go, activate_count=1, deactivate=go, deactivate_count=1,
+                          called_order=["activate", "deactivate"])
 
     def test_destroyed(self):
         """
         Validates the destroyed property represents the destroyed state,
         """
         go = GameObject()
-        assert not go.destroyed
+        assert not go.is_destroyed
 
         go.destroy()
-        assert go.destroyed
+        assert go.is_destroyed
         go.destroy()
-        assert go.destroyed
+        assert go.is_destroyed
 
     # TODO: test each of the add_handler() methods

@@ -24,7 +24,8 @@ def validate_properties(
     assert go.active is active
     assert go.enabled is enabled
     assert go.visible is visible
-    assert go.destroyed is destroyed
+    assert go.is_destroyed is destroyed
+    assert go.alive is not destroyed
     assert go.parent is parent
     assert go.children == children
 
@@ -276,13 +277,7 @@ class TestGameObjectConstructors:
         Validate that no other handlers are called when the GameObject is constructed.
         """
         handlers = TestHandlers()
-        go = GameObject(
-            draw_handler=handlers.draw,
-            update_handler=handlers.update,
-            activate_handler=handlers.activate,
-            deactivate_handler=handlers.deactivate,
-            destroy_handler=handlers.destroy)
-
+        go = handlers.create_game_object()
         handlers.validate(activate=go, activate_count=1)
 
     def test_try_to_add_child_with_parent(self):
@@ -291,7 +286,6 @@ class TestGameObjectConstructors:
         """
         child1 = GameObject(name="child1")
         child2 = GameObject(name="child2")
-
         parent1 = GameObject(name="parent1", children=[child2])
 
         with pytest.raises(ValueError):
@@ -302,12 +296,7 @@ class TestGameObjectConstructors:
         This is a basic test that ensures the draw handler is called.
         """
         handlers = TestHandlers()
-        go = GameObject(draw_handler=handlers.draw,
-                        update_handler=handlers.update,
-                        activate_handler=handlers.activate,
-                        deactivate_handler=handlers.deactivate,
-                        destroy_handler=handlers.destroy)
-
+        go = handlers.create_game_object()
         handlers.validate(activate=go, activate_count=1)
         handlers.reset()
 
@@ -319,12 +308,7 @@ class TestGameObjectConstructors:
         This is a basic test that ensures the update handler is called.
         """
         handlers = TestHandlers()
-        go = GameObject(draw_handler=handlers.draw,
-                        update_handler=handlers.update,
-                        activate_handler=handlers.activate,
-                        deactivate_handler=handlers.deactivate,
-                        destroy_handler=handlers.destroy)
-
+        go = handlers.create_game_object()
         handlers.validate(activate=go, activate_count=1)
         handlers.reset()
 
@@ -336,12 +320,7 @@ class TestGameObjectConstructors:
         This is a basic test that ensures the destroy handler is called.
         """
         handlers = TestHandlers()
-        go = GameObject(draw_handler=handlers.draw,
-                        update_handler=handlers.update,
-                        activate_handler=handlers.activate,
-                        deactivate_handler=handlers.deactivate,
-                        destroy_handler=handlers.destroy)
-
+        go = handlers.create_game_object()
         handlers.validate(activate=go, activate_count=1)
         handlers.reset()
 
@@ -353,13 +332,7 @@ class TestGameObjectConstructors:
         This is a basic test that ensures all the handlers are called.
         """
         handlers = TestHandlers()
-        go = GameObject(
-            draw_handler=handlers.draw,
-            update_handler=handlers.update,
-            activate_handler=handlers.activate,
-            deactivate_handler=handlers.deactivate,
-            destroy_handler=handlers.destroy)
-
+        go = handlers.create_game_object()
         handlers.validate(activate=go, activate_count=1)
 
         handlers.reset()
@@ -477,7 +450,8 @@ class TestGameObjectConstructors:
 
         handlers.reset()
         go.destroy()  # This will also deactivate the GameObject
-        handlers.validate(deactivate=go, deactivate_count=1, destroy=go, destroy_count=1)
+        handlers.validate(deactivate=go, deactivate_count=1, destroy=go, destroy_count=1,
+                          called_order=["deactivate", "destroy"])
         handlers1.validate(destroy=go, destroy_count=1)
         handlers2.validate(destroy=go, destroy_count=2)
 
@@ -525,4 +499,6 @@ class TestGameObjectConstructors:
 
         handlers.reset()
         go.destroy()  # This will also deactivate the GameObject
-        handlers.validate(deactivate=go, deactivate_count=3, destroy=go, destroy_count=3)
+        handlers.validate(deactivate=go, deactivate_count=3, destroy=go, destroy_count=3,
+                          called_order=["deactivate", "deactivate", "deactivate",
+                                        "destroy", "destroy", "destroy"])

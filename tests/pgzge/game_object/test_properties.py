@@ -100,5 +100,3 @@ class TestProperties:
         assert go.is_destroyed
         go.destroy()
         assert go.is_destroyed
-
-    # TODO: test each of the add_handler() methods

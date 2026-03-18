@@ -1,3 +1,5 @@
+from typing import Self
+
 from pgzge.core import GameObject
 
 
@@ -129,9 +131,9 @@ class TestHierarchy:
     This class is used to provide details of a GameObject hierarchy for tests.
     """
 
-    def __init__(self):
+    def __init__(self, name: str):
         self.called_order = []
-        self.parent = TestHierarchy.Item("parent", self.called_order)
+        self.parent = TestHierarchy.Item(name, self.called_order)
         self.children = []
         self.grandchildren = []
         self.everyone = [self.parent]
@@ -144,7 +146,7 @@ class TestHierarchy:
         for item in self.everyone:
             item.handlers.reset()
 
-    def add_child(self, name: str):
+    def add_child(self, name: str) -> Self:
         """
         Adds a child GameObject to the hierarchy.
         """
@@ -152,15 +154,18 @@ class TestHierarchy:
         self.children.append(child)
         self.everyone.append(child)
         self.parent.go.add_child(child.go)
-        return child
+        return self
 
-    def validate_properties(self, active=None):
+    def validate_properties(self, active=None, alive=None):
         """
         Validates that all items in the hierarchy have the same value for the specified property.
         """
         for item in self.everyone:
             if active is not None:
                 assert item.go.active == active
+
+            if alive is not None:
+                assert item.go.alive == alive
 
     def validate_called_order(self, expected_handler_order: list[str], debug=False):
         """

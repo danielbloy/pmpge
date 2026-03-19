@@ -194,12 +194,8 @@ def test_destroy_propagates_to_children():
 
 # TODO: Test when only some children are active/enabled.
 
-
 # TODO: Test all of the more complex parent and child checks.Validate the parent passed in works.
 # TODO: Validate that children can override their parents state such as active (but it makes no difference).
 
-
 # TODO: Test add_child()
 # TODO: Test remove_child()
-# TODO: Test draw_hierarchy()
-# TODO: Test update_hierarchy()

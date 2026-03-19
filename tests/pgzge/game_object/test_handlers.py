@@ -6,9 +6,6 @@ This suite of tests validate that event handlers can be added and removed.
 """
 
 
-# TODO: Test draw/update only when visible, enabled/active.
-
-
 # noinspection PyTypeChecker
 def test_removing_none_when_no_handlers():
     """

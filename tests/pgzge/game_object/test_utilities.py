@@ -3,6 +3,34 @@ from typing import Self
 from pgzge.core import GameObject
 
 
+class GameObjectSubclass(GameObject):
+    """
+    Subclass GameObject and override all the supported methods.
+    """
+
+    def activated(self) -> None:
+        self.handlers.activate(self)
+
+    def deactivated(self) -> None:
+        self.handlers.deactivate(self)
+
+    def draw(self, surface):
+        self.handlers.draw(self, surface)
+
+    def update(self, dt) -> None:
+        self.handlers.update(self, dt)
+
+    def destroyed(self) -> None:
+        self.handlers.destroy(self)
+
+    @property
+    def handlers(self):
+        if not hasattr(self, '_handlers'):
+            self._handlers = TestHandlers()
+
+        return self._handlers
+
+
 class TestHandlers:
     """
     Utility class to help track which handlers are called. This also provides a useful way
@@ -103,7 +131,7 @@ class TestHandlers:
         assert self.destroy_called == destroy
         assert self.destroy_called_count == destroy_count
 
-    def create_game_object(self, name=None):
+    def create_game_object(self, name=None) -> GameObject:
         """
         Create a game object with default settings but with name and handlers set.
         """
@@ -241,7 +269,7 @@ class TestHierarchy:
                     items.append(self.find(grandchild.name))
 
                 items.append(child)
-                
+
             items.append(self.parent)
 
         if interlace:

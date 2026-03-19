@@ -118,6 +118,10 @@ class TestHandlers:
 
 
 class TestHierarchy:
+    """
+    Test class to help manage hierarchies. All GameObjects should have unique names.
+    """
+
     class Item:
         """
         Simple data class to hold a GameObject and its handler object.
@@ -138,6 +142,21 @@ class TestHierarchy:
         self.grandchildren = []
         self.everyone = [self.parent]
 
+    def find(self, name: str) -> Item:
+        """
+        Finds an returns an item by name.
+        """
+        result = None
+        for item in self.everyone:
+            if item.go.name == name:
+                result = item
+                break
+
+        if result is None:
+            raise ValueError(f"No item found with name {name}")
+
+        return result
+
     def reset(self):
         """
         Resets all GameObject handler tracking in the hierarchy.
@@ -154,6 +173,17 @@ class TestHierarchy:
         self.children.append(child)
         self.everyone.append(child)
         self.parent.go.add_child(child.go)
+        return self
+
+    def add_grandchild(self, child: str, name: str) -> Self:
+        """
+        Adds a grandchild GameObject to the hierarchy as a child of the named child.
+        """
+        parent = self.find(child)
+        grandchild = TestHierarchy.Item(name, self.called_order)
+        self.grandchildren.append(grandchild)
+        self.everyone.append(grandchild)
+        parent.go.add_child(grandchild.go)
         return self
 
     def validate_properties(self, active=None, alive=None):
@@ -200,7 +230,19 @@ class TestHierarchy:
 
         # Now make sure the handlers were called in the correct order.
         expected_shared_called_order = []
-        items = self.everyone if not reverse else self.grandchildren + self.children + [self.parent]
+        items = self.everyone if not reverse else []
+
+        # Reversing order is slightly more complicated as grandchildren come before children who
+        # in turn come before the parent..
+        if reverse:
+            items = []
+            for child in self.children:
+                for grandchild in child.go.children:
+                    items.append(self.find(grandchild.name))
+
+                items.append(child)
+                
+            items.append(self.parent)
 
         if interlace:
             for item in items:

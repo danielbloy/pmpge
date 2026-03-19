@@ -29,7 +29,28 @@ def parent_three_children():
     )
 
 
-# TODO: Add more complex scenarios such as grandchildren.
+def parent_one_child_one_grandchild():
+    return (
+        TestHierarchy("parent_one_child_one_grandchild")
+        .add_child("child")
+        .add_grandchild("child", "grandchild")
+    )
+
+
+def parent_three_children_six_grandchildren():
+    return (
+        TestHierarchy("parent_three_children_six_grandchildren")
+        .add_child("child-1")
+        .add_grandchild("child-1", "grandchild-1")
+        .add_grandchild("child-1", "grandchild-2")
+        .add_grandchild("child-1", "grandchild-3")
+        .add_grandchild("child-1", "grandchild-4")
+        .add_child("child-2")
+        .add_child("child-3")
+        .add_grandchild("child-3", "grandchild-5")
+        .add_grandchild("child-3", "grandchild-6")
+
+    )
 
 
 def all_hierarchies():
@@ -40,6 +61,8 @@ def all_hierarchies():
         parent_one_child(),
         parent_two_children(),
         parent_three_children(),
+        parent_one_child_one_grandchild(),
+        parent_three_children_six_grandchildren()
     ]
 
     for h in hierarchies:

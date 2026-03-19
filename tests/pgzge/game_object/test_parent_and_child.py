@@ -57,10 +57,23 @@ def test_activate_deactivate_propagates_to_children():
         hierarchy.parent.go.active = False
         hierarchy.validate_properties(active=False)
         hierarchy.validate_called_order(["deactivate"])
+
+        # Try deactivating a second time, no events
+        hierarchy.reset()
+        hierarchy.parent.go.active = False
+        hierarchy.validate_properties(active=False)
+        hierarchy.validate_called_order([])
+
         hierarchy.reset()
         hierarchy.parent.go.active = True
         hierarchy.validate_properties(active=True)
         hierarchy.validate_called_order(["activate"])
+
+        # Try activating a second time, no events
+        hierarchy.reset()
+        hierarchy.parent.go.active = True
+        hierarchy.validate_properties(active=True)
+        hierarchy.validate_called_order([])
 
     for h in all_hierarchies():
         test_when_all_active(h)
@@ -76,9 +89,22 @@ def test_reset_propagates_to_children():
         hierarchy.validate_properties(active=True)
         hierarchy.validate_called_order(["deactivate", "activate"])
 
+        # try a second reset, we should get the same again.
+        hierarchy.reset()
+        hierarchy.parent.go.reset()
+        hierarchy.validate_properties(active=True)
+        hierarchy.validate_called_order(["deactivate", "activate"])
+
+        # Switch the active state to test the reverse
         hierarchy.parent.go.active = False
         hierarchy.reset()
 
+        hierarchy.parent.go.reset()
+        hierarchy.validate_properties(active=False)
+        hierarchy.validate_called_order(["activate", "deactivate"])
+
+        # Try a second reset, we should ge the same again.
+        hierarchy.reset()
         hierarchy.parent.go.reset()
         hierarchy.validate_properties(active=False)
         hierarchy.validate_called_order(["activate", "deactivate"])
@@ -96,6 +122,11 @@ def test_draw_propagates_to_children():
         hierarchy.parent.go.draw_hierarchy("surface")
         hierarchy.validate_called_order(["draw"])
 
+        # Try a second invocation, we should get the same result.
+        hierarchy.reset()
+        hierarchy.parent.go.draw_hierarchy("surface")
+        hierarchy.validate_called_order(["draw"])
+
     for h in all_hierarchies():
         test_when_all_active(h)
 
@@ -106,6 +137,11 @@ def test_update_propagates_to_children():
     """
 
     def test_when_all_active(hierarchy):
+        hierarchy.parent.go.update_hierarchy(0.1)
+        hierarchy.validate_called_order(["update"])
+
+        # Try a second invocation, we should get the same result.
+        hierarchy.reset()
         hierarchy.parent.go.update_hierarchy(0.1)
         hierarchy.validate_called_order(["update"])
 
@@ -120,8 +156,15 @@ def test_destroy_propagates_to_children():
 
     def test_when_all_active(hierarchy):
         hierarchy.parent.go.destroy()
-        hierarchy.validate_properties(alive=False)
-        hierarchy.validate_called_order(["deactivate", "destroy"])
+        hierarchy.validate_properties(active=False, alive=False)
+        hierarchy.validate_called_order(
+            ["deactivate", "destroy"], reverse=True, interlace=True)
+
+        # Try again, this time there should be no events.
+        hierarchy.reset()
+        hierarchy.parent.go.destroy()
+        hierarchy.validate_properties(active=False, alive=False)
+        hierarchy.validate_called_order([])
 
     for h in all_hierarchies():
         test_when_all_active(h)
@@ -132,7 +175,6 @@ def test_destroy_propagates_to_children():
 # TODO: Test all of the more complex parent and child checks.Validate the parent passed in works.
 # TODO: Validate that children can override their parents state such as active (but it makes no difference).
 
-# TODO: Test draw/update only when visible, enabled/active.
 
 # TODO: Test add_child()
 # TODO: Test remove_child()

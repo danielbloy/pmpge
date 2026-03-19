@@ -50,6 +50,7 @@ class GameObject:
         subclass and override the relevant method.
     """
 
+    # TODO: Move many of these parameters to kwargs to make subclassing easier.
     def __init__(self,
                  name: str | None = None,
                  active: bool = True,
@@ -226,10 +227,15 @@ class GameObject:
     def destroy(self) -> None:
         """
         Destroys the object, propagating to all children before the handlers for this object are
-        triggered. This will deactivate the object prior to destruction.
+        triggered. Starting from the leaf nodes, each object will be deactivated and then destroyed
+        in turn; the sequence of events is thus:
+         * deactivate child
+         * destroy child
+         * deactivate parent
+         * destroy parent
         """
 
-        # Propagate the destroy state to all children.
+        # Propagate the deactivated state to all children.
         for child in self.__children:
             child.destroy()
 

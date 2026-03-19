@@ -167,9 +167,21 @@ class TestHierarchy:
             if alive is not None:
                 assert item.go.alive == alive
 
-    def validate_called_order(self, expected_handler_order: list[str], debug=False):
+    def validate_called_order(self,
+                              expected_handler_order: list[str],
+                              reverse=False,
+                              interlace=False,
+                              debug=False):
         """
         Validates that the handlers were all invoked in the expected order.
+
+        If reverse is True, we reverse the expected order of the items in the hierarchy for
+        call order; typically used for testing the order of destruction which is done in reverse.
+
+        If interlace is false we expect all GameObjects to have the first handler invoked followed
+        by all GameObjects to have the second handler invoked and so on. If interlace is True, we
+        expect all GameObjects to have each handler invoked in turn followed by the next GameObject
+        having each handler invoked in turn.
         """
 
         if debug:
@@ -188,10 +200,16 @@ class TestHierarchy:
 
         # Now make sure the handlers were called in the correct order.
         expected_shared_called_order = []
+        items = self.everyone if not reverse else self.grandchildren + self.children + [self.parent]
 
-        for handler in expected_handler_order:
-            calls = [f"{handler} {item.go.name}" for item in self.everyone]
-            expected_shared_called_order.extend(calls)
+        if interlace:
+            for item in items:
+                calls = [f"{handler} {item.go.name}" for handler in expected_handler_order]
+                expected_shared_called_order.extend(calls)
+        else:
+            for handler in expected_handler_order:
+                calls = [f"{handler} {item.go.name}" for item in items]
+                expected_shared_called_order.extend(calls)
 
         if debug:
             print("Expected shared called order:")

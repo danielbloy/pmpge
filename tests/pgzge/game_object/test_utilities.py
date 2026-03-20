@@ -214,7 +214,7 @@ class TestHierarchy:
         parent.go.add_child(grandchild.go)
         return self
 
-    def validate_properties(self, active=None, alive=None):
+    def validate_properties(self, active=None, alive=None, enabled=None):
         """
         Validates that all items in the hierarchy have the same value for the specified property.
         """
@@ -224,6 +224,9 @@ class TestHierarchy:
 
             if alive is not None:
                 assert item.go.alive == alive
+
+            if enabled is not None:
+                assert item.go.enabled == enabled
 
     def validate_called_order(self,
                               expected_handler_order: list[str],

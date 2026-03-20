@@ -18,7 +18,8 @@ class GameObject:
                    When set to True, the corresponding handlers will be triggered and the destroy
                    state will be propagated to all children.
         * enabled: If this is True and active is also True, the object will be updated. This is not
-                   propagated to children.
+                   propagated to children. Enabled only ever impacts this GameObject, even during
+                   updates (i.e. updates are still propagated to children even if this is False).
         * visible: If this is True and active is also True, the object will be drawn. This is not
                    propagated to children.
         * parent: The parent GameObject. This is None if the GameObject has no parent. A GameObject
@@ -50,6 +51,7 @@ class GameObject:
         subclass and override the relevant method.
     """
 
+    # TODO: Add disabled property that is the opposite of enabled - add to tests.
     # TODO: Move many of these parameters to kwargs to make subclassing easier.
     def __init__(self,
                  name: str | None = None,

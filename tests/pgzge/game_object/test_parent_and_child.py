@@ -192,7 +192,43 @@ def test_destroy_propagates_to_children():
     for h in all_hierarchies():
         test_when_all_active(h)
 
-# TODO: Test when only some children are active/enabled.
+
+def test_activated_deactivated_propagated_through_disabled_objects():
+    """
+    Ensures activated() and deactivated() are called on a disabled object.
+    """
+    hierarchy = parent_three_children_six_grandchildren()
+    hierarchy.find('child-3').go.enabled = False
+    hierarchy.find('grandchild-5').go.enabled = False
+
+    hierarchy.reset()
+    hierarchy.parent.go.active = False
+    hierarchy.validate_properties(active=False)
+    hierarchy.validate_called_order(["deactivate"])
+
+    hierarchy.reset()
+    hierarchy.parent.go.active = True
+    hierarchy.validate_properties(active=True)
+    hierarchy.validate_called_order(["activate"])
+
+    hierarchy.reset()
+    hierarchy.parent.go.reset()
+    hierarchy.validate_properties(active=True)
+    hierarchy.validate_called_order(["deactivate", "activate"])
+
+
+def test_activated_deactivated_propagated_through_inactive_objects():
+    """
+    Ensures activated() and deactivated() are propagated through disabled objects.
+    """
+    hierarchy = parent_three_children_six_grandchildren()
+    hierarchy.find('child-3').go.active = False
+    hierarchy.find('grandchild-5').go.active = False
+
+    hierarchy.reset()
+    hierarchy.parent.go.active = False
+    hierarchy.validate_properties(active=False)
+    hierarchy.validate_called_order(["deactivate"])
 
 # TODO: Test all of the more complex parent and child checks.Validate the parent passed in works.
 # TODO: Validate that children can override their parents state such as active (but it makes no difference).

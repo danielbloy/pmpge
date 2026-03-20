@@ -1,10 +1,9 @@
-from pgzge.core import GameObject
-from tests.pgzge.game_object.test_utilities import TestHandlers
-
 """
 This suite of tests validates the GameObject properties. the tests are all relatively
 simple and cover the basic functionality of the properties.
 """
+from pgzge.core import GameObject
+from tests.pgzge.game_object.test_utilities import TestHandlers
 
 
 def test_name_property():

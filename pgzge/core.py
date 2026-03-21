@@ -51,7 +51,6 @@ class GameObject:
         subclass and override the relevant method.
     """
 
-    # TODO: Add disabled property that is the opposite of enabled - add to tests.
     # TODO: Move many of these parameters to kwargs to make subclassing easier.
     def __init__(self,
                  name: str | None = None,
@@ -205,6 +204,20 @@ class GameObject:
             self.activate().deactivate()
 
         return self
+
+    @property
+    def disabled(self) -> bool:
+        """
+        Returns whether this object is disabled or not. This is the opposite of enabled.
+        """
+        return not self.enabled
+
+    @disabled.setter
+    def disabled(self, value: bool) -> None:
+        """
+        Sets whether this object is disabled or not. This is the opposite of enabled.
+        """
+        self.enabled = not value
 
     @property
     def alive(self) -> bool:

@@ -90,6 +90,35 @@ def test_reset():
                       called_order=["activate", "deactivate"])
 
 
+def test_enabled_disabled():
+    """
+    Enabled is simply a boolean property. Disabled is simply the opposite of enabled and
+    provided as a convenience property. It does not propagate or affect children.
+    """
+    handlers = TestHandlers()
+    go = handlers.create_game_object()
+    handlers.reset()
+
+    assert go.enabled is True
+    assert go.disabled is False
+    handlers.validate()
+
+    go.enabled = False
+    assert go.enabled is False
+    assert go.disabled is True
+    handlers.validate()
+
+    go.disabled = False
+    assert go.enabled is True
+    assert go.disabled is False
+    handlers.validate()
+
+    go.disabled = True
+    assert go.enabled is False
+    assert go.disabled is True
+    handlers.validate()
+
+
 def test_destroyed():
     """
     Validates the destroyed property represents the destroyed state,

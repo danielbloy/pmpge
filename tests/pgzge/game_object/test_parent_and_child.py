@@ -37,6 +37,15 @@ def parent_one_child_one_grandchild():
     )
 
 
+def parent_two_children_one_grandchild():
+    return (
+        TestHierarchy("parent_two_children_one_grandchild")
+        .add_child("child-1")
+        .add_grandchild("child-1", "grandchild")
+        .add_child("child-2")
+    )
+
+
 def parent_three_children_six_grandchildren():
     return (
         TestHierarchy("parent_three_children_six_grandchildren")
@@ -62,6 +71,7 @@ def all_hierarchies():
         parent_two_children(),
         parent_three_children(),
         parent_one_child_one_grandchild(),
+        parent_two_children_one_grandchild(),
         parent_three_children_six_grandchildren()
     ]
 
@@ -221,14 +231,50 @@ def test_activated_deactivated_propagated_through_inactive_objects():
     """
     Ensures activated() and deactivated() are propagated through disabled objects.
     """
-    hierarchy = parent_three_children_six_grandchildren()
-    hierarchy.find('child-3').go.active = False
-    hierarchy.find('grandchild-5').go.active = False
+    hierarchy = parent_two_children_one_grandchild()
+    hierarchy.find(
+        'child-1').go.active = False  # This will disable grandchild-5 and 6 so we re-enable one
+    hierarchy.find('grandchild').go.active = True
 
     hierarchy.reset()
     hierarchy.parent.go.active = False
     hierarchy.validate_properties(active=False)
-    hierarchy.validate_called_order(["deactivate"])
+
+    parent = hierarchy.parent
+    child1 = hierarchy.find('child-1')
+    child2 = hierarchy.find('child-2')
+    grandchild = hierarchy.find('grandchild')
+
+    parent.handlers.validate(deactivate=parent.go, deactivate_count=1)
+    child1.handlers.validate()  # No de-activate event for child1 but should pass through
+    grandchild.handlers.validate(deactivate=grandchild.go, deactivate_count=1)
+    child2.handlers.validate(deactivate=child2.go, deactivate_count=1)
+
+
+def test_enabled_disabled_does_not_propagate():
+    """
+    Ensures enabled and disabled does not propagate to children.
+    """
+    hierarchy = parent_one_child_one_grandchild()
+    parent = hierarchy.parent
+    child = hierarchy.find('child')
+    grandchild = hierarchy.find('grandchild')
+
+    parent.go.enabled = False
+    assert child.go.enabled == True
+    assert grandchild.go.enabled == True
+
+    parent.go.disabled = False
+    assert child.go.enabled == True
+    assert grandchild.go.enabled == True
+
+    parent.go.disabled = True
+    assert child.go.enabled == True
+    assert grandchild.go.enabled == True
+
+    parent.go.enabled = True
+    assert child.go.enabled == True
+    assert grandchild.go.enabled == True
 
 # TODO: Test all of the more complex parent and child checks.Validate the parent passed in works.
 # TODO: Validate that children can override their parents state such as active (but it makes no difference).

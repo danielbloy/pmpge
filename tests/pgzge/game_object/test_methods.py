@@ -90,11 +90,30 @@ def test_active_works_on_disabled_object():
 
 
 def test_destroy_works_on_disabled_object():
-    assert False
+    """
+    Ensures that destroy() works when the object is disabled.
+    """
+    handlers = TestHandlers()
+    go = handlers.create_game_object()
+    go.enabled = False
+    handlers.reset()
+    go.destroy()
+
+    handlers.validate(deactivate=go, deactivate_count=1, destroy=go, destroy_count=1,
+                      called_order=["deactivate", "destroy"])
 
 
 def test_destroy_works_on_deactivated_object():
-    assert False
+    """
+    Ensures that destroy() works when the object is deactivated.
+    """
+    handlers = TestHandlers()
+    go = handlers.create_game_object()
+    go.active = False
+    handlers.reset()
+    go.destroy()
+
+    handlers.validate(destroy=go, destroy_count=1, called_order=["destroy"])
 
 
 def test_draw_does_nothing_when_inactive():

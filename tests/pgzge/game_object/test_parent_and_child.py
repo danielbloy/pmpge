@@ -276,8 +276,46 @@ def test_enabled_disabled_does_not_propagate():
     assert child.go.enabled == True
     assert grandchild.go.enabled == True
 
-# TODO: Test all of the more complex parent and child checks.Validate the parent passed in works.
-# TODO: Validate that children can override their parents state such as active (but it makes no difference).
+
+def test_destroy_works_on_disabled_object():
+    assert False
+
+
+def test_destroy_works_on_deactivated_object():
+    assert False
+
+
+def test_draw_does_nothing_when_inactive():
+    # TODO: Test also in parent child.
+    assert False
+
+
+def test_draw_does_nothing_when_invisible():
+    # TODO: Test also in parent child.
+    assert False
+
+
+def test_draw_works_when_disabled():
+    # TODO: Test also in parent child.
+    assert False
+
+
+def test_updated_removes_destroyed_children():
+    assert False
+
+
+def test_update_does_nothing_when_inactive():
+    # TODO: Test also in parent child.
+    assert False
+
+
+def test_update_does_nothing_when_disabled():
+    # TODO: Test also in parent child.
+    assert False
+
+
+def test_update_works_when_invisible():
+    assert False
 
 # TODO: Test add_child()
 # TODO: Test remove_child()

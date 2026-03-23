@@ -4,7 +4,7 @@ from typing import Self, Any
 from pgzero.keyboard import Keyboard
 from pgzero.loaders import images
 
-from core import GameObject
+from pgzge.core import GameObject
 
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)

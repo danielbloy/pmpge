@@ -1,12 +1,11 @@
-import pytest
-
-from pgzge.core import GameObject
-from tests.pgzge.game_object.test_utilities import TestHandlers
-
 """
 This suite of tests is to validate the GameObject constructor with its
 many optional arguments.
 """
+import pytest
+
+from pgzge.core import GameObject
+from tests.pgzge.game_object.test_utilities import TestHandlers
 
 
 def validate_properties(

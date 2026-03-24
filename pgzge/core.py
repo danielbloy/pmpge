@@ -441,6 +441,7 @@ class GameObject:
         return self
 
 
+# TODO: Write tests for Game
 class Game:
     """
     Game is the root of the GameObject hierarchy. It provides a simple way to manage the root

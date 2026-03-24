@@ -14,7 +14,7 @@ def validate_properties(
         active=True,
         enabled=True,
         visible=True,
-        destroyed=False,
+        alive=True,
         parent=None,
         children=None):
     """
@@ -28,8 +28,7 @@ def validate_properties(
     assert go.active is active
     assert go.enabled is enabled
     assert go.visible is visible
-    assert go.is_destroyed is destroyed
-    assert go.alive is not destroyed
+    assert go.alive is alive
     assert go.parent is parent
     assert go.children == children
 

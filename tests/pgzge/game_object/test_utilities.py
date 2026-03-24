@@ -263,7 +263,7 @@ class TestHierarchy:
             print("Hierarchy:")
             for item in self.everyone:
                 print(
-                    f"  {item.go.name} - Active: {item.go.active} Destroyed: {item.go.is_destroyed} Enabled: {item.go.enabled} Visible: {item.go.visible} - {item.handlers.called_order} ")
+                    f"  {item.go.name} - Alive: {item.go.alive}, Active: {item.go.active} Enabled: {item.go.enabled} Visible: {item.go.visible} - {item.handlers.called_order} ")
             print()
 
         # First make sure all GameObjects have the expected handler

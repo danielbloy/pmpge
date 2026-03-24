@@ -121,12 +121,12 @@ def test_enabled_disabled():
 
 def test_destroyed():
     """
-    Validates the destroyed property represents the destroyed state,
+    Validates the alive property represents the destroyed state,
     """
     go = GameObject()
-    assert not go.is_destroyed
+    assert go.alive
 
     go.destroy()
-    assert go.is_destroyed
+    assert not go.alive
     go.destroy()
-    assert go.is_destroyed
+    assert not go.alive

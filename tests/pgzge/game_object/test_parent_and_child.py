@@ -2,6 +2,9 @@
 This suite of tests validates the propagation of state and handlers between
 parent and children.
 """
+import pytest
+
+from core import GameObject
 from tests.pgzge.game_object.test_utilities import TestHierarchy
 
 
@@ -378,7 +381,26 @@ def test_draw_works_when_disabled():
 
 
 def test_updated_removes_destroyed_children():
-    pass
+    """
+    Validates that update_hierarchy() removes destroyed children.
+    """
+    hierarchy = parent_three_children_six_grandchildren()
+    parent = hierarchy.parent
+    assert len(parent.go.children) == 3
+    hierarchy.find('child-1').go.destroy()
+    hierarchy.find('child-3').go.destroy()
+    hierarchy.reset()
+
+    parent.go.update_hierarchy(0.1)
+
+    assert len(parent.go.children) == 1
+    parent.handlers.validate(update=(parent.go, 0.1), update_count=1, called_order=["update"])
+    child2 = hierarchy.find('child-2')
+    child2.handlers.validate(update=(child2.go, 0.1), update_count=1, called_order=["update"])
+
+    # The destroyed children should get no events
+    hierarchy.find('child-1').handlers.validate([])
+    hierarchy.find('child-3').handlers.validate([])
 
 
 def test_update_does_nothing_when_inactive():
@@ -444,5 +466,107 @@ def test_update_works_when_invisible():
     for h in all_hierarchies():
         test_when_disabled(h)
 
-# TODO: Test add_child()
-# TODO: Test remove_child()
+
+def test_add_child():
+    """
+    Validates that a child can be added to a parent.
+    """
+    parent = GameObject()
+    child = GameObject()
+
+    assert len(parent.children) == 0
+    assert child.parent is None
+
+    # Add none, this should not error
+    # noinspection PyTypeChecker
+    parent.add_child(None)
+    assert len(parent.children) == 0
+
+    # Add child
+    parent.add_child(child)
+    assert len(parent.children) == 1
+    assert child.parent == parent
+
+    # Add a second time, this should not error.
+    parent.add_child(child)
+    assert len(parent.children) == 1
+    assert child.parent == parent
+
+
+def test_add_child_to_another_parent():
+    """
+    Validates that a child cannot be added to another parent.
+    """
+    parent1 = GameObject()
+    parent2 = GameObject()
+    child = GameObject(parent=parent1)
+
+    assert len(parent1.children) == 1
+    assert len(parent2.children) == 0
+    assert child.parent is parent1
+
+    with pytest.raises(ValueError):
+        parent2.add_child(child)
+
+    assert len(parent1.children) == 1
+    assert len(parent2.children) == 0
+    assert child.parent is parent1
+
+
+def test_remove_child():
+    """
+    Validates that a child can be removed from a parent.
+    """
+    parent = GameObject()
+    child1 = GameObject(parent=parent)
+    child2 = GameObject(parent=parent)
+    child3 = GameObject(parent=parent)
+
+    assert len(parent.children) == 3
+    assert child1.parent is parent
+    assert child2.parent is parent
+    assert child3.parent is parent
+
+    # Remove none, this should not error
+    # noinspection PyTypeChecker
+    parent.remove_child(None)
+    assert len(parent.children) == 3
+    assert child1.parent is parent
+    assert child2.parent is parent
+    assert child3.parent is parent
+
+    # Remove child
+    parent.remove_child(child2)
+    assert len(parent.children) == 2
+    assert child1.parent == parent
+    assert child2.parent is None
+    assert child3.parent == parent
+
+    # Remove a second time, this should not error.
+    parent.remove_child(child1)
+    assert len(parent.children) == 1
+    assert child1.parent is None
+    assert child2.parent is None
+    assert child3.parent == parent
+
+    # Remove a second child
+
+
+def test_remove_child_from_another_parent():
+    """
+    Validates that a child cannot be removed from another parent.
+    """
+    parent1 = GameObject()
+    parent2 = GameObject()
+    child = GameObject(parent=parent1)
+
+    assert len(parent1.children) == 1
+    assert len(parent2.children) == 0
+    assert child.parent is parent1
+
+    with pytest.raises(ValueError):
+        parent2.remove_child(child)
+
+    assert len(parent1.children) == 1
+    assert len(parent2.children) == 0
+    assert child.parent is parent1

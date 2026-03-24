@@ -213,3 +213,5 @@ def test_update_works_when_invisible():
     go.update_hierarchy(0.1)
 
     handlers.validate(update=(go, 0.1), update_count=1, called_order=["update"])
+
+# TODO: Test methods return self.

@@ -246,7 +246,7 @@ def test_activated_deactivated_propagated_through_inactive_objects():
     grandchild = hierarchy.find('grandchild')
 
     parent.handlers.validate(deactivate=parent.go, deactivate_count=1)
-    child1.handlers.validate()  # No de-activate event for child1 but should pass through
+    child1.handlers.validate()  # No deactivate event for child1 but should pass through
     grandchild.handlers.validate(deactivate=grandchild.go, deactivate_count=1)
     child2.handlers.validate(deactivate=child2.go, deactivate_count=1)
 
@@ -278,44 +278,171 @@ def test_enabled_disabled_does_not_propagate():
 
 
 def test_destroy_works_on_disabled_object():
-    assert False
+    """
+    Ensures destroy works on disabled objects.
+    """
+
+    def test_when_disabled(hierarchy):
+        # Disable the parent and first child if one exists.
+        hierarchy.parent.go.enabled = False
+        if len(hierarchy.children) > 0:
+            hierarchy.children[0].go.enabled = False
+
+        hierarchy.parent.go.destroy()
+        hierarchy.validate_called_order(["deactivate", "destroy"], reverse=True, interlace=True)
+
+    for h in all_hierarchies():
+        test_when_disabled(h)
 
 
 def test_destroy_works_on_deactivated_object():
-    assert False
+    """
+    Ensures destroy works on deactivated objects.
+    """
+
+    def test_when_deactivated(hierarchy):
+        # Deactivate the parent (this deactivates the entire hierarchy)
+        hierarchy.parent.go.active = False
+        hierarchy.reset()
+
+        hierarchy.parent.go.destroy()
+        hierarchy.validate_properties(active=False, alive=False)
+        hierarchy.validate_called_order(["destroy"], reverse=True)
+
+    for h in all_hierarchies():
+        test_when_deactivated(h)
 
 
 def test_draw_does_nothing_when_inactive():
-    # TODO: Test also in parent child.
-    assert False
+    """
+    Ensures draw_hierarchy() does nothing on inactive objects. It should also not propagate.
+    """
+
+    def test_when_inactive(hierarchy):
+        # Deactivate the parent (this deactivates the entire hierarchy)
+        hierarchy.parent.go.active = False
+        # Reactivate all grandchildren and first child
+        if len(hierarchy.children) > 0:
+            hierarchy.children[0].go.active = True
+        for grandchild in hierarchy.grandchildren:
+            grandchild.go.active = True
+        hierarchy.reset()
+
+        hierarchy.parent.go.draw_hierarchy("surface")
+        hierarchy.validate_called_order([])
+
+    for h in all_hierarchies():
+        test_when_inactive(h)
 
 
 def test_draw_does_nothing_when_invisible():
-    # TODO: Test also in parent child.
-    assert False
+    """
+    Ensures draw_hierarchy() does nothing on invisible objects. The visible property only
+    applies to the object itself so the update still propagates
+    """
+
+    def test_when_invisible(hierarchy):
+        invisible = [hierarchy.parent.go]
+
+        # Hide the parent and first child if one exists.
+        hierarchy.parent.go.visible = False
+        if len(hierarchy.children) > 0:
+            hierarchy.children[0].go.visible = False
+            invisible.append(hierarchy.children[0].go)
+
+        hierarchy.parent.go.draw_hierarchy("surface")
+        hierarchy.validate_called_order(["draw"], exclude=invisible)
+
+    for h in all_hierarchies():
+        test_when_invisible(h)
 
 
 def test_draw_works_when_disabled():
-    # TODO: Test also in parent child.
-    assert False
+    """
+    Ensures draw_hierarchy() works as normal on disabled objects as disabled/enabled only
+    applies to update_hierarchy().
+    """
+
+    def test_when_disabled(hierarchy):
+
+        # Disable the parent and first child if one exists.
+        hierarchy.parent.go.enabled = False
+        if len(hierarchy.children) > 0:
+            hierarchy.children[0].go.enabled = False
+
+        hierarchy.parent.go.draw_hierarchy("surface")
+        hierarchy.validate_called_order(["draw"])
+
+    for h in all_hierarchies():
+        test_when_disabled(h)
 
 
 def test_updated_removes_destroyed_children():
-    assert False
+    pass
 
 
 def test_update_does_nothing_when_inactive():
-    # TODO: Test also in parent child.
-    assert False
+    """
+    Ensures update_hierarchy() does nothing on inactive objects. It should also not propagate.
+    """
+
+    def test_when_inactive(hierarchy):
+        # Deactivate the parent (this deactivates the entire hierarchy)
+        hierarchy.parent.go.active = False
+        # Reactivate all grandchildren and first child
+        if len(hierarchy.children) > 0:
+            hierarchy.children[0].go.active = True
+        for grandchild in hierarchy.grandchildren:
+            grandchild.go.active = True
+        hierarchy.reset()
+
+        hierarchy.parent.go.update_hierarchy(0.1)
+        hierarchy.validate_called_order([])
+
+    for h in all_hierarchies():
+        test_when_inactive(h)
 
 
 def test_update_does_nothing_when_disabled():
-    # TODO: Test also in parent child.
-    assert False
+    """
+    Ensures update_hierarchy() does nothing on disabled objects. The enabled property only
+    applies to the object itself so the update still propagates
+    """
+
+    def test_when_disabled(hierarchy):
+        disabled = [hierarchy.parent.go]
+
+        # Disable the parent and first child if one exists.
+        hierarchy.parent.go.enabled = False
+        if len(hierarchy.children) > 0:
+            hierarchy.children[0].go.enabled = False
+            disabled.append(hierarchy.children[0].go)
+
+        hierarchy.parent.go.update_hierarchy(0.1)
+        hierarchy.validate_called_order(["update"], exclude=disabled)
+
+    for h in all_hierarchies():
+        test_when_disabled(h)
 
 
 def test_update_works_when_invisible():
-    assert False
+    """
+    Ensures update_hierarchy() works as normal on invisible objects as visible only
+    applies to draw_hierarchy().
+    """
+
+    def test_when_disabled(hierarchy):
+
+        # Hide the parent and first child if one exists.
+        hierarchy.parent.go.visible = False
+        if len(hierarchy.children) > 0:
+            hierarchy.children[0].go.visible = False
+
+        hierarchy.parent.go.update_hierarchy(0.1)
+        hierarchy.validate_called_order(["update"])
+
+    for h in all_hierarchies():
+        test_when_disabled(h)
 
 # TODO: Test add_child()
 # TODO: Test remove_child()

@@ -232,7 +232,8 @@ class TestHierarchy:
                               expected_handler_order: list[str],
                               reverse=False,
                               interlace=False,
-                              debug=False):
+                              debug=False,
+                              exclude=None):
         """
         Validates that the handlers were all invoked in the expected order.
 
@@ -243,7 +244,16 @@ class TestHierarchy:
         by all GameObjects to have the second handler invoked and so on. If interlace is True, we
         expect all GameObjects to have each handler invoked in turn followed by the next GameObject
         having each handler invoked in turn.
+
+        An exclude list can be passed in which lists all GameObjects expected to be excluded from
+        having the handlers called..
         """
+
+        def include(item: TestHierarchy.Item):
+            if not exclude:
+                return True
+
+            return item.go not in exclude
 
         if debug:
             print()
@@ -252,28 +262,35 @@ class TestHierarchy:
             print()
             print("Hierarchy:")
             for item in self.everyone:
-                print(f"  {item.go.name} - {item.handlers.called_order}")
+                print(
+                    f"  {item.go.name} - Active: {item.go.active} Destroyed: {item.go.is_destroyed} Enabled: {item.go.enabled} Visible: {item.go.visible} - {item.handlers.called_order} ")
             print()
 
         # First make sure all GameObjects have the expected handler
         for item in self.everyone:
-            assert item.handlers.called_order == expected_handler_order
+            if include(item):
+                assert item.handlers.called_order == expected_handler_order
+            else:
+                assert item.handlers.called_order == []
 
         # Now make sure the handlers were called in the correct order.
         expected_shared_called_order = []
-        items = self.everyone if not reverse else []
+        items = [item for item in self.everyone if include(item)] if not reverse else []
 
         # Reversing order is slightly more complicated as grandchildren come before children who
-        # in turn come before the parent..
+        # in turn come before the parent.
         if reverse:
             items = []
             for child in self.children:
                 for grandchild in child.go.children:
-                    items.append(self.find(grandchild.name))
+                    if include(grandchild):
+                        items.append(self.find(grandchild.name))
 
-                items.append(child)
+                if include(child):
+                    items.append(child)
 
-            items.append(self.parent)
+            if include(self.parent):
+                items.append(self.parent)
 
         if interlace:
             for item in items:

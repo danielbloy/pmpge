@@ -51,7 +51,6 @@ class GameObject:
         subclass and override the relevant method.
     """
 
-    # TODO: Move many of these parameters to kwargs to make subclassing easier.
     def __init__(self,
                  name: str | None = None,
                  active: bool = True,

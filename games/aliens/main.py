@@ -1,6 +1,6 @@
 import os
 
-from sprites import Sprites, new_kind, new_sprite
+from sprite import Sprites, new_kind, new_sprite
 from traits.controller import MoveWithKeyboard
 from traits.drawing import DrawImage, DrawText
 from traits.physics import Velocity

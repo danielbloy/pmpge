@@ -1,3 +1,4 @@
+# TODO: Remove dependency on pygame zero
 from pgzero.keyboard import Keyboard
 
 

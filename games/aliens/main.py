@@ -1,8 +1,11 @@
 import os
 
-from sprites import Sprites, MoveWithKeyboard, StayInBounds, DrawImage, new_kind, new_sprite, \
-    Velocity, DrawText, \
-    RelativeToParent
+from sprites import Sprites, new_kind, new_sprite
+from trait import merge
+from traits.controller import MoveWithKeyboard
+from traits.drawing import DrawImage, DrawText
+from traits.physics import Velocity
+from traits.position import StayInBounds, RelativeToParent
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
@@ -253,8 +256,8 @@ player = sprites.new('player',
                      WIDTH / 2, PLAYER_SHIP_START_HEIGHT,
                      DrawImage('player'))
 
-player.merge(MoveWithKeyboard(200, 0, keyboard))
-player.merge(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, HEIGHT))
+merge(player, MoveWithKeyboard(200, 0, keyboard))
+merge(player, StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, HEIGHT))
 game_hud.add_child(player)
 
 player.add_child(
@@ -269,7 +272,7 @@ player.add_child(
         DrawText(f"{lives}"))
 )
 
-player.image = 'alien_a_2'
+# player.image = 'alien_a_2'
 
 player_kind = new_kind("player_kind")
 

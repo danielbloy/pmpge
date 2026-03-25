@@ -2,6 +2,8 @@ from collections.abc import Callable
 from typing import Self, Any
 
 
+# TODO: Split core.py into game_object.py and game.py
+
 class GameObject:
     """
     GameObject is the base class for all objects in the game. It provides a simple parent/child

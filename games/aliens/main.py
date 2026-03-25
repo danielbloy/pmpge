@@ -1,7 +1,6 @@
 import os
 
 from sprites import Sprites, new_kind, new_sprite
-from trait import merge
 from traits.controller import MoveWithKeyboard
 from traits.drawing import DrawImage, DrawText
 from traits.physics import Velocity
@@ -256,15 +255,15 @@ player = sprites.new('player',
                      WIDTH / 2, PLAYER_SHIP_START_HEIGHT,
                      DrawImage('player'))
 
-merge(player, MoveWithKeyboard(200, 0, keyboard))
-merge(player, StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, HEIGHT))
+player.add_trait(MoveWithKeyboard(200, 0, keyboard))
+player.add_trait(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, HEIGHT))
 game_hud.add_child(player)
 
 player.add_child(
     sprites.new(
         'position', 0, 0,
         RelativeToParent(16, 16),
-        DrawText(lambda obj: f"{(int(obj.x), int(obj.y))}"))
+        DrawText(lambda obj: f"{(int(obj.x), int(obj.y))} {obj.pos}"))
 ).add_child(
     sprites.new(
         'lives', 0, 0,

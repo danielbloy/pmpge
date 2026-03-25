@@ -1,47 +1,18 @@
 from pgzge.core import GameObject
-from pgzge.trait import merge
+from pgzge.trait import new_object_with_traits, GameObjectWithTraits
 from pgzge.traits.position import Position
 
 
+# TODO: Add size, width, height, topleft, topright etc. properties
+# TODO: Add bounding box property
 # TODO: Sprites still needs some refinement to simplify their use, especially Kinds.
 
-class Sprite(GameObject):
+class Sprite(GameObjectWithTraits):
     pass
 
 
 def new_kind(name: str, *traits_classes: type) -> type:
     return type(name, (Sprite, Position, *traits_classes), {})
-
-
-def new_sprite(kind: type,
-               x: float, y: float,
-               *traits,
-               name: str | None = None,
-               active: bool = True,
-               enabled: bool = True,
-               visible: bool = True,
-               children: list[GameObject] = None
-               ) -> Sprite:
-    """
-    """
-    sprite = kind.__new__(kind)
-
-    # We don't use merge here because game_object is the basis of the sprite.
-    base = GameObject(
-        name=name,
-        active=active,
-        enabled=enabled,
-        visible=visible,
-        children=children
-    )
-    sprite.__dict__.update(base.__dict__)
-
-    merge(sprite, Position(x, y))
-
-    for trait in traits:
-        merge(sprite, trait)
-
-    return sprite
 
 
 class Kinds:
@@ -69,6 +40,28 @@ class Kinds:
             return self.types[name]
 
         return self.new(name, *traits_classes)
+
+
+def new_sprite(kind: type,
+               x: float, y: float,
+               *traits,
+               name: str | None = None,
+               active: bool = True,
+               enabled: bool = True,
+               visible: bool = True,
+               children: list[GameObject] = None) -> Sprite:
+    """
+    """
+
+    # We don't use merge here because game_object is the basis of the sprite.
+    base = GameObject(
+        name=name,
+        active=active,
+        enabled=enabled,
+        visible=visible,
+        children=children
+    )
+    return new_object_with_traits(base, Position(x, y), *traits, kind=kind)
 
 
 class Sprites:

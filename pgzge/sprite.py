@@ -11,7 +11,7 @@ class Sprite(GameObject):
     pass
 
 
-def new_kind(name: str, *traits_classes: type) -> type:
+def new_sprite_kind(name: str, *traits_classes: type) -> type:
     return type(name, (Sprite, Position, *traits_classes), {})
 
 
@@ -23,7 +23,7 @@ class Kinds:
         if name in self.types:
             raise ValueError(f"Sprite kind '{name}' already exists.")
 
-        self.types[name] = new_kind(name, *traits_classes)
+        self.types[name] = new_sprite_kind(name, *traits_classes)
         return self.types[name]
 
     def __contains__(self, item) -> bool:

@@ -1,6 +1,6 @@
 import os
 
-from sprite import Sprites, new_kind, new_sprite
+from sprite import Sprites, new_sprite_kind, new_sprite
 from traits.controller import MoveWithKeyboard
 from traits.drawing import DrawImage, DrawText
 from traits.physics import Velocity
@@ -274,7 +274,7 @@ player.add_child(
 
 # player.image = 'alien_a_2'
 
-player_kind = new_kind("player_kind")
+player_kind = new_sprite_kind("player_kind")
 
 sprite = new_sprite(player_kind,
                     WIDTH / 2, PLAYER_SHIP_START_HEIGHT,

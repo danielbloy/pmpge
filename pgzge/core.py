@@ -440,7 +440,6 @@ class GameObject:
             self.__destroy_handlers.remove(handler)
         return self
 
-    # TODO: Add tests
     # TODO: Add comments
 
     def add_trait(self, trait: Any) -> Any:

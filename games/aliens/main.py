@@ -1,6 +1,6 @@
 import os
 
-from sprite import Sprites, new_sprite_kind, new_sprite
+from sprite import Sprite
 from traits.controller import MoveWithKeyboard
 from traits.drawing import DrawImage, DrawText
 from traits.physics import Velocity
@@ -249,42 +249,39 @@ PLAYER_SHIP_MAX_LEFT = (PLAYER_SHIP_WIDTH / 2)
 PLAYER_SHIP_MAX_RIGHT = WIDTH - (PLAYER_SHIP_WIDTH / 2)
 PLAYER_SHIP_START_HEIGHT = LOWER_BORDER_START - (PLAYER_SHIP_HEIGHT / 2)
 
-sprites = Sprites()
-
-sprites.kinds.new('player')
-player = sprites.new('player',
-                     WIDTH / 2, PLAYER_SHIP_START_HEIGHT,
-                     DrawImage('player'))
+player = Sprite(
+    WIDTH / 2, PLAYER_SHIP_START_HEIGHT,
+    DrawImage('player'))
 
 player.add_trait(MoveWithKeyboard(200, 0, keyboard))
 player.add_trait(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, HEIGHT))
 game_hud.add_child(player)
 
 player.add_child(
-    sprites.new(
-        'position', 0, 0,
+    Sprite(
+        0, 0,
         RelativeToParent(16, 16),
-        DrawText(lambda obj: f"{(int(obj.x), int(obj.y))} {obj.pos}"))
+        DrawText(lambda obj: f"{(int(obj.x), int(obj.y))} {obj.pos}")
+    )
 ).add_child(
-    sprites.new(
-        'lives', 0, 0,
+    Sprite(
+        0, 0,
         RelativeToParent(16, -16),
-        DrawText(f"{lives}"))
+        DrawText(f"{lives}")
+    )
 )
 
 # player.image = 'alien_a_2'
 
-player_kind = new_sprite_kind("player_kind")
-
-sprite = new_sprite(player_kind,
-                    WIDTH / 2, PLAYER_SHIP_START_HEIGHT,
+sprite = Sprite.new(WIDTH / 2, PLAYER_SHIP_START_HEIGHT,
                     DrawImage('alien_a_1'),
                     Velocity(15, -25))
 sprite.add_child(
-    sprites.new(
-        'position', 0, 0,
+    Sprite(
+        0, 0,
         RelativeToParent(16, 16),
-        DrawText(lambda obj: f"{(int(obj.x), int(obj.y))}"))
+        DrawText(lambda obj: f"{(int(obj.x), int(obj.y))}")
+    )
 )
 pgzge.add_child(sprite)
 

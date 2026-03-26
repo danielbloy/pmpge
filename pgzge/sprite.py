@@ -1,5 +1,5 @@
 from pgzge.core import GameObject
-from pgzge.trait import new_object_with_traits, GameObjectWithTraits
+from pgzge.core import new_object_with_traits
 from pgzge.traits.position import Position
 
 
@@ -7,7 +7,7 @@ from pgzge.traits.position import Position
 # TODO: Add bounding box property
 # TODO: Sprites still needs some refinement to simplify their use, especially Kinds.
 
-class Sprite(GameObjectWithTraits):
+class Sprite(GameObject):
     pass
 
 

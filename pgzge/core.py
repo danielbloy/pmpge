@@ -52,6 +52,7 @@ class GameObject:
     """
 
     def __init__(self,
+                 *traits,
                  name: str | None = None,
                  active: bool = True,
                  enabled: bool = True,
@@ -101,13 +102,17 @@ class GameObject:
         self.__deactivate_handlers.append(deactivate_handler) if deactivate_handler else None
         self.__destroy_handlers.append(destroy_handler) if destroy_handler else None
 
-        # Now add the parent and children read in time for the activation.
+        # Now add the parent and children before the activate or deactivate events.
         if parent:
             parent.add_child(self)
 
         if children:
             for child in children:
                 self.add_child(child)
+
+        # Add in the traits before triggering the active or deactivate events.
+        for trait in traits:
+            self.apply_trait(trait)
 
         # This forces the active or deactivate events to be called.
         self.__active: bool = not active
@@ -440,13 +445,11 @@ class GameObject:
             self.__destroy_handlers.remove(handler)
         return self
 
-    # TODO: Add comments
-
-    def add_trait(self, trait: Any) -> Any:
+    def apply_trait(self, trait: Any) -> Any:
         """
         Merge the properties and handlers of another object into a GameObject. It will
         not merge across methods or property getter and setters. For that you will
-        need to define a subclass of GameObject or create one dynamically via SpriteKinds.
+        need to define a subclass of GameObject or create one dynamically via new_kind.
         """
         self.__dict__.update(trait.__dict__)
 
@@ -502,6 +505,6 @@ def new_object_with_traits(base: GameObject, *traits, kind: type = None) -> Game
     result.__dict__.update(base.__dict__)
 
     for trait in traits:
-        result.add_trait(trait)
+        result.apply_trait(trait)
 
     return result

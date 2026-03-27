@@ -253,8 +253,8 @@ player = Sprite(
     WIDTH / 2, PLAYER_SHIP_START_HEIGHT,
     DrawImage('player'))
 
-player.add_trait(MoveWithKeyboard(200, 0, keyboard))
-player.add_trait(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, HEIGHT))
+player.apply_trait(MoveWithKeyboard(200, 0, keyboard))
+player.apply_trait(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, HEIGHT))
 game_hud.add_child(player)
 
 player.add_child(

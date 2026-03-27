@@ -8,11 +8,8 @@ from pgzge.traits.position import Position
 
 class Sprite(GameObject, Position):
     def __init__(self, x: float, y: float, *traits, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(*traits, **kwargs)
         Position.__init__(self, x, y)
-
-        for trait in traits:
-            self.add_trait(trait)
 
     @staticmethod
     def new(x: float, y: float, *traits, kind: type = None, **kwargs) -> GameObject:

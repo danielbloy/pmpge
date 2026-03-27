@@ -49,6 +49,8 @@ class GameObject:
 
         The handlers can be used to provide instance-specific behaviour without having to make a
         subclass and override the relevant method.
+
+        # TODO: Explain traits
     """
 
     def __init__(self,
@@ -445,11 +447,11 @@ class GameObject:
             self.__destroy_handlers.remove(handler)
         return self
 
-    def apply_trait(self, trait: Any) -> Any:
+    def apply_trait(self, trait: Any) -> Self:
         """
-        Merge the properties and handlers of another object into a GameObject. It will
-        not merge across methods or property getter and setters. For that you will
-        need to define a subclass of GameObject or create one dynamically via new_kind.
+        Merge the properties and handlers of a trait object into this GameObject. It will
+        not merge across methods or property getter and setters. For that you will need to
+        define a subclass of GameObject.
         """
         self.__dict__.update(trait.__dict__)
 

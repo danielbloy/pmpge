@@ -112,7 +112,7 @@ def test_parent():
     Validate that the parent property is set correctly. More complex test are done in
     test_parent_and_children.py.
     """
-    parent = GameObject("parent")
+    parent = GameObject(name="parent")
     go = GameObject(parent=parent)
     validate_properties(go, parent=parent)
     assert parent.children == [go]

@@ -4,20 +4,20 @@ class Position:
         self.y: float = y
 
     @property
-    def position(self) -> tuple[float, float]:
-        return self.x, self.y
+    def position(self) -> tuple[int, int]:
+        return int(self.x), int(self.y)
 
     @position.setter
-    def position(self, position: tuple[float, float]) -> None:
+    def position(self, position: tuple[int, int]) -> None:
         self.x = position[0]
         self.y = position[1]
 
     @property
-    def pos(self) -> tuple[float, float]:
-        return self.x, self.y
+    def pos(self) -> tuple[int, int]:
+        return int(self.x), int(self.y)
 
     @pos.setter
-    def pos(self, pos: tuple[float, float]) -> None:
+    def pos(self, pos: tuple[int, int]) -> None:
         self.x = pos[0]
         self.y = pos[1]
 

@@ -39,8 +39,10 @@ to take a look.
 The structure of the `pgzge`project is arranged in the following files (listed in order of
 importance):
 
-* `core.py` - required for every `pgzge` project as it provides the `Game` and `GameObject` classes.
-* `sprites.py` - provides the `Sprite` class which is used to represent a object with position.
+* `core.py` - required for every `pgzge` project as it provides the `GameObject` class.
+* `game.py` - provides the `Game` class which is used to run the game.
+* `sprite.py` - provides the `Sprite` class which is used to represent an object with position.
+* `traits` - directory containing a range of traits that can be added to a `GameObject`.
 
 Some sample games written using the `pgzge` framework can be found in `games` and examples
 demonstrating how to use the framework can be found in `examples`.

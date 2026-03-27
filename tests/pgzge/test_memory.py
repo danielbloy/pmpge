@@ -16,7 +16,7 @@ class TestGameObjectSize:
         print(f'Empty object: {asizeof.asizeof(obj)}')
 
     def test_with_name(self):
-        obj = GameObject("root-object")
+        obj = GameObject(name="root-object")
         print(f'Object with name: {asizeof.asizeof(obj)}')
 
     def test_with_two_children(self):

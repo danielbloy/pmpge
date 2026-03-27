@@ -261,7 +261,7 @@ player.add_child(
     Sprite(
         0, 0,
         RelativeToParent(16, 16),
-        DrawText(lambda obj: f"{(int(obj.x), int(obj.y))} {obj.pos}")
+        DrawText(lambda obj: f"{obj.pos}")
     )
 ).add_child(
     Sprite(
@@ -271,16 +271,14 @@ player.add_child(
     )
 )
 
-# player.image = 'alien_a_2'
-
 sprite = GameObject(Position(WIDTH / 2, PLAYER_SHIP_START_HEIGHT),
                     DrawImage('alien_a_1'),
                     Velocity(15, -25))
 sprite.add_child(
-    GameObject(
-        Position(0, 0),
+    Sprite(
+        0, 0,
         RelativeToParent(16, 16),
-        DrawText(lambda obj: f"{(int(obj.x), int(obj.y))}")
+        DrawText(lambda obj: f"{obj.pos}")
     )
 )
 pgzge.add_child(sprite)

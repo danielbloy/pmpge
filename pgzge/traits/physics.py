@@ -4,8 +4,8 @@ class Velocity:
         self.vy: int = vy
 
     def update(self, dt: float):
-        self.x += dt * self.vx
-        self.y += dt * self.vy
+        self.x += (dt * self.vx)
+        self.y += (dt * self.vy)
 
 
 class Acceleration:

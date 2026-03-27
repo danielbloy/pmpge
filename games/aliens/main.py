@@ -4,7 +4,7 @@ from sprite import Sprite
 from traits.controller import MoveWithKeyboard
 from traits.drawing import DrawImage, DrawText
 from traits.physics import Velocity
-from traits.position import StayInBounds, RelativeToParent
+from traits.position import StayInBounds, RelativeToParent, Position
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
@@ -273,12 +273,12 @@ player.add_child(
 
 # player.image = 'alien_a_2'
 
-sprite = Sprite.new(WIDTH / 2, PLAYER_SHIP_START_HEIGHT,
+sprite = GameObject(Position(WIDTH / 2, PLAYER_SHIP_START_HEIGHT),
                     DrawImage('alien_a_1'),
                     Velocity(15, -25))
 sprite.add_child(
-    Sprite(
-        0, 0,
+    GameObject(
+        Position(0, 0),
         RelativeToParent(16, 16),
         DrawText(lambda obj: f"{(int(obj.x), int(obj.y))}")
     )

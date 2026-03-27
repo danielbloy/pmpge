@@ -1,5 +1,4 @@
 from pgzge.core import GameObject
-from pgzge.core import new_object_with_traits
 from pgzge.traits.position import Position
 
 
@@ -10,8 +9,3 @@ class Sprite(GameObject, Position):
     def __init__(self, x: float, y: float, *traits, **kwargs):
         super().__init__(*traits, **kwargs)
         Position.__init__(self, x, y)
-
-    @staticmethod
-    def new(x: float, y: float, *traits, kind: type = None, **kwargs) -> GameObject:
-        base = GameObject(**kwargs)
-        return new_object_with_traits(base, Position(x, y), *traits, kind=kind)

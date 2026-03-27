@@ -482,29 +482,3 @@ class GameObject:
             cls.merged(self)
 
         return self
-
-
-# TODO: Explain the difference between traits and merging.
-# TODO: Explain what a trait is and how it works.
-
-
-def new_kind(name: str, *traits_classes: type) -> type:
-    return type(name, (GameObject, *traits_classes), {})
-
-
-# TODO: Replace kind with some kind finder.
-def new_object_with_traits(base: GameObject, *traits, kind: type = None) -> GameObject:
-    """
-    """
-    print(f"traits: {traits}")  # TODO: Remove
-    traits_classes = [trait.__class__ for trait in traits]
-    kind = kind if kind else new_kind(base.name if base.name else "", *traits_classes)
-    result = kind.__new__(kind)
-
-    # We don't use merge here because game_object is the basis of the sprite.
-    result.__dict__.update(base.__dict__)
-
-    for trait in traits:
-        result.apply_trait(trait)
-
-    return result

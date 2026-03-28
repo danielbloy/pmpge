@@ -133,13 +133,14 @@ class GameObject:
             for child in children:
                 self.add_child(child)
 
-        # Add in the traits before triggering the active or deactivate events.
-        for trait in traits:
-            self.apply_trait(trait)
-
         # This forces the active or deactivate events to be called.
         self.__active: bool = not active
         self.active = active
+
+        # Add in the traits after triggering the active or deactivate events. This has to be
+        # done here as we need the active state to determine which trait methods to call.
+        for trait in traits:
+            self.apply_trait(trait)
 
     @property
     def name(self) -> bool | None:

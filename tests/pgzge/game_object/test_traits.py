@@ -300,3 +300,60 @@ def test_all_handlers_copied_across():
     assert go.dt == 1.2
     assert go.called == ["activated", "merged", "deactivated", "activated", "draw", "update", "deactivated",
                          "destroyed"]
+
+
+# noinspection PyUnresolvedReferences
+def test_add_multiple_traits_copied_across_different_handlers():
+    """
+    Validates that draw() and update() are copied across to the GameObject as a handler.
+    """
+    go = GameObject()
+    go.apply_trait(TraitWithDrawHandler())
+    go.apply_trait(TraitWithUpdateHandler())
+    assert go.go is None
+    assert go.surface is None
+    assert go.dt is None
+    assert go.count == 0
+
+    go.draw_hierarchy("surface")
+
+    assert go.go == go
+    assert go.surface == "surface"
+    assert go.count == 1
+
+    go.update_hierarchy(1.2)
+
+    assert go.go == go
+    assert go.surface == "surface"
+    assert go.dt == 1.2
+    assert go.count == 2
+
+
+# noinspection PyUnresolvedReferences
+def test_add_multiple_traits_copied_across_same_handlers():
+    """
+    Validates that draw() and update() are copied across to the GameObject as a handler.
+    """
+    go = GameObject()
+    go.apply_trait(TraitWithDrawHandler())
+    go.apply_trait(TraitWithDrawHandler())
+    go.apply_trait(TraitWithUpdateHandler())
+    go.apply_trait(TraitWithUpdateHandler())
+    go.apply_trait(TraitWithUpdateHandler())
+    assert go.go is None
+    assert go.surface is None
+    assert go.dt is None
+    assert go.count == 0
+
+    go.draw_hierarchy("surface")
+
+    assert go.go == go
+    assert go.surface == "surface"
+    assert go.count == 2
+
+    go.update_hierarchy(1.2)
+
+    assert go.go == go
+    assert go.surface == "surface"
+    assert go.dt == 1.2
+    assert go.count == 5

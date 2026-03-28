@@ -7,10 +7,9 @@ is called after the trait has been merged with the GameObject. Traits are
 useful as they allow common behaviours to be added to GameObjects without
 subclassing.
 
-A trait can be provided as either a type (as in the first GameObject in
-this example) or as an instance. If a type is passed in, it must have
-a constructor that takes no argument other than self. If an instance is
-provided, all properties are copied across to the GameObject (shallow copy).
+A trait can be provided as either a type (as in this example) or as an
+instance (see `b_using_trait_instance.py`). If a type is passed in, it must
+have a constructor that takes no argument other than self.
 """
 import os
 
@@ -21,9 +20,6 @@ import time
 import pgzrun
 from pgzge.game import Game
 from pgzge.game_object import GameObject
-from pgzge.traits.drawing import DrawImage
-from pgzge.traits.physics import Velocity
-from pgzge.traits.position import Position
 from pgzero.clock import Clock
 from pgzero.keyboard import Keyboard
 from pgzero.screen import Screen
@@ -65,17 +61,8 @@ class BlinkOneUp:
             self.draw_one_up = not self.draw_one_up
 
 
-# Construct a GameObject using a type
 game_object = GameObject(BlinkOneUp)
 game.add_child(game_object)
-
-# Construct a GameObject using an instance (because it does not have default
-# constructor).
-game_object_2 = GameObject(
-    Position(100, 100),
-    Velocity(20, 20),
-    DrawImage("player.png"))
-game.add_child(game_object_2)
 
 game.add_update_func(terminate)
 

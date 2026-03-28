@@ -480,9 +480,12 @@ class GameObject:
 
         Finally, if a `merged()` method is present on the trait, that will be called.
         """
-        self.__dict__.update(trait.__dict__)
-
-        cls = trait.__class__
+        if isinstance(trait, type):
+            trait.__init__(self)
+            cls = trait
+        else:
+            self.__dict__.update(trait.__dict__)
+            cls = trait.__class__
 
         if hasattr(cls, 'draw'):
             self.add_draw_handler(cls.draw)

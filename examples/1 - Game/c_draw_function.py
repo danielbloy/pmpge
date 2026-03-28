@@ -11,15 +11,16 @@ In this example, we blit to the surface the player image which is moved by
 the update_image function.
 """
 import os
-import sys
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
+import sys
 import time
 import pgzrun
 from pgzge.game import Game
 from pgzero.screen import Screen
 
+game: Game = Game()
 screen: Screen
 
 WIDTH = 600
@@ -45,7 +46,6 @@ def draw_image(surface):
     surface.blit('player', pos)
 
 
-game: Game = Game()
 game.add_update_func(terminate)
 game.add_update_func(update_image)
 game.add_draw_func(draw_image)

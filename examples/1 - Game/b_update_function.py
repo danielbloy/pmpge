@@ -6,13 +6,15 @@ are added. In this example, the update function terminates the game after 2
 seconds have elapsed.
 """
 import os
-import sys
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
+import sys
 import time
 import pgzrun
 from pgzge.game import Game
+
+game: Game = Game()
 
 WIDTH = 600
 HEIGHT = 700
@@ -23,8 +25,6 @@ def terminate(dt: float):
         game.root.destroy()
         sys.exit(0)
 
-
-game: Game = Game()
 
 game.add_update_func(terminate)
 

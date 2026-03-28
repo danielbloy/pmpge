@@ -8,7 +8,7 @@ class GameObject:
     structure for updating and drawing GameObjects as well as a simple way to manage active and
     visible states.
 
-    A GameObject has the following properties:
+    A GameObject has the following built-in properties:
         * name: The name of this object. Used when locating an object by name. Must not contain the
                 `/` or `.` characters.
         * active: This has to be True for the GameObject to be updated or drawn (visible and
@@ -27,6 +27,11 @@ class GameObject:
                   multiple parents.
         * children: A list of child GameObjects. These will be updated and drawn only if this
                     GameObject is active.
+
+    A GameObject also provides a set of events that can have handlers attached to them. The handlers
+    can be used to provide instance-specific behaviour without having to make a subclass and
+    override one of the `draw()`, `update()`, `activate()`, `deactivate()` or destroyed() methods.
+    These handlers are also used with Traits (see later).
         * draw_handlers: Draw handlers are called during `draw_hierarchy()` if the GameObject is
           active and visible.
         * update_handlers: Update handlers are called during `update_hierarchy()` if the GameObject
@@ -37,20 +42,20 @@ class GameObject:
         * destroy_handlers = Destroy handlers are called when `destroy()` is called on the
           GameObject.
 
-        The `update_hierarchy()` and `draw_hierarchy()` methods propagate down the hierarchy if
-        active is True and regardless of visible and active which only apply to this GameObject
-        instance, i.e. a child can be enabled and visible even if the parent is not.
+    The `update_hierarchy()` and `draw_hierarchy()` methods propagate down the hierarchy if active
+    is True and regardless of the visible and active properties (which only apply to this
+    GameObject instance). i.e. a child can be enabled or visible even if the parent is not.
 
-        Destroy, activate and deactivate are propagated to all children irrespective of whether
-        active is True or False. All handlers are called before passing to the children except for
-        destroy which propagates to the children first. In the case of draw, update, activate and
-        deactivate, the `draw()`, `update()`, `activate()` and `deactivate()` methods are called
-        before any handlers.
+    Destroy, activate and deactivate are propagated to all children irrespective of whether
+    active is True or False. All handlers are called before passing to the children except for
+    destroy which propagates to the children first.
 
-        The handlers can be used to provide instance-specific behaviour without having to make a
-        subclass and override the relevant method.
+    The `draw()`, `update()`, `activate()`, `deactivate()` and destroyed() methods are called before
+    any handlers.
 
-        # TODO: Explain traits
+    GameObjects can also have Traits applied to them. Traits are a kind of Mixin and used as a way
+    to apply behaviour to a GameObject without subclassing. Traits make use of the handlers.
+    TODO: Finish
     """
 
     def __init__(self,
@@ -228,7 +233,7 @@ class GameObject:
     @property
     def alive(self) -> bool:
         """
-        Returns whether this object is alive or not. An alive object is not destoryed.
+        Returns whether this object is alive or not. An alive object is not destroyed.
         """
         return self.__alive
 

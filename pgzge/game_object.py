@@ -53,9 +53,25 @@ class GameObject:
     The `draw()`, `update()`, `activate()`, `deactivate()` and destroyed() methods are called before
     any handlers.
 
-    GameObjects can also have Traits applied to them. Traits are a kind of Mixin and used as a way
-    to apply behaviour to a GameObject without subclassing. Traits make use of the handlers.
-    TODO: Finish
+    GameObjects can also have traits applied to them. Traits are a kind of Mixin and used as a way
+    to apply behaviour to a GameObject without subclassing. Traits make use of the handlers. When a
+    trait is "applied" to a GameObject, all variables are copied from the trait instance to the
+    GameObject and if any of the following methods are present on the trait instance, they are copied
+    across to the relevant handler too. This mechanism allows traits to depend on other traits and
+    access the same state. Methods that are attached to the GameObjects handlers:
+        * draw()
+        * update()
+        * activated()
+        * deactivated()
+        * destroyed()
+
+    When a trait is "applied", it will have either the `activated()` or `deactivated()` method called
+    based on the state of the GameObject. Finally, if a `merged()` method is present on the trait,
+    that will be called.
+
+    Traits are not a complete replacement for subclassing because the entire object is not copied across.
+    For example, methods, property getter and setter methods. For an example of a subclass using traits,
+    see the Sprite class.
     """
 
     def __init__(self,
@@ -457,6 +473,11 @@ class GameObject:
         Merge the properties and handlers of a trait object into this GameObject. It will
         not merge across methods or property getter and setters. For that you will need to
         define a subclass of GameObject.
+
+        When a trait is "applied", it will have either the `activated()` or `deactivated()`
+        method called based on the state of the GameObject.
+
+        Finally, if a `merged()` method is present on the trait, that will be called.
         """
         self.__dict__.update(trait.__dict__)
 

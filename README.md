@@ -2,7 +2,8 @@
 
 An easy-to-use Game Engine that works with Pygame Zero and designed for use in Coding Clubs.
 
-Please see my website [Code Club Adventures](http://codeclubadventures.com/) for more coding materials.
+Please see my website [Code Club Adventures](http://codeclubadventures.com/) for more coding
+materials.
 
 ## Overview
 
@@ -35,10 +36,13 @@ to take a look.
 
 ## Project structure
 
-The structure of the `pgzge`project is arranged in the following files (listed in
-order of importance):
+The structure of the `pgzge`project is arranged in the following files (listed in order of
+importance):
 
-* core - required for every `pgzge` project as it provides the `Game` and `GameObject` classes.
+* `game.py`        - Provides the `Game` class which is a helper class used to run the game.
+* `game_object.py` - Provides the `GameObject` class which is the basis of `pgzge`.
+* `sprite.py`      - Provides the `Sprite` class which is used to represent a GameObject with position.
+* `traits`         - Directory containing a range of traits that can be added to a `GameObject`.
 
 Some sample games written using the `pgzge` framework can be found in `games` and examples
 demonstrating how to use the framework can be found in `examples`.
@@ -55,7 +59,8 @@ In PyCharm, the following "Project Structure" is used:
 
 ## License
 
-All materials provided in this project is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+All materials provided in this project is licensed under the Creative Commons
+Attribution-NonCommercial-ShareAlike 4.0
 International License. To view a copy of this license, visit
 <https://creativecommons.org/licenses/by-nc-sa/4.0/>.
 
@@ -66,8 +71,11 @@ In summary, this means that you are free to:
 
 Provided you follow these terms:
 
-* **Attribution** — You must give appropriate credit , provide a link to the license, and indicate if changes were made.
-  You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+* **Attribution** — You must give appropriate credit , provide a link to the license, and indicate
+  if changes were made.
+  You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you
+  or your use.
 * **NonCommercial** — You may not use the material for commercial purposes.
-* **ShareAlike** — If you remix, transform, or build upon the material, you must distribute your contributions under the
+* **ShareAlike** — If you remix, transform, or build upon the material, you must distribute your
+  contributions under the
   same license as the original.

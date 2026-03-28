@@ -4,7 +4,8 @@ many optional arguments.
 """
 import pytest
 
-from pgzge.core import GameObject
+from pgzge.game_object import GameObject
+from tests.pgzge.game_object.test_traits import TraitWithDrawHandler, TraitWithUpdateHandler, TraitWithEverything
 from tests.pgzge.game_object.test_utilities import TestHandlers
 
 
@@ -112,7 +113,7 @@ def test_parent():
     Validate that the parent property is set correctly. More complex test are done in
     test_parent_and_children.py.
     """
-    parent = GameObject("parent")
+    parent = GameObject(name="parent")
     go = GameObject(parent=parent)
     validate_properties(go, parent=parent)
     assert parent.children == [go]
@@ -521,3 +522,59 @@ def test_validate_handlers_copied():
     handlers.validate(deactivate=go, deactivate_count=3, destroy=go, destroy_count=3,
                       called_order=["deactivate", "deactivate", "deactivate",
                                     "destroy", "destroy", "destroy"])
+
+
+# noinspection PyUnresolvedReferences
+def test_traits_are_applied():
+    """
+    Mimics some of the tests in test_traits.py but using the constructor to apply the traits.
+    """
+    go = GameObject(TraitWithDrawHandler(), TraitWithUpdateHandler())
+    assert go.go is None
+    assert go.surface is None
+    assert go.dt is None
+    assert go.count == 0
+
+    go.draw_hierarchy("surface")
+
+    assert go.go == go
+    assert go.surface == "surface"
+    assert go.count == 1
+
+    go.update_hierarchy(1.2)
+
+    assert go.go == go
+    assert go.surface == "surface"
+    assert go.dt == 1.2
+    assert go.count == 2
+
+    go = GameObject(TraitWithEverything())
+    assert go.go == go
+    assert go.surface is None
+    assert go.dt is None
+    assert go.called == ["activated", "merged"]
+
+    go.reset()
+    assert go.go == go
+    assert go.surface is None
+    assert go.dt is None
+    assert go.called == ["activated", "merged", "deactivated", "activated"]
+
+    go.draw_hierarchy("surface")
+    assert go.go == go
+    assert go.surface == "surface"
+    assert go.dt is None
+    assert go.called == ["activated", "merged", "deactivated", "activated", "draw"]
+
+    go.update_hierarchy(1.2)
+    assert go.go == go
+    assert go.surface == "surface"
+    assert go.dt == 1.2
+    assert go.called == ["activated", "merged", "deactivated", "activated", "draw", "update"]
+
+    go.destroy()
+    assert go.go == go
+    assert go.surface == "surface"
+    assert go.dt == 1.2
+    assert go.called == ["activated", "merged", "deactivated", "activated", "draw", "update", "deactivated",
+                         "destroyed"]

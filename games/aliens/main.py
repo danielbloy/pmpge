@@ -1,12 +1,16 @@
 import os
 
-from sprites import Sprites, MoveWithKeyboard, StayInBounds, DrawImage, DrawText, \
-    RelativeToParent
+from sprite import Sprite
+from traits.controller import MoveWithKeyboard
+from traits.drawing import DrawImage, DrawText
+from traits.physics import Velocity
+from traits.position import StayInBounds, RelativeToParent, Position
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
 import pgzrun
-from pgzge.core import Game, GameObject
+from pgzge.game_object import GameObject
+from pgzge.game import Game
 from pgzero.clock import Clock
 from pgzero.keyboard import Keyboard
 from pgzero.screen import Screen
@@ -245,23 +249,41 @@ PLAYER_SHIP_MAX_LEFT = (PLAYER_SHIP_WIDTH / 2)
 PLAYER_SHIP_MAX_RIGHT = WIDTH - (PLAYER_SHIP_WIDTH / 2)
 PLAYER_SHIP_START_HEIGHT = LOWER_BORDER_START - (PLAYER_SHIP_HEIGHT / 2)
 
-sprites = Sprites()
+player = Sprite(
+    WIDTH / 2, PLAYER_SHIP_START_HEIGHT,
+    DrawImage('player'))
 
-sprites.kinds.new('player')
-player = sprites.new('player',
-                     WIDTH / 2, PLAYER_SHIP_START_HEIGHT,
-                     DrawImage('player'))
-
-player.merge(MoveWithKeyboard(200, 0, keyboard))
-player.merge(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, HEIGHT))
+player.apply_trait(MoveWithKeyboard(200, 0, keyboard))
+player.apply_trait(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, HEIGHT))
 game_hud.add_child(player)
 
+# TODO: Sprite decorator to show position and velocity
+
 player.add_child(
-    sprites.new(
-        'position', 0, 0,
+    Sprite(
+        0, 0,
         RelativeToParent(16, 16),
-        DrawText(lambda obj: f"{(int(obj.x), int(obj.y))}"))
+        DrawText(lambda obj: f"{obj.pos}")
+    )
+).add_child(
+    Sprite(
+        0, 0,
+        RelativeToParent(16, -16),
+        DrawText(f"{lives}")
+    )
 )
+
+sprite = GameObject(Position(WIDTH / 2, PLAYER_SHIP_START_HEIGHT),
+                    DrawImage('alien_a_1'),
+                    Velocity(15, -25))
+sprite.add_child(
+    Sprite(
+        0, 0,
+        RelativeToParent(16, 16),
+        DrawText(lambda obj: f"{obj.pos}")
+    )
+)
+pgzge.add_child(sprite)
 
 
 def draw():

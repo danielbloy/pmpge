@@ -8,7 +8,7 @@ class GameObject:
     structure for updating and drawing GameObjects as well as a simple way to manage active and
     visible states.
 
-    A GameObject has the following properties:
+    A GameObject has the following built-in properties:
         * name: The name of this object. Used when locating an object by name. Must not contain the
                 `/` or `.` characters.
         * active: This has to be True for the GameObject to be updated or drawn (visible and
@@ -23,10 +23,15 @@ class GameObject:
         * visible: If this is True and active is also True, the object will be drawn. This is not
                    propagated to children.
         * parent: The parent GameObject. This is None if the GameObject has no parent. A GameObject
-                  can only have one parent and it is an error to add a GameObject as a child to
+                  can only have one parent. It is an error to add a GameObject as a child to
                   multiple parents.
         * children: A list of child GameObjects. These will be updated and drawn only if this
                     GameObject is active.
+
+    A GameObject also provides a set of events that can have handlers attached to them. The handlers
+    can be used to provide instance-specific behaviour without having to make a subclass and
+    override one of the `draw()`, `update()`, `activate()`, `deactivate()` or destroyed() methods.
+    These handlers are also used with Traits (see later).
         * draw_handlers: Draw handlers are called during `draw_hierarchy()` if the GameObject is
           active and visible.
         * update_handlers: Update handlers are called during `update_hierarchy()` if the GameObject
@@ -37,21 +42,40 @@ class GameObject:
         * destroy_handlers = Destroy handlers are called when `destroy()` is called on the
           GameObject.
 
-        The `update_hierarchy()` and `draw_hierarchy()` methods propagate down the hierarchy if
-        active is True and regardless of visible and active which only apply to this GameObject
-        instance, i.e. a child can be enabled and visible even if the parent is not.
+    The `update_hierarchy()` and `draw_hierarchy()` methods propagate down the hierarchy if active
+    is True and regardless of the visible and active properties (which only apply to this
+    GameObject instance). i.e. a child can be enabled or visible even if the parent is not.
 
-        Destroy, activate and deactivate are propagated to all children irrespective of whether
-        active is True or False. All handlers are called before passing to the children except for
-        destroy which propagates to the children first. In the case of draw, update, activate and
-        deactivate, the `draw()`, `update()`, `activate()` and `deactivate()` methods are called
-        before any handlers.
+    Destroy, activate and deactivate are propagated to all children irrespective of whether
+    active is True or False. All handlers are called before passing to the children except for
+    destroy which propagates to the children first.
 
-        The handlers can be used to provide instance specific behaviour without having to make a
-        subclass and override the relevant method.
+    The `draw()`, `update()`, `activate()`, `deactivate()` and destroyed() methods are called before
+    any handlers.
+
+    GameObjects can also have traits applied to them. Traits are a kind of Mixin and used as a way
+    to apply behaviour to a GameObject without subclassing. Traits make use of the handlers. When a
+    trait is "applied" to a GameObject, all variables are copied from the trait instance to the
+    GameObject and if any of the following methods are present on the trait instance, they are copied
+    across to the relevant handler too. This mechanism allows traits to depend on other traits and
+    access the same state. Methods that are attached to the GameObjects handlers:
+        * draw()
+        * update()
+        * activated()
+        * deactivated()
+        * destroyed()
+
+    When a trait is "applied", it will have either the `activated()` or `deactivated()` method called
+    based on the state of the GameObject. Finally, if a `merged()` method is present on the trait,
+    that will be called.
+
+    Traits are not a complete replacement for subclassing because the entire object is not copied across.
+    For example, methods, property getter and setter methods. For an example of a subclass using traits,
+    see the Sprite class.
     """
 
     def __init__(self,
+                 *traits,
                  name: str | None = None,
                  active: bool = True,
                  enabled: bool = True,
@@ -101,7 +125,7 @@ class GameObject:
         self.__deactivate_handlers.append(deactivate_handler) if deactivate_handler else None
         self.__destroy_handlers.append(destroy_handler) if destroy_handler else None
 
-        # Now add the parent and children read in time for the activation.
+        # Now add the parent and children before the activate or deactivate events.
         if parent:
             parent.add_child(self)
 
@@ -112,6 +136,11 @@ class GameObject:
         # This forces the active or deactivate events to be called.
         self.__active: bool = not active
         self.active = active
+
+        # Add in the traits after triggering the active or deactivate events. This has to be
+        # done here as we need the active state to determine which trait methods to call.
+        for trait in traits:
+            self.apply_trait(trait)
 
     @property
     def name(self) -> bool | None:
@@ -221,7 +250,7 @@ class GameObject:
     @property
     def alive(self) -> bool:
         """
-        Returns whether this object is alive or not. An alive object is not destoryed.
+        Returns whether this object is alive or not. An alive object is not destroyed.
         """
         return self.__alive
 
@@ -440,80 +469,45 @@ class GameObject:
             self.__destroy_handlers.remove(handler)
         return self
 
+    def apply_trait(self, trait: Any) -> Self:
+        """
+        Merge the properties and handlers of a trait object into this GameObject. It will
+        not merge across methods or property getter and setters. For that you will need to
+        define a subclass of GameObject.
 
-# TODO: Write tests for Game
-class Game:
-    """
-    Game is the root of the GameObject hierarchy. It provides a simple way to manage the root
-    GameObject as well as provide custom draw and update functions that are called before the root
-    GameObject is drawn or updated.
-    """
+        When a trait is "applied", it will have either the `activated()` or `deactivated()`
+        method called based on the state of the GameObject.
 
-    def __init__(self, background_color: tuple[int, int, int] = (0, 0, 0)):
-        self.background_color: tuple[int, int, int] = background_color
-        self.__draw_funcs: list[Callable[[Any], None]] = []
-        self.__update_funcs: list[Callable[[float], None]] = []
-        self.__root = GameObject(name="root")
+        Finally, if a `merged()` method is present on the trait, that will be called.
+        """
+        self.__dict__.update(trait.__dict__)
 
-    @property
-    def root(self) -> GameObject:
-        """
-        Returns the root GameObject.
-        """
-        return self.__root
+        cls = trait.__class__
 
-    @property
-    def children(self) -> list[GameObject]:
-        """
-        Convenience method to get the children of the root GameObject.
-        """
-        return self.__root.children
+        if hasattr(cls, 'draw'):
+            self.add_draw_handler(cls.draw)
 
-    def add_child(self, child: GameObject) -> GameObject:
-        """
-        Convenience method to add a child to the root GameObject.
-        """
-        return self.__root.add_child(child)
+        if hasattr(cls, 'update'):
+            self.add_update_handler(cls.update)
 
-    def remove_child(self, child: GameObject) -> GameObject:
-        """
-        Convenience method to remove a child from the root GameObject.
-        """
-        return self.__root.remove_child(child)
+        if hasattr(cls, 'activated'):
+            self.add_activate_handler(cls.activated)
 
-    def add_draw_func(self, func: Callable[[Any], None]):
-        """
-        Adds a custom draw function that is called before the root GameObject is drawn.
-        """
-        self.__draw_funcs.append(func)
+        if hasattr(cls, 'deactivated'):
+            self.add_deactivate_handler(cls.deactivated)
 
-    def add_update_func(self, func: Callable[[float], None]):
-        """
-        Adds a custom update function that is called before the root GameObject is updated.
-        """
-        self.__update_funcs.append(func)
+        if hasattr(cls, 'destroyed'):
+            self.add_destroy_handler(cls.destroyed)
 
-    def draw(self, surface: Any):
-        """
-        Draws the entire GameObject hierarchy starting with the custom draw functions and
-        then from the root GameObject.
+        # Trigger activate and/or deactivate handlers on the combined game_object if they exist.
+        if hasattr(cls, 'activated') and self.active:
+            cls.activated(self)
 
-        The surface is passed down through all objects but does not need to be a Pygame surface. It
-        can be any object you like provided it has a `fill()` method that accepts am RGB colour
-        tuple.
-        """
-        surface.fill(self.background_color)
-        for draw_func in self.__draw_funcs:
-            draw_func(surface)
+        if hasattr(cls, 'deactivated') and not self.active:
+            cls.deactivated(self)
 
-        self.__root.draw_hierarchy(surface)
+        # Finally trigger the merge handler.
+        if hasattr(cls, 'merged'):
+            cls.merged(self)
 
-    def update(self, dt: float):
-        """
-        Updates the entire GameObject hierarchy starting with the custom update functions and
-        then from the root GameObject.
-        """
-        for update_func in self.__update_funcs:
-            update_func(dt)
-
-        self.__root.update_hierarchy(dt)
+        return self

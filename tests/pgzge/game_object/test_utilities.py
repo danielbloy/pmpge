@@ -26,12 +26,12 @@ class GameObjectSubclass(GameObject):
     @property
     def handlers(self):
         if not hasattr(self, '_handlers'):
-            self._handlers = TestHandlers()
+            self._handlers = Handlers()
 
         return self._handlers
 
 
-class TestHandlers:
+class Handlers:
     """
     Utility class to help track which handlers are called. This also provides a useful way
     to create a GameObject with the handlers already set.
@@ -156,7 +156,7 @@ class TestHierarchy:
         """
 
         def __init__(self, name: str, called_order: list[str]):
-            self.handlers: TestHandlers = TestHandlers(shared_called_order=called_order)
+            self.handlers: Handlers = Handlers(shared_called_order=called_order)
             self.go: GameObject = self.handlers.create_game_object(name=name)
 
     """

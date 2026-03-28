@@ -6,14 +6,14 @@ relevant test files.
 from pgzge.game_object import GameObject
 from pgzge.traits.position import Position
 from tests.pgzge.game_object.test_parent_and_child import parent_three_children
-from tests.pgzge.game_object.test_utilities import TestHandlers
+from tests.pgzge.game_object.test_utilities import Handlers
 
 
 def test_activate_deactivate_does_nothing_on_destroyed_object():
     """
     Ensures nothing is done when active is changed on a destroyed object.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     go.destroy()
     handlers.reset()
@@ -31,7 +31,7 @@ def test_draw_does_nothing_on_destroyed_object():
     """
     Ensures nothing is done when draw_hierarchy() is called on a destroyed object.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     go.destroy()
     handlers.reset()
@@ -45,7 +45,7 @@ def test_update_does_nothing_on_destroyed_object():
     """
     Ensures nothing is done when update_hierarchy() is called on a destroyed object.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     go.destroy()
     handlers.reset()
@@ -59,7 +59,7 @@ def test_destroy_does_nothing_on_destroyed_object():
     """
     Ensures nothing is called when active is changed on a destroyed object.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     go.destroy()
     handlers.reset()
@@ -73,7 +73,7 @@ def test_active_works_on_disabled_object():
     """
     Ensures active works on a disabled object.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     go.enabled = False
     handlers.reset()
@@ -95,7 +95,7 @@ def test_destroy_works_on_disabled_object():
     """
     Ensures that destroy() works when the object is disabled.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     go.enabled = False
     handlers.reset()
@@ -109,7 +109,7 @@ def test_destroy_works_on_deactivated_object():
     """
     Ensures that destroy() works when the object is deactivated.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     go.active = False
     handlers.reset()
@@ -122,7 +122,7 @@ def test_draw_does_nothing_when_inactive():
     """
     Ensures nothing is done when draw_hierarchy() is called on inactive object.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     go.active = False
     handlers.reset()
@@ -136,7 +136,7 @@ def test_draw_does_nothing_when_invisible():
     """
     Ensures nothing is done when draw_hierarchy() is called on an invisible object.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     go.visible = False
     handlers.reset()
@@ -150,7 +150,7 @@ def test_draw_works_when_disabled():
     """
     Ensures draw_hierarchy() calls handlers on a disabled object.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     go.disabled = True
     handlers.reset()
@@ -179,7 +179,7 @@ def test_update_does_nothing_when_inactive():
     """
     Ensures nothing is done when update_hierarchy() is called on an inactive object.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     go.active = False
     handlers.reset()
@@ -193,7 +193,7 @@ def test_update_does_nothing_when_disabled():
     """
     Ensures nothing is done when update_hierarchy() is called on a disabled object.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     go.enabled = False
     handlers.reset()
@@ -207,7 +207,7 @@ def test_update_works_when_invisible():
     """
     Ensures update_hierarchy() calls handlers on an invisible object.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     go.visible = False
     handlers.reset()
@@ -233,7 +233,7 @@ def test_methods_return_self():
     assert go.add_child(child) == go
     assert go.remove_child(child) == go
 
-    handlers = TestHandlers()
+    handlers = Handlers()
     assert go.add_draw_handler(handlers.draw) == go
     assert go.remove_draw_handler(handlers.draw) == go
 

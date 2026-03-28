@@ -6,7 +6,7 @@ import pytest
 
 from pgzge.game_object import GameObject
 from tests.pgzge.game_object.test_traits import TraitWithDrawHandler, TraitWithUpdateHandler, TraitWithEverything
-from tests.pgzge.game_object.test_utilities import TestHandlers
+from tests.pgzge.game_object.test_utilities import Handlers
 
 
 def validate_properties(
@@ -60,7 +60,7 @@ def test_activate_is_called():
     go = GameObject()
     validate_properties(go)
 
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = GameObject(
         activate_handler=handlers.activate,
         deactivate_handler=handlers.deactivate)
@@ -76,7 +76,7 @@ def test_deactivate_is_called():
     go = GameObject(active=False)
     validate_properties(go, active=False)
 
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = GameObject(
         active=False,
         activate_handler=handlers.activate,
@@ -125,13 +125,13 @@ def test_single_child():
     of propagating the active and deactivate handlers to children.
     """
     # Active/active, no handler called
-    child1_handlers = TestHandlers()
+    child1_handlers = Handlers()
     child1 = GameObject(
         activate_handler=child1_handlers.activate,
         deactivate_handler=child1_handlers.deactivate)
     child1_handlers.reset()
 
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = GameObject(name="parent", children=[child1],
                     activate_handler=handlers.activate,
                     deactivate_handler=handlers.deactivate)
@@ -143,14 +143,14 @@ def test_single_child():
     child1_handlers.validate()
 
     # Deactivate/activate, handler called
-    child1_handlers = TestHandlers()
+    child1_handlers = Handlers()
     child1 = GameObject(
         active=False,
         activate_handler=child1_handlers.activate,
         deactivate_handler=child1_handlers.deactivate)
     child1_handlers.reset()
 
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = GameObject(name="parent", children=[child1],
                     activate_handler=handlers.activate,
                     deactivate_handler=handlers.deactivate)
@@ -162,13 +162,13 @@ def test_single_child():
     child1_handlers.validate(activate=child1, activate_count=1)
 
     # Activate/deactivate, handler called
-    child1_handlers = TestHandlers()
+    child1_handlers = Handlers()
     child1 = GameObject(
         activate_handler=child1_handlers.activate,
         deactivate_handler=child1_handlers.deactivate)
     child1_handlers.reset()
 
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = GameObject(name="parent", active=False, children=[child1],
                     activate_handler=handlers.activate,
                     deactivate_handler=handlers.deactivate)
@@ -185,28 +185,28 @@ def test_multiple_children():
     Validate that multiple children can be set at once. This also validates that the
     activate/deactivate handlers are called on the children correctly too.
     """
-    child1_handlers = TestHandlers()
+    child1_handlers = Handlers()
     child1 = GameObject(
         active=False,
         activate_handler=child1_handlers.activate,
         deactivate_handler=child1_handlers.deactivate)
     child1_handlers.reset()
 
-    child2_handlers = TestHandlers()
+    child2_handlers = Handlers()
     child2 = GameObject(
         active=True,
         activate_handler=child2_handlers.activate,
         deactivate_handler=child2_handlers.deactivate)
     child2_handlers.reset()
 
-    child3_handlers = TestHandlers()
+    child3_handlers = Handlers()
     child3 = GameObject(
         active=False,
         activate_handler=child3_handlers.activate,
         deactivate_handler=child3_handlers.deactivate)
     child3_handlers.reset()
 
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = GameObject(name="another parent", children=[child1, child2, child3],
                     activate_handler=handlers.activate,
                     deactivate_handler=handlers.deactivate)
@@ -253,7 +253,7 @@ def test_combination_of_properties():
     Validate that multiple properties can be set at once.
     """
     child1 = GameObject(name="child1")
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = GameObject(name="frank", enabled=True, visible=False, active=True,
                     children=[child1],
                     activate_handler=handlers.activate,
@@ -285,7 +285,7 @@ def test_no_other_handlers_called():
     """
     Validate that no other handlers are called when the GameObject is constructed.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     handlers.validate(activate=go, activate_count=1)
 
@@ -306,7 +306,7 @@ def test_draw_handler_called():
     """
     This is a basic test that ensures the draw handler is called.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     handlers.validate(activate=go, activate_count=1)
     handlers.reset()
@@ -319,7 +319,7 @@ def test_update_handler_called():
     """
     This is a basic test that ensures the update handler is called.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     handlers.validate(activate=go, activate_count=1)
     handlers.reset()
@@ -332,7 +332,7 @@ def test_destroy_handler_called():
     """
     This is a basic test that ensures the destroy handler is called.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     handlers.validate(activate=go, activate_count=1)
     handlers.reset()
@@ -345,7 +345,7 @@ def test_activate_draw_update_deactivate_destroy_handlers_called():
     """
     This is a basic test that ensures all the handlers are called.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     handlers.validate(activate=go, activate_count=1)
 
@@ -367,9 +367,9 @@ def test_multiple_activate_handlers_called():
     This is a basic test that ensures multiple activate handlers are called.
     We also test that all handlers are merged into a single list.
     """
-    handlers = TestHandlers()
-    handlers1 = TestHandlers()
-    handlers2 = TestHandlers()
+    handlers = Handlers()
+    handlers1 = Handlers()
+    handlers2 = Handlers()
     go = GameObject(
         activate_handlers=[handlers1.activate, handlers2.activate, handlers2.activate],
         draw_handler=handlers.draw,
@@ -388,9 +388,9 @@ def test_multiple_deactivate_handlers_called():
     This is a basic test that ensures multiple deactivate handlers are called.
     We also test that all handlers are merged into a single list.
     """
-    handlers = TestHandlers()
-    handlers1 = TestHandlers()
-    handlers2 = TestHandlers()
+    handlers = Handlers()
+    handlers1 = Handlers()
+    handlers2 = Handlers()
     go = GameObject(
         active=False,
         deactivate_handlers=[handlers1.deactivate, handlers2.deactivate, handlers2.deactivate],
@@ -410,9 +410,9 @@ def test_multiple_draw_handlers_called():
     This is a basic test that ensures multiple draw handlers are called.
     We also test that all handlers are merged into a single list.
     """
-    handlers = TestHandlers()
-    handlers1 = TestHandlers()
-    handlers2 = TestHandlers()
+    handlers = Handlers()
+    handlers1 = Handlers()
+    handlers2 = Handlers()
     go = GameObject(
         draw_handlers=[handlers1.draw, handlers2.draw, handlers2.draw],
         draw_handler=handlers.draw,
@@ -433,9 +433,9 @@ def test_multiple_update_handlers_called():
     This is a basic test that ensures the update handler is called.
     We also test that all handlers are merged into a single list.
     """
-    handlers = TestHandlers()
-    handlers1 = TestHandlers()
-    handlers2 = TestHandlers()
+    handlers = Handlers()
+    handlers1 = Handlers()
+    handlers2 = Handlers()
     go = GameObject(
         update_handlers=[handlers1.update, handlers2.update, handlers2.update],
         draw_handler=handlers.draw,
@@ -456,9 +456,9 @@ def test_multiple_destroy_handlers_called():
     This is a basic test that ensures the destroy handler is called.
     We also test that all handlers are merged into a single list.
     """
-    handlers = TestHandlers()
-    handlers1 = TestHandlers()
-    handlers2 = TestHandlers()
+    handlers = Handlers()
+    handlers1 = Handlers()
+    handlers2 = Handlers()
     go = GameObject(
         destroy_handlers=[handlers1.destroy, handlers2.destroy, handlers2.destroy],
         draw_handler=handlers.draw,
@@ -480,7 +480,7 @@ def test_validate_handlers_copied():
     This ensures that the lists of handlers passed in are copied so the calling
     code cannot mutate it later.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     activate_handlers = [handlers.activate, handlers.activate, handlers.activate]
     deactivate_handlers = [handlers.deactivate, handlers.deactivate, handlers.deactivate]
     draw_handlers = [handlers.draw, handlers.draw, handlers.draw]

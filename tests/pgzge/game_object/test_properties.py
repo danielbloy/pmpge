@@ -3,7 +3,7 @@ This suite of tests validates the GameObject properties. the tests are all relat
 simple and cover the basic functionality of the properties.
 """
 from pgzge.game_object import GameObject
-from tests.pgzge.game_object.test_utilities import TestHandlers
+from tests.pgzge.game_object.test_utilities import Handlers
 
 
 def test_name_property():
@@ -26,7 +26,7 @@ def test_active_property():
     handlers. This does not test propagation of active to children, that is handled in the
     test_parent_and_child.py.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
 
     assert go.active is True
@@ -50,7 +50,7 @@ def test_active_property():
     handlers.validate()
 
     # Create a new GameObject, starting deactivated.
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = GameObject(
         active=False,
         activate_handler=handlers.activate,
@@ -68,7 +68,7 @@ def test_reset():
     """
     Validates that reset() works from both the active and inactive states.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
 
     assert go.active is True
@@ -95,7 +95,7 @@ def test_enabled_disabled():
     Enabled is simply a boolean property. Disabled is simply the opposite of enabled and
     provided as a convenience property. It does not propagate or affect children.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     handlers.reset()
 

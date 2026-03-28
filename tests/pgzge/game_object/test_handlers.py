@@ -1,5 +1,5 @@
 from pgzge.game_object import GameObject
-from tests.pgzge.game_object.test_utilities import TestHandlers
+from tests.pgzge.game_object.test_utilities import Handlers
 
 """
 This suite of tests validate that event handlers can be added and removed.
@@ -23,7 +23,7 @@ def test_removing_when_no_handlers():
     """
     Straight forward checks to make sure there are no errors.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = GameObject()
     go.remove_draw_handler(handlers.draw)
     go.remove_update_handler(handlers.update)
@@ -56,7 +56,7 @@ def test_adding_single_handler():
     """
     Validates that we can add a single handler to empty lists.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = GameObject()
     go.add_draw_handler(handlers.draw)
     go.draw_hierarchy("none")
@@ -95,7 +95,7 @@ def test_adding_all_single_handler():
     """
 
     # Try adding all of them.
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = GameObject()
     go.add_draw_handler(handlers.draw)
     go.add_update_handler(handlers.update)
@@ -128,7 +128,7 @@ def test_adding_and_remove_single_handler():
     """
     Validates that we can add a single handler to empty lists.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = GameObject()
     go.add_draw_handler(handlers.draw)
     go.remove_draw_handler(handlers.draw)
@@ -170,7 +170,7 @@ def test_adding_single_handler_twice():
     """
     Validates that we can add a single handler twice to empty lists.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = GameObject()
     go.add_draw_handler(handlers.draw)
     go.add_draw_handler(handlers.draw)
@@ -213,7 +213,7 @@ def test_adding_handlers_when_added_through_construction():
     """
     Validates that we can add handlers when some already added through the construction.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
 
     go = handlers.create_game_object()
     go.add_draw_handler(handlers.draw)
@@ -249,7 +249,7 @@ def test_remove_handlers_when_added_through_construction():
     """
     Validates that we can remove handlers when added through the construction.
     """
-    handlers = TestHandlers()
+    handlers = Handlers()
     go = handlers.create_game_object()
     go.remove_draw_handler(handlers.draw)
     go.remove_update_handler(handlers.update)

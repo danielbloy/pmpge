@@ -1,5 +1,8 @@
 """
-TODO: Text
+This example shows how to subclass from GameObject to add additional custom
+behaviour. There are 5 methods that can be overridden, this example just
+overrides 3 of them. The 5 methods that can be overridden are: activated(),
+deactivated(), draw(), update() and destroyed().
 """
 import os
 
@@ -31,7 +34,7 @@ def terminate(dt: float):
         sys.exit(0)
 
 
-class GameHud(GameObject):
+class BlinkOneUp(GameObject):
     def __init__(self):
         super().__init__()
         self.draw_one_up = True
@@ -52,8 +55,10 @@ class GameHud(GameObject):
             self.draw_one_up = not self.draw_one_up
 
 
-game_object = GameHud()
+game_object = BlinkOneUp()
 game.add_child(game_object)
+
+game.add_update_func(terminate)
 
 
 def draw():

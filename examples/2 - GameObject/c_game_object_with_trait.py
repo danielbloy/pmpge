@@ -31,7 +31,7 @@ def terminate(dt: float):
         sys.exit(0)
 
 
-class GameHudTrait:
+class BlinkOneUp:
     def __init__(self):
         self.draw_one_up = True
         self.one_up_transition = 0
@@ -51,7 +51,11 @@ class GameHudTrait:
             self.draw_one_up = not self.draw_one_up
 
 
-game.add_child(GameObject(GameHudTrait()))
+trait = BlinkOneUp()
+game_object = GameObject(trait)
+game.add_child(game_object)
+
+game.add_update_func(terminate)
 
 
 def draw():

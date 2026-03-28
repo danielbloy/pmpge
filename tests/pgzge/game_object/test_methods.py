@@ -3,6 +3,8 @@ This suite of tests validates the main GameObject methods. This file focuses on 
 single GameObject. There are related tests covering hierarchies and subclassing in the
 relevant test files.
 """
+from pgzge.core import GameObject
+from pgzge.traits.position import Position
 from tests.pgzge.game_object.test_parent_and_child import parent_three_children
 from tests.pgzge.game_object.test_utilities import TestHandlers
 
@@ -214,22 +216,37 @@ def test_update_works_when_invisible():
 
     handlers.validate(update=(go, 0.1), update_count=1, called_order=["update"])
 
-# TODO: Test methods return self.
-#   * activate()
-#   * deactivate()
-#   * reset()
-#   * add_child()
-#   * remove_child()
-#   * draw_hierarchy()
-#   * update_hierarchy()
-#   * add_draw_handler()
-#   * remove_draw_handler()
-#   * add_update_handler()
-#   * remove_update_handler()
-#   * add_activate_handler()
-#   * remove_activate_handler()
-#   * add_deactivate_handler()
-#   * remove_deactivate_handler()
-#   * add_destroy_handler()
-#   * remove_destroy_handler()
-#   * apply_trait()
+
+def test_methods_return_self():
+    """
+    Simple tests to check methods return itself to allow for chaining calls.
+    """
+    go = GameObject()
+    assert go.activate() == go
+    assert go.deactivate() == go
+    assert go.reset() == go
+
+    assert go.draw_hierarchy("surface") == go
+    assert go.update_hierarchy(0.001) == go
+
+    child = GameObject()
+    assert go.add_child(child) == go
+    assert go.remove_child(child) == go
+
+    handlers = TestHandlers()
+    assert go.add_draw_handler(handlers.draw) == go
+    assert go.remove_draw_handler(handlers.draw) == go
+
+    assert go.add_update_handler(handlers.update) == go
+    assert go.remove_update_handler(handlers.update) == go
+
+    assert go.add_activate_handler(handlers.activate) == go
+    assert go.remove_activate_handler(handlers.activate) == go
+
+    assert go.add_deactivate_handler(handlers.deactivate) == go
+    assert go.remove_deactivate_handler(handlers.deactivate) == go
+
+    assert go.add_destroy_handler(handlers.destroy) == go
+    assert go.remove_destroy_handler(handlers.destroy) == go
+
+    assert go.apply_trait(Position(0, 0)) == go

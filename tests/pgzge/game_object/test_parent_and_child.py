@@ -5,19 +5,19 @@ parent and children.
 import pytest
 
 from pgzge.game_object import GameObject
-from tests.pgzge.game_object.test_utilities import TestHierarchy
+from tests.pgzge.game_object.test_utilities import Hierarchy
 
 
 def parent_one_child():
     return (
-        TestHierarchy("parent_one_child")
+        Hierarchy("parent_one_child")
         .add_child("child")
     )
 
 
 def parent_two_children():
     return (
-        TestHierarchy("parent_two_children")
+        Hierarchy("parent_two_children")
         .add_child("child-1")
         .add_child("child-2")
     )
@@ -25,7 +25,7 @@ def parent_two_children():
 
 def parent_three_children():
     return (
-        TestHierarchy("parent_two_children")
+        Hierarchy("parent_two_children")
         .add_child("child-1")
         .add_child("child-2")
         .add_child("child-3")
@@ -34,7 +34,7 @@ def parent_three_children():
 
 def parent_one_child_one_grandchild():
     return (
-        TestHierarchy("parent_one_child_one_grandchild")
+        Hierarchy("parent_one_child_one_grandchild")
         .add_child("child")
         .add_grandchild("child", "grandchild")
     )
@@ -42,7 +42,7 @@ def parent_one_child_one_grandchild():
 
 def parent_two_children_one_grandchild():
     return (
-        TestHierarchy("parent_two_children_one_grandchild")
+        Hierarchy("parent_two_children_one_grandchild")
         .add_child("child-1")
         .add_grandchild("child-1", "grandchild")
         .add_child("child-2")
@@ -51,7 +51,7 @@ def parent_two_children_one_grandchild():
 
 def parent_three_children_six_grandchildren():
     return (
-        TestHierarchy("parent_three_children_six_grandchildren")
+        Hierarchy("parent_three_children_six_grandchildren")
         .add_child("child-1")
         .add_grandchild("child-1", "grandchild-1")
         .add_grandchild("child-1", "grandchild-2")

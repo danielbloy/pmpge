@@ -145,7 +145,7 @@ class Handlers:
         return go
 
 
-class TestHierarchy:
+class Hierarchy:
     """
     Test class to help manage hierarchies. All GameObjects should have unique names.
     """
@@ -165,7 +165,7 @@ class TestHierarchy:
 
     def __init__(self, name: str):
         self.called_order = []
-        self.parent = TestHierarchy.Item(name, self.called_order)
+        self.parent = Hierarchy.Item(name, self.called_order)
         self.children = []
         self.grandchildren = []
         self.everyone = [self.parent]
@@ -197,7 +197,7 @@ class TestHierarchy:
         """
         Adds a child GameObject to the hierarchy.
         """
-        child = TestHierarchy.Item(name, self.called_order)
+        child = Hierarchy.Item(name, self.called_order)
         self.children.append(child)
         self.everyone.append(child)
         self.parent.go.add_child(child.go)
@@ -208,7 +208,7 @@ class TestHierarchy:
         Adds a grandchild GameObject to the hierarchy as a child of the named child.
         """
         parent = self.find(child)
-        grandchild = TestHierarchy.Item(name, self.called_order)
+        grandchild = Hierarchy.Item(name, self.called_order)
         self.grandchildren.append(grandchild)
         self.everyone.append(grandchild)
         parent.go.add_child(grandchild.go)
@@ -249,7 +249,7 @@ class TestHierarchy:
         having the handlers called..
         """
 
-        def include(item: TestHierarchy.Item):
+        def include(item: Hierarchy.Item):
             if not exclude:
                 return True
 

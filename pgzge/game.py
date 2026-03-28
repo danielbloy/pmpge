@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from typing import Any
 
-from pgzge.core import GameObject
+from pgzge.game_object import GameObject
 
 
 class Game:

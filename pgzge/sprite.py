@@ -1,4 +1,4 @@
-from pgzge.core import GameObject
+from pgzge.game_object import GameObject
 from pgzge.traits.position import Position
 
 

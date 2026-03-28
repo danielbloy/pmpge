@@ -1,6 +1,6 @@
 from typing import Self
 
-from pgzge.core import GameObject
+from pgzge.game_object import GameObject
 
 
 class GameObjectSubclass(GameObject):

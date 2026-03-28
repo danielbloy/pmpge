@@ -9,7 +9,7 @@ from traits.position import StayInBounds, RelativeToParent, Position
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
 import pgzrun
-from pgzge.core import GameObject
+from pgzge.game_object import GameObject
 from pgzge.game import Game
 from pgzero.clock import Clock
 from pgzero.keyboard import Keyboard

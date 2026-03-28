@@ -3,7 +3,7 @@ This suite of tests validates the main GameObject methods. This file focuses on 
 single GameObject. There are related tests covering hierarchies and subclassing in the
 relevant test files.
 """
-from pgzge.core import GameObject
+from pgzge.game_object import GameObject
 from pgzge.traits.position import Position
 from tests.pgzge.game_object.test_parent_and_child import parent_three_children
 from tests.pgzge.game_object.test_utilities import TestHandlers

@@ -4,7 +4,7 @@ many optional arguments.
 """
 import pytest
 
-from pgzge.core import GameObject
+from pgzge.game_object import GameObject
 from tests.pgzge.game_object.test_utilities import TestHandlers
 
 

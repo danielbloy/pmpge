@@ -15,10 +15,10 @@ from pgzero.clock import Clock
 from pgzero.keyboard import Keyboard
 from pgzero.screen import Screen
 
+pgzge: Game = Game()
 clock: Clock
 keyboard: Keyboard
 screen: Screen
-pgzge: Game = Game()
 
 WIDTH = 600
 HEIGHT = 700

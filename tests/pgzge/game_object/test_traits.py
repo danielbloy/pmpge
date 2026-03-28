@@ -148,7 +148,7 @@ def test_methods_are_not_copied_across():
     Validates that unexpected methods are NOT copied to the GameObject
     """
     go = GameObject()
-    go.apply_trait(TraitWithNothingToCopyAcross())
+    go.apply_trait(TraitWithNothingToCopyAcross)
     assert not hasattr(go, 'some_method')
     assert not hasattr(go, 'pos')
 
@@ -165,7 +165,7 @@ def test_draw_handler_copied_across():
     Validates that draw() is copied across to the GameObject as a handler.
     """
     go = GameObject()
-    go.apply_trait(TraitWithDrawHandler())
+    go.apply_trait(TraitWithDrawHandler)
     assert go.go is None
     assert go.surface is None
     assert go.count == 0
@@ -183,7 +183,7 @@ def test_update_handler_copied_across():
     Validates that update() is copied across to the GameObject as a handler.
     """
     go = GameObject()
-    go.apply_trait(TraitWithUpdateHandler())
+    go.apply_trait(TraitWithUpdateHandler)
     assert go.go is None
     assert go.dt is None
     assert go.count == 0
@@ -201,7 +201,7 @@ def test_activated_handler_copied_across():
     Validates that activated() is copied across to the GameObject as a handler.
     """
     go = GameObject(active=False)
-    go.apply_trait(TraitWithActivatedHandler())
+    go.apply_trait(TraitWithActivatedHandler)
     assert go.go is None
     assert go.count == 0
 
@@ -211,7 +211,7 @@ def test_activated_handler_copied_across():
     assert go.count == 1
 
     go = GameObject(active=True)
-    go.apply_trait(TraitWithActivatedHandler())
+    go.apply_trait(TraitWithActivatedHandler)
     assert go.go == go
     assert go.count == 1
 
@@ -222,7 +222,7 @@ def test_deactivated_handler_copied_across():
     Validates that deactivated() is copied across to the GameObject as a handler.
     """
     go = GameObject(active=True)
-    go.apply_trait(TraitWithDeactivatedHandler())
+    go.apply_trait(TraitWithDeactivatedHandler)
     assert go.go is None
     assert go.count == 0
 
@@ -232,7 +232,7 @@ def test_deactivated_handler_copied_across():
     assert go.count == 1
 
     go = GameObject(active=False)
-    go.apply_trait(TraitWithDeactivatedHandler())
+    go.apply_trait(TraitWithDeactivatedHandler)
     assert go.go == go
     assert go.count == 1
 
@@ -243,7 +243,7 @@ def test_destroyed_handler_copied_across():
     Validates that destroyed() is copied across to the GameObject as a handler.
     """
     go = GameObject()
-    go.apply_trait(TraitWithDestroyedHandler())
+    go.apply_trait(TraitWithDestroyedHandler)
     assert go.go is None
     assert go.count == 0
 
@@ -259,7 +259,7 @@ def test_merged_handler_called():
     Validates that merged() is called.
     """
     go = GameObject()
-    go.apply_trait(TraitWithMergedHandler())
+    go.apply_trait(TraitWithMergedHandler)
     assert go.go == go
     assert go.count == 1
 
@@ -270,7 +270,7 @@ def test_all_handlers_copied_across():
     Validates that all functions are copied across to the GameObject.
     """
     go = GameObject()
-    go.apply_trait(TraitWithEverything())
+    go.apply_trait(TraitWithEverything)
     assert go.go == go
     assert go.surface is None
     assert go.dt is None
@@ -308,8 +308,8 @@ def test_add_multiple_traits_copied_across_different_handlers():
     Validates that draw() and update() are copied across to the GameObject as a handler.
     """
     go = GameObject()
-    go.apply_trait(TraitWithDrawHandler())
-    go.apply_trait(TraitWithUpdateHandler())
+    go.apply_trait(TraitWithDrawHandler)
+    go.apply_trait(TraitWithUpdateHandler)
     assert go.go is None
     assert go.surface is None
     assert go.dt is None
@@ -335,11 +335,11 @@ def test_add_multiple_traits_copied_across_same_handlers():
     Validates that draw() and update() are copied across to the GameObject as a handler.
     """
     go = GameObject()
-    go.apply_trait(TraitWithDrawHandler())
-    go.apply_trait(TraitWithDrawHandler())
-    go.apply_trait(TraitWithUpdateHandler())
-    go.apply_trait(TraitWithUpdateHandler())
-    go.apply_trait(TraitWithUpdateHandler())
+    go.apply_trait(TraitWithDrawHandler)
+    go.apply_trait(TraitWithDrawHandler)
+    go.apply_trait(TraitWithUpdateHandler)
+    go.apply_trait(TraitWithUpdateHandler)
+    go.apply_trait(TraitWithUpdateHandler)
     assert go.go is None
     assert go.surface is None
     assert go.dt is None

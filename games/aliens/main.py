@@ -257,8 +257,6 @@ player.apply_trait(MoveWithKeyboard(200, 0, keyboard))
 player.apply_trait(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, HEIGHT))
 game_hud.add_child(player)
 
-# TODO: Sprite decorator to show position and velocity
-
 player.add_child(
     Sprite(
         0, 0,

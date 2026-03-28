@@ -15,10 +15,10 @@ from pgzero.clock import Clock
 from pgzero.keyboard import Keyboard
 from pgzero.screen import Screen
 
+pgzge: Game = Game()
 clock: Clock
 keyboard: Keyboard
 screen: Screen
-pgzge: Game = Game()
 
 WIDTH = 600
 HEIGHT = 700
@@ -256,8 +256,6 @@ player = Sprite(
 player.apply_trait(MoveWithKeyboard(200, 0, keyboard))
 player.apply_trait(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, HEIGHT))
 game_hud.add_child(player)
-
-# TODO: Sprite decorator to show position and velocity
 
 player.add_child(
     Sprite(

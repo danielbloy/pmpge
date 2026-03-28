@@ -529,7 +529,7 @@ def test_traits_are_applied():
     """
     Mimics some of the tests in test_traits.py but using the constructor to apply the traits.
     """
-    go = GameObject(TraitWithDrawHandler(), TraitWithUpdateHandler())
+    go = GameObject(TraitWithDrawHandler, TraitWithUpdateHandler)
     assert go.go is None
     assert go.surface is None
     assert go.dt is None
@@ -548,7 +548,7 @@ def test_traits_are_applied():
     assert go.dt == 1.2
     assert go.count == 2
 
-    go = GameObject(TraitWithEverything())
+    go = GameObject(TraitWithEverything)
     assert go.go == go
     assert go.surface is None
     assert go.dt is None

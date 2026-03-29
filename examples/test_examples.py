@@ -8,6 +8,18 @@ import subprocess
 import sys
 from pathlib import Path
 
+# Folder to start the search. Presently, any folder inside the directory containing this script.
+root_folder = Path(__file__).parent
+
+# Files with these names will not be processed
+file_exclusion_list = [
+    'a_template_game_loop.py'
+]
+
+folder_exclusion_list = [
+    '__pycache__'
+]
+
 failures: int = 0
 
 
@@ -55,63 +67,85 @@ def execute_python_file(file_path):
         failures += 1
 
 
-def main():
-    """Main function to loop through subdirectories and execute Python example files."""
-    # Get the examples directory (current directory of this script)
-    examples_dir = Path(__file__).parent
-    print(f"Looking for subdirectories in: {examples_dir}")
+def get_folders(folder, exclusion_list: list[str] = None):
+    """
+    Locates all sub folders to process in folders. An exclusion list of folder names can
+    be provided for folders to skip.
+    """
+    print(f"Looking for folders in: {folder}")
 
     # Get all subdirectories, sorted for consistent execution order
     subdirectories = []
-    for item in examples_dir.iterdir():
-        if item.is_dir() and not item.name.startswith('.') and not item.name == '__pycache__':
+    for item in folder.iterdir():
+        if item.is_dir() and not item.name.startswith('.'):
+            if exclusion_list and item.name in exclusion_list:
+                continue
+
             subdirectories.append(item)
 
     # Sort subdirectories by name to ensure consistent order
     subdirectories.sort(key=lambda x: x.name)
+    return subdirectories
 
-    if not subdirectories:
-        print("No subdirectories found!")
+
+def get_files(folder, exclusion_list: list[str] = None):
+    """
+    Locates all files in a folder to process. An exclusion list of file names can
+    be provided for files to skip.
+    """
+    python_files = []
+    for file_path in folder.iterdir():
+        if file_path.is_file() and file_path.suffix == '.py':
+            if exclusion_list and file_path.name in exclusion_list:
+                continue
+
+            python_files.append(file_path)
+
+    # Sort Python files by name for consistent execution order
+    python_files.sort(key=lambda x: x.name)
+
+    return python_files
+
+
+def main():
+    files_processed: int = 0
+
+    folders = get_folders(root_folder, folder_exclusion_list)
+
+    if not folders:
+        print("No folders found!")
         return
 
-    print(f"Found {len(subdirectories)} subdirectories:")
-    for subdir in subdirectories:
-        print(f"  {subdir.name}")
+    print(f"Found {len(folders)} folders:")
+    for folder in folders:
+        print(f"  {folder.name}")
 
-    # Loop through each subdirectory
-    for subdir in subdirectories:
+    for folder in folders:
         print(f"\n{'#' * 40}")
-        print(f"Processing directory: {subdir.name}")
+        print(f"Processing directory: {folder.name}")
         print(f"{'#' * 40}")
 
-        # Find all Python files in this subdirectory
-        python_files = []
-        for file_path in subdir.iterdir():
-            if file_path.is_file() and file_path.suffix == '.py':
-                if file_path.name != "a_template_game_loop.py":
-                    python_files.append(file_path)
+        files = get_files(folder, file_exclusion_list)
+        files_processed += len(files)
 
-        # Sort Python files by name for consistent execution order
-        python_files.sort(key=lambda x: x.name)
-
-        if not python_files:
-            print(f"No Python files found in {subdir.name}")
+        if not files:
+            print(f"No files to process found in {folder.name}")
             continue
 
-        print(f"Found {len(python_files)} Python files:")
-        for py_file in python_files:
-            print(f"  {py_file.name}")
+        print(f"Found {len(files)} files to process:")
+        for file in files:
+            print(f"  {file.name}")
 
-        # Execute each Python file
-        for py_file in python_files:
-            execute_python_file(py_file)
+        for file in files:
+            execute_python_file(file)
 
-    print(f"\n{'#' * 40}")
+    print(f"\n{'#' * 60}")
+    print(f"Processed {len(folders)} folders, {files_processed} files, {failures} failures.")
     if failures > 0:
-        print(f"ERROR: There were {failures} failures!")
+        print(f"FAILURE: There were {failures} failures!")
     else:
-        print("SUCCESS!")
-    print(f"{'#' * 40}")
+        print("SUCCESS: There were no failures.")
+    print(f"{'#' * 60}")
 
 
 def test_examples():

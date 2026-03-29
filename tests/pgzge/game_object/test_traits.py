@@ -357,3 +357,16 @@ def test_add_multiple_traits_copied_across_same_handlers():
     assert go.surface == "surface"
     assert go.dt == 1.2
     assert go.count == 5
+
+
+def test_trait_class_fails_when_constructor_has_parameters():
+    """
+    When using the class type as a trait, it must have a parameterless
+    constructor, otherwise the constructor will fail.
+    """
+    go = GameObject()
+    with pytest.raises(TypeError):
+        go.apply_trait(TraitWithJustProperties)
+
+    with pytest.raises(TypeError):
+        GameObject(TraitWithJustProperties)

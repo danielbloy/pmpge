@@ -8,9 +8,13 @@ import subprocess
 import sys
 from pathlib import Path
 
+failures: int = 0
+
 
 def execute_python_file(file_path):
     """Execute a Python file and capture its output."""
+    global failures
+
     print(f"\n{'=' * 40}")
     print(f"Executing: {file_path.name}")
     print(f"{'=' * 40}")
@@ -27,24 +31,28 @@ def execute_python_file(file_path):
 
         # Print stdout
         if result.stdout:
-            print("Output:")
+            print("StdOut:")
             print(result.stdout)
 
         # Print stderr if there are errors
         if result.stderr:
-            print("Errors:")
+            print("StdErr:")
             print(result.stderr)
 
         # Print return code
         if result.returncode != 0:
-            print(f"Process exited with code: {result.returncode}")
+            print(f"ERROR: Process exited with code: {result.returncode}")
+            failures += 1
         else:
             print("Process completed successfully!")
 
     except subprocess.TimeoutExpired:
         print("ERROR: Script timed out!")
+        failures += 1
+
     except Exception as e:
         print(f"ERROR: Failed to execute {file_path}: {e}")
+        failures += 1
 
 
 def main():
@@ -99,7 +107,10 @@ def main():
             execute_python_file(py_file)
 
     print(f"\n{'#' * 40}")
-    print("All directories and files have been processed!")
+    if failures > 0:
+        print(f"ERROR: There were {failures} failures!")
+    else:
+        print("SUCCESS!")
     print(f"{'#' * 40}")
 
 
@@ -108,6 +119,7 @@ def test_examples():
     Run all the examples in the test framework.
     """
     main()
+    assert failures == 0
 
 
 if __name__ == "__main__":

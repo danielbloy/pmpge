@@ -4,7 +4,7 @@ from typing import Any, Callable
 # TODO: Remove dependency on pgzero
 from pgzero.loaders import images
 
-from game_object import GameObject
+from pgzge.game_object import GameObject
 
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)

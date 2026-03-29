@@ -74,18 +74,18 @@ def get_folders(folder, exclusion_list: list[str] = None):
     """
     print(f"Looking for folders in: {folder}")
 
-    # Get all subdirectories, sorted for consistent execution order
-    subdirectories = []
+    # Get all folders, sorted for consistent execution order
+    folders = []
     for item in folder.iterdir():
         if item.is_dir() and not item.name.startswith('.'):
             if exclusion_list and item.name in exclusion_list:
                 continue
 
-            subdirectories.append(item)
+            folders.append(item)
 
-    # Sort subdirectories by name to ensure consistent order
-    subdirectories.sort(key=lambda x: x.name)
-    return subdirectories
+    # Sort folders by name to ensure consistent order
+    folders.sort(key=lambda x: x.name)
+    return folders
 
 
 def get_files(folder, exclusion_list: list[str] = None):

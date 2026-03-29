@@ -22,8 +22,8 @@ clock: Clock
 keyboard: Keyboard
 screen: Screen
 
-WIDTH = 600
-HEIGHT = 700
+WIDTH = 200
+HEIGHT = 200
 
 RED = (255, 0, 0)
 
@@ -69,5 +69,5 @@ def update(dt):
     game.update(dt)
 
 
-finish = time.monotonic() + 2
+finish = time.monotonic() + 1
 pgzrun.go()

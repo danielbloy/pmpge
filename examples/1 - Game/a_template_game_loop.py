@@ -17,8 +17,8 @@ clock: Clock
 keyboard: Keyboard
 screen: Screen
 
-WIDTH = 600
-HEIGHT = 700
+WIDTH = 200
+HEIGHT = 200
 
 
 def draw():

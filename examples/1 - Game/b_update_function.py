@@ -16,8 +16,8 @@ from pgzge.game import Game
 
 game: Game = Game()
 
-WIDTH = 600
-HEIGHT = 700
+WIDTH = 200
+HEIGHT = 200
 
 
 def terminate(dt: float):
@@ -33,5 +33,5 @@ def update(dt):
     game.update(dt)
 
 
-finish = time.monotonic() + 2
+finish = time.monotonic() + 1
 pgzrun.go()

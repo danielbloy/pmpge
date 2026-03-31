@@ -1,24 +1,28 @@
 import os
 
-from sprite import Sprite
-from traits.controller import MoveWithKeyboard
-from traits.drawing import DrawImage, DrawText
-from traits.physics import Velocity
-from traits.position import StayInBounds, RelativeToParent, Position
-
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
 import pgzrun
-from pgzge.game_object import GameObject
-from pgzge.game import Game
 from pgzero.clock import Clock
 from pgzero.keyboard import Keyboard
 from pgzero.screen import Screen
 
-pgzge: Game = Game()
+from pgzge.controller import Controller
+from pgzge.game import Game
+from pgzge.game_object import GameObject
+from pgzge.sprite import Sprite
+from pgzge.traits.controller import MoveWithController
+from pgzge.traits.graphics import DrawImage, DrawText
+from pgzge.traits.physics import Velocity
+from pgzge.traits.position import StayInBounds, RelativeToParent, Position
+
 clock: Clock
 keyboard: Keyboard
 screen: Screen
+
+# TODO: initialise environment. width, height
+
+pgzge: Game = Game()
 
 WIDTH = 600
 HEIGHT = 700
@@ -253,7 +257,8 @@ player = Sprite(
     WIDTH / 2, PLAYER_SHIP_START_HEIGHT,
     DrawImage('player'))
 
-player.apply_trait(MoveWithKeyboard(200, 0, keyboard))
+controller = Controller()
+player.apply_trait(MoveWithController(200, 0, controller))
 player.apply_trait(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, HEIGHT))
 game_hud.add_child(player)
 

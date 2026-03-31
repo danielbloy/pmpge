@@ -20,14 +20,11 @@ import time
 import pgzrun
 from pgzge.game import Game
 from pgzge.game_object import GameObject
-from pgzero.clock import Clock
-from pgzero.keyboard import Keyboard
 from pgzero.screen import Screen
 
-game: Game = Game()
-clock: Clock
-keyboard: Keyboard
 screen: Screen
+
+game: Game = Game()
 
 WIDTH = 200
 HEIGHT = 200
@@ -52,7 +49,7 @@ class BlinkOneUp:
 
     def draw(self, surface):
         if self.draw_one_up:
-            screen.draw.text("1UP", topleft=(20, 0), color=RED, fontsize=36)
+            surface.draw.text("1UP", topleft=(20, 0), color=RED, fontsize=36)
 
     def update(self, dt):
         now = time.time()

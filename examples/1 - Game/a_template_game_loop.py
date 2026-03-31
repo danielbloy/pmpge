@@ -8,14 +8,10 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
 import pgzrun
 from pgzge.game import Game
-from pgzero.clock import Clock
-from pgzero.keyboard import Keyboard
 from pgzero.screen import Screen
 
-game: Game = Game()
-clock: Clock
-keyboard: Keyboard
 screen: Screen
+game: Game = Game()
 
 WIDTH = 200
 HEIGHT = 200

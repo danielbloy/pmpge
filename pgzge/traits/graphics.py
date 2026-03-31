@@ -6,11 +6,16 @@ from pgzero.loaders import images
 
 from pgzge.game_object import GameObject
 
+# TODO: Move colours to Pallette
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 CYAN = (0, 255, 255)
 YELLOW = (255, 255, 0)
+
+
+# TODO: Add size, width, height, topleft, topright etc. properties
+# TODO: Add bounding box property
 
 
 class DrawImage:
@@ -26,13 +31,17 @@ class DrawImage:
         self._image = None
         self.image = image
 
-    def draw(self, surface: Any):
+    def update(self, dt: float):
         if self.image != self._image:
             self._image = self.image
+
+            # TODO: need to delegate to the hal resource.
             self._surface = images.load(self.image)
+
             self._offset_x = self._surface.get_width() / 2
             self._offset_y = self._surface.get_height() / 2
 
+    def draw(self, surface: Any):
         surface.blit(self._surface, (self.x - self._offset_x, self.y - self._offset_y))
 
 

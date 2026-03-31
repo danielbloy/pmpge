@@ -25,23 +25,40 @@ with brackets. It's even harder to go back and change code you've already writte
 if you have modified or extended that code from the original. When students break and then cant
 fix their previously working program it leads to frustration and loss of confidence.
 
-it is also difficult to write clear and concise instructions explaining how to modify existing
+It is also difficult to write clear and concise instructions explaining how to modify existing
 code. It can very quickly get verbose and hard to follow. I therefore try to avoid this where
 possible and focus on incremental addition of new code rather than modification of existing code.
 
-The origins of this project are from the Python Pygame Zero games that I have written for my coding
-club. Head over
+The origins of this project are from the Python Pygame Zero games that I have written for my
+coding club. Head over
 to [Code Club adventures - games with Pygame Zero](https://codeclubadventures.co.uk/advancing/#games-with-pygame-zero)
 to take a look.
+
+A stretch goal for this project is to abstract the underlying host framework (Pygame Zero) so
+that support can be added relatively easily for other environments at a later date. The other
+environments are primarily CircuitPython which already provides a great abstraction layer. The
+driver for this is that writing games for devices is tricky in a Code Club other that using the
+MakeCode platform as the code/test cycle is tiresome and tricky for young people. This framework
+aims to make development easy on a desktop which can then be easily copied across to the device.
+The main limitation is RAM but with the new Pico 2350 and ESP32 S3 boards offering 2Mb or more
+of RAM, it is not the limtation is once was.
 
 ## Project structure
 
 The structure of the `pgzge`project is arranged in the following files (listed in order of
 importance):
 
+* `controller.py`  - Provides a standard controller abstraction offering different "levels" of
+  controller so games can adapt to what the environment offers.
+* `environment.py` - Provides information about the environment the engine is operating in such
+  as whether it is running on a desktop or microcontroller.
 * `game.py`        - Provides the `Game` class which is a helper class used to run the game.
 * `game_object.py` - Provides the `GameObject` class which is the basis of `pgzge`.
-* `sprite.py`      - Provides the `Sprite` class which is used to represent a GameObject with position.
+* `graphics.py`    - Provides a standard graphics abstraction to support different environments.
+* `palette.py`     - Provides the `Palette` class for managing colour palettes.
+* `sound.py`       - Provides a standard sound abstraction to support different environments.
+* `sprite.py`      - Provides the `Sprite` class which is used to represent a GameObject with
+  position.
 * `traits`         - Directory containing a range of traits that can be added to a `GameObject`.
 
 Some sample games written using the `pgzge` framework can be found in `games` and examples

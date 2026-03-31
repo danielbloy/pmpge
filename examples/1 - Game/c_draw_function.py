@@ -20,8 +20,8 @@ import pgzrun
 from pgzge.game import Game
 from pgzero.screen import Screen
 
-game: Game = Game()
 screen: Screen
+game: Game = Game()
 
 WIDTH = 200
 HEIGHT = 200

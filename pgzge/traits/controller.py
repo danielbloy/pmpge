@@ -1,20 +1,27 @@
-# TODO: Remove dependency on pygame zero
-from pgzero.keyboard import Keyboard
+from dataclasses import dataclass
+
+from pgzge.controller import Controller
 
 
-# TODO: Rename Controller1 and remove all dependencies on pygame
-class MoveWithKeyboard:
-    def __init__(self, vx, vy: int, keyboard: Keyboard):
-        self.vx: int = vx
-        self.vy: int = vy
-        self.keyboard: Keyboard = keyboard
+@dataclass
+class MoveWithController:
+    vx: int
+    vy: int
+    controller: Controller
 
     def update(self, dt: float):
-        new_pos = self.pos
-        keyboard = self.keyboard
-        if keyboard.a or keyboard.left:
-            new_pos = (new_pos[0] - (self.vx * dt), new_pos[1])
-        elif keyboard.d or keyboard.right:
-            new_pos = (new_pos[0] + (self.vx * dt), new_pos[1])
+        new_x, new_y = self.pos
+        controller = self.controller
 
-        self.position = new_pos
+        if controller.left:
+            new_x = new_x - (self.vx * dt)
+        elif controller.right:
+            new_x = new_x + (self.vx * dt)
+
+        if controller.level > 0:
+            if controller.up:
+                new_y = new_y - (self.vy * dt)
+            elif controller.down:
+                new_y = new_y + (self.vy * dt)
+
+        self.position = new_x, new_y

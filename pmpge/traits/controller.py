@@ -18,7 +18,7 @@ class MoveWithController:
         elif controller.right:
             new_x = new_x + (self.vx * dt)
 
-        if controller.level > 0:
+        if controller.button_count >= 6:
             if controller.up:
                 new_y = new_y - (self.vy * dt)
             elif controller.down:

@@ -1,14 +1,17 @@
 """
-There are a several primary controller levels, defined by a number. Each HAL
-will support up to an including one of the levels. Each level add progressively
-more buttons than the previous. Instantiating a Controller instance will give
-you a controller representing the greatest level supported. Each controller
-format is defined below (all controllers have a menu and start button):
+There are a several primary controllers, defined by the number of buttons available
+on the device. Each controller builds on the previous controllers as the number of
+buttons steadily increases. Instantiating a Controller instance will give you a
+controller representing the greatest number of buttons supported on the device.
+Each controller format is defined below (all controllers have a menu and start button):
 
-  * 0 - AB button controller
-  * 1 - NES style controller
-  * 2 - SNES style controller without shoulder buttons
-  * 3 - SNES style controller with shoulder buttons
+  * 0  - No buttons
+  * 2  - 2 button controller                               (start and select)
+  * 4  - AB controller                                     (start, select, A, B)
+  * 6 -  AB UD controller                                  (start, select, U, D, A, B)
+  * 8  - NES style controller                              (start, select, U, D, L, R, A, B)
+  * 10 - SNES style controller without shoulder buttons    (start, select, U, D, L, R, A, B, X, Y)
+  * 12 - SNES style controller with shoulder buttons       (start, select, U, D, L, R, A, B, X, Y, LS, RS)
 
 There are also some named actions that are mapped to buttons:
 
@@ -17,13 +20,26 @@ There are also some named actions that are mapped to buttons:
 
 Button arrangements for each controller:
 
-0 - AB
+2 - 2 button controller
+
+    Start       Select  (start is mapped as action, select as cancel)
+
+4 - AB
 
       B            A    (B and A are also mapped as Left and right respectively)
       
     Start       Select  (start is mapped as action, select as cancel)
 
-1 - NES
+
+6 - AB UD
+
+            U
+      B            A    (B and A are also mapped as Left and right respectively)
+            D
+
+    Start       Select  (start is mapped as action, select as cancel)
+
+8 - NES
 
       U        
     L   R           A    (A is mapped as action, B as cancel)
@@ -31,7 +47,7 @@ Button arrangements for each controller:
 
     Start       Select
 
-2 - SNES without shoulder buttons
+10 - SNES without shoulder buttons
 
       U           X
     L   R       Y   A    (A is mapped as action, B as cancel)
@@ -39,7 +55,7 @@ Button arrangements for each controller:
 
     Start       Select
 
-3 - SNES with shoulder buttons
+12 - SNES with shoulder buttons
 
  L Shoulder   R Shoulder
 
@@ -54,11 +70,87 @@ from abc import ABC, abstractmethod
 import pmpge.environment as environment
 
 
+class TwoButtonController(ABC):
+
+    @property
+    def button_count(self):
+        return 2
+
+    @property
+    @abstractmethod
+    def start(self) -> bool:
+        pass
+
+    @property
+    @abstractmethod
+    def select(self) -> bool:
+        pass
+
+    @property
+    def action(self) -> bool:
+        return self.start
+
+    @property
+    def cancel(self) -> bool:
+        return self.select
+
+
 class ABController(ABC):
 
     @property
-    def level(self):
-        return 0
+    def button_count(self):
+        return 4
+
+    @property
+    @abstractmethod
+    def start(self) -> bool:
+        pass
+
+    @property
+    @abstractmethod
+    def select(self) -> bool:
+        pass
+
+    @property
+    def action(self) -> bool:
+        return self.start
+
+    @property
+    def cancel(self) -> bool:
+        return self.select
+
+    @property
+    def left(self) -> bool:
+        return self.b
+
+    @property
+    def l(self) -> bool:
+        return self.b
+
+    @property
+    def right(self) -> bool:
+        return self.a
+
+    @property
+    def r(self) -> bool:
+        return self.a
+
+    @property
+    @abstractmethod
+    def a(self) -> bool:
+        pass
+
+    @property
+    @abstractmethod
+    def b(self) -> bool:
+        pass
+
+
+class ABUDController(ABC):
+
+    @property
+    def button_count(self):
+        return 4
 
     @property
     @abstractmethod
@@ -80,13 +172,21 @@ class ABController(ABC):
 
     @property
     @abstractmethod
-    def a(self) -> bool:
+    def up(self) -> bool:
         pass
 
     @property
+    def u(self) -> bool:
+        return self.up
+
+    @property
     @abstractmethod
-    def b(self) -> bool:
+    def down(self) -> bool:
         pass
+
+    @property
+    def d(self) -> bool:
+        return self.down
 
     @property
     def left(self) -> bool:
@@ -104,12 +204,22 @@ class ABController(ABC):
     def r(self) -> bool:
         return self.a
 
+    @property
+    @abstractmethod
+    def a(self) -> bool:
+        pass
+
+    @property
+    @abstractmethod
+    def b(self) -> bool:
+        pass
+
 
 class NESController(ABC):
 
     @property
-    def level(self):
-        return 1
+    def button_count(self):
+        return 8
 
     @property
     @abstractmethod
@@ -179,8 +289,8 @@ class NESController(ABC):
 class SNESNoShoulderButtonsController(ABC):
 
     @property
-    def level(self):
-        return 2
+    def button_count(self):
+        return 10
 
     @property
     @abstractmethod
@@ -260,8 +370,8 @@ class SNESNoShoulderButtonsController(ABC):
 class SNESController(ABC):
 
     @property
-    def level(self):
-        return 3
+    def button_count(self):
+        return 12
 
     @property
     @abstractmethod

@@ -52,7 +52,7 @@ def report():
     from pmpge.controller import Controller
     controller = Controller()
 
-    print(f'Running on {running_on} using {hal()} supporting a level {controller.level} controller.')
+    print(f'Running on {running_on} using {hal()} with a {controller.button_count} button controller.')
     del controller
 
 

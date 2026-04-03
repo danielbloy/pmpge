@@ -4,10 +4,10 @@ requires = ["setuptools >= 82.0.1"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pgzge"
+name = "pmpge"
 version = "2026.3.0"
 requires-python = ">= 3.12, < 3.14"
-description = "Pygame Zero Game Engine"
+description = "Python Multi-Platform Game Engine"
 readme = "README.md"
 classifiers = [
     # How mature is this project? Common values are
@@ -21,7 +21,7 @@ classifiers = [
 ]
 
 [tool.setuptools]
-packages = ["pgzge"]
+packages = ["pmpge"]
 
 [tool.pytest.ini_options]
 pythonpath = "."

@@ -4,7 +4,7 @@ This is a test hal using Pygame zero and a reduce controller set.
 
 from pgzero.builtins import keyboard
 
-from pgzge.controller import ABController
+from pmpge.controller import ABController
 
 
 class Controller(ABController):

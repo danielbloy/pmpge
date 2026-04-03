@@ -7,14 +7,14 @@ from pgzero.clock import Clock
 from pgzero.keyboard import Keyboard
 from pgzero.screen import Screen
 
-from pgzge.controller import Controller
-from pgzge.game import Game
-from pgzge.game_object import GameObject
-from pgzge.sprite import Sprite
-from pgzge.traits.controller import MoveWithController
-from pgzge.traits.graphics import DrawImage, DrawText
-from pgzge.traits.physics import Velocity
-from pgzge.traits.position import StayInBounds, RelativeToParent, Position
+from pmpge.controller import Controller
+from pmpge.game import Game
+from pmpge.game_object import GameObject
+from pmpge.sprite import Sprite
+from pmpge.traits.controller import MoveWithController
+from pmpge.traits.graphics import DrawImage, DrawText
+from pmpge.traits.physics import Velocity
+from pmpge.traits.position import StayInBounds, RelativeToParent, Position
 
 clock: Clock
 keyboard: Keyboard
@@ -22,7 +22,7 @@ screen: Screen
 
 # TODO: initialise environment. width, height
 
-pgzge: Game = Game()
+pmpge: Game = Game()
 
 WIDTH = 600
 HEIGHT = 700
@@ -94,7 +94,7 @@ class StarField(GameObject):
 
 
 starfield = StarField(STARS_TOTAL)
-pgzge.add_child(starfield)  # NOTE: Additional code
+pmpge.add_child(starfield)  # NOTE: Additional code
 
 # Step 3: Adding the title screen
 high_score = 20000
@@ -164,7 +164,7 @@ class TitleScreen(GameObject):
 
 
 title_screen = TitleScreen()
-pgzge.add_child(title_screen)  # NOTE: Additional code
+pmpge.add_child(title_screen)  # NOTE: Additional code
 
 # Step 4: Add a game HUD
 LOWER_BORDER_HEIGHT = 40
@@ -231,7 +231,7 @@ class GameHud(GameObject):
 
 
 game_hud = GameHud()
-pgzge.add_child(game_hud)  # NOTE: Additional code
+pmpge.add_child(game_hud)  # NOTE: Additional code
 
 
 def new_game(dt):
@@ -245,7 +245,7 @@ def new_game(dt):
         game_hud.active = True
 
 
-pgzge.add_update_func(new_game)  # NOTE: modified from `update_funcs.append(new_game)`.
+pmpge.add_update_func(new_game)  # NOTE: modified from `update_funcs.append(new_game)`.
 
 PLAYER_SHIP_HEIGHT = 32
 PLAYER_SHIP_WIDTH = 32
@@ -286,15 +286,15 @@ sprite.add_child(
         DrawText(lambda obj: f"{obj.pos}")
     )
 )
-pgzge.add_child(sprite)
+pmpge.add_child(sprite)
 
 
 def draw():
-    pgzge.draw(screen)
+    pmpge.draw(screen)
 
 
 def update(dt):
-    pgzge.update(dt)
+    pmpge.update(dt)
 
 
 pgzrun.go()

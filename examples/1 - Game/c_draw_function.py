@@ -17,7 +17,7 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 import sys
 import time
 import pgzrun
-from pgzge.game import Game
+from pmpge.game import Game
 from pgzero.screen import Screen
 
 screen: Screen

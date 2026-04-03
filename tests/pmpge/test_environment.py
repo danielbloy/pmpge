@@ -1,4 +1,4 @@
-import pgzge.environment as environment
+import pmpge.environment as environment
 
 
 class TestEnvironment:

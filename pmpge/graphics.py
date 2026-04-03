@@ -1,3 +1,3 @@
-import pgzge.environment as environment
+import pmpge.environment as environment
 
 __graphics = environment.import_hal_module('graphics')

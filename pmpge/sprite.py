@@ -1,5 +1,5 @@
-from pgzge.game_object import GameObject
-from pgzge.traits.position import Position
+from pmpge.game_object import GameObject
+from pmpge.traits.position import Position
 
 
 class Sprite(GameObject, Position):

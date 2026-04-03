@@ -4,8 +4,8 @@ parent and children.
 """
 import pytest
 
-from pgzge.game_object import GameObject
-from tests.pgzge.game_object.test_utilities import Hierarchy
+from pmpge.game_object import GameObject
+from tests.pmpge.game_object.test_utilities import Hierarchy
 
 
 def parent_one_child():

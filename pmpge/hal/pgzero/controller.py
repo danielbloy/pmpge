@@ -4,7 +4,7 @@ Defines the controller by mapping to the Pygame Zero keyboard instance.
 
 from pgzero.builtins import keyboard
 
-from pgzge.controller import SNESController
+from pmpge.controller import SNESController
 
 
 class Controller(SNESController):

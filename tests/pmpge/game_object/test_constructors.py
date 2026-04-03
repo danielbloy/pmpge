@@ -4,9 +4,9 @@ many optional arguments.
 """
 import pytest
 
-from pgzge.game_object import GameObject
-from tests.pgzge.game_object.test_traits import TraitWithDrawHandler, TraitWithUpdateHandler, TraitWithEverything
-from tests.pgzge.game_object.test_utilities import Handlers
+from pmpge.game_object import GameObject
+from tests.pmpge.game_object.test_traits import TraitWithDrawHandler, TraitWithUpdateHandler, TraitWithEverything
+from tests.pmpge.game_object.test_utilities import Handlers
 
 
 def validate_properties(

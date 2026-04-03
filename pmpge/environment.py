@@ -49,7 +49,7 @@ def report():
     """
     running_on = "microcontroller" if is_running_on_microcontroller() else sys.platform
 
-    from pgzge.controller import Controller
+    from pmpge.controller import Controller
     controller = Controller()
 
     print(f'Running on {running_on} using {hal()} supporting a level {controller.level} controller.')
@@ -77,7 +77,7 @@ def import_hal_module(module: str):
     """
     returns the specified HAL module.
     """
-    return importlib.import_module(f"pgzge.hal.{hal()}.{module}")
+    return importlib.import_module(f"pmpge.hal.{hal()}.{module}")
 
 
 # TODO: Provide environment information like screen width, height

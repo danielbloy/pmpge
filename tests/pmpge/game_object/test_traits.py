@@ -3,7 +3,7 @@ from typing import Any
 
 import pytest
 
-from pgzge.game_object import GameObject
+from pmpge.game_object import GameObject
 
 
 @dataclass

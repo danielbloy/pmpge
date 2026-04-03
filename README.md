@@ -1,9 +1,9 @@
-# Pygame Zero Game Engine (pgzge)
+# Python Multi-Platform Game Engine (pmpge)
 
-An easy-to-use Game Engine that works with Pygame Zero and designed for use in Coding Clubs.
+An easy-to-use Game Engine that works with Pygame Zero on desktop computers and also with
+CircuitPython and MicroPython devices. It is designed for use in Coding Clubs.
 
-Please see my website [Code Club Adventures](http://codeclubadventures.com/) for more coding
-materials.
+Please see my website [Code Club Adventures](http://codeclubadventures.com/) for more coding materials.
 
 ## Overview
 
@@ -45,7 +45,7 @@ of RAM, it is not the limtation is once was.
 
 ## Project structure
 
-The structure of the `pgzge`project is arranged in the following files (listed in order of
+The structure of the `pmpge`project is arranged in the following files (listed in order of
 importance):
 
 * `controller.py`  - Provides a standard controller abstraction offering different "levels" of
@@ -53,7 +53,7 @@ importance):
 * `environment.py` - Provides information about the environment the engine is operating in such
   as whether it is running on a desktop or microcontroller.
 * `game.py`        - Provides the `Game` class which is a helper class used to run the game.
-* `game_object.py` - Provides the `GameObject` class which is the basis of `pgzge`.
+* `game_object.py` - Provides the `GameObject` class which is the basis of `pmpge`.
 * `graphics.py`    - Provides a standard graphics abstraction to support different environments.
 * `palette.py`     - Provides the `Palette` class for managing colour palettes.
 * `sound.py`       - Provides a standard sound abstraction to support different environments.
@@ -61,7 +61,7 @@ importance):
   position.
 * `traits`         - Directory containing a range of traits that can be added to a `GameObject`.
 
-Some sample games written using the `pgzge` framework can be found in `games` and examples
+Some sample games written using the `pmpge` framework can be found in `games` and examples
 demonstrating how to use the framework can be found in `examples`.
 
 ## Setting up a Development Environment

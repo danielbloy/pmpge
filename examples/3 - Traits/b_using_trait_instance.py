@@ -18,11 +18,11 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 import sys
 import time
 import pgzrun
-from pgzge.game import Game
-from pgzge.game_object import GameObject
-from pgzge.traits.graphics import DrawImage
-from pgzge.traits.physics import Velocity
-from pgzge.traits.position import Position
+from pmpge.game import Game
+from pmpge.game_object import GameObject
+from pmpge.traits.graphics import DrawImage
+from pmpge.traits.physics import Velocity
+from pmpge.traits.position import Position
 from pgzero.screen import Screen
 
 screen: Screen

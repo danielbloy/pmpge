@@ -4,7 +4,7 @@ from typing import Any, Callable
 # TODO: Remove dependency on pgzero
 from pgzero.loaders import images
 
-from pgzge.game_object import GameObject
+from pmpge.game_object import GameObject
 
 # TODO: Move colours to Pallette
 BLACK = (0, 0, 0)

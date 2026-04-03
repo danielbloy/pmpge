@@ -3,10 +3,10 @@ This suite of tests validates the main GameObject methods. This file focuses on 
 single GameObject. There are related tests covering hierarchies and subclassing in the
 relevant test files.
 """
-from pgzge.game_object import GameObject
-from pgzge.traits.position import Position
-from tests.pgzge.game_object.test_parent_and_child import parent_three_children
-from tests.pgzge.game_object.test_utilities import Handlers
+from pmpge.game_object import GameObject
+from pmpge.traits.position import Position
+from tests.pmpge.game_object.test_parent_and_child import parent_three_children
+from tests.pmpge.game_object.test_utilities import Handlers
 
 
 def test_activate_deactivate_does_nothing_on_destroyed_object():

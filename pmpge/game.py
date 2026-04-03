@@ -7,8 +7,8 @@ from pmpge.game_object import GameObject
 class Game:
     """
     Game is the root of the GameObject hierarchy. It provides a simple way to manage the root
-    GameObject as well as provide custom draw and update functions that are called before the root
-    GameObject is drawn or updated.
+    GameObject as well as provide custom draw and update functions that are called after the
+    root GameObject is drawn or updated.
     """
 
     def __init__(self, background_color: tuple[int, int, int] = (0, 0, 0)):
@@ -57,25 +57,26 @@ class Game:
 
     def draw(self, surface: Any):
         """
-        Draws the entire GameObject hierarchy starting with the custom draw functions and
-        then from the root GameObject.
+        Draws the entire GameObject hierarchy starting with the root GameObject and then the
+        custom draw functions.
 
         The surface is passed down through all objects but does not need to be a Pygame surface. It
         can be any object you like provided it has a `fill()` method that accepts am RGB colour
         tuple.
         """
         surface.fill(self.background_color)
-        for draw_func in self.__draw_funcs:
-            draw_func(surface)
 
         self.__root.draw_hierarchy(surface)
 
+        for draw_func in self.__draw_funcs:
+            draw_func(surface)
+
     def update(self, dt: float):
         """
-        Updates the entire GameObject hierarchy starting with the custom update functions and
-        then from the root GameObject.
+        Updates the entire GameObject hierarchy starting with the root GameObject and then the
+        custom update functions.
         """
+        self.__root.update_hierarchy(dt)
+
         for update_func in self.__update_funcs:
             update_func(dt)
-
-        self.__root.update_hierarchy(dt)

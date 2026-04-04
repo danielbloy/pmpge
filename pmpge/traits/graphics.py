@@ -30,6 +30,7 @@ class DrawImage:
 
         self._image = None
         self.image = image
+        self.update(0)
 
     def update(self, dt: float):
         if self.image != self._image:

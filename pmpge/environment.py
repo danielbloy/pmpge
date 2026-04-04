@@ -202,7 +202,6 @@ def import_driver(module: str):
     Returns the specified driver for the given module.
     """
     driver = get_driver(module).lower()
-    print(f"pmpge.drivers.{platform().lower()}.{module.lower()}.{driver}")
     return importlib.import_module(f"pmpge.drivers.{platform().lower()}.{module.lower()}.{driver}")
 
 

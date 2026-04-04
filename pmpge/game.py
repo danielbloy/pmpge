@@ -25,9 +25,21 @@ class Game:
         self.__draw_funcs: list[Callable[[Any], None]] = []
         self.__update_funcs: list[Callable[[float], None]] = []
         self.__root = GameObject(name="root")
-        initialise(width, height)
+        self.__width, self.__height = initialise(width, height)
 
-    # TODO: Add properties to return the actual width and height
+    @property
+    def width(self) -> int:
+        """
+        The width of the game area.
+        """
+        return self.__width
+
+    @property
+    def height(self) -> int:
+        """
+        The height of the game area.
+        """
+        return self.__height
 
     @property
     def root(self) -> GameObject:

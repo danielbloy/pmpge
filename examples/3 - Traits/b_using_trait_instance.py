@@ -23,7 +23,7 @@ from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import Velocity
 from pmpge.traits.position import Position
 
-game: Game = Game(200, 200)
+game: Game = Game(320, 240)
 
 RED = (255, 0, 0)
 

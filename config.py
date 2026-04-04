@@ -1,3 +1,5 @@
 TEST_VALUE = 123.456
 
 TEST_STRING = "Hello world!"
+
+SCALE = 2

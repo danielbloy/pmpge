@@ -10,13 +10,21 @@ class Game:
     Game is the root of the GameObject hierarchy. It provides a simple way to manage the root
     GameObject as well as provide custom draw and update functions that are called after the
     root GameObject is drawn or updated.
+
+    The desired width and height of the game can be specified. The system will then determine
+    how best to scales the desired dimensions to the available screen size. If these are not
+    specified then the default screen size will be used.
     """
 
-    def __init__(self, background_color: tuple[int, int, int] = (0, 0, 0)):
-        self.background_color: tuple[int, int, int] = background_color
+    def __init__(self, width: int = None, height: int = None, background_color: tuple[int, int, int] = None):
+        self.background_color: tuple[int, int, int] = background_color if background_color else (0, 0, 0)
+        self.__width: int | None = width
+        self.__height: int | None = height
         self.__draw_funcs: list[Callable[[Any], None]] = []
         self.__update_funcs: list[Callable[[float], None]] = []
         self.__root = GameObject(name="root")
+
+    # TODO: Add properties to return the actual width and height
 
     @property
     def root(self) -> GameObject:
@@ -86,4 +94,4 @@ class Game:
         """
         Runs the game.
         """
-        run()
+        run(self.__width, self.__height)

@@ -17,9 +17,6 @@ from pgzero.screen import Screen
 screen: Screen
 game: Game = Game()
 
-WIDTH = 200
-HEIGHT = 200
-
 RED = (255, 0, 0)
 
 

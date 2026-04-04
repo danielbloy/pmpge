@@ -15,9 +15,6 @@ from pmpge.game import Game
 
 game: Game = Game()
 
-WIDTH = 200
-HEIGHT = 200
-
 
 def terminate(dt: float):
     if time.monotonic() > finish:

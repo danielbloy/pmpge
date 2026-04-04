@@ -12,9 +12,6 @@ from pgzero.screen import Screen
 screen: Screen
 game: Game = Game()
 
-WIDTH = 200
-HEIGHT = 200
-
 
 def draw():
     game.draw(screen)

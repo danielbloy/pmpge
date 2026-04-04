@@ -55,13 +55,17 @@ def initialise(width: int | None = None, height: int | None = None) -> tuple[int
 
 
 def execute(game, background_colour: tuple[int, int, int] = None):
+    # noinspection PyTypeChecker
+    screen = None
     scale_surface = None
     if game_scale > 1:
         scale_surface = pygame.Surface((game_width, game_height))
 
     def draw():
-        # TODO: See if this can be made better/faster
-        screen = getattr(mod, 'screen')
+        nonlocal screen
+        if not screen:
+            screen = getattr(mod, 'screen')
+
         screen.fill(background_colour)
 
         game.draw(screen)

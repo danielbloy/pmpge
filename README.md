@@ -51,7 +51,7 @@ importance):
 * `controller.py`  - Provides a standard controller abstraction offering different "levels" of
   controller so games can adapt to what the environment offers.
 * `environment.py` - Provides information about the environment the engine is operating in such
-  as whether it is running on a desktop or microcontroller.
+  as whether it is running on a desktop or microcontroller and which type of Python.
 * `game.py`        - Provides the `Game` class which is a helper class used to run the game.
 * `game_object.py` - Provides the `GameObject` class which is the basis of `pmpge`.
 * `graphics.py`    - Provides a standard graphics abstraction to support different environments.
@@ -59,6 +59,7 @@ importance):
 * `sound.py`       - Provides a standard sound abstraction to support different environments.
 * `sprite.py`      - Provides the `Sprite` class which is used to represent a GameObject with
   position.
+* `system.py`      - Provides a standard system abstraction to support different host systems.
 * `traits`         - Directory containing a range of traits that can be added to a `GameObject`.
 
 Some sample games written using the `pmpge` framework can be found in `games` and examples

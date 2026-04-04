@@ -1,3 +1,3 @@
 import pmpge.environment as environment
 
-__graphics = environment.import_hal_module('graphics')
+__graphics = environment.import_driver('graphics')

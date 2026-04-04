@@ -25,9 +25,18 @@ class TestEnvironment:
         assert environment.TEST_VALUE == 123.456
         assert environment.TEST_STRING == "Hello world!"
 
-    def test_hal(self):
+    def test_platform(self):
         """
-        Validates that the hal is the default value which is pgzero.
-        :return:
+        Validates that the platform is the default value which is "Python".
         """
-        assert environment.hal() == "pgzero"
+        assert environment.platform() == "Python"
+
+# TODO: Test the following functions:
+#   * is_running_on_circuitpython()
+#   * is_running_on micropython()
+#   * is_python()
+#   * get_graphics_driver()
+#   * get_sound_driver()
+#   * get_controller_driver()
+#   * get_system_driver()
+#   * get_driver()

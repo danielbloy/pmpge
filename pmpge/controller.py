@@ -466,5 +466,5 @@ class SNESController(ABC):
         return self.right
 
 
-__controller = environment.import_hal_module('controller')
+__controller = environment.import_driver('controller')
 Controller = __controller.Controller

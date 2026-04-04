@@ -12,13 +12,4 @@ from pgzero.screen import Screen
 screen: Screen
 game: Game = Game()
 
-
-def draw():
-    game.draw(screen)
-
-
-def update(dt):
-    game.update(dt)
-
-
 game.run()

@@ -2,4 +2,6 @@
 import pmpge.environment as environment
 
 __system = environment.import_driver('system')
-run = __system.run
+initialise = __system.initialise
+execute = __system.execute
+terminate = __system.terminate

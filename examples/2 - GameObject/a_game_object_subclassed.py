@@ -8,7 +8,6 @@ import os
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
-import sys
 import time
 from pmpge.game import Game
 from pmpge.game_object import GameObject
@@ -22,8 +21,7 @@ RED = (255, 0, 0)
 
 def terminate(dt: float):
     if time.monotonic() > finish:
-        game.root.destroy()
-        sys.exit(0)
+        game.terminate()
 
 
 class BlinkOneUp(GameObject):
@@ -51,15 +49,6 @@ game_object = BlinkOneUp()
 game.add_child(game_object)
 
 game.add_update_func(terminate)
-
-
-def draw():
-    game.draw(screen)
-
-
-def update(dt):
-    game.update(dt)
-
 
 finish = time.monotonic() + 1
 game.run()

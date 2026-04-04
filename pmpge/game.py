@@ -2,7 +2,7 @@ from collections.abc import Callable
 from typing import Any
 
 from pmpge.game_object import GameObject
-from pmpge.system import run
+from pmpge.system import initialise, execute, terminate
 
 
 class Game:
@@ -11,6 +11,10 @@ class Game:
     GameObject as well as provide custom draw and update functions that are called after the
     root GameObject is drawn or updated.
 
+    Creating a Game object also causes the System to be initialised, therefore it is
+    recommended that only one GameObject is created at any one time, though this is not
+    enforced.
+
     The desired width and height of the game can be specified. The system will then determine
     how best to scales the desired dimensions to the available screen size. If these are not
     specified then the default screen size will be used.
@@ -18,11 +22,10 @@ class Game:
 
     def __init__(self, width: int = None, height: int = None, background_color: tuple[int, int, int] = None):
         self.background_color: tuple[int, int, int] = background_color if background_color else (0, 0, 0)
-        self.__width: int | None = width
-        self.__height: int | None = height
         self.__draw_funcs: list[Callable[[Any], None]] = []
         self.__update_funcs: list[Callable[[float], None]] = []
         self.__root = GameObject(name="root")
+        initialise(width, height)
 
     # TODO: Add properties to return the actual width and height
 
@@ -73,8 +76,6 @@ class Game:
         can be any object you like provided it has a `fill()` method that accepts am RGB colour
         tuple.
         """
-        surface.fill(self.background_color)
-
         self.__root.draw_hierarchy(surface)
 
         for draw_func in self.__draw_funcs:
@@ -90,8 +91,16 @@ class Game:
         for update_func in self.__update_funcs:
             update_func(dt)
 
+    def terminate(self):
+        """
+        Terminates the application by destroying all objects and then delegating to the
+        System module.
+        """
+        self.root.destroy()
+        terminate()
+
     def run(self):
         """
-        Runs the game.
+        Runs the actual game. How this works is delegated to the System module.
         """
-        run(self.__width, self.__height)
+        execute(self, self.background_color)

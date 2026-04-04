@@ -7,7 +7,8 @@ from pgzero.keyboard import Keyboard
 from pgzero.screen import Screen
 
 from pmpge.controller import Controller
-from pmpge.game import Gamefrom pmpge.game_object import GameObject
+from pmpge.game import Game
+from pmpge.game_object import GameObject
 from pmpge.sprite import Sprite
 from pmpge.traits.controller import MoveWithController
 from pmpge.traits.graphics import DrawImage, DrawText

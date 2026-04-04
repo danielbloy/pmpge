@@ -2,6 +2,7 @@ from collections.abc import Callable
 from typing import Any
 
 from pmpge.game_object import GameObject
+from pmpge.system import run
 
 
 class Game:
@@ -80,3 +81,9 @@ class Game:
 
         for update_func in self.__update_funcs:
             update_func(dt)
+
+    def run(self):
+        """
+        Runs the game.
+        """
+        run()

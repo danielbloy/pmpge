@@ -2,14 +2,12 @@ import os
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
-import pgzrun
 from pgzero.clock import Clock
 from pgzero.keyboard import Keyboard
 from pgzero.screen import Screen
 
 from pmpge.controller import Controller
-from pmpge.game import Game
-from pmpge.game_object import GameObject
+from pmpge.game import Gamefrom pmpge.game_object import GameObject
 from pmpge.sprite import Sprite
 from pmpge.traits.controller import MoveWithController
 from pmpge.traits.graphics import DrawImage, DrawText
@@ -22,7 +20,7 @@ screen: Screen
 
 # TODO: initialise environment. width, height
 
-pmpge: Game = Game()
+game: Game = Game()
 
 WIDTH = 600
 HEIGHT = 700
@@ -94,7 +92,7 @@ class StarField(GameObject):
 
 
 starfield = StarField(STARS_TOTAL)
-pmpge.add_child(starfield)  # NOTE: Additional code
+game.add_child(starfield)  # NOTE: Additional code
 
 # Step 3: Adding the title screen
 high_score = 20000
@@ -164,7 +162,7 @@ class TitleScreen(GameObject):
 
 
 title_screen = TitleScreen()
-pmpge.add_child(title_screen)  # NOTE: Additional code
+game.add_child(title_screen)  # NOTE: Additional code
 
 # Step 4: Add a game HUD
 LOWER_BORDER_HEIGHT = 40
@@ -231,7 +229,7 @@ class GameHud(GameObject):
 
 
 game_hud = GameHud()
-pmpge.add_child(game_hud)  # NOTE: Additional code
+game.add_child(game_hud)  # NOTE: Additional code
 
 
 def new_game(dt):
@@ -245,7 +243,7 @@ def new_game(dt):
         game_hud.active = True
 
 
-pmpge.add_update_func(new_game)  # NOTE: modified from `update_funcs.append(new_game)`.
+game.add_update_func(new_game)  # NOTE: modified from `update_funcs.append(new_game)`.
 
 PLAYER_SHIP_HEIGHT = 32
 PLAYER_SHIP_WIDTH = 32
@@ -286,15 +284,15 @@ sprite.add_child(
         DrawText(lambda obj: f"{obj.pos}")
     )
 )
-pmpge.add_child(sprite)
+game.add_child(sprite)
 
 
 def draw():
-    pmpge.draw(screen)
+    game.draw(screen)
 
 
 def update(dt):
-    pmpge.update(dt)
+    game.update(dt)
 
 
-pgzrun.go()
+game.run()

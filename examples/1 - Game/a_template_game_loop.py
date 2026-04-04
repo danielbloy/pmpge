@@ -6,7 +6,6 @@ import os
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
-import pgzrun
 from pmpge.game import Game
 from pgzero.screen import Screen
 
@@ -25,4 +24,4 @@ def update(dt):
     game.update(dt)
 
 
-pgzrun.go()
+game.run()

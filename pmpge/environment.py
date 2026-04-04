@@ -165,7 +165,7 @@ def get_system_driver() -> str:
         return SYSTEM_DRIVER
 
     if is_running_on_desktop():
-        return "pgzero.py"
+        return "pgzero"
 
     if is_running_on_circuitpython():
         return ""

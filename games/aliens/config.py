@@ -1,1 +1,1 @@
-CONTROLLER_DRIVER = "ab_keyboard_controller"
+CONTROLLER_DRIVER = "tests.drivers.ab_keyboard_controller"

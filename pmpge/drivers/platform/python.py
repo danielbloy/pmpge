@@ -33,6 +33,8 @@ game_width = screen_width // game_scale
 game_height = screen_height // game_scale
 
 
+# TODO: Some of this needs removing from platform specific code into generic platform code.
+
 def initialise(width: int | None = None, height: int | None = None) -> tuple[int, int]:
     """
     Here width and height are the desired width and height of the game.

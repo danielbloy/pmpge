@@ -23,6 +23,8 @@ class DrawImage:
     This works without requiring properties.
     """
 
+    # TODO: Test this class
+    
     def __init__(self, image: str):
         self._surface = None
         self._offset_x = None

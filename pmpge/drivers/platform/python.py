@@ -33,10 +33,10 @@ game_width = screen_width // game_scale
 game_height = screen_height // game_scale
 
 
-# TODO: Some of this needs removing from platform specific code into generic platform code.
-
 def initialise(width: int | None = None, height: int | None = None) -> tuple[int, int]:
     """
+    # TODO: Document this function.
+    # TODO: See if we can extract out the pygame specific code.
     Here width and height are the desired width and height of the game.
     """
     global game_width, game_height, screen_width, screen_height
@@ -57,6 +57,9 @@ def initialise(width: int | None = None, height: int | None = None) -> tuple[int
 
 
 def execute(game, background_colour: tuple[int, int, int] = None):
+    # TODO: Document this function.
+    # TODO: Later, experiment if we can extract out common code between Python, CircuitPython and MicroPython
+    # TODO: See if we can extract out the pygame zero and pygame specific code.
     # noinspection PyTypeChecker
     screen = None
     scale_surface = None

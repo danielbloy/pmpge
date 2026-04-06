@@ -1,4 +1,7 @@
 class Velocity:
+    # TODO: Test this class
+    # TODO: Document this clas
+
     def __init__(self, vx, vy: int):
         self.vx: int = vx
         self.vy: int = vy
@@ -24,6 +27,8 @@ class Friction:
     its friction will slow the sprite down until the velocity becomes zero. This is similar to
     a negative acceleration, but friction stops once the sprite stops.
     """
+
+    # TODO: Test this class
 
     def __init__(self, fx, fy: int):
         self.fx: int = fx

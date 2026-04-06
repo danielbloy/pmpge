@@ -75,6 +75,12 @@ In PyCharm, the following "Project Structure" is used:
 
 ![Project Structure](./project_structure.png)
 
+## Reference hardware
+
+TODO: Use EdgeBadge/PyBadge for CircuitPython.
+TODO: Use vanilla Pico 2 with 160x128 display for micropython and circuit python
+TODO: Could also specify Tufty for MicroPython
+
 ## License
 
 All materials provided in this project is licensed under the Creative Commons

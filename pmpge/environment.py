@@ -103,14 +103,14 @@ def get_controller_driver() -> str:
 def get_device_driver() -> str:
     """
     Returns the device driver to use. This can be specified in `config.py` to provide
-    an override or a default will be provided depending on the platform we are executing
-    within.
+    an override or the `none.py` device driver will be used. This is different from
+    the other drivers which have platform specific drivers.
     """
-    if 'CONTROLLER_DRIVER' in globals():
+    if 'DEVICE_DRIVER' in globals():
         # noinspection PyUnresolvedReferences
-        return CONTROLLER_DRIVER
+        return DEVICE_DRIVER
 
-    return f"pmpge.drivers.device.{platform().lower()}_reference"
+    return f"pmpge.drivers.device.none"
 
 
 def get_graphics_driver() -> str:

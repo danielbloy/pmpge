@@ -1,4 +1,7 @@
 class Lifetime:
+    # TODO: Document this class
+    # TODO: Test this class
+
     def __init__(self, lifetime: float = None):
         self.lifetime = lifetime
 

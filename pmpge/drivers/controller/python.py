@@ -9,6 +9,14 @@ from pmpge.controller import SNESController
 
 class Controller(SNESController):
 
+    # TODO: Document this class
+    # TODO: Test this class
+    # TODO: Optionally specify the controller buttons in config as an array.
+    #       The number of buttons determines the size of the controller.
+    #       This could be common code across all platforms as it just needs
+    #       a property for true or false for pressed/no pressed. Then another
+    #       for a button event.
+
     @property
     def start(self) -> bool:
         return keyboard.enter or keyboard.space

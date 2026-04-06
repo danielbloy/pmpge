@@ -26,6 +26,7 @@ class Game:
         self.__update_funcs: list[Callable[[float], None]] = []
         self.__root = GameObject(name="root")
         # If no width and height are specified, initialise will return the default width and height for the game.
+        # TODO: Should this be in platform or graphics?
         self.__width, self.__height = initialise(width, height)
 
     @property

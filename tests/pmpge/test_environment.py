@@ -27,9 +27,9 @@ class TestEnvironment:
 
     def test_platform(self):
         """
-        Validates that the platform is the default value which is "Python".
+        Validates that the platform is the default value which is "pgzero".
         """
-        assert environment.platform() == "Python"
+        assert environment.platform() == "pgzero"
 
 # TODO: Test the following functions:
 #   * is_running_on_circuitpython()

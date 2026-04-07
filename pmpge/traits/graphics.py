@@ -1,4 +1,3 @@
-import time
 from typing import Any, Callable
 
 # TODO: Remove dependency on pgzero
@@ -24,7 +23,7 @@ class DrawImage:
     """
 
     # TODO: Test this class
-    
+
     def __init__(self, image: str):
         self._surface = None
         self._offset_x = None
@@ -48,30 +47,11 @@ class DrawImage:
         surface.blit(self._surface, (self.x - self._offset_x, self.y - self._offset_y))
 
 
-class DrawAnimatedImage:
-    # TODO: This needs implementing properly
-    def __init__(self, images: list[str]):
-        self.images = images
-        self.fps = 2
-        self.next_frame = -1
-        self.frame = -1
-
-    def activated(self: GameObject):
-        self.next_frame = -1
-        self.frame = -1
-
-    def draw(self, surface: Any):
-        pass
-
-    def update(self, dt: float):
-        now = time.time_ns()
-
-        if now > self.next_frame:
-            self.frame = (self.frame + 1) % len(self.images)
-            self.next_frame = now + (1_000_000_000 / self.fps)
-
-
 class DrawText:
+
+    # TODO: Test this class
+    # TODO: Document this class
+
     def __init__(self,
                  text: str | Callable[[GameObject], str],
                  colour: tuple[int, int, int] = WHITE,
@@ -89,6 +69,7 @@ class DrawText:
         if not isinstance(text, str):
             text = self.text(self)
 
+        # TODO: need to delegate to the hal resource.
         surface.draw.text(
             text,
             bottomleft=self.pos,

@@ -73,16 +73,16 @@ def platform() -> str:
     """
     Returns the supported platform which is used to determine which drivers to
     load and provide the Hardware Abstraction Layer. There are only three valid
-    values: Python, CircuitPython and MicroPython.
+    values: pgzero, circuit and micro.
     """
     if is_running_on_desktop():
-        return "Python"
+        return "pgzero"
 
     if is_running_on_circuitpython():
-        return "CircuitPython"
+        return "circuit"
 
     if is_running_on_micropython():
-        return "MicroPython"
+        return "micro"
 
     raise ValueError("Unsupported platform")
 

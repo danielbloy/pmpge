@@ -5,6 +5,7 @@ from pmpge.controller import Controller
 
 @dataclass
 class MoveWithController:
+    # TODO: Test this class
     vx: int
     vy: int
     controller: Controller

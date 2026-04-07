@@ -1,3 +1,6 @@
-from pmpge.environment import report
+import pmpge.environment as environment
 
-report()
+# Initialise the device next to allow it to perform any setup.
+__device = environment.import_driver('device')
+
+environment.report()

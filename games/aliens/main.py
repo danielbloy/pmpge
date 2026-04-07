@@ -2,7 +2,6 @@ import os
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
-import pgzrun
 from pgzero.clock import Clock
 from pgzero.keyboard import Keyboard
 from pgzero.screen import Screen
@@ -20,12 +19,7 @@ clock: Clock
 keyboard: Keyboard
 screen: Screen
 
-# TODO: initialise environment. width, height
-
-pmpge: Game = Game()
-
-WIDTH = 600
-HEIGHT = 700
+game: Game = Game(600, 700)
 
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
@@ -48,8 +42,8 @@ class StarField(GameObject):
         self.n = n
         self.stars = [
             (
-                randint(0, WIDTH),  # x position
-                randint(0, HEIGHT),  # y position
+                randint(0, game.width),  # x position
+                randint(0, game.height),  # y position
                 randint(STARS_MIN_SPEED, STARS_MAX_SPEED)  # speed
             )
             for _ in range(n)
@@ -79,14 +73,14 @@ class StarField(GameObject):
                 star[2]
             )
             for star in self.stars
-            if star[1] < HEIGHT
+            if star[1] < game.height
         ]
 
         # STEP C: Add new stars at the top to maintain the total number of stars
         for _ in range(self.n - len(self.stars)):
             self.stars.append(
                 (
-                    randint(0, WIDTH),  # x position
+                    randint(0, game.width),  # x position
                     0,  # y position - top of screen
                     randint(STARS_MIN_SPEED, STARS_MAX_SPEED)  # speed
                 )
@@ -94,7 +88,7 @@ class StarField(GameObject):
 
 
 starfield = StarField(STARS_TOTAL)
-pmpge.add_child(starfield)  # NOTE: Additional code
+game.add_child(starfield)  # NOTE: Additional code
 
 # Step 3: Adding the title screen
 high_score = 20000
@@ -117,17 +111,17 @@ class TitleScreen(GameObject):
 
     def draw(self, surface):
         screen.draw.text("HIGH SCORE",  # NOTE: Code modified to use screen directly.
-                         midtop=(WIDTH / 2, 0),
+                         midtop=(game.width / 2, 0),
                          color=RED,
                          fontsize=36)
         screen.draw.text(f"{high_score}",  # NOTE: Code modified to use screen directly.
-                         midtop=(WIDTH / 2, 30),
+                         midtop=(game.width / 2, 30),
                          color=WHITE,
                          fontsize=36)
 
         if self.draw_press_space:
             screen.draw.text("PRESS SPACE TO START",  # NOTE: Code modified to use screen directly.
-                             midtop=(WIDTH / 2, 250),
+                             midtop=(game.width / 2, 250),
                              color=CYAN,
                              fontsize=36)
 
@@ -136,23 +130,23 @@ class TitleScreen(GameObject):
         screen.blit('player', (75, 545))
 
         screen.draw.text("1ST BONUS FOR 30000 PTS",  # NOTE: Code modified to use screen directly.
-                         midtop=(WIDTH / 2, 400),
+                         midtop=(game.width / 2, 400),
                          color=YELLOW,
                          fontsize=36)
 
         screen.draw.text("2ND BONUS FOR 120000 PTS",  # NOTE: Code modified to use screen directly.
-                         midtop=(WIDTH / 2, 475),
+                         midtop=(game.width / 2, 475),
                          color=YELLOW,
                          fontsize=36)
 
         screen.draw.text("AND FOR EVERY 120000 PTS",  # NOTE: Code modified to use screen directly.
-                         midtop=(WIDTH / 2, 550),
+                         midtop=(game.width / 2, 550),
                          color=YELLOW,
                          fontsize=36)
 
         screen.draw.text("INSPIRED BY GALAGA FROM NAMCO LTD.",
                          # NOTE: Code modified to use screen directly.
-                         midtop=(WIDTH / 2, 650),
+                         midtop=(game.width / 2, 650),
                          color=WHITE,
                          fontsize=36)
 
@@ -164,12 +158,12 @@ class TitleScreen(GameObject):
 
 
 title_screen = TitleScreen()
-pmpge.add_child(title_screen)  # NOTE: Additional code
+game.add_child(title_screen)  # NOTE: Additional code
 
 # Step 4: Add a game HUD
 LOWER_BORDER_HEIGHT = 40
 UPPER_BORDER_HEIGHT = 50
-LOWER_BORDER_START = HEIGHT - LOWER_BORDER_HEIGHT
+LOWER_BORDER_START = game.height - LOWER_BORDER_HEIGHT
 
 
 class GameHud(GameObject):
@@ -188,11 +182,11 @@ class GameHud(GameObject):
 
     def draw(self, draw):
         screen.draw.text("HIGH SCORE",  # NOTE: Code modified to use screen directly.
-                         midtop=(WIDTH / 2, 0),
+                         midtop=(game.width / 2, 0),
                          color=RED,
                          fontsize=36)
         screen.draw.text(f"{high_score}",  # NOTE: Code modified to use screen directly.
-                         midtop=(WIDTH / 2, 30),
+                         midtop=(game.width / 2, 30),
                          color=WHITE,
                          fontsize=36)
 
@@ -209,7 +203,7 @@ class GameHud(GameObject):
 
         if self.show_stage:
             screen.draw.text(f"STAGE {stage}",  # NOTE: Code modified to use screen directly.
-                             midtop=(WIDTH / 2, 300),
+                             midtop=(game.width / 2, 300),
                              color=CYAN,
                              fontsize=36)
 
@@ -218,7 +212,7 @@ class GameHud(GameObject):
 
         for i in range(stage):
             screen.blit('stage_marker',
-                        ((WIDTH - 5) - (16 * (i + 1)), LOWER_BORDER_START + 4))
+                        ((game.width - 5) - (16 * (i + 1)), LOWER_BORDER_START + 4))
 
     def update(self, dt):
         self.show_stage_left -= dt
@@ -231,7 +225,7 @@ class GameHud(GameObject):
 
 
 game_hud = GameHud()
-pmpge.add_child(game_hud)  # NOTE: Additional code
+game.add_child(game_hud)  # NOTE: Additional code
 
 
 def new_game(dt):
@@ -245,21 +239,21 @@ def new_game(dt):
         game_hud.active = True
 
 
-pmpge.add_update_func(new_game)  # NOTE: modified from `update_funcs.append(new_game)`.
+game.add_update_func(new_game)  # NOTE: modified from `update_funcs.append(new_game)`.
 
 PLAYER_SHIP_HEIGHT = 32
 PLAYER_SHIP_WIDTH = 32
 PLAYER_SHIP_MAX_LEFT = (PLAYER_SHIP_WIDTH / 2)
-PLAYER_SHIP_MAX_RIGHT = WIDTH - (PLAYER_SHIP_WIDTH / 2)
+PLAYER_SHIP_MAX_RIGHT = game.width - (PLAYER_SHIP_WIDTH / 2)
 PLAYER_SHIP_START_HEIGHT = LOWER_BORDER_START - (PLAYER_SHIP_HEIGHT / 2)
 
 player = Sprite(
-    WIDTH / 2, PLAYER_SHIP_START_HEIGHT,
+    game.width / 2, PLAYER_SHIP_START_HEIGHT,
     DrawImage('player'))
 
 controller = Controller()
 player.apply_trait(MoveWithController(200, 0, controller))
-player.apply_trait(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, HEIGHT))
+player.apply_trait(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, game.height))
 game_hud.add_child(player)
 
 player.add_child(
@@ -276,7 +270,7 @@ player.add_child(
     )
 )
 
-sprite = GameObject(Position(WIDTH / 2, PLAYER_SHIP_START_HEIGHT),
+sprite = GameObject(Position(game.width / 2, PLAYER_SHIP_START_HEIGHT),
                     DrawImage('alien_a_1'),
                     Velocity(15, -25))
 sprite.add_child(
@@ -286,15 +280,15 @@ sprite.add_child(
         DrawText(lambda obj: f"{obj.pos}")
     )
 )
-pmpge.add_child(sprite)
+game.add_child(sprite)
 
 
 def draw():
-    pmpge.draw(screen)
+    game.draw(screen)
 
 
 def update(dt):
-    pmpge.update(dt)
+    game.update(dt)
 
 
-pgzrun.go()
+game.run()

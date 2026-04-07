@@ -1,5 +1,6 @@
 """
-This is a test hal using Pygame zero and a reduce controller set.
+This is a test controller using Pygame zero and the keyboard to provide
+a simple AB controller with 4 buttons.
 """
 
 from pgzero.builtins import keyboard

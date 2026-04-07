@@ -2,7 +2,7 @@ from collections.abc import Callable
 from typing import Any
 
 from pmpge.game_object import GameObject
-from pmpge.platform import initialise, execute, terminate
+from pmpge.system import initialise, execute, terminate
 
 
 class Game:
@@ -11,7 +11,7 @@ class Game:
     GameObject as well as provide custom draw and update functions that are called after the
     root GameObject is drawn or updated.
 
-    Creating a Game object also causes the platform/device to be initialised, therefore it is
+    Creating a Game object also causes the system/device to be initialised, therefore it is
     recommended that only one Game instance is created at any one time, though this is not
     enforced.
 
@@ -26,7 +26,7 @@ class Game:
         self.__update_funcs: list[Callable[[float], None]] = []
         self.__root = GameObject(name="root")
         # If no width and height are specified, initialise will return the default width and height for the game.
-        # TODO: Should this be in platform or graphics?
+        # TODO: Should this be in system or graphics?
         self.__width, self.__height = initialise(width, height)
 
     @property
@@ -108,13 +108,13 @@ class Game:
     def terminate(self):
         """
         Terminates the application by destroying all objects and then delegating to the
-        platform module.
+        system module.
         """
         self.root.destroy()
         terminate()
 
     def run(self):
         """
-        Runs the actual game. How this works is delegated to the platform module.
+        Runs the actual game. How this works is delegated to the system module.
         """
         execute(self, self.background_color)

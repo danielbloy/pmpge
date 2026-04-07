@@ -25,11 +25,11 @@ class TestEnvironment:
         assert environment.TEST_VALUE == 123.456
         assert environment.TEST_STRING == "Hello world!"
 
-    def test_platform(self):
+    def test_system(self):
         """
-        Validates that the platform is the default value which is "pgzero".
+        Validates that the system is the default value which is "pgzero".
         """
-        assert environment.platform() == "pgzero"
+        assert environment.system() == "pgzero"
 
 # TODO: Test the following functions:
 #   * is_running_on_circuitpython()
@@ -38,6 +38,6 @@ class TestEnvironment:
 #   * get_controller_driver()
 #   * get_device_driver()
 #   * get_graphics_driver()
-#   * get_platform_driver()
 #   * get_sound_driver()
+#   * get_system_driver()
 #   * get_driver()

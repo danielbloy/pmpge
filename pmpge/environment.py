@@ -10,7 +10,7 @@ import sys
 ################################################################################
 # P L A T F O R M
 ################################################################################
-# Internal properties to determine which platform we are running on.
+# Internal properties to determine which system we are running on.
 __is_running_on_microcontroller: bool = False
 __is_running_on_circuitpython: bool = False
 __is_running_on_micropython: bool = False
@@ -65,13 +65,13 @@ def report():
     from pmpge.controller import Controller
     controller = Controller()
 
-    print(f'Running on {platform()} with a {controller.button_count} button controller.')
+    print(f'Running on {system()} with a {controller.button_count} button controller.')
     del controller
 
 
-def platform() -> str:
+def system() -> str:
     """
-    Returns the supported platform which is used to determine which drivers to
+    Returns the supported system which is used to determine which drivers to
     load and provide the Hardware Abstraction Layer. There are only three valid
     values: pgzero, circuit and micro.
     """
@@ -84,27 +84,27 @@ def platform() -> str:
     if is_running_on_micropython():
         return "micro"
 
-    raise ValueError("Unsupported platform")
+    raise ValueError("Unsupported system")
 
 
 def get_controller_driver() -> str:
     """
     Returns the controller driver to use. This can be specified in `config.py` to provide
-    an override or a default will be provided depending on the platform we are executing
+    an override or a default will be provided depending on the system we are executing
     within.
     """
     if 'CONTROLLER_DRIVER' in globals():
         # noinspection PyUnresolvedReferences
         return CONTROLLER_DRIVER
 
-    return f"pmpge.drivers.controller.{platform().lower()}"
+    return f"pmpge.drivers.controller.{system().lower()}"
 
 
 def get_device_driver() -> str:
     """
     Returns the device driver to use. This can be specified in `config.py` to provide
     an override or the `none.py` device driver will be used. This is different from
-    the other drivers which have platform specific drivers.
+    the other drivers which have system specific drivers.
     """
     if 'DEVICE_DRIVER' in globals():
         # noinspection PyUnresolvedReferences
@@ -116,41 +116,41 @@ def get_device_driver() -> str:
 def get_graphics_driver() -> str:
     """
     Returns the graphics driver to use. This can be specified in `config.py` to provide
-    an override or a default will be provided depending on the platform we are executing
+    an override or a default will be provided depending on the system we are executing
     within.
     """
     if 'GRAPHICS_DRIVER' in globals():
         # noinspection PyUnresolvedReferences
         return GRAPHICS_DRIVER
 
-    return f"pmpge.drivers.graphics.{platform().lower()}"
+    return f"pmpge.drivers.graphics.{system().lower()}"
 
 
 def get_sound_driver() -> str:
     """
     Returns the sound driver to use. This can be specified in `config.py` to provide
-    an override or a default will be provided depending on the platform we are executing
+    an override or a default will be provided depending on the system we are executing
     within.
     """
     if 'SOUND_DRIVER' in globals():
         # noinspection PyUnresolvedReferences
         return SOUND_DRIVER
 
-    return f"pmpge.drivers.sound.{platform().lower()}"
+    return f"pmpge.drivers.sound.{system().lower()}"
 
 
-def get_platform_driver() -> str:
+def get_system_driver() -> str:
     """
-    Returns the platform driver to use. This can be specified in `config.py` to provide
-    an override or a default will be provided depending on the platform we are executing
-    within. The platform driver is used to provide platform specific functionality.
+    Returns the system driver to use. This can be specified in `config.py` to provide
+    an override or a default will be provided depending on the system we are executing
+    within. The system driver is used to provide system specific functionality.
     """
 
-    if 'PLATFORM_DRIVER' in globals():
+    if 'SYSTEM_DRIVER' in globals():
         # noinspection PyUnresolvedReferences
-        return PLATFORM_DRIVER
+        return SYSTEM_DRIVER
 
-    return f"pmpge.drivers.platform.{platform().lower()}"
+    return f"pmpge.drivers.system.{system().lower()}"
 
 
 def get_driver(module: str) -> str:
@@ -159,8 +159,8 @@ def get_driver(module: str) -> str:
       * controller
       * device
       * graphics
-      * platform
       * sound
+      * system
     """
     match module.lower():
         case "controller":
@@ -169,10 +169,10 @@ def get_driver(module: str) -> str:
             return get_device_driver()
         case "graphics":
             return get_graphics_driver()
-        case "platform":
-            return get_platform_driver()
         case "sound":
             return get_sound_driver()
+        case "system":
+            return get_system_driver()
 
     raise ValueError("Unknown module")
 

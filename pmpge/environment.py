@@ -194,3 +194,7 @@ try:
 
 except ImportError:
     print("No config file found.")
+
+# TODO: Import the config from root as above and then add overrides from config file from working directory
+# This allows a device level configuration and then a specific game level configuration.
+# TODO: Is this really necessary.

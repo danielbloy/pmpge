@@ -1,3 +1,4 @@
+import time
 from typing import Any, Callable
 
 # TODO: Remove dependency on pgzero
@@ -77,3 +78,26 @@ class DrawText:
             background=self.background,
             fontname=self.fontname,
             fontsize=self.fontsize)
+
+
+class DrawAnimatedImage:
+    # TODO: This needs implementing properly
+    def __init__(self, images: list[str]):
+        self.images = images
+        self.fps = 2
+        self.next_frame = -1
+        self.frame = -1
+
+    def activated(self: GameObject):
+        self.next_frame = -1
+        self.frame = -1
+
+    def draw(self, surface: Any):
+        pass
+
+    def update(self, dt: float):
+        now = time.time_ns()
+
+        if now > self.next_frame:
+            self.frame = (self.frame + 1) % len(self.images)
+            self.next_frame = now + (1_000_000_000 / self.fps)

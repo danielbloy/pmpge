@@ -2,13 +2,13 @@
 # that the code is being executed in to allow various parts of the program
 # to selectively run based on what is available to it.
 #
-# THIS FILE SHOULD NOT IMPORT ANY OTHER FILE IN THE TOOLKIT
+# THIS FILE SHOULD NOT IMPORT ANY OTHER FILE IN THE FRAMEWORK
 #
 import importlib.util
 import sys
 
 ################################################################################
-# P L A T F O R M
+# S Y S T E M    P R O P E R T I E S
 ################################################################################
 # Internal properties to determine which system we are running on.
 __is_running_on_microcontroller: bool = False
@@ -65,8 +65,40 @@ def report():
     from pmpge.controller import Controller
     controller = Controller()
 
-    print(f'Running on {system()} with a {controller.button_count} button controller.')
+    print(
+        f'Running on {system()} with {screen_size()} screen and {controller.button_count} button controller.')
     del controller
+
+
+def screen_size() -> tuple[int, int]:
+    """
+    Returns the deafult screen size in pixels. In a Python/pygame zero environment this will
+    default to 640 x 480 pixels if not specified in 'config.py'. For a microcontroller this
+    will be the physical screen dimensions. In a Python/pygame environment this screen size
+    can be overridden.
+    """
+    width, height = None, None
+
+    if 'SCREEN_WIDTH' in globals():
+        # noinspection PyUnresolvedReferences
+        width = SCREEN_WIDTH
+
+    if 'SCREEN_HEIGHT' in globals():
+        # noinspection PyUnresolvedReferences
+        height = SCREEN_HEIGHT
+
+    if (width and not height) or (height and not width):
+        raise ValueError(
+            "Cannot specify just one of SCREEN_WIDTH or SCREEN_HEIGHT, specify both or neither")
+
+    if width and height:
+        # noinspection PyTypeChecker
+        return width, height
+
+    if is_running_on_desktop():
+        return 640, 480
+
+    raise ValueError("Cannot determine screen size")
 
 
 def system() -> str:
@@ -87,10 +119,14 @@ def system() -> str:
     raise ValueError("Unsupported system")
 
 
+################################################################################
+# D R I V E R S
+################################################################################
+
 def get_controller_driver() -> str:
     """
     Returns the controller driver to use. This can be specified in `config.py` to provide
-    an override or a default will be provided depending on the system we are executing
+    an override, otherwise a default will be provided depending on the system we are executing
     within.
     """
     if 'CONTROLLER_DRIVER' in globals():
@@ -103,8 +139,8 @@ def get_controller_driver() -> str:
 def get_device_driver() -> str:
     """
     Returns the device driver to use. This can be specified in `config.py` to provide
-    an override or the `none.py` device driver will be used. This is different from
-    the other drivers which have system specific drivers.
+    an override, otherwise the `none.py` device driver will be used. This is different
+    from the other drivers which have system specific drivers.
     """
     if 'DEVICE_DRIVER' in globals():
         # noinspection PyUnresolvedReferences
@@ -116,8 +152,8 @@ def get_device_driver() -> str:
 def get_graphics_driver() -> str:
     """
     Returns the graphics driver to use. This can be specified in `config.py` to provide
-    an override or a default will be provided depending on the system we are executing
-    within.
+    an override, otherwise a default will be provided depending on the system we are
+    executing within.
     """
     if 'GRAPHICS_DRIVER' in globals():
         # noinspection PyUnresolvedReferences
@@ -129,8 +165,8 @@ def get_graphics_driver() -> str:
 def get_sound_driver() -> str:
     """
     Returns the sound driver to use. This can be specified in `config.py` to provide
-    an override or a default will be provided depending on the system we are executing
-    within.
+    an override, otherwise a default will be provided depending on the system we are
+    executing within.
     """
     if 'SOUND_DRIVER' in globals():
         # noinspection PyUnresolvedReferences
@@ -168,81 +204,46 @@ def import_driver(module: str):
     return importlib.import_module(driver)
 
 
-def screen_size() -> tuple[int, int]:
+################################################################################
+# E X E C U T I O N
+################################################################################
+
+def execute_on_microcontroller(game, width: int, height: int,
+                               background_colour: tuple[int, int, int] = None):
     """
-    Returns the deafult screen size in pixels. In a Python/pygame zero environment this will
-    default to 640 x 480 pixels if not specified in 'config.py'. For a microcontroller this
-    will be the physical screen dimensions. In a Python/pygame environment this screen size
-    can be overridden.
+    This executes the game at the desired resolution. If the screen display is larger
+    than the specified width and height, the application will scale if it is able to
+    do so.
     """
-    width, height = None, None
-
-    if 'SCREEN_WIDTH' in globals():
-        # noinspection PyUnresolvedReferences
-        width = SCREEN_WIDTH
-
-    if 'SCREEN_HEIGHT' in globals():
-        # noinspection PyUnresolvedReferences
-        height = SCREEN_HEIGHT
-
-    if (width and not height) or (height and not width):
-        raise ValueError(
-            "Cannot specify just one of SCREEN_WIDTH or SCREEN_HEIGHT, specify both or neither")
-
-    if width and height:
-        # noinspection PyTypeChecker
-        return width, height
-
-    if is_running_on_desktop():
-        return 640, 480
-
-    raise ValueError("Cannot determine screen size")
-
-
-def terminate():
-    """
-    Termiantes the application.
-    """
-    sys.exit(0)
-
-
-# Try loading local device settings as overrides.
-try:
-    # noinspection PyPackageRequirements
-    from config import *
-
-    print("Config file loaded.")
-
-except ImportError:
-    print("No config file found.")
-
-if is_running_on_desktop():
-    import pgzrun
-    import pygame
-
-
-def execute(game, game_width: int, game_height: int,
-            background_colour: tuple[int, int, int] = None):
-    # TODO: Document this function.
-    # TODO: Later, experiment if we can extract out common code between Python, CircuitPython and MicroPython
-    # TODO: See if we can extract out the pygame zero and pygame specific code.
-
     screen_width, screen_height = screen_size()
 
-    print(f"Screen width: {game_width}, height: {game_height}")
-    print(f"Game width: {game_width}, height: {game_height}")
+    # On a microcontroller, a larger game size than screen size is an error.
+    if width > screen_width or height > screen_height:
+        raise ValueError("Game width and height cannot be larger than screen")
 
-    # This determines the ratio of screen_width/game_width and screen_height/game_height.
-    # game_scale: int = 1
-    # if 'SCALE' in globals():
-    #    game_scale = SCALE
 
-    # game_width = screen_width // game_scale
-    # game_height = screen_height // game_scale
+def execute_on_desktop(game, width: int, height: int,
+                       background_colour: tuple[int, int, int] = None):
+    """
+    This executes the game at the desired resolution in a python/pygame environment. If
+    the games specified width or height is smaller than the dimensions provided by
+    screen_size() then the image will be scaled. If the games specified width or height
+    is larger than the dimensions provided by screen_size() then the game is scaled
+    horizontally, vertically or both.
+
+    This function also injects WIDTH, HEIGHT, draw() and update() functions into the
+    main application to hook into pygame zero. This will overwrite the those values
+    or functions if they are set in the main Python file.
+    """
+    screen_width, screen_height = screen_size()
+    if is_running_on_desktop():
+        if width > screen_width:
+            screen_width = width
+
+        if height > screen_height:
+            screen_height = height
 
     mod = sys.modules['__main__']
-
-    game_scale = 1
 
     setattr(mod, 'WIDTH', screen_width)
     setattr(mod, 'HEIGHT', screen_height)
@@ -250,8 +251,8 @@ def execute(game, game_width: int, game_height: int,
     # noinspection PyTypeChecker
     screen = None
     scale_surface = None
-    if game_scale > 1:
-        scale_surface = pygame.Surface((game_width, game_height))
+    if width < screen_width or height < screen_height:
+        scale_surface = pygame.Surface((width, height))
 
     def draw():
         nonlocal screen
@@ -273,3 +274,42 @@ def execute(game, game_width: int, game_height: int,
     setattr(mod, 'update', update)
 
     pgzrun.go()
+
+
+# Bind the correct execution function based on the system.
+if is_running_on_microcontroller():
+    execute = execute_on_microcontroller
+
+if is_running_on_desktop():
+    execute = execute_on_desktop
+
+
+def terminate():
+    """
+    Termiantes the application.
+    """
+    sys.exit(0)
+
+
+################################################################################
+# C O N F I G    A N D    D E P E N D E N C I E S
+################################################################################
+
+# Try loading local device settings as overrides.
+try:
+    # noinspection PyPackageRequirements
+    from config import *
+
+    print("Config file loaded.")
+
+except ImportError:
+    print("No config file found.")
+
+if is_running_on_desktop():
+    # This is required to bootstrap pygames display to allow some of the game setup
+    # code to work.
+    import pgzrun
+    import pygame
+
+# Initialise the device next to allow it to perform any setup.
+import_driver('device')

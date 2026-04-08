@@ -139,20 +139,6 @@ def get_sound_driver() -> str:
     return f"pmpge.drivers.sound.{system().lower()}"
 
 
-def get_system_driver() -> str:
-    """
-    Returns the system driver to use. This can be specified in `config.py` to provide
-    an override or a default will be provided depending on the system we are executing
-    within. The system driver is used to provide system specific functionality.
-    """
-
-    if 'SYSTEM_DRIVER' in globals():
-        # noinspection PyUnresolvedReferences
-        return SYSTEM_DRIVER
-
-    return f"pmpge.drivers.system.{system().lower()}"
-
-
 def get_driver(module: str) -> str:
     """
     Returns the specified driver for the given module. Valid modules are:
@@ -160,7 +146,6 @@ def get_driver(module: str) -> str:
       * device
       * graphics
       * sound
-      * system
     """
     match module.lower():
         case "controller":
@@ -171,8 +156,6 @@ def get_driver(module: str) -> str:
             return get_graphics_driver()
         case "sound":
             return get_sound_driver()
-        case "system":
-            return get_system_driver()
 
     raise ValueError("Unknown module")
 
@@ -185,6 +168,44 @@ def import_driver(module: str):
     return importlib.import_module(driver)
 
 
+def screen_size() -> tuple[int, int]:
+    """
+    Returns the deafult screen size in pixels. In a Python/pygame zero environment this will
+    default to 640 x 480 pixels if not specified in 'config.py'. For a microcontroller this
+    will be the physical screen dimensions. In a Python/pygame environment this screen size
+    can be overridden.
+    """
+    width, height = None, None
+
+    if 'SCREEN_WIDTH' in globals():
+        # noinspection PyUnresolvedReferences
+        width = SCREEN_WIDTH
+
+    if 'SCREEN_HEIGHT' in globals():
+        # noinspection PyUnresolvedReferences
+        height = SCREEN_HEIGHT
+
+    if (width and not height) or (height and not width):
+        raise ValueError(
+            "Cannot specify just one of SCREEN_WIDTH or SCREEN_HEIGHT, specify both or neither")
+
+    if width and height:
+        # noinspection PyTypeChecker
+        return width, height
+
+    if is_running_on_desktop():
+        return 640, 480
+
+    raise ValueError("Cannot determine screen size")
+
+
+def terminate():
+    """
+    Termiantes the application.
+    """
+    sys.exit(0)
+
+
 # Try loading local device settings as overrides.
 try:
     # noinspection PyPackageRequirements
@@ -195,6 +216,60 @@ try:
 except ImportError:
     print("No config file found.")
 
-# TODO: Import the config from root as above and then add overrides from config file from working directory
-# This allows a device level configuration and then a specific game level configuration.
-# TODO: Is this really necessary.
+if is_running_on_desktop():
+    import pgzrun
+    import pygame
+
+
+def execute(game, game_width: int, game_height: int,
+            background_colour: tuple[int, int, int] = None):
+    # TODO: Document this function.
+    # TODO: Later, experiment if we can extract out common code between Python, CircuitPython and MicroPython
+    # TODO: See if we can extract out the pygame zero and pygame specific code.
+
+    screen_width, screen_height = screen_size()
+
+    print(f"Screen width: {game_width}, height: {game_height}")
+    print(f"Game width: {game_width}, height: {game_height}")
+
+    # This determines the ratio of screen_width/game_width and screen_height/game_height.
+    # game_scale: int = 1
+    # if 'SCALE' in globals():
+    #    game_scale = SCALE
+
+    # game_width = screen_width // game_scale
+    # game_height = screen_height // game_scale
+
+    mod = sys.modules['__main__']
+
+    game_scale = 1
+
+    setattr(mod, 'WIDTH', screen_width)
+    setattr(mod, 'HEIGHT', screen_height)
+
+    # noinspection PyTypeChecker
+    screen = None
+    scale_surface = None
+    if game_scale > 1:
+        scale_surface = pygame.Surface((game_width, game_height))
+
+    def draw():
+        nonlocal screen
+        if not screen:
+            screen = getattr(mod, 'screen')
+
+        screen.fill(background_colour)
+
+        game.draw(screen)
+
+        if scale_surface:
+            scale_surface.blit(screen.surface, (0, 0))
+            pygame.transform.scale(scale_surface, (screen_width, screen_height), screen.surface)
+
+    def update(dt):
+        game.update(dt)
+
+    setattr(mod, 'draw', draw)
+    setattr(mod, 'update', update)
+
+    pgzrun.go()

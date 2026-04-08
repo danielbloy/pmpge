@@ -39,5 +39,5 @@ class TestEnvironment:
 #   * get_device_driver()
 #   * get_graphics_driver()
 #   * get_sound_driver()
-#   * get_system_driver()
 #   * get_driver()
+#   * def screen_size()

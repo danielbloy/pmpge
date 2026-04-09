@@ -72,7 +72,7 @@ def report():
 
 def screen_size() -> tuple[int, int]:
     """
-    Returns the deafult screen size in pixels. In a Python/pygame zero environment this will
+    Returns the default screen size in pixels. In a Python/pygame zero environment this will
     default to 640 x 480 pixels if not specified in 'config.py'. For a microcontroller this
     will be the physical screen dimensions. In a Python/pygame environment this screen size
     can be overridden.
@@ -133,7 +133,10 @@ def get_controller_driver() -> str:
         # noinspection PyUnresolvedReferences
         return CONTROLLER_DRIVER
 
-    return f"pmpge.drivers.controller.{system().lower()}"
+    if is_running_on_desktop():
+        return f"pmpge.drivers.controller.{system().lower()}"
+
+    raise SystemError("Cannot determine controller driver")
 
 
 def get_device_driver() -> str:
@@ -159,7 +162,16 @@ def get_graphics_driver() -> str:
         # noinspection PyUnresolvedReferences
         return GRAPHICS_DRIVER
 
-    return f"pmpge.drivers.graphics.{system().lower()}"
+    if is_running_on_desktop():
+        return f"pmpge.drivers.graphics.pgzero"
+
+    if is_running_on_micropython():
+        return f"pmpge.drivers.graphics.picographics"
+
+    if is_running_on_circuitpython():
+        return f"pmpge.drivers.graphics.displayio"
+
+    raise SystemError("Cannot determine graphics driver")
 
 
 def get_sound_driver() -> str:
@@ -172,7 +184,10 @@ def get_sound_driver() -> str:
         # noinspection PyUnresolvedReferences
         return SOUND_DRIVER
 
-    return f"pmpge.drivers.sound.{system().lower()}"
+    if is_running_on_desktop():
+        return f"pmpge.drivers.sound.{system().lower()}"
+
+    raise SystemError("Cannot determine sound driver")
 
 
 def get_driver(module: str) -> str:

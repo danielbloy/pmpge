@@ -1,4 +1,46 @@
+"""
+Most of the tests for environment.py are fairly simple as many functions only
+provide platform specific values and given that all CI runs are on Python, they
+cannot realistically test CircuitPython and MicroPython runs. We therefore delegate
+that level of testing to the device specific validation tests that run on the
+physical devices.
+"""
 import pmpge.environment as environment
+
+
+def test_is_running_on_desktop():
+    """
+    Validates that the environment is correctly identified as running on a desktop.
+    """
+    assert environment.is_running_on_desktop()
+
+
+def test_is_running_on_microcontroller():
+    """
+    Validates that the environment is correctly identified as not running on a microcontroller.
+    """
+    assert not environment.is_running_on_microcontroller()
+
+
+def test_is_running_on_circuitpython():
+    """
+    Validates that the environment is correctly identified as not running on CircuitPython.
+    """
+    assert not environment.is_running_on_circuitpython()
+
+
+def test_is_running_on_micropython():
+    """
+    Validates that the environment is correctly identified as not running on MicroPython.
+    """
+    assert not environment.is_running_on_micropython()
+
+
+def test_microcontroller_or_desktop():
+    """
+    Just a simple test to make sure we are not returning a microcontroller and desktop environment
+    """
+    assert environment.is_running_on_desktop() != environment.is_running_on_microcontroller()
 
 
 def test_report():
@@ -8,11 +50,16 @@ def test_report():
     environment.report()
 
 
-def test_controller_or_desktop():
+def test_screen_size():
+    # Test with no config file, should default to 640x480
+    assert environment.screen_size() == (640, 480)
+
+
+def test_system():
     """
-    Just a simple test to make sure we are not returning a microcontroller and desktop environment
+    Validates that the system is the default value which is "pgzero".
     """
-    assert environment.is_running_on_desktop() != environment.is_running_on_microcontroller()
+    assert environment.system() == "pgzero"
 
 
 def test_config_is_loaded() -> None:
@@ -34,8 +81,6 @@ def test_system():
     assert environment.system() == "pgzero"
 
 # TODO: Test the following functions:
-#   * is_running_on_circuitpython()
-#   * is_running_on micropython()
 #   * get_controller_driver()
 #   * get_device_driver()
 #   * get_graphics_driver()

@@ -3,7 +3,7 @@ This suite of tests validates the GameObject properties. the tests are all relat
 simple and cover the basic functionality of the properties.
 """
 from pmpge.game_object import GameObject
-from tests.pmpge.game_object.test_utilities import Handlers
+from tests.pmpge.test_utilities import Handlers
 
 
 def test_name_property():

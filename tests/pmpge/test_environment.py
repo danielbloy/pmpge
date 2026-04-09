@@ -5,7 +5,29 @@ cannot realistically test CircuitPython and MicroPython runs. We therefore deleg
 that level of testing to the device specific validation tests that run on the
 physical devices.
 """
+import os
+import pathlib
+from collections.abc import Callable
+from importlib import reload
+
 import pmpge.environment as environment
+
+
+def with_config_file(contents: str, test: Callable[[], bool]) -> None:
+    """
+    Utility function for testing using a custom config file. It cleans up the file after the test.
+    """
+    config_file = f"{pathlib.Path().resolve()}/config.py"
+
+    try:
+        with open(config_file, "w") as file:
+            file.write(contents)
+
+        reload(environment)
+        assert test()
+
+    finally:
+        os.remove(config_file)
 
 
 def test_is_running_on_desktop():
@@ -54,24 +76,16 @@ def test_screen_size():
     # Test with no config file, should default to 640x480
     assert environment.screen_size() == (640, 480)
 
+    with_config_file(
+        "SCREEN_WIDTH = 800\nSCREEN_HEIGHT = 300\n",
+        lambda: environment.screen_size() == (800, 300))
+
 
 def test_system():
     """
     Validates that the system is the default value which is "pgzero".
     """
     assert environment.system() == "pgzero"
-
-
-def test_config_is_loaded() -> None:
-    """
-    Validates configuration defaults are loaded as well as the local overrides
-    contained in config.py.
-    """
-
-    # These are just random configuration values from the config.
-    # noinspection PyUnresolvedReferences
-    assert environment.TEST_VALUE == 123.456
-    assert environment.TEST_STRING == "Hello world!"
 
 
 def test_system():

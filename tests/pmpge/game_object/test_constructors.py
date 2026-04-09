@@ -5,8 +5,9 @@ many optional arguments.
 import pytest
 
 from pmpge.game_object import GameObject
-from tests.pmpge.game_object.test_traits import TraitWithDrawHandler, TraitWithUpdateHandler, TraitWithEverything
-from tests.pmpge.game_object.test_utilities import Handlers
+from tests.pmpge.game_object.test_traits import TraitWithDrawHandler, TraitWithUpdateHandler, \
+    TraitWithEverything
+from tests.pmpge.test_utilities import Handlers
 
 
 def validate_properties(
@@ -576,5 +577,6 @@ def test_traits_are_applied():
     assert go.go == go
     assert go.surface == "surface"
     assert go.dt == 1.2
-    assert go.called == ["activated", "merged", "deactivated", "activated", "draw", "update", "deactivated",
+    assert go.called == ["activated", "merged", "deactivated", "activated", "draw", "update",
+                         "deactivated",
                          "destroyed"]

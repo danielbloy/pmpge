@@ -286,9 +286,9 @@ if is_running_on_desktop():
 
 def terminate():
     """
-    Termiantes the application.
+    Terminates the application by ending the execute() function.
     """
-    sys.exit(0)
+    pygame.event.post(pygame.event.Event(pygame.QUIT))
 
 
 ################################################################################

@@ -8,14 +8,16 @@ physical devices.
 import os
 import pathlib
 from collections.abc import Callable
-from importlib import reload
+
+import pytest
 
 import pmpge.environment as environment
 
 
-def with_config_file(contents: str, test: Callable[[], bool]) -> None:
+def with_config_file(contents: str, test: Callable, expect_error: bool = False) -> None:
     """
-    Utility function for testing using a custom config file. It cleans up the file after the test.
+    Utility function for testing using a custom config file. It cleans up the file after the test
+    and also removes any existing config values.
     """
     config_file = f"{pathlib.Path().resolve()}/config.py"
 
@@ -23,8 +25,21 @@ def with_config_file(contents: str, test: Callable[[], bool]) -> None:
         with open(config_file, "w") as file:
             file.write(contents)
 
-        reload(environment)
-        assert test()
+        # Remove any existing config values
+        if environment.config:
+            for attr in dir(environment.config):
+                if attr.startswith("__"):
+                    continue
+                print(f"Removing {attr} from config")
+                delattr(environment.config, attr)
+
+        environment.import_config()
+
+        if expect_error:
+            with pytest.raises(ValueError):
+                test()
+        else:
+            assert test()
 
     finally:
         os.remove(config_file)
@@ -80,6 +95,15 @@ def test_screen_size():
         "SCREEN_WIDTH = 800\nSCREEN_HEIGHT = 300\n",
         lambda: environment.screen_size() == (800, 300))
 
+    # Test invalid configuration scenarios.
+    with_config_file(
+        "SCREEN_WIDTH = 800\n",
+        lambda: environment.screen_size(), expect_error=True)
+
+    with_config_file(
+        "SCREEN_HEIGHT = 300\n",
+        lambda: environment.screen_size(), expect_error=True)
+
 
 def test_system():
     """
@@ -88,18 +112,90 @@ def test_system():
     assert environment.system() == "pgzero"
 
 
-def test_system():
+def test_get_controller_driver():
     """
-    Validates that the system is the default value which is "pgzero".
+    Checks the default value and an override in the config file.
     """
-    assert environment.system() == "pgzero"
+    assert environment.get_controller_driver() == "pmpge.drivers.controller.pgzero"
+
+    with_config_file(
+        'CONTROLLER_DRIVER = "my.controller.driver"\n',
+        lambda: environment.get_controller_driver() == "my.controller.driver")
+
+
+def test_get_device_driver():
+    """
+    Checks the default value and an override in the config file.
+    """
+    assert environment.get_device_driver() == "pmpge.drivers.device.none"
+
+    with_config_file(
+        'DEVICE_DRIVER = "my.device.driver"\n',
+        lambda: environment.get_device_driver() == "my.device.driver")
+
+
+def test_get_graphics_driver():
+    """
+    Checks the default value and an override in the config file.
+    """
+    assert environment.get_graphics_driver() == "pmpge.drivers.graphics.pgzero"
+
+    with_config_file(
+        'GRAPHICS_DRIVER = "my.graphics.driver"\n',
+        lambda: environment.get_graphics_driver() == "my.graphics.driver")
+
+
+def test_get_sound_driver():
+    """
+    Checks the default value and an override in the config file.
+    """
+    assert environment.get_sound_driver() == "pmpge.drivers.sound.pgzero"
+
+    with_config_file(
+        'SOUND_DRIVER = "my.sound.driver"\n',
+        lambda: environment.get_sound_driver() == "my.sound.driver")
+
+
+def test_get_driver():
+    """
+    Check that the different types of drivers can be retrieved.
+    """
+    # Just use the default cases.
+    assert environment.get_driver("CONTROLLER") == environment.get_controller_driver()
+    assert environment.get_driver("DeViCe") == environment.get_device_driver()
+    assert environment.get_driver("graphics") == environment.get_graphics_driver()
+    assert environment.get_driver("SOuND") == environment.get_sound_driver()
+
+    # Test an unknown driver raises an error.
+    with pytest.raises(ValueError):
+        environment.get_driver("unknown")
+
+
+def test_import_driver():
+    """
+    Validates that the driver module can be imported without errors.
+    """
+    # TODO
+    pass
+
+
+def test_config_is_loaded() -> None:
+    """
+    Validates configuration defaults are loaded as well as the local overrides
+    contained in config.py.
+    """
+
+    # noinspection PyUnresolvedReferences
+    with_config_file(
+        'TEST_VALUE = 123.456\nTEST_STRING = "Hello world!"\n',
+        lambda: environment.config.TEST_VALUE == 123.456)
+
+    assert environment.config.TEST_STRING == "Hello world!"
 
 # TODO: Test the following functions:
 #   * get_controller_driver()
 #   * get_device_driver()
 #   * get_graphics_driver()
 #   * get_sound_driver()
-#   * screen_size()
-#   * system()
 #   * termiante()
 #   * execute()

@@ -79,13 +79,11 @@ def screen_size() -> tuple[int, int]:
     """
     width, height = None, None
 
-    if 'SCREEN_WIDTH' in globals():
-        # noinspection PyUnresolvedReferences
-        width = SCREEN_WIDTH
+    if config and hasattr(config, 'SCREEN_WIDTH'):
+        width = config.SCREEN_WIDTH
 
-    if 'SCREEN_HEIGHT' in globals():
-        # noinspection PyUnresolvedReferences
-        height = SCREEN_HEIGHT
+    if config and hasattr(config, 'SCREEN_HEIGHT'):
+        height = config.SCREEN_HEIGHT
 
     if (width and not height) or (height and not width):
         raise ValueError(
@@ -129,12 +127,11 @@ def get_controller_driver() -> str:
     an override, otherwise a default will be provided depending on the system we are executing
     within.
     """
-    if 'CONTROLLER_DRIVER' in globals():
-        # noinspection PyUnresolvedReferences
-        return CONTROLLER_DRIVER
+    if config and hasattr(config, 'CONTROLLER_DRIVER'):
+        return config.CONTROLLER_DRIVER
 
     if is_running_on_desktop():
-        return f"pmpge.drivers.controller.{system().lower()}"
+        return "pmpge.drivers.controller.pgzero"
 
     raise SystemError("Cannot determine controller driver")
 
@@ -145,11 +142,10 @@ def get_device_driver() -> str:
     an override, otherwise the `none.py` device driver will be used. This is different
     from the other drivers which have system specific drivers.
     """
-    if 'DEVICE_DRIVER' in globals():
-        # noinspection PyUnresolvedReferences
-        return DEVICE_DRIVER
+    if config and hasattr(config, 'DEVICE_DRIVER'):
+        return config.DEVICE_DRIVER
 
-    return f"pmpge.drivers.device.none"
+    return "pmpge.drivers.device.none"
 
 
 def get_graphics_driver() -> str:
@@ -158,18 +154,17 @@ def get_graphics_driver() -> str:
     an override, otherwise a default will be provided depending on the system we are
     executing within.
     """
-    if 'GRAPHICS_DRIVER' in globals():
-        # noinspection PyUnresolvedReferences
-        return GRAPHICS_DRIVER
+    if config and hasattr(config, 'GRAPHICS_DRIVER'):
+        return config.GRAPHICS_DRIVER
 
     if is_running_on_desktop():
-        return f"pmpge.drivers.graphics.pgzero"
+        return "pmpge.drivers.graphics.pgzero"
 
     if is_running_on_micropython():
-        return f"pmpge.drivers.graphics.picographics"
+        return "pmpge.drivers.graphics.picographics"
 
     if is_running_on_circuitpython():
-        return f"pmpge.drivers.graphics.displayio"
+        return "pmpge.drivers.graphics.displayio"
 
     raise SystemError("Cannot determine graphics driver")
 
@@ -180,12 +175,11 @@ def get_sound_driver() -> str:
     an override, otherwise a default will be provided depending on the system we are
     executing within.
     """
-    if 'SOUND_DRIVER' in globals():
-        # noinspection PyUnresolvedReferences
-        return SOUND_DRIVER
+    if config and hasattr(config, 'SOUND_DRIVER'):
+        return config.SOUND_DRIVER
 
     if is_running_on_desktop():
-        return f"pmpge.drivers.sound.{system().lower()}"
+        return "pmpge.drivers.sound.pgzero"
 
     raise SystemError("Cannot determine sound driver")
 
@@ -309,16 +303,35 @@ def terminate():
 ################################################################################
 # C O N F I G    A N D    D E P E N D E N C I E S
 ################################################################################
+config = None
 
-# Try loading local device settings as overrides.
-try:
-    # noinspection PyPackageRequirements
-    from config import *
 
-    print("Config file loaded.")
+def import_config():
+    """
+    Loads or reloads the config file. This is called automatically when the module
+    is first loaded so only needs to be called if 'config.py' changes and we need
+    to see those changes. Ordinarily this is only useful when testing.
 
-except ImportError:
-    print("No config file found.")
+    Please note that this is additive so if the config file changes, the new
+    values will be added to the existing configuration. Redefined values will
+    be overwritten by removed values will not be deleted.
+    """
+    global config
+    try:
+        config = importlib.import_module('config')
+        config = importlib.reload(config)
+        print(f"Config file {config.__file__} loaded.")
+
+        # noinspection PyTypeChecker
+        with open(config.__file__) as f:
+            print(f.read())
+
+
+    except ImportError:
+        print("No config file found.")
+
+
+import_config()
 
 if is_running_on_desktop():
     # This is required to bootstrap pygames display to allow some of the game setup

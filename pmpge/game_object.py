@@ -143,7 +143,7 @@ class GameObject:
             self.apply_trait(trait)
 
     @property
-    def name(self) -> bool | None:
+    def name(self) -> str | None:
         """
         The name of this GameObject or None if the GameObject has no name. It should not contain the
         `/` or `.`` characters. It is used when locating an object by name.

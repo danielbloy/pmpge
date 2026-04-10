@@ -209,7 +209,7 @@ def import_driver(module: str):
     """
     Returns the specified driver for the given module.
     """
-    driver = get_driver(module).lower()
+    driver = get_driver(module)
     return importlib.import_module(driver)
 
 
@@ -244,6 +244,9 @@ def execute_on_desktop(game, width: int, height: int,
     main application to hook into pygame zero. This will overwrite the those values
     or functions if they are set in the main Python file.
     """
+    if not background_colour:
+        background_colour = (0, 0, 0)
+
     screen_width, screen_height = screen_size()
     if is_running_on_desktop():
         if width > screen_width:

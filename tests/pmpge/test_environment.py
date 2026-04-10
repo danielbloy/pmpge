@@ -12,6 +12,7 @@ from collections.abc import Callable
 import pytest
 
 import pmpge.environment as environment
+from game import Game
 
 
 def with_config_file(contents: str, test: Callable, expect_error: bool = False) -> None:
@@ -19,12 +20,8 @@ def with_config_file(contents: str, test: Callable, expect_error: bool = False) 
     Utility function for testing using a custom config file. It cleans up the file after the test
     and also removes any existing config values.
     """
-    config_file = f"{pathlib.Path().resolve()}/config.py"
 
-    try:
-        with open(config_file, "w") as file:
-            file.write(contents)
-
+    def remove_config_values():
         # Remove any existing config values
         if environment.config:
             for attr in dir(environment.config):
@@ -32,6 +29,14 @@ def with_config_file(contents: str, test: Callable, expect_error: bool = False) 
                     continue
                 print(f"Removing {attr} from config")
                 delattr(environment.config, attr)
+
+    config_file = f"{pathlib.Path().resolve()}/config.py"
+
+    try:
+        with open(config_file, "w") as file:
+            file.write(contents)
+
+        remove_config_values()
 
         environment.import_config()
 
@@ -43,6 +48,8 @@ def with_config_file(contents: str, test: Callable, expect_error: bool = False) 
 
     finally:
         os.remove(config_file)
+
+        remove_config_values()
 
 
 def test_is_running_on_desktop():
@@ -173,20 +180,35 @@ def test_get_driver():
 
 def test_import_driver():
     """
-    Validates that the driver module can be imported without errors.
+    Validates that drivers module can be imported without errors.
     """
-    # TODO
-    pass
+    controller = environment.import_driver("controller")
+    device = environment.import_driver("device")
+    graphics = environment.import_driver("graphics")
+    sound = environment.import_driver("sound")
+
+    # Test an unknown driver raises an error.
+    with pytest.raises(ValueError):
+        environment.import_driver("unknown")
 
 
-def test_execute_on_desktop():
-    # TODO:
-    pass
+def test_execute_and_terminate_on_desktop():
+    """
+    Validates that terminate() can be called when pygame is running it actually terminates.
+    This also tests that the execute_on_desktop() function works too (well as best we can).
+    """
+    counter = 0
 
+    def update(dt: float):
+        nonlocal counter
+        counter += 1
+        if counter >= 10:
+            environment.terminate()
 
-def test_terminate():
-    # TODO
-    pass
+    game = Game()
+    game.add_update_func(update)
+    environment.execute_on_desktop(game, 320, 200)
+    assert counter == 10
 
 
 def test_config_is_loaded() -> None:
@@ -198,6 +220,5 @@ def test_config_is_loaded() -> None:
     # noinspection PyUnresolvedReferences
     with_config_file(
         'TEST_VALUE = 123.456\nTEST_STRING = "Hello world!"\n',
-        lambda: environment.config.TEST_VALUE == 123.456)
-
-    assert environment.config.TEST_STRING == "Hello world!"
+        lambda: environment.config.TEST_VALUE == 123.456 and
+                environment.config.TEST_STRING == "Hello world!")

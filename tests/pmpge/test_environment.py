@@ -179,6 +179,16 @@ def test_import_driver():
     pass
 
 
+def test_execute_on_desktop():
+    # TODO:
+    pass
+
+
+def test_terminate():
+    # TODO
+    pass
+
+
 def test_config_is_loaded() -> None:
     """
     Validates configuration defaults are loaded as well as the local overrides
@@ -191,11 +201,3 @@ def test_config_is_loaded() -> None:
         lambda: environment.config.TEST_VALUE == 123.456)
 
     assert environment.config.TEST_STRING == "Hello world!"
-
-# TODO: Test the following functions:
-#   * get_controller_driver()
-#   * get_device_driver()
-#   * get_graphics_driver()
-#   * get_sound_driver()
-#   * termiante()
-#   * execute()

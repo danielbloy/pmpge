@@ -8,8 +8,11 @@ from pmpge.controller import SNESController
 
 
 class Controller(SNESController):
+    """
+    This is a simple controller that uses the Pygame Zero keyboard and provides the
+    full keyboard mapping for the SNES controller.
+    """
 
-    # TODO: Document this class
     # TODO: Test this class
     # TODO: Optionally specify the controller buttons in config as an array.
     #       The number of buttons determines the size of the controller.

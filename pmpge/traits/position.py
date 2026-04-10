@@ -1,6 +1,15 @@
-class Position:
+from pmpge.sprite import Sprite
 
-    # TODO: Document this class
+
+class Position:
+    """
+    Position is a specific location in 2D space, represented by an x and y co-ordinate.
+    A Position can be inside the viewable display area of the game or outside of it.
+    """
+
+    x: float
+    y: float
+
     # TODO: Test this class
 
     def __init__(self, x, y: float):
@@ -27,8 +36,22 @@ class Position:
 
 
 class RelativeToParent:
+    """
+    RelativeToParent keeps the position of a GameObject a specified number of pixels
+    horizontally and vertically relative to its parent GameObject. If the parent moves,
+    the child will move with it at a constant offset. If the GameObject has no parent,
+    the offset will be relative to the top left corner of the screen.
 
-    # TODO: Document this class
+    The RelativeToParent trait requires a Position trait to be present on the GameObject
+    amd the parent GameObject.
+    """
+
+    parent: Sprite
+    x: float
+    y: float
+    offset_x: int
+    offset_y: int
+
     # TODO: Test this class
 
     def __init__(self, offset_x, offset_y: int):
@@ -45,8 +68,20 @@ class RelativeToParent:
 
 
 class StayInBounds:
+    """
+    StayInBounds keeps a GameObjects position within a specified range of x and y co-ordinates.
+    The co-ordinates do not need to be entirely within the visible bounds of the screen.
 
-    # TODO: Document this class
+    The StayInBounds trait requires a Position trait to be present on the GameObject.
+    """
+
+    x: float
+    y: float
+    min_x: int
+    min_y: int
+    max_x: int
+    max_y: int
+
     # TODO: Test this class
 
     def __init__(self, min_x, min_y, max_x, max_y: int):

@@ -1,6 +1,6 @@
 import os
 
-os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
+os.environ['SDL_VIDEO_WINDOW_POS'] = f'150,100'
 
 from pgzero.clock import Clock
 from pgzero.keyboard import Keyboard

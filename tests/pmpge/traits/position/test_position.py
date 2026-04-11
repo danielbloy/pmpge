@@ -1,5 +1,4 @@
 import pytest
-from pygments.lexers import go
 
 from pmpge.game_object import GameObject
 from pmpge.traits.position import Position
@@ -7,7 +6,7 @@ from pmpge.traits.position import Position
 
 def test_constructor():
     """
-    Simple test to ensure that Position constructor works.
+    Simple test to ensure that Position works.
     """
     trait = Position(0, 0)
     assert trait.x == 0

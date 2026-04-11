@@ -37,8 +37,8 @@ class RelativeToParent:
     the child will move with it at a constant offset. If the GameObject has no parent,
     the offset will be relative to the top left corner of the screen.
 
-    The RelativeToParent trait requires a Position trait to be present on the GameObject
-    amd the parent GameObject.
+    RelativeToParent will not work unless added to a GameObject as it requires the
+    parent property to be present.
     """
 
     parent: Position
@@ -56,6 +56,7 @@ class RelativeToParent:
             self.x = self.parent.x + self.offset_x
             self.y = self.parent.y + self.offset_y
         else:
+            print('hi')
             self.x = self.offset_x
             self.y = self.offset_y
 

@@ -12,7 +12,8 @@ class MoveWithController:
     Because this trait adds a vx and vy property to the GameObject, there is no
     need to combine it with a Velocity trait.
 
-    The StayInBounds trait requires a Position trait to be present on the GameObject.
+    The MoveWithController trait requires a Position trait to be present on the
+    GameObject.
     """
 
     x: float

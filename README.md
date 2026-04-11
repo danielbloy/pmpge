@@ -3,7 +3,8 @@
 An easy-to-use Game Engine that works with Pygame Zero on desktop computers and also with
 CircuitPython and MicroPython devices. It is designed for use in Coding Clubs.
 
-Please see my website [Code Club Adventures](http://codeclubadventures.com/) for more coding materials.
+Please see my website [Code Club Adventures](http://codeclubadventures.com/) for more coding
+materials.
 
 ## Overview
 
@@ -57,7 +58,6 @@ importance):
 * `game_object.py` - Provides the `GameObject` class which is the basis of `pmpge`.
 * `graphics.py`    - Provides a standard graphics abstraction to support different environments.
 * `palette.py`     - Provides the `Palette` class for managing colour palettes.
-* `platform.py`    - Provides a standard python abstraction to support different types of Python.
 * `sound.py`       - Provides a standard sound abstraction to support different environments.
 * `sprite.py`      - Provides the `Sprite` class which is used to represent a GameObject with
   position.
@@ -125,9 +125,11 @@ such as this one:
 
 The following are the reference commercial hardware devices that will be used to test the framework:
 
-* Pimoroni [PicoSystem](https://shop.pimoroni.com/products/picosystem?variant=32369546985555) for CircuiPython and
+* Pimoroni [PicoSystem](https://shop.pimoroni.com/products/picosystem?variant=32369546985555) for
+  CircuiPython and
   MicroPython* Adafruit [PyBadge](https://www.adafruit.com/product/4200) for CircuitPython
-* Pimoroni [Badgeware Tufty](https://shop.pimoroni.com/products/tufty-2350?variant=55811986227579) with STEM kit for
+* Pimoroni [Badgeware Tufty](https://shop.pimoroni.com/products/tufty-2350?variant=55811986227579)
+  with STEM kit for
   MicroPython
 
 Additionally, I will make two reference systems using COTS parts using:
@@ -138,8 +140,10 @@ Additionally, I will make two reference systems using COTS parts using:
     * 8 x Standard push buttons
 
 * Design 2:
-    * Pimoroni [Pico Plus 2](https://shop.pimoroni.com/products/pimoroni-pico-plus-2?variant=42092668289107)
-    * Pimoroni [Pico Display 2.8"](https://shop.pimoroni.com/products/pico-display-pack-2-8?variant=42047194005587)
+    *
+    Pimoroni [Pico Plus 2](https://shop.pimoroni.com/products/pimoroni-pico-plus-2?variant=42092668289107)
+    *
+    Pimoroni [Pico Display 2.8"](https://shop.pimoroni.com/products/pico-display-pack-2-8?variant=42047194005587)
 
 ## License
 

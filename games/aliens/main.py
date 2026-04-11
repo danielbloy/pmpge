@@ -1,6 +1,6 @@
 import os
 
-os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
+os.environ['SDL_VIDEO_WINDOW_POS'] = f'150,100'
 
 from pgzero.clock import Clock
 from pgzero.keyboard import Keyboard
@@ -9,6 +9,7 @@ from pgzero.screen import Screen
 from pmpge.controller import Controller
 from pmpge.game import Game
 from pmpge.game_object import GameObject
+from pmpge.palette import CYAN, RED, WHITE, YELLOW
 from pmpge.sprite import Sprite
 from pmpge.traits.controller import MoveWithController
 from pmpge.traits.graphics import DrawImage, DrawText
@@ -20,12 +21,6 @@ keyboard: Keyboard
 screen: Screen
 
 game: Game = Game(600, 700)
-
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-WHITE = (255, 255, 255)
-CYAN = (0, 255, 255)
-YELLOW = (255, 255, 0)
 
 # Step 2: Adding the starfield
 STARS_MIN_SPEED = 75

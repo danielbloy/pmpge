@@ -1,7 +1,11 @@
 class Position:
+    """
+    Position is a specific location in 2D space, represented by an x and y co-ordinate.
+    A Position can be inside the viewable display area of the game or outside of it.
+    """
 
-    # TODO: Document this class
-    # TODO: Test this class
+    x: float
+    y: float
 
     def __init__(self, x, y: float):
         self.x: float = x
@@ -27,9 +31,21 @@ class Position:
 
 
 class RelativeToParent:
+    """
+    RelativeToParent keeps the position of a GameObject a specified number of pixels
+    horizontally and vertically relative to its parent GameObject. If the parent moves,
+    the child will move with it at a constant offset. If the GameObject has no parent,
+    the offset will be relative to the top left corner of the screen.
 
-    # TODO: Document this class
-    # TODO: Test this class
+    RelativeToParent will not work unless added to a GameObject as it requires the
+    parent property to be present.
+    """
+
+    parent: Position
+    x: float
+    y: float
+    offset_x: int
+    offset_y: int
 
     def __init__(self, offset_x, offset_y: int):
         self.offset_x: int = offset_x
@@ -40,14 +56,25 @@ class RelativeToParent:
             self.x = self.parent.x + self.offset_x
             self.y = self.parent.y + self.offset_y
         else:
+            print('hi')
             self.x = self.offset_x
             self.y = self.offset_y
 
 
 class StayInBounds:
+    """
+    StayInBounds keeps a GameObjects position within a specified range of x and y co-ordinates.
+    The co-ordinates do not need to be entirely within the visible bounds of the screen.
 
-    # TODO: Document this class
-    # TODO: Test this class
+    The StayInBounds trait requires a Position trait to be present on the GameObject.
+    """
+
+    x: float
+    y: float
+    min_x: int
+    min_y: int
+    max_x: int
+    max_y: int
 
     def __init__(self, min_x, min_y, max_x, max_y: int):
         self.min_x: int = min_x

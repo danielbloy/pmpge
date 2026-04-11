@@ -30,15 +30,15 @@ class MoveWithController:
         controller = self.controller
 
         if controller.left:
-            new_x = new_x - (self.mx * dt)
+            new_x -= (self.mx * dt)
         elif controller.right:
-            new_x = new_x + (self.mx * dt)
+            new_x += (self.mx * dt)
 
         if controller.button_count >= 6:
             if controller.up:
-                new_y = new_y - (self.my * dt)
+                new_y -= (self.my * dt)
             elif controller.down:
-                new_y = new_y + (self.my * dt)
+                new_y += (self.my * dt)
 
         self.x = new_x
         self.y = new_y

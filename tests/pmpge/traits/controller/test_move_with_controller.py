@@ -370,5 +370,85 @@ def test_velocity_and_move_with_controller():
     )
     assert go.x == 0
     assert go.y == 0
+    assert go.vx == 30
+    assert go.vy == 40
+    assert go.mx == 10
+    assert go.my == 20
+
+    # Should change nothing
+    controller.left = True
+    controller.right = True
+    controller.up = True
+    controller.down = True
+    go.update_hierarchy(0)
+    assert go.x == 0
+    assert go.y == 0
+    assert go.vx == 30
+    assert go.vy == 40
+    assert go.mx == 10
+    assert go.my == 20
+
+    # Velocity should move the GameObject
+    controller.left = False
+    controller.right = False
+    controller.up = False
+    controller.down = False
+    go.update_hierarchy(1)
+    assert go.x == 30
+    assert go.y == 40
+    assert go.vx == 30
+    assert go.vy == 40
+    assert go.mx == 10
+    assert go.my == 20
+
+    # Velocity and right should move the GameObject
+    controller.left = False
+    controller.right = True
+    controller.up = False
+    controller.down = False
+    go.update_hierarchy(1)
+    assert go.x == 70
+    assert go.y == 80
+    assert go.vx == 30
+    assert go.vy == 40
+    assert go.mx == 10
+    assert go.my == 20
+
+    # Velocity and left should move the GameObject
+    controller.left = True
+    controller.right = False
+    controller.up = False
+    controller.down = False
+    go.update_hierarchy(1)
+    assert go.x == 90
+    assert go.y == 120
+    assert go.vx == 30
+    assert go.vy == 40
+    assert go.mx == 10
+    assert go.my == 20
+
+    # Velocity and down should move the GameObject
+    controller.left = False
+    controller.right = False
+    controller.up = False
+    controller.down = True
+    go.update_hierarchy(1)
+    assert go.x == 120
+    assert go.y == 180
+    assert go.vx == 30
+    assert go.vy == 40
+    assert go.mx == 10
+    assert go.my == 20
+
+    # Velocity and up should move the GameObject
+    controller.left = False
+    controller.right = False
+    controller.up = True
+    controller.down = False
+    go.update_hierarchy(1)
+    assert go.x == 150
+    assert go.y == 200
+    assert go.vx == 30
+    assert go.vy == 40
     assert go.mx == 10
     assert go.my == 20

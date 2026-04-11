@@ -237,4 +237,94 @@ def test_trait_order_matters():
     assert go.fx == 10
     assert go.fy == 20
 
-# TODO: Validate friction with zero velocity
+
+# noinspection PyUnresolvedReferences
+def test_friction_when_velocity_hits_zero():
+    """
+    Validates that the friction trait works (by doing nothing) when velocity hits zero.
+    """
+    go = GameObject(
+        Position(1000, 1000),
+        Velocity(2, 3),
+        Friction(1, 1))
+    assert go.x == 1000
+    assert go.y == 1000
+    assert go.vx == 2
+    assert go.vy == 3
+    assert go.fx == 1
+    assert go.fy == 1
+
+    go.update_hierarchy(1)
+    assert go.x == 1002
+    assert go.y == 1003
+    assert go.vx == 1
+    assert go.vy == 2
+    assert go.fx == 1
+    assert go.fy == 1
+
+    go.update_hierarchy(1)
+    assert go.x == 1003
+    assert go.y == 1005
+    assert go.vx == 0
+    assert go.vy == 1
+    assert go.fx == 1
+    assert go.fy == 1
+
+    go.update_hierarchy(1)
+    assert go.x == 1003
+    assert go.y == 1006
+    assert go.vx == 0
+    assert go.vy == 0
+    assert go.fx == 1
+    assert go.fy == 1
+
+    go.update_hierarchy(1)
+    go.update_hierarchy(1)
+    go.update_hierarchy(1)
+    assert go.x == 1003
+    assert go.y == 1006
+    assert go.vx == 0
+    assert go.vy == 0
+    assert go.fx == 1
+    assert go.fy == 1
+
+    # Now try with negative friction on velocity, this will increase velocity.
+    go = GameObject(
+        Position(1000, 1000),
+        Velocity(2, 3),
+        Friction(-1, -1))
+    assert go.x == 1000
+    assert go.y == 1000
+    assert go.vx == 2
+    assert go.vy == 3
+    assert go.fx == -1
+    assert go.fy == -1
+
+    go.update_hierarchy(1)
+    assert go.x == 1002
+    assert go.y == 1003
+    assert go.vx == 3
+    assert go.vy == 4
+    assert go.fx == -1
+    assert go.fy == -1
+
+    # Now try with negative friction on negative velocity, this will not change
+    # velocity as velocity is negative
+    go = GameObject(
+        Position(1000, 1000),
+        Velocity(-2, -3),
+        Friction(-1, -1))
+    assert go.x == 1000
+    assert go.y == 1000
+    assert go.vx == -2
+    assert go.vy == -3
+    assert go.fx == -1
+    assert go.fy == -1
+
+    go.update_hierarchy(1)
+    assert go.x == 998
+    assert go.y == 997
+    assert go.vx == -2
+    assert go.vy == -3
+    assert go.fx == -1
+    assert go.fy == -1

@@ -4,8 +4,8 @@ import pytest
 
 from pmpge.game_object import GameObject
 from pmpge.traits.controller import MoveWithController
+from pmpge.traits.physics import Velocity
 from pmpge.traits.position import Position
-from traits.physics import Velocity
 
 
 @dataclass
@@ -48,8 +48,8 @@ def test_constructor():
     """
     controller = ControllerWith2Buttons(False, False)
     trait = MoveWithController(0, 0, controller)
-    assert trait.vx == 0
-    assert trait.vy == 0
+    assert trait.mx == 0
+    assert trait.my == 0
     assert trait.controller == controller
 
     # At this point there will be no x or y properties on the object
@@ -61,8 +61,8 @@ def test_constructor():
 
     controller = ControllerWith4Buttons(False, False, False, False)
     trait = MoveWithController(10, 20, controller)
-    assert trait.vx == 10
-    assert trait.vy == 20
+    assert trait.mx == 10
+    assert trait.my == 20
     assert trait.controller == controller
 
     # At this point there will be no x or y properties on the object
@@ -74,8 +74,8 @@ def test_constructor():
 
     controller = ControllerWith4Buttons(False, False, False, False)
     trait = MoveWithController(-1, -2, controller)
-    assert trait.vx == -1
-    assert trait.vy == -2
+    assert trait.mx == -1
+    assert trait.my == -2
     assert trait.controller == controller
 
     # At this point there will be no x or y properties on the object
@@ -105,8 +105,8 @@ def test_with_2_buttons():
     go = GameObject(Position(0, 0), MoveWithController(10, 20, controller))
     assert go.x == 0
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Should change nothing
     controller.left = True
@@ -114,8 +114,8 @@ def test_with_2_buttons():
     go.update_hierarchy(0)
     assert go.x == 0
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Right
     controller.left = False
@@ -123,8 +123,8 @@ def test_with_2_buttons():
     go.update_hierarchy(1)
     assert go.x == 10
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Left
     controller.left = True
@@ -132,8 +132,8 @@ def test_with_2_buttons():
     go.update_hierarchy(1.5)
     assert go.x == -5
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Right again
     controller.left = False
@@ -141,8 +141,8 @@ def test_with_2_buttons():
     go.update_hierarchy(1.5)
     assert go.x == 10
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Left again
     controller.left = True
@@ -150,8 +150,8 @@ def test_with_2_buttons():
     go.update_hierarchy(1)
     assert go.x == 0
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Left and right (left wins)
     controller.left = True
@@ -159,8 +159,8 @@ def test_with_2_buttons():
     go.update_hierarchy(1)
     assert go.x == -10
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
 
 # noinspection PyUnresolvedReferences
@@ -172,8 +172,8 @@ def test_with_4_buttons():
     go = GameObject(Position(0, 0), MoveWithController(10, 20, controller))
     assert go.x == 0
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Should change nothing
     controller.left = True
@@ -183,8 +183,8 @@ def test_with_4_buttons():
     go.update_hierarchy(0)
     assert go.x == 0
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Right works
     controller.left = False
@@ -194,8 +194,8 @@ def test_with_4_buttons():
     go.update_hierarchy(1)
     assert go.x == 10
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Left works
     controller.left = True
@@ -205,8 +205,8 @@ def test_with_4_buttons():
     go.update_hierarchy(1)
     assert go.x == 0
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Down does not work
     controller.left = False
@@ -216,8 +216,8 @@ def test_with_4_buttons():
     go.update_hierarchy(1)
     assert go.x == 0
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Up does not work
     controller.left = False
@@ -227,8 +227,8 @@ def test_with_4_buttons():
     go.update_hierarchy(1)
     assert go.x == 0
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
 
 # noinspection PyUnresolvedReferences
@@ -240,8 +240,8 @@ def test_with_6_buttons():
     go = GameObject(Position(0, 0), MoveWithController(10, 20, controller))
     assert go.x == 0
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Should change nothing
     controller.left = True
@@ -251,8 +251,8 @@ def test_with_6_buttons():
     go.update_hierarchy(0)
     assert go.x == 0
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Right
     controller.left = False
@@ -262,8 +262,8 @@ def test_with_6_buttons():
     go.update_hierarchy(1)
     assert go.x == 10
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Left
     controller.left = True
@@ -273,8 +273,8 @@ def test_with_6_buttons():
     go.update_hierarchy(1.5)
     assert go.x == -5
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Left and right (left wins)
     controller.left = True
@@ -284,8 +284,8 @@ def test_with_6_buttons():
     go.update_hierarchy(1)
     assert go.x == -15
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Down
     controller.left = False
@@ -295,8 +295,8 @@ def test_with_6_buttons():
     go.update_hierarchy(1)
     assert go.x == -15
     assert go.y == 20
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Up
     controller.left = False
@@ -306,8 +306,8 @@ def test_with_6_buttons():
     go.update_hierarchy(1.5)
     assert go.x == -15
     assert go.y == -10
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Down again
     controller.left = False
@@ -317,8 +317,8 @@ def test_with_6_buttons():
     go.update_hierarchy(1)
     assert go.x == -15
     assert go.y == 10
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Up again
     controller.left = False
@@ -328,8 +328,8 @@ def test_with_6_buttons():
     go.update_hierarchy(1.5)
     assert go.x == -15
     assert go.y == -20
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Down and up (up wins)
     controller.left = False
@@ -339,8 +339,8 @@ def test_with_6_buttons():
     go.update_hierarchy(1)
     assert go.x == -15
     assert go.y == -40
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
     # Reset and all buttons are set
     go.x = 0
@@ -352,15 +352,15 @@ def test_with_6_buttons():
     go.update_hierarchy(1)
     assert go.x == -10
     assert go.y == -20
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20
 
 
 # noinspection PyUnresolvedReferences
 def test_velocity_and_move_with_controller():
     """
-    This runs a small number of tests when Velocity is combined with MoveWithController: the
-    vx and vy properties clash: Order matters so in these tests, Velocity is processed first.
+    This runs a small number of tests when Velocity is combined with MoveWithController.
+    Order matters so in these tests, Velocity is processed first.
     """
     controller = ControllerWith6Buttons(False, False, False, False)
     go = GameObject(
@@ -370,5 +370,5 @@ def test_velocity_and_move_with_controller():
     )
     assert go.x == 0
     assert go.y == 0
-    assert go.vx == 10
-    assert go.vy == 20
+    assert go.mx == 10
+    assert go.my == 20

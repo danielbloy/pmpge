@@ -9,22 +9,19 @@ class MoveWithController:
     The Controller must have a left and right button but can optionally have up
     and down buttons. This allows it to be used with 2 button controllers and up.
 
-    Because this trait adds a vx and vy property to the GameObject, there is no
-    need to combine it with a Velocity trait.
-
     The MoveWithController trait requires a Position trait to be present on the
     GameObject.
     """
 
     x: float
     y: float
-    vx: int
-    vy: int
+    mx: int
+    my: int
     controller: Controller
 
-    def __init__(self, vx, vy: int, controller: Controller):
-        self.vx = vx
-        self.vy = vy
+    def __init__(self, mx, my: int, controller: Controller):
+        self.mx = mx
+        self.my = my
         self.controller = controller
 
     def update(self, dt: float):
@@ -33,15 +30,15 @@ class MoveWithController:
         controller = self.controller
 
         if controller.left:
-            new_x = new_x - (self.vx * dt)
+            new_x = new_x - (self.mx * dt)
         elif controller.right:
-            new_x = new_x + (self.vx * dt)
+            new_x = new_x + (self.mx * dt)
 
         if controller.button_count >= 6:
             if controller.up:
-                new_y = new_y - (self.vy * dt)
+                new_y = new_y - (self.my * dt)
             elif controller.down:
-                new_y = new_y + (self.vy * dt)
+                new_y = new_y + (self.my * dt)
 
         self.x = new_x
         self.y = new_y

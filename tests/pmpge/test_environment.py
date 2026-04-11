@@ -12,7 +12,7 @@ from collections.abc import Callable
 import pytest
 
 import pmpge.environment as environment
-from game import Game
+from pmpge.game import Game
 
 
 def with_config_file(contents: str, test: Callable, expect_error: bool = False) -> None:

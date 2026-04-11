@@ -13,7 +13,6 @@ class Controller(SNESController):
     full keyboard mapping for the SNES controller.
     """
 
-    # TODO: Test this class
     # TODO: Optionally specify the controller buttons in config as an array.
     #       The number of buttons determines the size of the controller.
     #       This could be common code across all environments as it just needs

@@ -217,6 +217,9 @@ def import_driver(module: str):
 # E X E C U T I O N
 ################################################################################
 
+__execute: bool = False
+
+
 def execute_on_microcontroller(game, width: int, height: int,
                                background_colour: tuple[int, int, int] = None):
     """
@@ -224,11 +227,23 @@ def execute_on_microcontroller(game, width: int, height: int,
     than the specified width and height, the application will scale if it is able to
     do so.
     """
+
     screen_width, screen_height = screen_size()
 
     # On a microcontroller, a larger game size than screen size is an error.
     if width > screen_width or height > screen_height:
         raise ValueError("Game width and height cannot be larger than screen")
+
+    global __execute
+    __execute = True
+
+    last = time.monotonic()
+    while __execute:
+        now = time.monotonic()
+        dt = now - last
+        last = now
+        game.update(dt)
+        game.draw(None)
 
 
 def execute_on_desktop(game, width: int, height: int,
@@ -285,23 +300,36 @@ def execute_on_desktop(game, width: int, height: int,
     setattr(mod, 'draw', draw)
     setattr(mod, 'update', update)
 
+    global __execute
+    __execute = True
     pgzrun.go()
+
+
+def terminate_on_desktop():
+    """
+    Terminates the application by ending the execute() function.
+    """
+    global __execute
+    __execute = False
+    pygame.event.post(pygame.event.Event(pygame.QUIT))
+
+
+def terminate_on_microcontroller():
+    """
+    Terminates the application when running on a microcontroller.
+    """
+    global __execute
+    __execute = False
 
 
 # Bind the correct execution function based on the system.
 if is_running_on_microcontroller():
     execute = execute_on_microcontroller
+    terminate = terminate_on_microcontroller
 
 if is_running_on_desktop():
     execute = execute_on_desktop
-
-
-def terminate():
-    """
-    Terminates the application by ending the execute() function.
-    """
-    pygame.event.post(pygame.event.Event(pygame.QUIT))
-
+    terminate = terminate_on_desktop
 
 ################################################################################
 # C O N F I G    A N D    D E P E N D E N C I E S
@@ -337,10 +365,15 @@ def import_config():
 import_config()
 
 if is_running_on_desktop():
-    # This is required to bootstrap pygames display to allow some of the game setup
-    # code to work.
+    # This is required to bootstrap the pygame display to allow some of the
+    # game setup code to work.
     import pgzrun
     import pygame
+
+if is_running_on_microcontroller():
+    # This is required on microcontrollers as we implement the game loop
+    # ourselves.
+    import time
 
 # Initialise the device next to allow it to perform any setup.
 import_driver('device')

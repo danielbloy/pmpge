@@ -58,8 +58,8 @@ def test_activate_is_called():
     """
     Validate that the activate handler is called when the GameObject is constructed.
     """
-    go = GameObject()
-    validate_properties(go)
+    go = GameObject(active=True)
+    validate_properties(go, active=True)
 
     handlers = Handlers()
     go = GameObject(

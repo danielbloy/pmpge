@@ -195,7 +195,9 @@ def test_import_driver():
 def test_execute_and_terminate_on_desktop():
     """
     Validates that terminate() can be called when pygame is running it actually terminates.
-    This also tests that the execute_on_desktop() function works too (well as best we can).
+    This also tests that the execute() function works too (well as best we can). The
+    underlying e that is executed is the relevant execute_on_desktop() and
+    termiante_on_desktop() code.
     """
     counter = 0
 
@@ -207,7 +209,7 @@ def test_execute_and_terminate_on_desktop():
 
     game = Game()
     game.add_update_func(update)
-    environment.execute_on_desktop(game, 320, 200)
+    environment.execute(game, 320, 200)
     assert counter == 10
 
 

@@ -10,8 +10,6 @@ class Sprite(GameObject, Position):
     from the left and 8th pixel from the top.
     """
 
-    # TODO: Test this class
-
     def __init__(self, x: float, y: float, *traits, **kwargs):
         super().__init__(*traits, **kwargs)
         Position.__init__(self, x, y)

@@ -13,8 +13,6 @@ class Velocity:
     vx: int
     vy: int
 
-    # TODO: Test this class
-
     def __init__(self, vx, vy: int):
         self.vx: int = vx
         self.vy: int = vy
@@ -39,8 +37,6 @@ class Acceleration:
     ax: int
     ay: int
 
-    # TODO: Test this class
-
     def __init__(self, ax, ay: int):
         self.ax: int = ax
         self.ay: int = ay
@@ -63,8 +59,6 @@ class Friction:
     vy: int
     fx: int
     fy: int
-
-    # TODO: Test this class
 
     def __init__(self, fx, fy: int):
         self.fx: int = fx

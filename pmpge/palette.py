@@ -1,3 +1,5 @@
-class Palette:
-    # TODO: Implement Palette and add tests
-    pass
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+WHITE = (255, 255, 255)
+CYAN = (0, 255, 255)
+YELLOW = (255, 255, 0)

@@ -5,9 +5,16 @@ from pmpge.traits.position import Position
 class Sprite(GameObject, Position):
     """
     A Sprite is a GameObject with a Position trait. The position of a Sprite is the
-    center of the Sprite's image and bounding box if it has one. If a sprite has an
-    image of 15 pixels by 15 pixels, the position of the Sprite will be the 8th pixel
-    from the left and 8th pixel from the top.
+    center of the Sprite's image and bounding box if it has one.
+
+    If a sprite has an image of 15 pixels by 15 pixels, the position of the Sprite
+    will be the 8th pixel from the left and 8th pixel from the top.
+
+    If the size of the Sprite's image is an even number of pixels in either direction,
+    the centre is offset one pixel to the left and one to the right. For example, if
+    a sprite has an image of 16 pixels by 16 pixels, the position of the Sprite
+    will be the 8th pixel from the left and 8th pixel from the top. This leaves 8 pixels
+    to the right and 8 pixels below the centre of the Sprite.
     """
 
     def __init__(self, x: float, y: float, *traits, **kwargs):

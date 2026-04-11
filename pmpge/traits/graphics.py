@@ -4,13 +4,7 @@ from typing import Any, Callable
 from pgzero.loaders import images
 
 from pmpge.game_object import GameObject
-
-# TODO: Move colours to Pallette
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-WHITE = (255, 255, 255)
-CYAN = (0, 255, 255)
-YELLOW = (255, 255, 0)
+from pmpge.palette import WHITE
 
 
 # TODO: Add size, width, height, topleft, topright etc. properties
@@ -20,9 +14,8 @@ YELLOW = (255, 255, 0)
 class DrawImage:
     """
     This works without requiring properties.
+    See notes on Sprite for rules of positioning an image.
     """
-
-    # TODO: Test this class
 
     def __init__(self, image: str):
         self._surface = None
@@ -49,7 +42,6 @@ class DrawImage:
 
 class DrawText:
 
-    # TODO: Test this class
     # TODO: Document this class
 
     def __init__(self,

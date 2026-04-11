@@ -8,8 +8,6 @@ class Lifetime:
     destroy: bool
     lifetime: float | None
 
-    # TODO: Test this class
-
     def __init__(self, lifetime: float = None):
         self.lifetime = lifetime
 

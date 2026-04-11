@@ -1,6 +1,3 @@
-from pmpge.sprite import Sprite
-
-
 class Position:
     """
     Position is a specific location in 2D space, represented by an x and y co-ordinate.
@@ -46,7 +43,7 @@ class RelativeToParent:
     amd the parent GameObject.
     """
 
-    parent: Sprite
+    parent: Position
     x: float
     y: float
     offset_x: int

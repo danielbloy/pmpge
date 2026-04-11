@@ -84,6 +84,45 @@ def test_using_with_game_object_positive():
     assert go.ax == 10
     assert go.ay == 20
 
+    # Run a few more
+    go.update_hierarchy(1)
+    go.update_hierarchy(1)
+    assert go.x == 130
+    assert go.y == 160
+    assert go.vx == 30
+    assert go.vy == 60
+    assert go.ax == 10
+    assert go.ay == 20
+
+    # Run 2 seconds
+    go.update_hierarchy(2)
+    assert go.x == 190
+    assert go.y == 280
+    assert go.vx == 50
+    assert go.vy == 100
+    assert go.ax == 10
+    assert go.ay == 20
+
+    # Run a half second
+    go.update_hierarchy(0.5)
+    assert go.x == 215
+    assert go.y == 330
+    assert go.vx == 55
+    assert go.vy == 110
+    assert go.ax == 10
+    assert go.ay == 20
+
+    # Change acceleration
+    go.ax = 1
+    go.ay = 2
+    go.update_hierarchy(1)
+    assert go.x == 270
+    assert go.y == 440
+    assert go.vx == 56
+    assert go.vy == 112
+    assert go.ax == 1
+    assert go.ay == 2
+
 
 # noinspection PyUnresolvedReferences
 def test_using_with_game_object_negative():
@@ -120,6 +159,45 @@ def test_using_with_game_object_negative():
     assert go.vy == -20
     assert go.ax == -10
     assert go.ay == -20
+
+    # Run a few more
+    go.update_hierarchy(1)
+    go.update_hierarchy(1)
+    assert go.x == 70
+    assert go.y == 40
+    assert go.vx == -30
+    assert go.vy == -60
+    assert go.ax == -10
+    assert go.ay == -20
+
+    # Run 2 seconds
+    go.update_hierarchy(2)
+    assert go.x == 10
+    assert go.y == -80
+    assert go.vx == -50
+    assert go.vy == -100
+    assert go.ax == -10
+    assert go.ay == -20
+
+    # Run a half second
+    go.update_hierarchy(0.5)
+    assert go.x == -15
+    assert go.y == -130
+    assert go.vx == -55
+    assert go.vy == -110
+    assert go.ax == -10
+    assert go.ay == -20
+
+    # Change acceleration
+    go.ax = -1
+    go.ay = -2
+    go.update_hierarchy(1)
+    assert go.x == -70
+    assert go.y == -240
+    assert go.vx == -56
+    assert go.vy == -112
+    assert go.ax == -1
+    assert go.ay == -2
 
 
 # noinspection PyUnresolvedReferences

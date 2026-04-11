@@ -68,5 +68,5 @@ class Friction:
         if self.vx > 0:
             self.vx -= dt * self.fx
 
-        if self.fy > 0:
+        if self.vy > 0:
             self.vy -= dt * self.fy

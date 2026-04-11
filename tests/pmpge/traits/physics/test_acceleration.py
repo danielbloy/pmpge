@@ -1,8 +1,7 @@
 import pytest
 
 from pmpge.game_object import GameObject
-from pmpge.traits.physics import Acceleration
-from pmpge.traits.physics import Velocity
+from pmpge.traits.physics import Acceleration, Friction, Velocity
 from pmpge.traits.position import Position
 
 
@@ -246,4 +245,45 @@ def test_trait_order_matters():
     assert go.ax == 10
     assert go.ay == 20
 
-# TODO: Test Acceleration and Friction together
+
+# noinspection PyUnresolvedReferences
+def test_acceleration_and_friction_together():
+    """
+    Validates how acceleration and friction interact. These are relatively
+    simple tests as it can get quite complex quite quickly.
+    """
+    go = GameObject(
+        Position(100, 100),
+        Velocity(10, 10),
+        Friction(1, 2),
+        Acceleration(10, 20))
+    assert go.x == 100
+    assert go.y == 100
+    assert go.vx == 10
+    assert go.vy == 10
+    assert go.fx == 1
+    assert go.fy == 2
+    assert go.ax == 10
+    assert go.ay == 20
+
+    # Update for 1 second
+    go.update_hierarchy(1)
+    assert go.x == 110
+    assert go.y == 110
+    assert go.vx == 19
+    assert go.vy == 28
+    assert go.fx == 1
+    assert go.fy == 2
+    assert go.ax == 10
+    assert go.ay == 20
+
+    # Update for another second
+    go.update_hierarchy(1)
+    assert go.x == 129
+    assert go.y == 138
+    assert go.vx == 28
+    assert go.vy == 46
+    assert go.fx == 1
+    assert go.fy == 2
+    assert go.ax == 10
+    assert go.ay == 20

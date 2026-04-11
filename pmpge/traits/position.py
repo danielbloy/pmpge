@@ -7,8 +7,6 @@ class Position:
     x: float
     y: float
 
-    # TODO: Test this class
-
     def __init__(self, x, y: float):
         self.x: float = x
         self.y: float = y
@@ -49,8 +47,6 @@ class RelativeToParent:
     offset_x: int
     offset_y: int
 
-    # TODO: Test this class
-
     def __init__(self, offset_x, offset_y: int):
         self.offset_x: int = offset_x
         self.offset_y: int = offset_y
@@ -78,8 +74,6 @@ class StayInBounds:
     min_y: int
     max_x: int
     max_y: int
-
-    # TODO: Test this class
 
     def __init__(self, min_x, min_y, max_x, max_y: int):
         self.min_x: int = min_x

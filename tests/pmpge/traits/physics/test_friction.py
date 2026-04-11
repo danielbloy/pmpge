@@ -84,6 +84,45 @@ def test_using_with_game_object_positive():
     assert go.fx == 10
     assert go.fy == 20
 
+    # Run a few more
+    go.update_hierarchy(1)
+    go.update_hierarchy(1)
+    assert go.x == 1270
+    assert go.y == 1240
+    assert go.vx == 70
+    assert go.vy == 40
+    assert go.fx == 10
+    assert go.fy == 20
+
+    # Run 2 seconds
+    go.update_hierarchy(2)
+    assert go.x == 1410
+    assert go.y == 1320
+    assert go.vx == 50
+    assert go.vy == 0
+    assert go.fx == 10
+    assert go.fy == 20
+
+    # Run a half second
+    go.update_hierarchy(0.5)
+    assert go.x == 1435
+    assert go.y == 1320
+    assert go.vx == 45
+    assert go.vy == 0  # We do not go below zero with friction
+    assert go.fx == 10
+    assert go.fy == 20
+
+    # Change friction
+    go.fx = 1
+    go.fy = 2
+    go.update_hierarchy(1)
+    assert go.x == 1480
+    assert go.y == 1320
+    assert go.vx == 44
+    assert go.vy == 0
+    assert go.fx == 1
+    assert go.fy == 2
+
 
 # noinspection PyUnresolvedReferences
 def test_using_with_game_object_negative():
@@ -111,6 +150,45 @@ def test_using_with_game_object_negative():
     assert go.vy == 100
     assert go.fx == -10
     assert go.fy == -20
+
+    # Run a few more
+    go.update_hierarchy(1)
+    go.update_hierarchy(1)
+    assert go.x == 1210
+    assert go.y == 1220
+    assert go.vx == 120
+    assert go.vy == 140
+    assert go.fx == -10
+    assert go.fy == -20
+
+    # Run 2 seconds
+    go.update_hierarchy(2)
+    assert go.x == 1450
+    assert go.y == 1500
+    assert go.vx == 140
+    assert go.vy == 180
+    assert go.fx == -10
+    assert go.fy == -20
+
+    # Run a half second
+    go.update_hierarchy(0.5)
+    assert go.x == 1520
+    assert go.y == 1590
+    assert go.vx == 145
+    assert go.vy == 190
+    assert go.fx == -10
+    assert go.fy == -20
+
+    # Change friction
+    go.fx = -1
+    go.fy = -2
+    go.update_hierarchy(1)
+    assert go.x == 1665
+    assert go.y == 1780
+    assert go.vx == 146
+    assert go.vy == 192
+    assert go.fx == -1
+    assert go.fy == -2
 
 
 # noinspection PyUnresolvedReferences

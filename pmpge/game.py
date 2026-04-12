@@ -122,4 +122,4 @@ class Game:
         """
         Runs the actual game at the desired resolution.
         """
-        execute(self, self.__width, self.__height, self.background_color)
+        execute(self, self.background_color)

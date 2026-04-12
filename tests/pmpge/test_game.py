@@ -292,6 +292,48 @@ def test_root_updated_before_update_funcs():
     assert called == ["update_root", "update_1", "update_2"]
 
 
+def test_properties_passed_to_execute():
+    """
+    Validates that the correct properties are passed to the execute function.
+    """
+    game = Game()
+    expected_size = None
+    expected_bgc = None
+
+    def execute(g, bgc: tuple[int, int, int] = None):
+        assert g == game
+        expected_width, expected_height = expected_size
+
+        assert g.width == expected_width
+        assert g.height == expected_height
+
+        assert expected_bgc == bgc
+
+    # This is naughty as a lot could go wrong so we must make sure we restore the execute function.
+    import pmpge.game as my_game
+    original_execute = my_game.execute
+    try:
+        my_game.execute = execute
+
+        game = Game()
+        expected_size = (640, 480)
+        expected_bgc = (0, 0, 0)
+        game.run()
+
+        game = Game(320, 240, background_color=(1, 2, 3))
+        expected_size = (320, 240)
+        expected_bgc = (1, 2, 3)
+        game.run()
+
+        game = Game(800, 300, background_color=(5, 4, 7))
+        expected_size = (800, 300)
+        expected_bgc = (5, 4, 7)
+        game.run()
+
+    finally:
+        my_game.execute = original_execute
+
+
 def test_run_and_terminate():
     """
     Validates that run and terminate work, simply by executing them. This also ensure that

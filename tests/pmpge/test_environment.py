@@ -175,11 +175,11 @@ def test_execute_and_terminate_on_desktop():
         nonlocal draw_counter
         draw_counter += 1
 
-    game = Game()
+    game = Game(320, 200)
     game.add_update_func(update)
     game.add_draw_func(draw)
 
-    environment.execute(game, 320, 200)
+    environment.execute(game)
 
     assert update_counter == 10
     assert draw_counter == 10

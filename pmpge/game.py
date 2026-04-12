@@ -91,9 +91,9 @@ class Game:
         Draws the entire GameObject hierarchy starting with the root GameObject and then the
         custom draw functions.
 
-        The surface is passed down through all objects but does not need to be a Pygame surface. It
-        can be any object you like provided it has a `fill()` method that accepts am RGB colour
-        tuple.
+        The surface is passed down through all objects but does not need to be a Pygame
+        surface, it can be any object you like provided it is compatible with the selected
+        graphics driver.
         """
         self.__root.draw_hierarchy(surface)
 
@@ -102,8 +102,8 @@ class Game:
 
     def update(self, dt: float):
         """
-        Updates the entire GameObject hierarchy starting with the root GameObject and then the
-        custom update functions.
+        Updates the entire GameObject hierarchy starting with the root GameObject and then
+        the custom update functions.
         """
         self.__root.update_hierarchy(dt)
 

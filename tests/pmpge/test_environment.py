@@ -157,21 +157,32 @@ def test_execute_and_terminate_on_desktop():
     """
     Validates that terminate() can be called when pygame is running it actually terminates.
     This also tests that the execute() function works too (well as best we can). The
-    underlying e that is executed is the relevant execute_on_desktop() and
-    termiante_on_desktop() code.
+    underlying code that is executed is the relevant execute_on_desktop() and
+    termiante_on_desktop() code. This also validates that update() and draw() are called
+    on the Game instance.
     """
-    counter = 0
+    update_counter = 0
 
     def update(dt: float):
-        nonlocal counter
-        counter += 1
-        if counter >= 10:
+        nonlocal update_counter
+        update_counter += 1
+        if update_counter >= 10:
             environment.terminate()
+
+    draw_counter = 0
+
+    def draw(dt: float):
+        nonlocal draw_counter
+        draw_counter += 1
 
     game = Game()
     game.add_update_func(update)
+    game.add_draw_func(draw)
+
     environment.execute(game, 320, 200)
-    assert counter == 10
+
+    assert update_counter == 10
+    assert draw_counter == 10
 
 
 def test_config_is_loaded() -> None:

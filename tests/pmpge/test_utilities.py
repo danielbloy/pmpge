@@ -1,6 +1,49 @@
+import os
+import pathlib
+from collections.abc import Callable
 from typing import Self
 
+import pytest
+
+import pmpge.environment as environment
 from pmpge.game_object import GameObject
+
+
+def with_config_file(contents: str, test: Callable, expect_error: bool = False) -> None:
+    """
+    Utility function for testing using a custom config file. It cleans up the file after the test
+    and also removes any existing config values.
+    """
+
+    def remove_config_values():
+        # Remove any existing config values
+        if environment.config:
+            for attr in dir(environment.config):
+                if attr.startswith("__"):
+                    continue
+                print(f"Removing {attr} from config")
+                delattr(environment.config, attr)
+
+    config_file = f"{pathlib.Path().resolve()}/config.py"
+
+    try:
+        with open(config_file, "w") as file:
+            file.write(contents)
+
+        remove_config_values()
+
+        environment.import_config()
+
+        if expect_error:
+            with pytest.raises(ValueError):
+                test()
+        else:
+            assert test()
+
+    finally:
+        os.remove(config_file)
+
+        remove_config_values()
 
 
 class GameObjectSubclass(GameObject):

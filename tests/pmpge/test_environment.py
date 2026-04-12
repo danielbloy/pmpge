@@ -5,51 +5,12 @@ cannot realistically test CircuitPython and MicroPython runs. We therefore deleg
 that level of testing to the device specific validation tests that run on the
 physical devices.
 """
-import os
-import pathlib
-from collections.abc import Callable
 
 import pytest
 
 import pmpge.environment as environment
 from pmpge.game import Game
-
-
-def with_config_file(contents: str, test: Callable, expect_error: bool = False) -> None:
-    """
-    Utility function for testing using a custom config file. It cleans up the file after the test
-    and also removes any existing config values.
-    """
-
-    def remove_config_values():
-        # Remove any existing config values
-        if environment.config:
-            for attr in dir(environment.config):
-                if attr.startswith("__"):
-                    continue
-                print(f"Removing {attr} from config")
-                delattr(environment.config, attr)
-
-    config_file = f"{pathlib.Path().resolve()}/config.py"
-
-    try:
-        with open(config_file, "w") as file:
-            file.write(contents)
-
-        remove_config_values()
-
-        environment.import_config()
-
-        if expect_error:
-            with pytest.raises(ValueError):
-                test()
-        else:
-            assert test()
-
-    finally:
-        os.remove(config_file)
-
-        remove_config_values()
+from tests.pmpge.test_utilities import with_config_file
 
 
 def test_is_running_on_desktop():
@@ -196,21 +157,32 @@ def test_execute_and_terminate_on_desktop():
     """
     Validates that terminate() can be called when pygame is running it actually terminates.
     This also tests that the execute() function works too (well as best we can). The
-    underlying e that is executed is the relevant execute_on_desktop() and
-    termiante_on_desktop() code.
+    underlying code that is executed is the relevant execute_on_desktop() and
+    termiante_on_desktop() code. This also validates that update() and draw() are called
+    on the Game instance.
     """
-    counter = 0
+    update_counter = 0
 
     def update(dt: float):
-        nonlocal counter
-        counter += 1
-        if counter >= 10:
+        nonlocal update_counter
+        update_counter += 1
+        if update_counter >= 10:
             environment.terminate()
 
-    game = Game()
+    draw_counter = 0
+
+    def draw(dt: float):
+        nonlocal draw_counter
+        draw_counter += 1
+
+    game = Game(320, 200)
     game.add_update_func(update)
-    environment.execute(game, 320, 200)
-    assert counter == 10
+    game.add_draw_func(draw)
+
+    environment.execute(game)
+
+    assert update_counter == 10
+    assert draw_counter == 10
 
 
 def test_config_is_loaded() -> None:

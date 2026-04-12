@@ -220,14 +220,16 @@ def import_driver(module: str):
 __execute: bool = False
 
 
-def execute_on_microcontroller(game, width: int, height: int,
-                               background_colour: tuple[int, int, int] = None):
+def execute_on_microcontroller(game, background_colour: tuple[int, int, int] = None):
     """
     This executes the game at the desired resolution. If the screen display is larger
     than the specified width and height, the application will scale if it is able to
     do so.
     """
+    if not background_colour:
+        background_colour = (0, 0, 0)
 
+    width, height = game.width, game.height
     screen_width, screen_height = screen_size()
 
     # On a microcontroller, a larger game size than screen size is an error.
@@ -246,8 +248,7 @@ def execute_on_microcontroller(game, width: int, height: int,
         game.draw(None)
 
 
-def execute_on_desktop(game, width: int, height: int,
-                       background_colour: tuple[int, int, int] = None):
+def execute_on_desktop(game, background_colour: tuple[int, int, int] = None):
     """
     This executes the game at the desired resolution in a python/pygame environment. If
     the games specified width or height is smaller than the dimensions provided by
@@ -262,7 +263,9 @@ def execute_on_desktop(game, width: int, height: int,
     if not background_colour:
         background_colour = (0, 0, 0)
 
+    width, height = game.width, game.height
     screen_width, screen_height = screen_size()
+    
     if is_running_on_desktop():
         if width > screen_width:
             screen_width = width

@@ -120,8 +120,133 @@ def test_adding_and_removing_children():
     assert len(game.children) == 0
 
 
-# TODO: Test adding draw and update functions
-# TODO: Validate the order that draw and update functions are called after the hierarchy.
+def test_draw_functions_and_order():
+    """
+    Validates that draw functions are called in the order they are added.
+    This also ensures that the surface is passed correctly.
+    """
+    called: list[str] = []
+    surface = None
+
+    def draw_1(value):
+        nonlocal surface
+        surface = value
+        called.append("draw_1")
+
+    def draw_2(value):
+        nonlocal surface
+        surface = value
+        called.append("draw_2")
+
+    def draw_3(value):
+        nonlocal surface
+        surface = value
+        called.append("draw_3")
+
+    game = Game()
+    game.add_draw_func(draw_1)
+
+    game.draw("fred")
+    assert called == ["draw_1"]
+    assert surface == "fred"
+
+    called.clear()
+
+    game.add_draw_func(draw_2)
+    game.add_draw_func(draw_3)
+
+    game.draw("scooby")
+    assert called == ["draw_1", "draw_2", "draw_3"]
+    assert surface == "scooby"
+
+
+def test_update_functions_and_order():
+    """
+    Validates that update functions are called in the order they are added.
+    This also ensures that dt is passed correctly.
+    """
+    called: list[str] = []
+    dt = None
+
+    def update_1(value):
+        nonlocal dt
+        dt = value
+        called.append("update_1")
+
+    def update_2(value):
+        nonlocal dt
+        dt = value
+        called.append("update_2")
+
+    def update_3(value):
+        nonlocal dt
+        dt = value
+        called.append("update_3")
+
+    game = Game()
+    game.add_update_func(update_1)
+
+    game.update(0.1)
+    assert called == ["update_1"]
+    assert dt == 0.1
+
+    called.clear()
+
+    game.add_update_func(update_2)
+    game.add_update_func(update_3)
+
+    game.update(0.3)
+    assert called == ["update_1", "update_2", "update_3"]
+    assert dt == 0.3
+
+
+def test_root_drawn_before_draw_funcs():
+    """
+    Validates that the root GameObject is drawn before draw functions are called.
+    """
+    called: list[str] = []
+
+    def draw_1(value):
+        called.append("draw_1")
+
+    def draw_2(value):
+        called.append("draw_2")
+
+    def draw_root(this, value):
+        called.append("draw_root")
+
+    game = Game()
+    game.add_draw_func(draw_1)
+    game.root.add_draw_handler(draw_root)
+    game.add_draw_func(draw_2)
+
+    game.draw("shaggy")
+    assert called == ["draw_root", "draw_1", "draw_2"]
+
+
+def test_root_updated_before_update_funcs():
+    """
+    Validates that the root GameObject is updated before update functions are called.
+    """
+    called: list[str] = []
+
+    def update_1(value):
+        called.append("update_1")
+
+    def update_2(value):
+        called.append("update_2")
+
+    def update_root(this, value):
+        called.append("update_root")
+
+    game = Game()
+    game.add_update_func(update_1)
+    game.root.add_update_handler(update_root)
+    game.add_update_func(update_2)
+
+    game.update(0.1)
+    assert called == ["update_root", "update_1", "update_2"]
+
 
 def test_run_and_terminate():
     """

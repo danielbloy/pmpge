@@ -82,8 +82,6 @@ def test_constructor_with_background_colour():
     assert game.root
     assert len(game.children) == 0
 
-    # TODO: Can we validate background_colour is passed to execute?
-
 
 def test_adding_and_removing_children():
     """
@@ -198,6 +196,52 @@ def test_update_functions_and_order():
     game.update(0.3)
     assert called == ["update_1", "update_2", "update_3"]
     assert dt == 0.3
+
+
+def test_root_gets_drawn():
+    """
+    Validates that the root object gets drawn and is passed the correct values.
+    """
+    called: list[str] = []
+    surface = None
+    that = None
+
+    def draw_root(this, value):
+        nonlocal surface, that
+        surface = value
+        that = this
+        called.append("draw_root")
+
+    game = Game()
+    game.root.add_draw_handler(draw_root)
+
+    game.draw("thelma")
+    assert called == ["draw_root"]
+    assert surface == "thelma"
+    assert that == game.root
+
+
+def test_root_gets_updated():
+    """
+    Validates that the root object gets updated and is passed the correct values.
+    """
+    called: list[str] = []
+    dt = None
+    that = None
+
+    def update_root(this, value):
+        nonlocal dt, that
+        dt = value
+        that = this
+        called.append("update_root")
+
+    game = Game()
+    game.root.add_update_handler(update_root)
+
+    game.update(0.3)
+    assert called == ["update_root"]
+    assert dt == 0.3
+    assert that == game.root
 
 
 def test_root_drawn_before_draw_funcs():

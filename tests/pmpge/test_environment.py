@@ -5,51 +5,12 @@ cannot realistically test CircuitPython and MicroPython runs. We therefore deleg
 that level of testing to the device specific validation tests that run on the
 physical devices.
 """
-import os
-import pathlib
-from collections.abc import Callable
 
 import pytest
 
 import pmpge.environment as environment
 from pmpge.game import Game
-
-
-def with_config_file(contents: str, test: Callable, expect_error: bool = False) -> None:
-    """
-    Utility function for testing using a custom config file. It cleans up the file after the test
-    and also removes any existing config values.
-    """
-
-    def remove_config_values():
-        # Remove any existing config values
-        if environment.config:
-            for attr in dir(environment.config):
-                if attr.startswith("__"):
-                    continue
-                print(f"Removing {attr} from config")
-                delattr(environment.config, attr)
-
-    config_file = f"{pathlib.Path().resolve()}/config.py"
-
-    try:
-        with open(config_file, "w") as file:
-            file.write(contents)
-
-        remove_config_values()
-
-        environment.import_config()
-
-        if expect_error:
-            with pytest.raises(ValueError):
-                test()
-        else:
-            assert test()
-
-    finally:
-        os.remove(config_file)
-
-        remove_config_values()
+from tests.pmpge.test_utilities import with_config_file
 
 
 def test_is_running_on_desktop():

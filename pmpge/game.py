@@ -17,9 +17,10 @@ class Game:
 
     def __init__(self, width: int = None, height: int = None,
                  background_color: tuple[int, int, int] = None):
-        self.background_color: tuple[int, int, int] = background_color if background_color else (0,
-                                                                                                 0,
-                                                                                                 0)
+
+        self.background_color: tuple[int, int, int] = background_color if (
+            background_color) else (0, 0, 0)
+
         self.__draw_funcs: list[Callable[[Any], None]] = []
         self.__update_funcs: list[Callable[[float], None]] = []
         self.__root = GameObject(name="root")

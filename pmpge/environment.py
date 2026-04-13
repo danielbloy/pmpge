@@ -220,14 +220,38 @@ def import_driver(module: str):
 __execute: bool = False
 
 
-def execute_on_microcontroller(game, background_colour: tuple[int, int, int] = None):
+def terminate():
+    """
+    Terminates the application by ending the execute() function.
+    """
+    global __execute
+    __execute = False
+    if is_running_on_desktop():
+        pygame.event.post(pygame.event.Event(pygame.QUIT))
+
+
+def execute(game, background_colour: tuple[int, int, int] = None):
+    """
+    Executes the game at the desired resolution.
+    """
+    if not background_colour:
+        background_colour = (0, 0, 0)
+
+    global __execute
+    __execute = True
+
+    if is_running_on_desktop():
+        execute_on_desktop(game, background_colour)
+    else:
+        execute_on_microcontroller(game, background_colour)
+
+
+def execute_on_microcontroller(game, background_colour: tuple[int, int, int]):
     """
     This executes the game at the desired resolution. If the screen display is larger
     than the specified width and height, the application will scale if it is able to
     do so.
     """
-    if not background_colour:
-        background_colour = (0, 0, 0)
 
     width, height = game.width, game.height
     screen_width, screen_height = screen_size()
@@ -235,9 +259,6 @@ def execute_on_microcontroller(game, background_colour: tuple[int, int, int] = N
     # On a microcontroller, a larger game size than screen size is an error.
     if width > screen_width or height > screen_height:
         raise ValueError("Game width and height cannot be larger than screen")
-
-    global __execute
-    __execute = True
 
     last = time.monotonic()
     while __execute:
@@ -248,7 +269,7 @@ def execute_on_microcontroller(game, background_colour: tuple[int, int, int] = N
         game.draw(None)
 
 
-def execute_on_desktop(game, background_colour: tuple[int, int, int] = None):
+def execute_on_desktop(game, background_colour: tuple[int, int, int]):
     """
     This executes the game at the desired resolution in a python/pygame environment. If
     the games specified width or height is smaller than the dimensions provided by
@@ -260,18 +281,14 @@ def execute_on_desktop(game, background_colour: tuple[int, int, int] = None):
     main application to hook into pygame zero. This will overwrite the those values
     or functions if they are set in the main Python file.
     """
-    if not background_colour:
-        background_colour = (0, 0, 0)
-
     width, height = game.width, game.height
     screen_width, screen_height = screen_size()
-    
-    if is_running_on_desktop():
-        if width > screen_width:
-            screen_width = width
 
-        if height > screen_height:
-            screen_height = height
+    if width > screen_width:
+        screen_width = width
+
+    if height > screen_height:
+        screen_height = height
 
     mod = sys.modules['__main__']
 
@@ -303,36 +320,8 @@ def execute_on_desktop(game, background_colour: tuple[int, int, int] = None):
     setattr(mod, 'draw', draw)
     setattr(mod, 'update', update)
 
-    global __execute
-    __execute = True
     pgzrun.go()
 
-
-def terminate_on_desktop():
-    """
-    Terminates the application by ending the execute() function.
-    """
-    global __execute
-    __execute = False
-    pygame.event.post(pygame.event.Event(pygame.QUIT))
-
-
-def terminate_on_microcontroller():
-    """
-    Terminates the application when running on a microcontroller.
-    """
-    global __execute
-    __execute = False
-
-
-# Bind the correct execution function based on the system.
-if is_running_on_microcontroller():
-    execute = execute_on_microcontroller
-    terminate = terminate_on_microcontroller
-
-if is_running_on_desktop():
-    execute = execute_on_desktop
-    terminate = terminate_on_desktop
 
 ################################################################################
 # C O N F I G    A N D    D E P E N D E N C I E S

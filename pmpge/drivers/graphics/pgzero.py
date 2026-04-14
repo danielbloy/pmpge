@@ -53,6 +53,7 @@ def clear(screen, background_colour: tuple[int, int, int]):
 
 
 def draw(screen):
+    global screen_width, screen_height
     if scale_surface:
         scale_surface.blit(screen.surface, (0, 0))
         pygame.transform.scale(scale_surface, (screen_width, screen_height), screen.surface)

@@ -15,16 +15,15 @@ mod = sys.modules['__main__']
 
 def init(w: int, h: int, sw: int, sh: int):
     """
-    TODO: Update comments.
-    This executes the game at the desired resolution in a python/pygame environment. If
-    the games specified width or height is smaller than the dimensions provided by
-    screen_size() then the image will be scaled. If the games specified width or height
-    is larger than the dimensions provided by screen_size() then the game is scaled
+    This sets up the game to run at the desired resolution in a python/pygame zero
+    environment. If the games specified width or height is smaller than the provided
+    screen dimensions, then the image will be scaled. If the games specified width or
+    height is larger than the provided screen dimensions, then the game is scaled
     horizontally, vertically or both.
 
-    This function also injects WIDTH, HEIGHT, draw() and update() functions into the
-    main application to hook into pygame zero. This will overwrite those values or
-    functions if they are set in the main Python file.
+    This function also injects WIDTH, HEIGHT variables into the main application to
+    hook into pygame zero. This will overwrite those values if they are set in the
+    main Python file.
     """
     global width, height, screen_width, screen_height, scale_surface
 
@@ -44,16 +43,18 @@ def init(w: int, h: int, sw: int, sh: int):
         scale_surface = pygame.Surface((width, height))
 
 
-def deinit():
-    pass
-
-
 def clear(screen, background_colour: tuple[int, int, int]):
+    """
+    Clears the screen with the specified background colour.
+    """
     screen.fill(background_colour)
 
 
 def draw(screen):
-    global screen_width, screen_height
+    """
+    Performs any scaling that is required.
+    """
     if scale_surface:
+        global screen_width, screen_height
         scale_surface.blit(screen.surface, (0, 0))
         pygame.transform.scale(scale_surface, (screen_width, screen_height), screen.surface)

@@ -238,16 +238,9 @@ def execute(game, background_colour: tuple[int, int, int] = None):
     In a desktop environment, this function also injects draw() and update() functions
     into the main application to hook into pygame zero. This will overwrite those
     functions if they are set in the main Python file.
-
-    TODO: See if we can further refine this.
-    TODO: Consider exception handling.
     """
     if not background_colour:
         background_colour = (0, 0, 0)
-
-    sound = import_driver('sound')
-    graphics = import_driver('graphics')
-    controller = import_driver('controller')
 
     width, height = game.width, game.height
     screen_width, screen_height = screen_size()
@@ -257,86 +250,72 @@ def execute(game, background_colour: tuple[int, int, int] = None):
         if width > screen_width or height > screen_height:
             raise ValueError("Game width and height cannot be larger than screen")
 
-    if hasattr(device, 'init'):
-        device.init()
-    if hasattr(controller, 'init'):
-        controller.init()
-    if hasattr(sound, 'init'):
-        sound.init()
-    if hasattr(graphics, 'init'):
-        graphics.init(width, height, screen_width, screen_height)
+    sound = import_driver('sound')
+    graphics = import_driver('graphics')
+    controller = import_driver('controller')
 
-    device_update = None
-    controller_update = None
-    sound_update = None
-    graphics_update = None
-    if hasattr(device, 'update'):
-        device_update = device.update
-    if hasattr(controller, 'update'):
-        controller_update = controller.update
-    if hasattr(sound, 'update'):
-        sound_update = sound.update
-    if hasattr(graphics, 'update'):
-        graphics_update = graphics.update
+    device.init() if hasattr(device, 'init') else None
+    controller.init() if hasattr(controller, 'init') else None
+    sound.init() if hasattr(sound, 'init') else None
+    graphics.init(width, height, screen_width, screen_height) if hasattr(graphics, 'init') else None
 
-    # noinspection PyCallingNonCallable
-    def update(dt: float):
+    device_update = device.update if hasattr(device, 'update') else None
+    controller_update = controller.update if hasattr(controller, 'update') else None
+    sound_update = sound.update if hasattr(sound, 'update') else None
+    graphics_update = graphics.update if hasattr(graphics, 'update') else None
 
-        if device_update:
-            device_update(dt)
-        if controller_update:
-            controller_update(dt)
-        if sound_update:
-            sound_update(dt)
-        if graphics_update:
-            graphics_update(dt)
-        game.update(dt)
+    try:
+        def update(dt: float):
+            device_update(dt) if device_update else None
+            controller_update(dt) if controller_update else None
+            sound_update(dt) if sound_update else None
+            graphics_update(dt) if graphics_update else None
+            game.update(dt)
 
-    def draw(surface):
-        graphics.clear(surface, background_colour)
-        game.draw(surface)
-        graphics.draw(surface)
+        def draw(surface):
+            graphics.clear(surface, background_colour)
+            game.draw(surface)
+            graphics.draw(surface)
 
-    global __execute
-    __execute = True
+        global __execute
+        __execute = True
 
-    if is_running_on_desktop():
-        mod = sys.modules['__main__']
-        screen = None
+        if is_running_on_desktop():
+            # On a desktop environment, we need to inject our own draw() and update()
+            # methods to interact with pygame zero.
+            mod = sys.modules['__main__']
+            screen = None
 
-        def pgzero_draw():
-            nonlocal screen
-            if not screen:
-                screen = getattr(mod, 'screen')
+            def pgzero_draw():
+                nonlocal screen
+                if not screen:
+                    screen = getattr(mod, 'screen')
 
-            draw(screen)
+                draw(screen)
 
-        setattr(mod, 'draw', pgzero_draw)
-        setattr(mod, 'update', update)
+            setattr(mod, 'draw', pgzero_draw)
+            setattr(mod, 'update', update)
 
-        pgzrun.go()
+            pgzrun.go()
 
-    else:
+        else:
+            # On a microcontroller, we implement our own game loop.
+            last = time.monotonic()
+            while __execute:
+                now = time.monotonic()
+                delta_time = now - last
+                last = now
 
-        last = time.monotonic()
-        while __execute:
-            now = time.monotonic()
-            delta_time = now - last
-            last = now
+                update(delta_time)
+                draw(None)
 
-            update(delta_time)
-            draw(None)
+    finally:
+        __execute = False
 
-    __execute = False
-
-    if hasattr(graphics, 'deinit'):
-        graphics.deinit()
-    if hasattr(sound, 'deinit'):
-        sound.deinit()
-    if hasattr(controller, 'deinit'):
-        controller.deinit()
-    if hasattr(device, 'deinit'):
-        device.deinit()
+        graphics.deinit() if hasattr(graphics, 'deinit') else None
+        sound.deinit() if hasattr(sound, 'deinit') else None
+        controller.deinit() if hasattr(controller, 'deinit') else None
+        device.deinit() if hasattr(device, 'deinit') else None
 
 
 ################################################################################

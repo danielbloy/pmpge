@@ -76,6 +76,45 @@ In PyCharm, the following "Project Structure" is used:
 
 ![Project Structure](./project_structure.png)
 
+## Supporting Different Execution Environments
+
+In a nutshell, the framework is designed to work as much as possible with vanilla
+Python with small modifications to support CircuitPython and MicroPython. Where
+this gets a little more tricky is with graphics, sound and controller support. To
+support these, the framework has been designed to be able to be extended with new
+drivers. Some default drivers are provided to cover a broad range of hardware but
+it is possible to write your own drivers.
+
+So what drivers do you need? You will need drivers to support graphics, sound and
+controller input. There is also the option for a device driver too. Using a
+non-default driver requires setting of the following configuration properties:
+
+* `DEVICE_DRIVER`
+* `CONTROLLER_DRIVER`
+* `SOUND_DRIVER`
+* `GRAPHICS_DRIVER`
+
+Implementing a driver is pretty simple for the most part. There are optional
+common hook methods for all drivers and mandatory methods that must be implemented
+for specific drivers. The optional methods are:
+
+* `init()` - called once when the game first runs.
+    * The screen variant of `init()` accepts 4 parameters:
+        * `width` - the width of the game in pixels.
+        * `height` - the height of the game in pixels.
+        * `screen_width` - the width of the screen in pixels.
+        * `screen_height` - the height of the screen in pixels.
+* `update(delta_time: float)` - called once every update cycle.
+* `deinit()` - called once when the game finishes.
+
+Additionally, a graphics driver must implement the following mandatory methods:
+
+* `clear(surface, colour)` - called once per frame and sets the screen to the
+  specified RGB colour triplet. Called before any other displayed operations.
+* `draw(surface)` - called once per frame and passed a surface object that is
+  implementation-dependent. Called after the game is drawn to the screen to
+  allow for any final operations such as scaling or flipping.
+
 ## Supporting CircuitPython and MicroPython
 
 This is currently in the early feasibility stages and work is off the main branch so
@@ -102,16 +141,20 @@ Optimisation will come later._
 
 ### CircuitPython
 
-On circuitPython, the supported display driver is to use displayio
+On CircuitPython, where devices support the `Stage` and `ugame` libraries, they will
+be used. Otherwise, the supported display driver is to use `displayio`.
 
-* https://docs.circuitpython.org/en/latest/shared-bindings/displayio/
-* https://learn.adafruit.com/circuitpython-display-support-using-displayio/introduction
+* [CircuitPython Display Support Using displayio](
+  https://learn.adafruit.com/circuitpython-display-support-using-displayio/introduction)
+* [displayio – High level, display object compositing system](
+  https://docs.circuitpython.org/en/latest/shared-bindings/displayio/)
 
 ### MicroPython
 
 On MicroPython, the supported display driver is to use pico-graphics:
 
-* https://github.com/pimoroni/pimoroni-pico/blob/main/micropython/modules/picographics/README.md
+* [Pico Graphics](
+  https://github.com/pimoroni/pimoroni-pico/blob/main/micropython/modules/picographics/README.md)
 
 ### Raspberry Pi with additional SPI screen/controller
 
@@ -119,31 +162,33 @@ For an interesting diversion, another aim is to be able to support a Raspberry P
 an additional SPI connected display. There are many HATs out there with screen and buttons
 such as this one:
 
-* https://www.amazon.co.uk/dp/B0DQXYJY4X?ref=cm_sw_r_cso_em_mwn_dp_BK5HK79X16XEKVJW77Z4&social_share=cm_sw_r_cso_em_mwn_dp_BK5HK79X16XEKVJW77Z4
+* [Raspberry Pi HAT](
+  https://www.amazon.co.uk/dp/B0DQXYJY4X?ref=cm_sw_r_cso_em_mwn_dp_BK5HK79X16XEKVJW77Z4&social_share=cm_sw_r_cso_em_mwn_dp_BK5HK79X16XEKVJW77Z4)
 
 ### Reference hardware
 
-The following are the reference commercial hardware devices that will be used to test the framework:
+The following are commercial hardware devices that will be used to test the framework:
 
-* Pimoroni [PicoSystem](https://shop.pimoroni.com/products/picosystem?variant=32369546985555) for
-  CircuiPython and
-  MicroPython* Adafruit [PyBadge](https://www.adafruit.com/product/4200) for CircuitPython
-* Pimoroni [Badgeware Tufty](https://shop.pimoroni.com/products/tufty-2350?variant=55811986227579)
-  with STEM kit for
-  MicroPython
+* Pimoroni [PicoSystem](https://shop.pimoroni.com/products/picosystem?variant=32369546985555)
+  forCircuiPython and MicroPython
+* Adafruit [PyBadge](https://www.adafruit.com/product/4200) for CircuitPython only
 
 Additionally, I will make two reference systems using COTS parts using:
 
-* Design 1:
-    * Raspberry Pi Pico 2
-    * Generic ST7735R 160 x 128 pixel display
-    * 8 x Standard push buttons
+Design 1:
 
-* Design 2:
-    *
-    Pimoroni [Pico Plus 2](https://shop.pimoroni.com/products/pimoroni-pico-plus-2?variant=42092668289107)
-    *
-    Pimoroni [Pico Display 2.8"](https://shop.pimoroni.com/products/pico-display-pack-2-8?variant=42047194005587)
+* Raspberry Pi Pico 2
+* Generic ST7735R 160 x 128 pixel display
+* 8 x Standard push buttons
+
+Design 2:
+
+* Pimoroni [Pico Plus 2](
+  https://shop.pimoroni.com/products/pimoroni-pico-plus-2?variant=42092668289107)
+* Pimoroni [Pico Display 2.8"](
+  https://shop.pimoroni.com/products/pico-display-pack-2-8?variant=42047194005587)
+
+* 8 x Standard push buttons
 
 ## License
 

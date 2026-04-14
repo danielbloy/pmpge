@@ -2,7 +2,7 @@
 # that the code is being executed in to allow various parts of the program
 # to selectively run based on what is available to it.
 #
-# THIS FILE SHOULD NOT IMPORT ANY OTHER FILE IN THE FRAMEWORK
+# THIS FILE SHOULD NOT IMPORT ANY OTHER FILE IN THE FRAMEWORK OTHER THAN DRIVERS
 #
 import importlib.util
 import sys
@@ -232,95 +232,111 @@ def terminate():
 
 def execute(game, background_colour: tuple[int, int, int] = None):
     """
-    Executes the game at the desired resolution.
+    Executes the game at the desired resolution. If the screen display is larger than
+    the specified width and height, the application will scale if it is able to do so.
+
+    In a desktop environment, this function also injects draw() and update() functions
+    into the main application to hook into pygame zero. This will overwrite those
+    functions if they are set in the main Python file.
+
+    TODO: See if we can further refine this.
+    TODO: Consider exception handling.
     """
     if not background_colour:
         background_colour = (0, 0, 0)
 
-    global __execute
-    __execute = True
-
-    if is_running_on_desktop():
-        execute_on_desktop(game, background_colour)
-    else:
-        execute_on_microcontroller(game, background_colour)
-
-
-def execute_on_microcontroller(game, background_colour: tuple[int, int, int]):
-    """
-    This executes the game at the desired resolution. If the screen display is larger
-    than the specified width and height, the application will scale if it is able to
-    do so.
-    """
+    sound = import_driver('sound')
+    graphics = import_driver('graphics')
+    controller = import_driver('controller')
 
     width, height = game.width, game.height
     screen_width, screen_height = screen_size()
 
     # On a microcontroller, a larger game size than screen size is an error.
-    if width > screen_width or height > screen_height:
-        raise ValueError("Game width and height cannot be larger than screen")
+    if is_running_on_microcontroller():
+        if width > screen_width or height > screen_height:
+            raise ValueError("Game width and height cannot be larger than screen")
 
-    last = time.monotonic()
-    while __execute:
-        now = time.monotonic()
-        dt = now - last
-        last = now
-        game.update(dt)
-        game.draw(None)
+    if hasattr(device, 'init'):
+        device.init()
+    if hasattr(controller, 'init'):
+        controller.init()
+    if hasattr(sound, 'init'):
+        sound.init()
+    if hasattr(graphics, 'init'):
+        graphics.init(width, height, screen_width, screen_height)
 
+    device_update = None
+    controller_update = None
+    sound_update = None
+    graphics_update = None
+    if hasattr(device, 'update'):
+        device_update = device.update
+    if hasattr(controller, 'update'):
+        controller_update = controller.update
+    if hasattr(sound, 'update'):
+        sound_update = sound.update
+    if hasattr(graphics, 'update'):
+        graphics_update = graphics.update
 
-def execute_on_desktop(game, background_colour: tuple[int, int, int]):
-    """
-    This executes the game at the desired resolution in a python/pygame environment. If
-    the games specified width or height is smaller than the dimensions provided by
-    screen_size() then the image will be scaled. If the games specified width or height
-    is larger than the dimensions provided by screen_size() then the game is scaled
-    horizontally, vertically or both.
+    # noinspection PyCallingNonCallable
+    def update(dt: float):
 
-    This function also injects WIDTH, HEIGHT, draw() and update() functions into the
-    main application to hook into pygame zero. This will overwrite the those values
-    or functions if they are set in the main Python file.
-    """
-    width, height = game.width, game.height
-    screen_width, screen_height = screen_size()
-
-    if width > screen_width:
-        screen_width = width
-
-    if height > screen_height:
-        screen_height = height
-
-    mod = sys.modules['__main__']
-
-    setattr(mod, 'WIDTH', screen_width)
-    setattr(mod, 'HEIGHT', screen_height)
-
-    # noinspection PyTypeChecker
-    screen = None
-    scale_surface = None
-    if width < screen_width or height < screen_height:
-        scale_surface = pygame.Surface((width, height))
-
-    def draw():
-        nonlocal screen
-        if not screen:
-            screen = getattr(mod, 'screen')
-
-        screen.fill(background_colour)
-
-        game.draw(screen)
-
-        if scale_surface:
-            scale_surface.blit(screen.surface, (0, 0))
-            pygame.transform.scale(scale_surface, (screen_width, screen_height), screen.surface)
-
-    def update(dt):
+        if device_update:
+            device_update(dt)
+        if controller_update:
+            controller_update(dt)
+        if sound_update:
+            sound_update(dt)
+        if graphics_update:
+            graphics_update(dt)
         game.update(dt)
 
-    setattr(mod, 'draw', draw)
-    setattr(mod, 'update', update)
+    def draw(surface):
+        graphics.clear(surface, background_colour)
+        game.draw(surface)
+        graphics.draw(surface)
 
-    pgzrun.go()
+    global __execute
+    __execute = True
+
+    if is_running_on_desktop():
+        mod = sys.modules['__main__']
+        screen = None
+
+        def pgzero_draw():
+            nonlocal screen
+            if not screen:
+                screen = getattr(mod, 'screen')
+
+            draw(screen)
+
+        setattr(mod, 'draw', pgzero_draw)
+        setattr(mod, 'update', update)
+
+        pgzrun.go()
+
+    else:
+
+        last = time.monotonic()
+        while __execute:
+            now = time.monotonic()
+            delta_time = now - last
+            last = now
+
+            update(delta_time)
+            draw(None)
+
+    __execute = False
+
+    if hasattr(graphics, 'deinit'):
+        graphics.deinit()
+    if hasattr(sound, 'deinit'):
+        sound.deinit()
+    if hasattr(controller, 'deinit'):
+        controller.deinit()
+    if hasattr(device, 'deinit'):
+        device.deinit()
 
 
 ################################################################################
@@ -368,4 +384,4 @@ if is_running_on_microcontroller():
     import time
 
 # Initialise the device next to allow it to perform any setup.
-import_driver('device')
+device = import_driver('device')

@@ -6,11 +6,50 @@ that level of testing to the device specific validation tests that run on the
 physical devices.
 """
 
+from collections.abc import Callable
+
 import pytest
 
 import pmpge.environment as environment
 from pmpge.game import Game
 from tests.pmpge.test_utilities import with_config_file
+
+
+def with_forced_system(dist: str, test: Callable, expect_error: bool = False):
+    """
+    Allows a limited amount of testing by forcing the system to pretend it is
+    a different target environment to the one running. Use with great caution.
+    """
+    is_desktop = False
+    is_circuit = False
+    is_micro = False
+
+    dist = dist.lower()
+    if dist == 'd':
+        is_desktop = True
+    if dist == 'c':
+        is_circuit = True
+    if dist == 'm':
+        is_micro = True
+
+    original_desktop = environment.is_running_on_desktop
+    original_circuitpython = environment.is_running_on_circuitpython
+    original_micropython = environment.is_running_on_micropython
+
+    try:
+        environment.is_running_on_desktop = lambda: is_desktop
+        environment.is_running_on_circuitpython = lambda: is_circuit
+        environment.is_running_on_micropython = lambda: is_micro
+        if expect_error:
+            with pytest.raises(ValueError):
+                test()
+        else:
+            assert test()
+
+    finally:
+        environment.is_running_on_desktop = original_desktop
+        environment.is_running_on_circuitpython = original_circuitpython
+        environment.is_running_on_micropython = original_micropython
 
 
 def test_is_running_on_desktop():
@@ -80,11 +119,31 @@ def test_system():
     assert environment.system() == "pgzero"
 
 
+def test_system_diff_environments():
+    """
+    Validates that system() responds differently in different environments.
+    To make this work, we override some of the environment functions which
+    is a dangerous thing to do.
+    """
+    with_forced_system('d', lambda: environment.system() == "pgzero")
+    with_forced_system('c', lambda: environment.system() == "circuit")
+    with_forced_system('m', lambda: environment.system() == "micro")
+
+
 def test_get_controller_driver():
     """
     Checks the default value and an override in the config file.
     """
     assert environment.get_controller_driver() == "pmpge.drivers.controller.pgzero"
+
+    with_forced_system(
+        'd', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.pgzero")
+
+    with_forced_system(
+        'c', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.pgzero")
+
+    with_forced_system(
+        'm', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.pgzero")
 
     with_config_file(
         'CONTROLLER_DRIVER = "my.controller.driver"\n',
@@ -97,6 +156,15 @@ def test_get_device_driver():
     """
     assert environment.get_device_driver() == "pmpge.drivers.device.none"
 
+    with_forced_system(
+        'd', lambda: environment.get_device_driver() == "pmpge.drivers.controller.pgzero")
+
+    with_forced_system(
+        'c', lambda: environment.get_device_driver() == "pmpge.drivers.controller.pgzero")
+
+    with_forced_system(
+        'm', lambda: environment.get_device_driver() == "pmpge.drivers.controller.pgzero")
+
     with_config_file(
         'DEVICE_DRIVER = "my.device.driver"\n',
         lambda: environment.get_device_driver() == "my.device.driver")
@@ -108,6 +176,15 @@ def test_get_graphics_driver():
     """
     assert environment.get_graphics_driver() == "pmpge.drivers.graphics.pgzero"
 
+    with_forced_system(
+        'd', lambda: environment.get_graphics_driver() == "pmpge.drivers.controller.pgzero")
+
+    with_forced_system(
+        'c', lambda: environment.get_graphics_driver() == "pmpge.drivers.controller.pgzero")
+
+    with_forced_system(
+        'm', lambda: environment.get_graphics_driver() == "pmpge.drivers.controller.pgzero")
+
     with_config_file(
         'GRAPHICS_DRIVER = "my.graphics.driver"\n',
         lambda: environment.get_graphics_driver() == "my.graphics.driver")
@@ -118,6 +195,15 @@ def test_get_sound_driver():
     Checks the default value and an override in the config file.
     """
     assert environment.get_sound_driver() == "pmpge.drivers.sound.pgzero"
+
+    with_forced_system(
+        'd', lambda: environment.get_sound_driver() == "pmpge.drivers.controller.pgzero")
+
+    with_forced_system(
+        'c', lambda: environment.get_sound_driver() == "pmpge.drivers.controller.pgzero")
+
+    with_forced_system(
+        'm', lambda: environment.get_sound_driver() == "pmpge.drivers.controller.pgzero")
 
     with_config_file(
         'SOUND_DRIVER = "my.sound.driver"\n',

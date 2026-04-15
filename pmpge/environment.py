@@ -250,9 +250,10 @@ def execute(game, background_colour: tuple[int, int, int] = None):
         if width > screen_width or height > screen_height:
             raise ValueError("Game width and height cannot be larger than screen")
 
+    device = import_driver('device')
+    controller = import_driver('controller')
     sound = import_driver('sound')
     graphics = import_driver('graphics')
-    controller = import_driver('controller')
 
     device.init() if hasattr(device, 'init') else None
     controller.init() if hasattr(controller, 'init') else None
@@ -327,10 +328,10 @@ config = None
 def import_config():
     """
     Loads or reloads the config file. This is called automatically when the module
-    is first loaded so only needs to be called if 'config.py' changes and we need
+    is first loaded, so it only needs to be called if 'config.py' changes and we need
     to see those changes. Ordinarily this is only useful when testing.
 
-    Please note that this is additive so if the config file changes, the new
+    Please note that this is additive, so if the config file changes, the new
     values will be added to the existing configuration. Redefined values will
     be overwritten by removed values will not be deleted.
     """
@@ -363,4 +364,4 @@ if is_running_on_microcontroller():
     import time
 
 # Initialise the device next to allow it to perform any setup.
-device = import_driver('device')
+import_driver('device')

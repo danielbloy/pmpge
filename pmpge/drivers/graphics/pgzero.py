@@ -54,8 +54,8 @@ def draw(screen):
     """
     Performs any scaling that is required.
     """
-    global screen_width, screen_height
-
     if scale_surface:
         scale_surface.blit(screen.surface, (0, 0))
-        pygame.transform.scale(scale_surface, (screen_width, screen_height), screen.surface)
+        pygame.transform.scale(
+            scale_surface,
+            (screen_width, screen_height), screen.surface)  # noqa: F821

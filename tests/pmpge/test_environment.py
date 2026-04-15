@@ -41,7 +41,7 @@ def with_forced_system(dist: str, test: Callable, expect_error: bool = False):
         environment.is_running_on_circuitpython = lambda: is_circuit
         environment.is_running_on_micropython = lambda: is_micro
         if expect_error:
-            with pytest.raises(ValueError):
+            with pytest.raises(SystemError):
                 test()
         else:
             assert test()
@@ -140,10 +140,12 @@ def test_get_controller_driver():
         'd', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.pgzero")
 
     with_forced_system(
-        'c', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.pgzero")
+        'c', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.pgzero",
+        expect_error=True)
 
     with_forced_system(
-        'm', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.pgzero")
+        'm', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.pgzero",
+        expect_error=True)
 
     with_config_file(
         'CONTROLLER_DRIVER = "my.controller.driver"\n',
@@ -157,13 +159,13 @@ def test_get_device_driver():
     assert environment.get_device_driver() == "pmpge.drivers.device.none"
 
     with_forced_system(
-        'd', lambda: environment.get_device_driver() == "pmpge.drivers.controller.pgzero")
+        'd', lambda: environment.get_device_driver() == "pmpge.drivers.device.none")
 
     with_forced_system(
-        'c', lambda: environment.get_device_driver() == "pmpge.drivers.controller.pgzero")
+        'c', lambda: environment.get_device_driver() == "pmpge.drivers.device.none")
 
     with_forced_system(
-        'm', lambda: environment.get_device_driver() == "pmpge.drivers.controller.pgzero")
+        'm', lambda: environment.get_device_driver() == "pmpge.drivers.device.none")
 
     with_config_file(
         'DEVICE_DRIVER = "my.device.driver"\n',
@@ -177,13 +179,13 @@ def test_get_graphics_driver():
     assert environment.get_graphics_driver() == "pmpge.drivers.graphics.pgzero"
 
     with_forced_system(
-        'd', lambda: environment.get_graphics_driver() == "pmpge.drivers.controller.pgzero")
+        'd', lambda: environment.get_graphics_driver() == "pmpge.drivers.graphics.pgzero")
 
     with_forced_system(
-        'c', lambda: environment.get_graphics_driver() == "pmpge.drivers.controller.pgzero")
+        'c', lambda: environment.get_graphics_driver() == "pmpge.drivers.graphics.displayio")
 
     with_forced_system(
-        'm', lambda: environment.get_graphics_driver() == "pmpge.drivers.controller.pgzero")
+        'm', lambda: environment.get_graphics_driver() == "pmpge.drivers.graphics.picographics")
 
     with_config_file(
         'GRAPHICS_DRIVER = "my.graphics.driver"\n',
@@ -197,13 +199,15 @@ def test_get_sound_driver():
     assert environment.get_sound_driver() == "pmpge.drivers.sound.pgzero"
 
     with_forced_system(
-        'd', lambda: environment.get_sound_driver() == "pmpge.drivers.controller.pgzero")
+        'd', lambda: environment.get_sound_driver() == "pmpge.drivers.sound.pgzero")
 
     with_forced_system(
-        'c', lambda: environment.get_sound_driver() == "pmpge.drivers.controller.pgzero")
+        'c', lambda: environment.get_sound_driver() == "pmpge.drivers.controller.pgzero",
+        expect_error=True)
 
     with_forced_system(
-        'm', lambda: environment.get_sound_driver() == "pmpge.drivers.controller.pgzero")
+        'm', lambda: environment.get_sound_driver() == "pmpge.drivers.controller.pgzero",
+        expect_error=True)
 
     with_config_file(
         'SOUND_DRIVER = "my.sound.driver"\n',

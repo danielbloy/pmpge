@@ -56,7 +56,6 @@ class RelativeToParent:
             self.x = self.parent.x + self.offset_x
             self.y = self.parent.y + self.offset_y
         else:
-            print('hi')
             self.x = self.offset_x
             self.y = self.offset_y
 

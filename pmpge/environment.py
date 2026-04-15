@@ -2,7 +2,7 @@
 # that the code is being executed in to allow various parts of the program
 # to selectively run based on what is available to it.
 #
-# THIS FILE SHOULD NOT IMPORT ANY OTHER FILE IN THE FRAMEWORK
+# THIS FILE SHOULD NOT IMPORT ANY OTHER FILE IN THE FRAMEWORK OTHER THAN DRIVERS
 #
 import importlib.util
 import sys
@@ -220,11 +220,24 @@ def import_driver(module: str):
 __execute: bool = False
 
 
-def execute_on_microcontroller(game, background_colour: tuple[int, int, int] = None):
+def terminate():
     """
-    This executes the game at the desired resolution. If the screen display is larger
-    than the specified width and height, the application will scale if it is able to
-    do so.
+    Terminates the application by ending the execute() function.
+    """
+    global __execute
+    __execute = False
+    if is_running_on_desktop():
+        pygame.event.post(pygame.event.Event(pygame.QUIT))
+
+
+def execute(game, background_colour: tuple[int, int, int] = None):
+    """
+    Executes the game at the desired resolution. If the screen display is larger than
+    the specified width and height, the application will scale if it is able to do so.
+
+    In a desktop environment, this function also injects draw() and update() functions
+    into the main application to hook into pygame zero. This will overwrite those
+    functions if they are set in the main Python file.
     """
     if not background_colour:
         background_colour = (0, 0, 0)
@@ -233,106 +246,78 @@ def execute_on_microcontroller(game, background_colour: tuple[int, int, int] = N
     screen_width, screen_height = screen_size()
 
     # On a microcontroller, a larger game size than screen size is an error.
-    if width > screen_width or height > screen_height:
-        raise ValueError("Game width and height cannot be larger than screen")
+    if is_running_on_microcontroller():
+        if width > screen_width or height > screen_height:
+            raise ValueError("Game width and height cannot be larger than screen")
 
-    global __execute
-    __execute = True
+    device = import_driver('device')
+    controller = import_driver('controller')
+    sound = import_driver('sound')
+    graphics = import_driver('graphics')
 
-    last = time.monotonic()
-    while __execute:
-        now = time.monotonic()
-        dt = now - last
-        last = now
-        game.update(dt)
-        game.draw(None)
+    device.init() if hasattr(device, 'init') else None
+    controller.init() if hasattr(controller, 'init') else None
+    sound.init() if hasattr(sound, 'init') else None
+    graphics.init(width, height, screen_width, screen_height) if hasattr(graphics, 'init') else None
 
+    device_update = device.update if hasattr(device, 'update') else None
+    controller_update = controller.update if hasattr(controller, 'update') else None
+    sound_update = sound.update if hasattr(sound, 'update') else None
+    graphics_update = graphics.update if hasattr(graphics, 'update') else None
 
-def execute_on_desktop(game, background_colour: tuple[int, int, int] = None):
-    """
-    This executes the game at the desired resolution in a python/pygame environment. If
-    the games specified width or height is smaller than the dimensions provided by
-    screen_size() then the image will be scaled. If the games specified width or height
-    is larger than the dimensions provided by screen_size() then the game is scaled
-    horizontally, vertically or both.
+    try:
+        def update(dt: float):
+            device_update(dt) if device_update else None
+            controller_update(dt) if controller_update else None
+            sound_update(dt) if sound_update else None
+            graphics_update(dt) if graphics_update else None
+            game.update(dt)
 
-    This function also injects WIDTH, HEIGHT, draw() and update() functions into the
-    main application to hook into pygame zero. This will overwrite the those values
-    or functions if they are set in the main Python file.
-    """
-    if not background_colour:
-        background_colour = (0, 0, 0)
+        def draw(surface):
+            graphics.clear(surface, background_colour)
+            game.draw(surface)
+            graphics.draw(surface)
 
-    width, height = game.width, game.height
-    screen_width, screen_height = screen_size()
-    
-    if is_running_on_desktop():
-        if width > screen_width:
-            screen_width = width
+        global __execute
+        __execute = True
 
-        if height > screen_height:
-            screen_height = height
+        if is_running_on_desktop():
+            # On a desktop environment, we need to inject our own draw() and update()
+            # methods to interact with pygame zero.
+            mod = sys.modules['__main__']
+            screen = None
 
-    mod = sys.modules['__main__']
+            def pgzero_draw():
+                nonlocal screen
+                if not screen:
+                    screen = getattr(mod, 'screen')
 
-    setattr(mod, 'WIDTH', screen_width)
-    setattr(mod, 'HEIGHT', screen_height)
+                draw(screen)
 
-    # noinspection PyTypeChecker
-    screen = None
-    scale_surface = None
-    if width < screen_width or height < screen_height:
-        scale_surface = pygame.Surface((width, height))
+            setattr(mod, 'draw', pgzero_draw)
+            setattr(mod, 'update', update)
 
-    def draw():
-        nonlocal screen
-        if not screen:
-            screen = getattr(mod, 'screen')
+            pgzrun.go()
 
-        screen.fill(background_colour)
+        else:
+            # On a microcontroller, we implement our own game loop.
+            last = time.monotonic()
+            while __execute:
+                now = time.monotonic()
+                delta_time = now - last
+                last = now
 
-        game.draw(screen)
+                update(delta_time)
+                draw(None)
 
-        if scale_surface:
-            scale_surface.blit(screen.surface, (0, 0))
-            pygame.transform.scale(scale_surface, (screen_width, screen_height), screen.surface)
+    finally:
+        __execute = False
 
-    def update(dt):
-        game.update(dt)
+        graphics.deinit() if hasattr(graphics, 'deinit') else None
+        sound.deinit() if hasattr(sound, 'deinit') else None
+        controller.deinit() if hasattr(controller, 'deinit') else None
+        device.deinit() if hasattr(device, 'deinit') else None
 
-    setattr(mod, 'draw', draw)
-    setattr(mod, 'update', update)
-
-    global __execute
-    __execute = True
-    pgzrun.go()
-
-
-def terminate_on_desktop():
-    """
-    Terminates the application by ending the execute() function.
-    """
-    global __execute
-    __execute = False
-    pygame.event.post(pygame.event.Event(pygame.QUIT))
-
-
-def terminate_on_microcontroller():
-    """
-    Terminates the application when running on a microcontroller.
-    """
-    global __execute
-    __execute = False
-
-
-# Bind the correct execution function based on the system.
-if is_running_on_microcontroller():
-    execute = execute_on_microcontroller
-    terminate = terminate_on_microcontroller
-
-if is_running_on_desktop():
-    execute = execute_on_desktop
-    terminate = terminate_on_desktop
 
 ################################################################################
 # C O N F I G    A N D    D E P E N D E N C I E S
@@ -343,10 +328,10 @@ config = None
 def import_config():
     """
     Loads or reloads the config file. This is called automatically when the module
-    is first loaded so only needs to be called if 'config.py' changes and we need
+    is first loaded, so it only needs to be called if 'config.py' changes and we need
     to see those changes. Ordinarily this is only useful when testing.
 
-    Please note that this is additive so if the config file changes, the new
+    Please note that this is additive, so if the config file changes, the new
     values will be added to the existing configuration. Redefined values will
     be overwritten by removed values will not be deleted.
     """

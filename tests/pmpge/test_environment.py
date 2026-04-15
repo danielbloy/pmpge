@@ -6,11 +6,50 @@ that level of testing to the device specific validation tests that run on the
 physical devices.
 """
 
+from collections.abc import Callable
+
 import pytest
 
 import pmpge.environment as environment
 from pmpge.game import Game
 from tests.pmpge.test_utilities import with_config_file
+
+
+def with_forced_system(dist: str, test: Callable, expect_error: bool = False):
+    """
+    Allows a limited amount of testing by forcing the system to pretend it is
+    a different target environment to the one running. Use with great caution.
+    """
+    is_desktop = False
+    is_circuit = False
+    is_micro = False
+
+    dist = dist.lower()
+    if dist == 'd':
+        is_desktop = True
+    if dist == 'c':
+        is_circuit = True
+    if dist == 'm':
+        is_micro = True
+
+    original_desktop = environment.is_running_on_desktop
+    original_circuitpython = environment.is_running_on_circuitpython
+    original_micropython = environment.is_running_on_micropython
+
+    try:
+        environment.is_running_on_desktop = lambda: is_desktop
+        environment.is_running_on_circuitpython = lambda: is_circuit
+        environment.is_running_on_micropython = lambda: is_micro
+        if expect_error:
+            with pytest.raises(SystemError):
+                test()
+        else:
+            assert test()
+
+    finally:
+        environment.is_running_on_desktop = original_desktop
+        environment.is_running_on_circuitpython = original_circuitpython
+        environment.is_running_on_micropython = original_micropython
 
 
 def test_is_running_on_desktop():
@@ -80,11 +119,33 @@ def test_system():
     assert environment.system() == "pgzero"
 
 
+def test_system_diff_environments():
+    """
+    Validates that system() responds differently in different environments.
+    To make this work, we override some of the environment functions which
+    is a dangerous thing to do.
+    """
+    with_forced_system('d', lambda: environment.system() == "pgzero")
+    with_forced_system('c', lambda: environment.system() == "circuit")
+    with_forced_system('m', lambda: environment.system() == "micro")
+
+
 def test_get_controller_driver():
     """
     Checks the default value and an override in the config file.
     """
     assert environment.get_controller_driver() == "pmpge.drivers.controller.pgzero"
+
+    with_forced_system(
+        'd', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.pgzero")
+
+    with_forced_system(
+        'c', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.pgzero",
+        expect_error=True)
+
+    with_forced_system(
+        'm', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.pgzero",
+        expect_error=True)
 
     with_config_file(
         'CONTROLLER_DRIVER = "my.controller.driver"\n',
@@ -97,6 +158,15 @@ def test_get_device_driver():
     """
     assert environment.get_device_driver() == "pmpge.drivers.device.none"
 
+    with_forced_system(
+        'd', lambda: environment.get_device_driver() == "pmpge.drivers.device.none")
+
+    with_forced_system(
+        'c', lambda: environment.get_device_driver() == "pmpge.drivers.device.none")
+
+    with_forced_system(
+        'm', lambda: environment.get_device_driver() == "pmpge.drivers.device.none")
+
     with_config_file(
         'DEVICE_DRIVER = "my.device.driver"\n',
         lambda: environment.get_device_driver() == "my.device.driver")
@@ -108,6 +178,15 @@ def test_get_graphics_driver():
     """
     assert environment.get_graphics_driver() == "pmpge.drivers.graphics.pgzero"
 
+    with_forced_system(
+        'd', lambda: environment.get_graphics_driver() == "pmpge.drivers.graphics.pgzero")
+
+    with_forced_system(
+        'c', lambda: environment.get_graphics_driver() == "pmpge.drivers.graphics.displayio")
+
+    with_forced_system(
+        'm', lambda: environment.get_graphics_driver() == "pmpge.drivers.graphics.picographics")
+
     with_config_file(
         'GRAPHICS_DRIVER = "my.graphics.driver"\n',
         lambda: environment.get_graphics_driver() == "my.graphics.driver")
@@ -118,6 +197,17 @@ def test_get_sound_driver():
     Checks the default value and an override in the config file.
     """
     assert environment.get_sound_driver() == "pmpge.drivers.sound.pgzero"
+
+    with_forced_system(
+        'd', lambda: environment.get_sound_driver() == "pmpge.drivers.sound.pgzero")
+
+    with_forced_system(
+        'c', lambda: environment.get_sound_driver() == "pmpge.drivers.controller.pgzero",
+        expect_error=True)
+
+    with_forced_system(
+        'm', lambda: environment.get_sound_driver() == "pmpge.drivers.controller.pgzero",
+        expect_error=True)
 
     with_config_file(
         'SOUND_DRIVER = "my.sound.driver"\n',
@@ -153,13 +243,10 @@ def test_import_driver():
         environment.import_driver("unknown")
 
 
-def test_execute_and_terminate_on_desktop():
+def test_basic_execute_and_terminate_on_desktop():
     """
     Validates that terminate() can be called when pygame is running it actually terminates.
-    This also tests that the execute() function works too (well as best we can). The
-    underlying code that is executed is the relevant execute_on_desktop() and
-    termiante_on_desktop() code. This also validates that update() and draw() are called
-    on the Game instance.
+    This also tests that the execute() function works too (well as best we can).
     """
     update_counter = 0
 
@@ -183,6 +270,80 @@ def test_execute_and_terminate_on_desktop():
 
     assert update_counter == 10
     assert draw_counter == 10
+
+    # This will be the pgzero driver so we take a peek at the internals.
+    graphics = environment.import_driver('graphics')
+    assert graphics.width == 320
+    assert graphics.height == 200
+    assert graphics.screen_width == 640
+    assert graphics.screen_height == 480
+
+
+def test_execute_calls_drivers_correctly():
+    """
+    In this test, we inject our own drivers and validate the interface functions are called
+    in the desired order.
+    """
+
+    def run_test():
+        update_counter = 2
+
+        def update(dt: float):
+            nonlocal update_counter
+            update_counter -= 1
+            if update_counter <= 0:
+                environment.terminate()
+
+        game = Game(123, 456, (7, 8, 9))
+        game.add_update_func(update)
+
+        game.run()
+
+        # Now we inspect our dummy drivers
+        device = environment.import_driver('device')
+        sound = environment.import_driver('sound')
+        graphics = environment.import_driver('graphics')
+        controller = environment.import_driver('controller')
+
+        assert graphics.width == 123
+        assert graphics.height == 456
+        assert graphics.screen_width == 640
+        assert graphics.screen_height == 480
+        assert graphics.screen_clear == graphics.screen_draw
+        assert graphics.background_colour == (7, 8, 9)
+
+        # Validate the order the drivers were loaded.
+        assert device.loaded < controller.loaded < sound.loaded < graphics.loaded
+
+        # Validate internal call order.
+        assert device.call_order == [
+            'init', 'update', 'update', 'deinit'
+        ]
+        assert sound.call_order == [
+            'init', 'update', 'update', 'deinit'
+        ]
+        assert graphics.call_order == [
+            'init', 'update', 'clear', 'draw', 'update', 'clear', 'draw', 'deinit'
+        ]
+        assert controller.call_order == [
+            'init', 'update', 'update', 'deinit'
+        ]
+
+        # Validate the order the methods in the drivers were called relative to each other.
+        assert device.init_called < controller.init_called < sound.init_called < graphics.init_called
+        assert device.update_called < controller.update_called < sound.update_called < graphics.update_called
+        assert graphics.deinit_called < sound.deinit_called < controller.deinit_called < device.deinit_called
+
+        return True
+
+    with_config_file(
+        """
+DEVICE_DRIVER = 'tests.drivers.dummy_device_driver'
+CONTROLLER_DRIVER = 'tests.drivers.dummy_controller_driver'
+GRAPHICS_DRIVER = 'tests.drivers.dummy_graphics_driver'
+SOUND_DRIVER = 'tests.drivers.dummy_sound_driver'
+""",
+        run_test)
 
 
 def test_config_is_loaded() -> None:

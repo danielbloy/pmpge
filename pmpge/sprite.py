@@ -11,10 +11,10 @@ class Sprite(GameObject, Position):
     will be the 8th pixel from the left and 8th pixel from the top.
 
     If the size of the Sprite's image is an even number of pixels in either direction,
-    the centre is offset one pixel to the left and one to the right. For example, if
+    the centre is offset one pixel to the right and one pixel down. For example, if
     a sprite has an image of 16 pixels by 16 pixels, the position of the Sprite
-    will be the 8th pixel from the left and 8th pixel from the top. This leaves 8 pixels
-    to the right and 8 pixels below the centre of the Sprite.
+    will be the 9th pixel from the left and 9th pixel from the top. This leaves 7 pixels
+    to the right and 7 pixels below the centre of the Sprite.
     """
 
     def __init__(self, x: float, y: float, *traits, **kwargs):

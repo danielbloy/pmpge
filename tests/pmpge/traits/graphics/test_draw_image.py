@@ -19,10 +19,6 @@ def setup_pgzero():
     dir_path = os.path.dirname(os.path.realpath(__file__))
     loaders.set_root(dir_path)
 
-    # name, _ = os.path.splitext(os.path.basename(__file__))
-    # mod.__file__ = __file__
-    # mod.__name__ = name
-    # sys.modules[name] = mod
     mod = ModuleType("test")
     PGZeroGame(mod).reinit_screen()
 
@@ -32,18 +28,25 @@ def test_constructor():
     Simple test to ensure that DrawImage works.
     """
     setup_pgzero()
-    trait = DrawImage("player.png")
+    trait = DrawImage("7x3.png")
 
-    # assert trait.x == 0
-    # assert trait.y == 0
+    assert trait._surface is not None
+    assert trait._offset_x == 3
+    assert trait._offset_y == 1
+    assert trait.image == "7x3.png"
+    assert trait._image == "7x3.png"
 
 
+# noinspection PyUnresolvedReferences
 def test_using_with_game_object():
     """
     Validates it can be used as a GameObject trait.
     """
     setup_pgzero()
     game: Game = Game(320, 240)
-    go = GameObject(DrawImage("player.png"))
-    # assert go.x == 1
-    # assert go.y == 2
+    go = GameObject(DrawImage("8x8.png"))
+    assert go._surface is not None
+    assert go._offset_x == 4
+    assert go._offset_y == 4
+    assert go.image == "8x8.png"
+    assert go._image == "8x8.png"

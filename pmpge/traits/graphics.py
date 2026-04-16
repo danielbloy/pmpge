@@ -41,8 +41,8 @@ class DrawImage:
             # TODO: need to delegate to the hal resource.
             self._surface = images.load(self.image)
 
-            self._offset_x = self._surface.get_width() / 2
-            self._offset_y = self._surface.get_height() / 2
+            self._offset_x = self._surface.get_width() // 2
+            self._offset_y = self._surface.get_height() // 2
 
     def draw(self, surface: Any):
         surface.blit(self._surface, (self.x - self._offset_x, self.y - self._offset_y))

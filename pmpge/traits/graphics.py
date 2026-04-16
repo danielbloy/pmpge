@@ -10,6 +10,14 @@ from pmpge.palette import WHITE
 # TODO: Add size, width, height, topleft, topright etc. properties
 # TODO: Add bounding box property
 
+class BoundingBox:
+    width: int
+    height: int
+    top: int
+    bottom: int
+    left: int
+    right: int
+
 
 class DrawImage:
     """

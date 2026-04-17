@@ -38,3 +38,47 @@ class Sprite(GameObject, Position):
     def pos(self, pos: tuple[int, int]) -> None:
         self.x = pos[0]
         self.y = pos[1]
+
+# TODO: Add tests for bounding box.
+class Bounds:
+    """
+    Represents a bounding box for a Sprite, covering all pixels of the Sprite's image.
+    """
+    x: float
+    y: float
+    width: int
+    height: int
+
+    @property
+    def left(self) -> float:
+        return self.x - (self.width // 2)
+
+    @property
+    def right(self) -> float:
+        return self.left + self.width - 1
+
+    @property
+    def top(self) -> float:
+        return self.y - (self.height // 2)
+
+    @property
+    def bottom(self) -> float:
+        return self.top + self.height - 1
+
+    @property
+    def top_left(self) -> tuple[float, float]:
+        return self.left, self.top
+
+    @property
+    def top_right(self) -> tuple[float, float]:
+        return self.right, self.top
+
+    @property
+    def bottom_left(self) -> tuple[float, float]:
+        return self.left, self.bottom
+
+    @property
+    def bottom_right(self) -> tuple[float, float]:
+        return self.right, self.bottom
+
+    # TODO: Add bounding box.

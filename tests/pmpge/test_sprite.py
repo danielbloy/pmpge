@@ -106,3 +106,5 @@ def test_sprite_works_with_handlers():
     assert sprite.x == 10
     assert sprite.y == 20
     handlers.validate(deactivate=sprite, deactivate_count=1)
+
+# TODO: Add tests for bounds

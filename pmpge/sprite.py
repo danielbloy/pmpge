@@ -39,7 +39,6 @@ class Sprite(GameObject, Position):
         self.x = pos[0]
         self.y = pos[1]
 
-# TODO: Add tests for bounding box.
 class Bounds:
     """
     Represents a bounding box for a Sprite, covering all pixels of the Sprite's image.
@@ -80,5 +79,3 @@ class Bounds:
     @property
     def bottom_right(self) -> tuple[float, float]:
         return self.right, self.bottom
-
-    # TODO: Add bounding box.

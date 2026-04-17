@@ -3,7 +3,7 @@ from typing import Any, Callable
 from pmpge.game_object import GameObject
 from pmpge.graphics import ImageResource
 from pmpge.palette import WHITE
-from sprite import Bounds
+from pmpge.sprite import Bounds
 
 
 class DrawImage:

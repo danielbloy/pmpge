@@ -246,6 +246,7 @@ player = Sprite(
     game.width / 2, PLAYER_SHIP_START_HEIGHT,
     DrawImage('player'))
 
+# TODO: Should controller be accessed via get_controller()?
 controller = Controller()
 player.apply_trait(MoveWithController(200, 0, controller))
 player.apply_trait(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, game.height))

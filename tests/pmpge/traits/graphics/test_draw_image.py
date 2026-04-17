@@ -6,6 +6,7 @@ from pgzero.game import PGZeroGame
 
 from pmpge.game import Game
 from pmpge.game_object import GameObject
+from pmpge.sprite import Sprite
 from pmpge.traits.graphics import DrawImage
 
 
@@ -25,16 +26,36 @@ def setup_pgzero():
 
 def test_constructor():
     """
-    Simple test to ensure that DrawImage works.
+    Simple test to ensure that DrawImage works. This pays particular attention to the
+    bounding box as we need to adhere to the placement rules.
     """
     setup_pgzero()
     trait = DrawImage("7x3.png")
+    assert trait.image.surface is not None
+    assert trait.image.width == 7
+    assert trait.image.height == 3
+    assert trait.bounds.width == 7
+    assert trait.bounds.height == 3
+    assert trait.bounds.top_left == (-3, -1)
+    assert trait.bounds.bottom_right == (3, 1)
 
-    assert trait._surface is not None
-    assert trait._offset_x == 3
-    assert trait._offset_y == 1
-    assert trait.image == "7x3.png"
-    assert trait._image == "7x3.png"
+    trait = DrawImage("7x7.png")
+    assert trait.image.surface is not None
+    assert trait.image.width == 7
+    assert trait.image.height == 7
+    assert trait.bounds.width == 7
+    assert trait.bounds.height == 7
+    assert trait.bounds.top_left == (-3, -3)
+    assert trait.bounds.bottom_right == (3, 3)
+
+    trait = DrawImage("8x8.png")
+    assert trait.image.surface is not None
+    assert trait.image.width == 8
+    assert trait.image.height == 8
+    assert trait.bounds.width == 8
+    assert trait.bounds.height == 8
+    assert trait.bounds.top_left == (-4, -4)
+    assert trait.bounds.bottom_right == (3, 3)
 
 
 # noinspection PyUnresolvedReferences
@@ -45,8 +66,24 @@ def test_using_with_game_object():
     setup_pgzero()
     game: Game = Game(320, 240)
     go = GameObject(DrawImage("8x8.png"))
-    assert go._surface is not None
-    assert go._offset_x == 4
-    assert go._offset_y == 4
-    assert go.image == "8x8.png"
-    assert go._image == "8x8.png"
+    assert go.image.surface is not None
+    assert go.image.width == 8
+    assert go.image.height == 8
+    assert go.bounds.width == 8
+    assert go.bounds.height == 8
+    assert go.bounds.top_left == (-4, -4)
+    assert go.bounds.bottom_right == (3, 3)
+
+    go = Sprite(10, 20, DrawImage("8x8.png"))
+    assert go.x == 10
+    assert go.y == 20
+    assert go.image.surface is not None
+    assert go.image.width == 8
+    assert go.image.height == 8
+    assert go.bounds.width == 8
+    assert go.bounds.height == 8
+    assert go.bounds.top_left == (-4, -4)
+    assert go.bounds.bottom_right == (3, 3)
+    go.update_hierarchy(0)
+    assert go.bounds.top_left == (6, 16)
+    assert go.bounds.bottom_right == (13, 23)

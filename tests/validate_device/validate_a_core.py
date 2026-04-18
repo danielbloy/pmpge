@@ -6,6 +6,7 @@ output as the program executes.
 import tests.validate_device.helper as helper
 
 DEBUG = False
+update_cycles = 0
 
 
 def execute():
@@ -16,6 +17,8 @@ def execute():
     game: Game = Game()
 
     def terminate(dt: float):
+        global update_cycles
+        update_cycles += 1
         helper.track_memory_usage(DEBUG)
 
         if time.monotonic() > finish:
@@ -25,6 +28,7 @@ def execute():
 
     finish = time.monotonic() + 1
     game.run()
+    print(f"Achieved {update_cycles} update cycles")
 
 
 if helper.should_execute(__name__):

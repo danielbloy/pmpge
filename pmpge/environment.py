@@ -180,7 +180,7 @@ def get_sound_driver() -> str:
     if is_running_on_desktop():
         return "pmpge.drivers.sound.pgzero"
 
-    raise NotImplementedError("Cannot determine sound driver")
+    return "pmpge.drivers.sound.none"
 
 
 def get_driver(module: str) -> str:

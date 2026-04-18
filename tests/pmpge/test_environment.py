@@ -200,12 +200,10 @@ def test_get_sound_driver():
         'd', lambda: environment.get_sound_driver() == "pmpge.drivers.sound.pgzero")
 
     with_forced_system(
-        'c', lambda: environment.get_sound_driver() == "pmpge.drivers.controller.pgzero",
-        expect_error=True)
+        'c', lambda: environment.get_sound_driver() == "pmpge.drivers.sound.none")
 
     with_forced_system(
-        'm', lambda: environment.get_sound_driver() == "pmpge.drivers.controller.pgzero",
-        expect_error=True)
+        'm', lambda: environment.get_sound_driver() == "pmpge.drivers.sound.none")
 
     with_config_file(
         'SOUND_DRIVER = "my.sound.driver"\n',

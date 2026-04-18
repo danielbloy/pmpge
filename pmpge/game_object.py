@@ -1,5 +1,9 @@
-from collections.abc import Callable
-from typing import Self, Any
+from pmpge.environment import is_running_on_desktop
+
+# These are not available in CircuitPython.
+if is_running_on_desktop():
+    from collections.abc import Callable
+    from typing import Self, Any
 
 
 class GameObject:

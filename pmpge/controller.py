@@ -68,6 +68,7 @@ Button arrangements for each controller:
 
 import pmpge.environment as environment
 
+# These are not available in CircuitPython.
 if environment.is_running_on_desktop():
     from abc import ABC, abstractmethod
 

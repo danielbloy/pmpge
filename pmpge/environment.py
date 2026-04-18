@@ -4,7 +4,6 @@
 #
 # THIS FILE SHOULD NOT IMPORT ANY OTHER FILE IN THE FRAMEWORK OTHER THAN DRIVERS
 #
-import importlib.util
 import sys
 
 ################################################################################
@@ -133,7 +132,7 @@ def get_controller_driver() -> str:
     if is_running_on_desktop():
         return "pmpge.drivers.controller.pgzero"
 
-    raise SystemError("Cannot determine controller driver")
+    return "pmpge.drivers.controller.none"
 
 
 def get_device_driver() -> str:
@@ -166,7 +165,7 @@ def get_graphics_driver() -> str:
     if is_running_on_circuitpython():
         return "pmpge.drivers.graphics.displayio"
 
-    raise SystemError("Cannot determine graphics driver")
+    raise NotImplementedError("Cannot determine graphics driver")
 
 
 def get_sound_driver() -> str:
@@ -181,7 +180,7 @@ def get_sound_driver() -> str:
     if is_running_on_desktop():
         return "pmpge.drivers.sound.pgzero"
 
-    raise SystemError("Cannot determine sound driver")
+    return "pmpge.drivers.sound.none"
 
 
 def get_driver(module: str) -> str:
@@ -192,25 +191,46 @@ def get_driver(module: str) -> str:
       * graphics
       * sound
     """
-    match module.lower():
-        case "controller":
-            return get_controller_driver()
-        case "device":
-            return get_device_driver()
-        case "graphics":
-            return get_graphics_driver()
-        case "sound":
-            return get_sound_driver()
+    if module.lower() == "controller":
+        return get_controller_driver()
+
+    if module.lower() == "device":
+        return get_device_driver()
+
+    if module.lower() == "graphics":
+        return get_graphics_driver()
+
+    if module.lower() == "sound":
+        return get_sound_driver()
 
     raise ValueError("Unknown module")
 
 
 def import_driver(module: str):
     """
-    Returns the specified driver for the given module.
+    Returns the specified driver for the given module. This is trivial on a
+    full CPython implementation as we can use the official importlib module.
+    However, on a MicroController, this is not available so we have to load
+    it ourselves. See the following articles for more information about what
+    we are attempting to do here:
+    * https://github.com/adafruit/circuitpython/issues/10481 - contains a link
+      to a pure Python importlib.reload() function.
+    * https://github.com/Lumensalis/LumensalisCPLib/blob/main/lib/LumensalisCP/pyCp/importlib.py
+      The importlib.reload() function.
+    * https://stackoverflow.com/questions/9806963/how-to-use-the-import-function-to-import-a-name-from-a-submodule
+      Article on how to use __import__().
     """
     driver = get_driver(module)
-    return importlib.import_module(driver)
+
+    if is_running_on_desktop():
+        import importlib.util
+        return importlib.import_module(driver)
+    else:
+        # TODO: This could benefit from further investigation to see if we can
+        #       do something better.
+        mod = __import__(driver)
+        mod = sys.modules[driver]
+        return mod
 
 
 ################################################################################
@@ -337,8 +357,15 @@ def import_config():
     """
     global config
     try:
-        config = importlib.import_module('config')
-        config = importlib.reload(config)
+        if is_running_on_desktop():
+            import importlib.util
+            config = importlib.import_module('config')
+            config = importlib.reload(config)
+        else:
+            # TODO: This could benefit from further investigation to see if we can
+            #       do something better. See the notes in import_driver().
+            config = __import__('config')
+
         print(f"Config file {config.__file__} loaded.")
 
         # noinspection PyTypeChecker

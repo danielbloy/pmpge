@@ -1,8 +1,10 @@
-from collections.abc import Callable
-from typing import Any
-
-from pmpge.environment import screen_size, execute, terminate
+from pmpge.environment import is_running_on_desktop, screen_size, execute, terminate
 from pmpge.game_object import GameObject
+
+# These are not available in CircuitPython.
+if is_running_on_desktop():
+    from collections.abc import Callable
+    from typing import Any
 
 
 class Game:

@@ -41,7 +41,7 @@ def with_forced_system(dist: str, test: Callable, expect_error: bool = False):
         environment.is_running_on_circuitpython = lambda: is_circuit
         environment.is_running_on_micropython = lambda: is_micro
         if expect_error:
-            with pytest.raises(SystemError):
+            with pytest.raises(NotImplementedError):
                 test()
         else:
             assert test()
@@ -140,12 +140,10 @@ def test_get_controller_driver():
         'd', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.pgzero")
 
     with_forced_system(
-        'c', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.pgzero",
-        expect_error=True)
+        'c', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.none")
 
     with_forced_system(
-        'm', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.pgzero",
-        expect_error=True)
+        'm', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.none")
 
     with_config_file(
         'CONTROLLER_DRIVER = "my.controller.driver"\n',
@@ -202,12 +200,10 @@ def test_get_sound_driver():
         'd', lambda: environment.get_sound_driver() == "pmpge.drivers.sound.pgzero")
 
     with_forced_system(
-        'c', lambda: environment.get_sound_driver() == "pmpge.drivers.controller.pgzero",
-        expect_error=True)
+        'c', lambda: environment.get_sound_driver() == "pmpge.drivers.sound.none")
 
     with_forced_system(
-        'm', lambda: environment.get_sound_driver() == "pmpge.drivers.controller.pgzero",
-        expect_error=True)
+        'm', lambda: environment.get_sound_driver() == "pmpge.drivers.sound.none")
 
     with_config_file(
         'SOUND_DRIVER = "my.sound.driver"\n',

@@ -1,17 +1,18 @@
+import tests.validate_device.helper as helper
 import tests.validate_device.validate_a_core as a
-from tests.validate_device.memory import report_memory_usage, report_memory_usage_and_free
+import tests.validate_device.validate_b_memory as b
 
-modules = [a]
+modules = [a, b]
 
 
 def execute():
-    report_memory_usage()
+    helper.report_memory_usage()
     for module in modules:
         print("Executing module {}".format(module))
         module.execute()
-        report_memory_usage_and_free()
+        helper.report_memory_usage_and_free()
         del module
 
 
-if __name__ == '__main__':
+if helper.should_execute(__name__):
     execute()

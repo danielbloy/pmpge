@@ -5,6 +5,16 @@ import pmpge.environment as environment
 peak = 0
 
 
+def should_execute(name: str):
+    if name == '__main__':
+        return True
+
+    if environment.is_running_on_desktop():
+        return name == "pgzero.builtins"
+
+    return False
+
+
 def track_memory_usage(report: bool = False):
     global peak
     if environment.is_running_on_desktop():

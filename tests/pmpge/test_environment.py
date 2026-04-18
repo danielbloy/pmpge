@@ -41,7 +41,7 @@ def with_forced_system(dist: str, test: Callable, expect_error: bool = False):
         environment.is_running_on_circuitpython = lambda: is_circuit
         environment.is_running_on_micropython = lambda: is_micro
         if expect_error:
-            with pytest.raises(SystemError):
+            with pytest.raises(NotImplementedError):
                 test()
         else:
             assert test()

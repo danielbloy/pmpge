@@ -132,7 +132,7 @@ def get_controller_driver() -> str:
     if is_running_on_desktop():
         return "pmpge.drivers.controller.pgzero"
 
-    raise NotImplementedError("Cannot determine controller driver")
+    return "pmpge.drivers.controller.none"
 
 
 def get_device_driver() -> str:
@@ -228,7 +228,9 @@ def import_driver(module: str):
     else:
         # TODO: This could benefit from further investigation to see if we can
         #       do something better.
-        return __import__(driver)
+        mod = __import__(driver)
+        mod = sys.modules[driver]
+        return mod
 
 
 ################################################################################

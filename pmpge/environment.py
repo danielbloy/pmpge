@@ -226,6 +226,7 @@ def import_driver(module: str):
         import importlib.util
         return importlib.import_module(driver)
     else:
+        # TODO: We may need a MicroPython specific version of this code.
         # TODO: This could benefit from further investigation to see if we can
         #       do something better.
         mod = __import__(driver)

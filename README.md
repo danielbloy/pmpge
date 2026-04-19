@@ -83,7 +83,8 @@ Python with small modifications to support CircuitPython and MicroPython. Where
 this gets a little more tricky is with graphics, sound and controller support. To
 support these, the framework has been designed to be able to be extended with new
 drivers. Some default drivers are provided to cover a broad range of hardware but
-it is possible to write your own drivers.
+it is possible to write your own drivers. For more information on the devices
+supported, look at the documentation in the `devices` directory.
 
 So what drivers do you need? You will need drivers to support graphics, sound and
 controller input. There is also the option for a device driver too. Using a
@@ -114,81 +115,6 @@ Additionally, a graphics driver must implement the following mandatory methods:
 * `draw(surface)` - called once per frame and passed a surface object that is
   implementation-dependent. Called after the game is drawn to the screen to
   allow for any final operations such as scaling or flipping.
-
-## Supporting CircuitPython and MicroPython
-
-This is currently in the early feasibility stages and work is off the main branch so
-no implementation details are available as these are changing too quickly. The aim
-though is users of this framework will not need to make much in the way of changes
-to simply run their games on one of the reference hardware devices. Naturally, RAM
-and CPU resources are much more limited on these tiny devices but the main limitation
-to be aware of is display resolution. Typically on these devices the screens will
-have a resolution of either:
-
-* 160 x 128 pixels
-* 240 x 240 pixels
-* 320 x 240 pixels
-* 640 x 480 pixels
-
-The framework will autoscale where possible so ideally, pick a game resolution of
-either 160 x 120 or 320 x 240 and it should work on the reference target devices with
-little or no modifications. Yes, with a 160 x 128 pixel display you lose 8 pixels but
-that is the cost of maximum portability.
-
-_**NOTE:** Please be aware that the initial releases of PMPGE will be validated for
-functionality and ease of use rather than optimisation for performance on small devices.
-Optimisation will come later._
-
-### CircuitPython
-
-On CircuitPython, where devices support the `Stage` and `ugame` libraries, they will
-be used. Otherwise, the supported display driver is to use `displayio`.
-
-* [CircuitPython Display Support Using displayio](
-  https://learn.adafruit.com/circuitpython-display-support-using-displayio/introduction)
-* [displayio – High level, display object compositing system](
-  https://docs.circuitpython.org/en/latest/shared-bindings/displayio/)
-
-### MicroPython
-
-On MicroPython, the supported display driver is to use pico-graphics:
-
-* [Pico Graphics](
-  https://github.com/pimoroni/pimoroni-pico/blob/main/micropython/modules/picographics/README.md)
-
-### Raspberry Pi with additional SPI screen/controller
-
-For an interesting diversion, another aim is to be able to support a Raspberry Pi using
-an additional SPI connected display. There are many HATs out there with screen and buttons
-such as this one:
-
-* [Raspberry Pi HAT](
-  https://www.amazon.co.uk/dp/B0DQXYJY4X?ref=cm_sw_r_cso_em_mwn_dp_BK5HK79X16XEKVJW77Z4&social_share=cm_sw_r_cso_em_mwn_dp_BK5HK79X16XEKVJW77Z4)
-
-### Reference hardware
-
-The following are commercial hardware devices that will be used to test the framework:
-
-* Pimoroni [PicoSystem](https://shop.pimoroni.com/products/picosystem?variant=32369546985555)
-  forCircuiPython and MicroPython
-* Adafruit [PyBadge](https://www.adafruit.com/product/4200) for CircuitPython only
-
-Additionally, I will make two reference systems using COTS parts using:
-
-Design 1:
-
-* Raspberry Pi Pico 2
-* Generic ST7735R 160 x 128 pixel display
-* 8 x Standard push buttons
-
-Design 2:
-
-* Pimoroni [Pico Plus 2](
-  https://shop.pimoroni.com/products/pimoroni-pico-plus-2?variant=42092668289107)
-* Pimoroni [Pico Display 2.8"](
-  https://shop.pimoroni.com/products/pico-display-pack-2-8?variant=42047194005587)
-
-* 8 x Standard push buttons
 
 ## License
 

@@ -13,10 +13,14 @@ from pmpge.game import Game
 if is_running_on_desktop():
     from collections.abc import Callable
 
+RUNTIME = 1
 SAMPLE_FREQUENCY = 10
 REPORT_FREQUENCY = 1
 PROFILE = False
 PROFILE_TOP = 10
+
+if hasattr(config, 'RUNTIME'):
+    RUNTIME = config.RUNTIME
 
 if hasattr(config, 'SAMPLE_FREQUENCY'):
     SAMPLE_FREQUENCY = config.SAMPLE_FREQUENCY
@@ -46,10 +50,9 @@ def should_execute(name: str):
 
 def execute(
         setup_func: Callable[[Game], None],
-        runtime: int = 1,
+        runtime: int = RUNTIME,
         sample_frequency: int = SAMPLE_FREQUENCY,
-        report_frequency: int = REPORT_FREQUENCY,
-        profiling: bool = PROFILE):
+        report_frequency: int = REPORT_FREQUENCY):
     """
     Instruments and executes the Game, reporting all details out afterwards.
     A single Game instance is created with update() and draw() functions

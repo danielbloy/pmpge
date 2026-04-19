@@ -32,5 +32,6 @@ def execute():
 
 
 if helper.should_execute(__name__):
+    helper.start_validation()
     execute()
-    helper.report_memory_usage()
+    helper.end_validation()

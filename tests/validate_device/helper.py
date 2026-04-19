@@ -17,6 +17,27 @@ def should_execute(name: str):
     return False
 
 
+# TODO: Improve the documentation on these tests.
+
+def start_validation():
+    # See: https://docs.python.org/3/library/tracemalloc.html
+    if environment.is_running_on_desktop():
+        import tracemalloc
+        tracemalloc.start()
+
+
+def end_validation():
+    if environment.is_running_on_desktop():
+        import tracemalloc
+        snapshot = tracemalloc.take_snapshot()
+        top_stats = snapshot.statistics('lineno')
+        print("[ Top 20 ]")
+        for stat in top_stats[:20]:
+            print(stat)
+
+    report_memory_usage_and_free()
+
+
 def track_memory_usage(report: bool = False):
     global peak
     if environment.is_running_on_desktop():

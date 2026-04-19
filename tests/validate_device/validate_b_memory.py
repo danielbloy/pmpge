@@ -3,7 +3,7 @@ Creates a large number of GameObjects to see memory usage.
 """
 import tests.validate_device.helper as helper
 
-DEBUG = False
+runtime = 1
 update_cycles = 0
 
 
@@ -20,16 +20,16 @@ def execute():
     def terminate(dt: float):
         global update_cycles
         update_cycles += 1
-        helper.track_memory_usage(DEBUG)
+        helper.report_memory_usage_periodically()
 
         if time.monotonic() > finish:
             game.terminate()
 
     game.add_update_func(terminate)
 
-    finish = time.monotonic() + 1
+    finish = time.monotonic() + runtime
     game.run()
-    print(f"Achieved {update_cycles} update cycles")
+    print(f"Achieved {update_cycles / runtime:.2f} update cycles per second")
 
 
 if helper.should_execute(__name__):

@@ -1,8 +1,10 @@
 import gc
+import time
 
 import pmpge.environment as environment
 
 peak = 0
+last_report = 0
 
 
 def should_execute(name: str):
@@ -33,6 +35,18 @@ def track_memory_usage(report: bool = False):
             peak = alloc
         if report:
             print(f"Peak: {peak} bytes, Used: {alloc} bytes, Free: {gc.mem_free()} bytes")
+
+
+def report_memory_usage_periodically(period: int = 1_000_000_100):
+    """
+    Reports memory usage at the required period (in nanoseconds)
+    """
+    global last_report
+    now = time.monotonic_ns()
+    report = (now - last_report) >= period
+    track_memory_usage(report)
+    if report:
+        last_report = now
 
 
 def report_memory_usage():

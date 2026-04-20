@@ -1,5 +1,5 @@
 """
-Creates a large number of root GameObjects to see memory usage and
+Creates a hierarchy GameObjects with various Traits to see memory usage and
 performance impact.
 """
 import tests.validate_device.utils as utils

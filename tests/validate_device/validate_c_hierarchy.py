@@ -1,5 +1,5 @@
 """
-Creates hierarchy GameObjects to see memory usage and
+Creates hierarchy of GameObjects to see memory usage and
 performance impact.
 """
 import tests.validate_device.utils as utils

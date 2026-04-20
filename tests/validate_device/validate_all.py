@@ -10,9 +10,12 @@ modules = [a, b, c, ch, d]
 
 def execute():
     for module in modules:
-        print("Executing module {}".format(module))
-        utils.execute(module.setup)
-        del module
+        try:
+            print("Executing module {}".format(module))
+            utils.execute(module.setup)
+            del module
+        except MemoryError:
+            pass
 
 
 if utils.should_execute(__name__):

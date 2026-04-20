@@ -1,0 +1,61 @@
+>>> %Run -c $EDITOR_CONTENT
+Config file config.py loaded.
+SCREEN_WIDTH = 1
+SCREEN_HEIGHT = 1
+RUNTIME = 2
+SAMPLE_FREQUENCY = 50
+REPORT_FREQUENCY = 4
+PROFILE = True
+PROFILE_TOP = 10
+
+No device driver.
+Running on circuit with (1, 1) screen and 0 button controller.
+Executing module <module 'tests.validate_device.validate_a_game' from 'tests/validate_device/validate_a_game.py'>
+Peak: 24144 bytes, Used: 24144 bytes, Free: 141744 bytes, Total: 165888 bytes
+Peak: 63344 bytes, Used: 51376 bytes, Free: 114512 bytes, Total: 165888 bytes
+Peak: 63344 bytes, Used: 38208 bytes, Free: 127680 bytes, Total: 165888 bytes
+Peak: 63344 bytes, Used: 30352 bytes, Free: 135536 bytes, Total: 165888 bytes
+Peak: 63344 bytes, Used: 58560 bytes, Free: 107328 bytes, Total: 165888 bytes
+Peak: 63344 bytes, Used: 47440 bytes, Free: 118448 bytes, Total: 165888 bytes
+Peak: 63344 bytes, Used: 36400 bytes, Free: 129488 bytes, Total: 165888 bytes
+Peak: 63344 bytes, Used: 27840 bytes, Free: 138048 bytes, Total: 165888 bytes
+Peak: 63344 bytes, Used: 54832 bytes, Free: 111056 bytes, Total: 165888 bytes
+Achieved 1424.00 updates/s
+Achieved 1424.00 draws/s
+Peak: 63344 bytes, Used: 23824 bytes, Free: 142064 bytes, Total: 165888 bytes
+Executing module <module 'tests.validate_device.validate_b_game_object' from 'tests/validate_device/validate_b_game_object.py'>
+Peak: 57936 bytes, Used: 57936 bytes, Free: 107952 bytes, Total: 165888 bytes
+Peak: 126880 bytes, Used: 65184 bytes, Free: 98656 bytes, Total: 163840 bytes
+Peak: 126880 bytes, Used: 75728 bytes, Free: 88112 bytes, Total: 163840 bytes
+Peak: 126880 bytes, Used: 86288 bytes, Free: 77552 bytes, Total: 163840 bytes
+Peak: 126880 bytes, Used: 106336 bytes, Free: 57504 bytes, Total: 163840 bytes
+Peak: 126880 bytes, Used: 116896 bytes, Free: 46944 bytes, Total: 163840 bytes
+Peak: 126880 bytes, Used: 55424 bytes, Free: 108416 bytes, Total: 163840 bytes
+Peak: 126880 bytes, Used: 75472 bytes, Free: 88368 bytes, Total: 163840 bytes
+Peak: 126880 bytes, Used: 86016 bytes, Free: 77824 bytes, Total: 163840 bytes
+Achieved 32.50 updates/s
+Achieved 32.50 draws/s
+Peak: 126880 bytes, Used: 54688 bytes, Free: 109152 bytes, Total: 163840 bytes
+Executing module <module 'tests.validate_device.validate_c_hierarchy' from 'tests/validate_device/validate_c_hierarchy.py'>
+Peak: 99040 bytes, Used: 99040 bytes, Free: 64800 bytes, Total: 163840 bytes
+Peak: 118944 bytes, Used: 115424 bytes, Free: 48416 bytes, Total: 163840 bytes
+Peak: 125488 bytes, Used: 59328 bytes, Free: 104512 bytes, Total: 163840 bytes
+Peak: 125488 bytes, Used: 75760 bytes, Free: 88080 bytes, Total: 163840 bytes
+Peak: 125488 bytes, Used: 92112 bytes, Free: 71728 bytes, Total: 163840 bytes
+Peak: 125488 bytes, Used: 108512 bytes, Free: 55328 bytes, Total: 163840 bytes
+Peak: 125488 bytes, Used: 124880 bytes, Free: 38960 bytes, Total: 163840 bytes
+Peak: 125488 bytes, Used: 58976 bytes, Free: 104864 bytes, Total: 163840 bytes
+Achieved 33.50 updates/s
+Achieved 33.50 draws/s
+Peak: 125488 bytes, Used: 54272 bytes, Free: 109568 bytes, Total: 163840 bytes
+Executing module <module 'tests.validate_device.validate_c_huge_hierarchy' from 'tests/validate_device/validate_c_huge_hierarchy.py'>
+Executing module <module 'tests.validate_device.validate_d_traits' from 'tests/validate_device/validate_d_traits.py'>
+Traceback (most recent call last):
+  File "<stdin>", line 22, in <module>
+  File "<stdin>", line 15, in execute
+  File "tests/validate_device/utils.py", line 108, in execute
+  File "tests/validate_device/validate_d_traits.py", line 19, in setup
+  File "pmpge/game_object.py", line 147, in __init__
+  File "pmpge/game_object.py", line 491, in apply_trait
+TypeError:
+>>>

@@ -5,35 +5,32 @@ investigated and what has already been done.
 
 ## Reference test hardware
 
-All performance testing has been done on a Adafruit EdgeBadge running CircuitPython 10.1.4.
+All performance testing has been done on the following devices:
+
+* Desktop PC
+* Adafruit EdgeBadge running CircuitPython 10.1.4.
+* Raspberry Pi Pico running CircuitPython 10.1.4.
+* Raspberry Pi Pico 2 running CircuitPython 10.1.4.
+* Waveshare S3 Zero running CircuitPython 10.1.4.
+
+Using the following `config.py`
+
+```
+SCREEN_WIDTH = 1
+SCREEN_HEIGHT = 1
+RUNTIME = 2
+SAMPLE_FREQUENCY = 50
+REPORT_FREQUENCY = 4
+PROFILE = True
+PROFILE_TOP = 10
+```
 
 The tests executed is the code found in `tests/validate_device`
 
 ## Optimisation results
 
-* a = `validate_a_core.py`
-* b = `validate_b_memory.py`
-
-Initial:
-
-* a = 405.80 updates per second
-* b = 17.80 updates per second
-
-```
-Running on circuit with (60, 20) screen and 0 button controller.
-Peak: 17584 bytes, Used: 17584 bytes, Free: 127824 bytes
-Peak: 63360 bytes, Used: 37872 bytes, Free: 107536 bytes
-Peak: 63488 bytes, Used: 56512 bytes, Free: 88896 bytes
-Peak: 63488 bytes, Used: 30176 bytes, Free: 115232 bytes
-Peak: 63488 bytes, Used: 49472 bytes, Free: 95936 bytes
-Peak: 63488 bytes, Used: 22176 bytes, Free: 123232 bytes
-Peak: 63488 bytes, Used: 42112 bytes, Free: 103296 bytes
-Peak: 63488 bytes, Used: 60656 bytes, Free: 84752 bytes
-Peak: 63488 bytes, Used: 34592 bytes, Free: 110816 bytes
-Peak: 63488 bytes, Used: 53616 bytes, Free: 91792 bytes
-Achieved 405.80 update cycles per second
-Peak: 63488 bytes, Used: 24704 bytes, Free: 120704 bytes
-```
+See the directory `results` for the latest results. Check the history of the files to
+see how the optimisation process has progressed.
 
 ### Checking RAM allocations
 
@@ -47,6 +44,10 @@ Vanilla results:
 * Replace all `float` based maths with `int` by changing units from pixels per second to thousandth pixels per second
 
 ### References
+
+Use the following tool to program the Waveshare ESP-S3 Zero:
+
+* https://learn.adafruit.com/circuitpython-with-esp32-quick-start/web-serial-esptool
 
 The following references have been used:
 

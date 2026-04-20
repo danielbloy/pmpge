@@ -1,18 +1,22 @@
-import tests.validate_device.helper as helper
-import tests.validate_device.validate_a_core as a
-import tests.validate_device.validate_b_memory as b
+import tests.validate_device.utils as utils
+import tests.validate_device.validate_a_game as a
+import tests.validate_device.validate_b_game_object as b
+import tests.validate_device.validate_c_hierarchy as c
+import tests.validate_device.validate_c_huge_hierarchy as ch
+import tests.validate_device.validate_d_traits as d
 
-modules = [a, b]
+modules = [a, b, c, ch, d]
 
 
 def execute():
-    helper.report_memory_usage()
     for module in modules:
-        print("Executing module {}".format(module))
-        module.execute()
-        helper.report_memory_usage_and_free()
-        del module
+        try:
+            print("Executing module {}".format(module))
+            utils.execute(module.setup)
+            del module
+        except MemoryError:
+            pass
 
 
-if helper.should_execute(__name__):
+if utils.should_execute(__name__):
     execute()

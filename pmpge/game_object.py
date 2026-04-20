@@ -373,19 +373,12 @@ class GameObject:
         Updates the GameObject (if `active` and `enabled`) and propagates to children (if `active`).
         Also removes any destroyed children.
         """
-
         # Remove any destroyed children.
-        destroyed_children = [
-            child for child in self.__children
-            if not child.__alive
-        ]
-        for child in destroyed_children:
-            child.__parent = None
-
-        self.__children = [
-            child for child in self.__children
-            if child.__alive
-        ]
+        children = self.__children
+        for child in children:
+            if not child.__alive:
+                child.__parent = None
+                children.remove(child)
 
         if not self.active:
             return self

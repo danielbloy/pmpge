@@ -11,44 +11,44 @@ PROFILE_TOP = 10
 No device driver.
 Running on circuit with (1, 1) screen and 0 button controller.
 Executing module <module 'tests.validate_device.validate_a_game' from 'tests/validate_device/validate_a_game.py'>
-Peak: 23968 bytes, Used: 23968 bytes, Free: 407648 bytes, Total: 431616 bytes
-Peak: 61856 bytes, Used: 38144 bytes, Free: 393472 bytes, Total: 431616 bytes
-Peak: 61856 bytes, Used: 51968 bytes, Free: 379648 bytes, Total: 431616 bytes
-Peak: 62560 bytes, Used: 37072 bytes, Free: 394544 bytes, Total: 431616 bytes
-Peak: 62560 bytes, Used: 51744 bytes, Free: 379872 bytes, Total: 431616 bytes
-Peak: 62560 bytes, Used: 37072 bytes, Free: 394544 bytes, Total: 431616 bytes
-Peak: 62560 bytes, Used: 51936 bytes, Free: 379680 bytes, Total: 431616 bytes
-Peak: 62720 bytes, Used: 25360 bytes, Free: 406256 bytes, Total: 431616 bytes
-Peak: 62720 bytes, Used: 51936 bytes, Free: 379680 bytes, Total: 431616 bytes
-Achieved 2869.00 updates/s
-Achieved 2869.00 draws/s
-Peak: 62720 bytes, Used: 23648 bytes, Free: 407968 bytes, Total: 431616 bytes
+Peak: 24048 bytes, Used: 24048 bytes, Free: 407568 bytes, Total: 431616 bytes
+Peak: 61232 bytes, Used: 58960 bytes, Free: 372656 bytes, Total: 431616 bytes
+Peak: 62704 bytes, Used: 54512 bytes, Free: 377104 bytes, Total: 431616 bytes
+Peak: 62704 bytes, Used: 56176 bytes, Free: 375440 bytes, Total: 431616 bytes
+Peak: 62704 bytes, Used: 51728 bytes, Free: 379888 bytes, Total: 431616 bytes
+Peak: 62704 bytes, Used: 53392 bytes, Free: 378224 bytes, Total: 431616 bytes
+Peak: 62704 bytes, Used: 49520 bytes, Free: 382096 bytes, Total: 431616 bytes
+Peak: 62704 bytes, Used: 45232 bytes, Free: 386384 bytes, Total: 431616 bytes
+Peak: 62704 bytes, Used: 47312 bytes, Free: 384304 bytes, Total: 431616 bytes
+Achieved 3211.00 updates/s
+Achieved 3211.00 draws/s
+Peak: 62704 bytes, Used: 23824 bytes, Free: 407792 bytes, Total: 431616 bytes
 Executing module <module 'tests.validate_device.validate_b_game_object' from 'tests/validate_device/validate_b_game_object.py'>
-Peak: 58064 bytes, Used: 58064 bytes, Free: 373552 bytes, Total: 431616 bytes
-Peak: 117296 bytes, Used: 97552 bytes, Free: 331504 bytes, Total: 429056 bytes
-Peak: 119184 bytes, Used: 76224 bytes, Free: 352832 bytes, Total: 429056 bytes
-Peak: 119184 bytes, Used: 55648 bytes, Free: 373408 bytes, Total: 429056 bytes
-Peak: 119408 bytes, Used: 119408 bytes, Free: 309648 bytes, Total: 429056 bytes
-Peak: 119408 bytes, Used: 97552 bytes, Free: 331504 bytes, Total: 429056 bytes
-Peak: 119408 bytes, Used: 76224 bytes, Free: 352832 bytes, Total: 429056 bytes
-Peak: 119408 bytes, Used: 55648 bytes, Free: 373408 bytes, Total: 429056 bytes
-Peak: 119408 bytes, Used: 98832 bytes, Free: 330224 bytes, Total: 429056 bytes
-Achieved 74.00 updates/s
-Achieved 74.00 draws/s
-Peak: 119408 bytes, Used: 54544 bytes, Free: 374512 bytes, Total: 429056 bytes
+Peak: 56320 bytes, Used: 56320 bytes, Free: 375296 bytes, Total: 431616 bytes
+Peak: 59424 bytes, Used: 59424 bytes, Free: 372192 bytes, Total: 431616 bytes
+Peak: 62528 bytes, Used: 62528 bytes, Free: 369088 bytes, Total: 431616 bytes
+Peak: 62528 bytes, Used: 57472 bytes, Free: 374144 bytes, Total: 431616 bytes
+Peak: 62528 bytes, Used: 60576 bytes, Free: 371040 bytes, Total: 431616 bytes
+Peak: 62816 bytes, Used: 55648 bytes, Free: 375968 bytes, Total: 431616 bytes
+Peak: 62816 bytes, Used: 58752 bytes, Free: 372864 bytes, Total: 431616 bytes
+Peak: 62816 bytes, Used: 61856 bytes, Free: 369760 bytes, Total: 431616 bytes
+Peak: 62944 bytes, Used: 56832 bytes, Free: 374784 bytes, Total: 431616 bytes
+Achieved 120.50 updates/s
+Achieved 120.50 draws/s
+Peak: 62944 bytes, Used: 54720 bytes, Free: 376896 bytes, Total: 431616 bytes
 Executing module <module 'tests.validate_device.validate_c_hierarchy' from 'tests/validate_device/validate_c_hierarchy.py'>
-Peak: 98896 bytes, Used: 98896 bytes, Free: 330160 bytes, Total: 429056 bytes
-Peak: 123168 bytes, Used: 61440 bytes, Free: 367616 bytes, Total: 429056 bytes
-Peak: 123168 bytes, Used: 95632 bytes, Free: 333424 bytes, Total: 429056 bytes
-Peak: 123168 bytes, Used: 58256 bytes, Free: 370800 bytes, Total: 429056 bytes
-Peak: 123168 bytes, Used: 102336 bytes, Free: 326720 bytes, Total: 429056 bytes
-Peak: 123168 bytes, Used: 74832 bytes, Free: 354224 bytes, Total: 429056 bytes
-Peak: 123168 bytes, Used: 118864 bytes, Free: 310192 bytes, Total: 429056 bytes
-Peak: 123168 bytes, Used: 81408 bytes, Free: 347648 bytes, Total: 429056 bytes
-Peak: 123168 bytes, Used: 115616 bytes, Free: 313440 bytes, Total: 429056 bytes
-Achieved 74.50 updates/s
-Achieved 74.50 draws/s
-Peak: 123168 bytes, Used: 54096 bytes, Free: 374960 bytes, Total: 429056 bytes
+Peak: 56592 bytes, Used: 56592 bytes, Free: 375024 bytes, Total: 431616 bytes
+Peak: 59696 bytes, Used: 59696 bytes, Free: 371920 bytes, Total: 431616 bytes
+Peak: 62800 bytes, Used: 62800 bytes, Free: 368816 bytes, Total: 431616 bytes
+Peak: 62800 bytes, Used: 57408 bytes, Free: 374208 bytes, Total: 431616 bytes
+Peak: 62800 bytes, Used: 60512 bytes, Free: 371104 bytes, Total: 431616 bytes
+Peak: 62800 bytes, Used: 55040 bytes, Free: 376576 bytes, Total: 431616 bytes
+Peak: 62800 bytes, Used: 58144 bytes, Free: 373472 bytes, Total: 431616 bytes
+Peak: 62800 bytes, Used: 61248 bytes, Free: 370368 bytes, Total: 431616 bytes
+Peak: 62912 bytes, Used: 55776 bytes, Free: 375840 bytes, Total: 431616 bytes
+Achieved 120.50 updates/s
+Achieved 120.50 draws/s
+Peak: 62912 bytes, Used: 54272 bytes, Free: 377344 bytes, Total: 431616 bytes
 Executing module <module 'tests.validate_device.validate_c_huge_hierarchy' from 'tests/validate_device/validate_c_huge_hierarchy.py'>
 Executing module <module 'tests.validate_device.validate_d_traits' from 'tests/validate_device/validate_d_traits.py'>
 Traceback (most recent call last):
@@ -57,6 +57,6 @@ Traceback (most recent call last):
   File "tests/validate_device/utils.py", line 108, in execute
   File "tests/validate_device/validate_d_traits.py", line 19, in setup
   File "pmpge/game_object.py", line 147, in __init__
-  File "pmpge/game_object.py", line 491, in apply_trait
+  File "pmpge/game_object.py", line 484, in apply_trait
 TypeError:
 >>>

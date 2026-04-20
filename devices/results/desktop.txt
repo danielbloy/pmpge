@@ -1,0 +1,128 @@
+C:\Workspace\repos\pmpge\.venv\Scripts\python.exe C:\Workspace\repos\pmpge\tests\validate_device\validate_all.py
+Config file C:\Workspace\repos\pmpge\tests\validate_device\config.py loaded.
+RUNTIME = 2
+SAMPLE_FREQUENCY = 50
+REPORT_FREQUENCY = 4
+PROFILE = True
+PROFILE_TOP = 10
+
+pygame 2.6.1 (SDL 2.28.4, Python 3.13.1)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+No device driver.
+Running on pgzero with (640, 480) screen and 12 button controller.
+Executing module <module 'tests.validate_device.validate_a_game' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_a_game.py'>
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22754.07 MB, Total: 9932.10 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22753.45 MB, Total: 9932.72 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22783.64 MB, Total: 9902.52 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22768.21 MB, Total: 9917.96 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22767.72 MB, Total: 9918.45 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22774.32 MB, Total: 9911.85 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22775.68 MB, Total: 9910.49 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22772.48 MB, Total: 9913.68 MB
+[ Top 10 ]
+<frozen importlib._bootstrap_external>:784: size=254 KiB, count=2384, average=109 B
+C:\Program Files\Python313\Lib\collections\__init__.py:512: size=60.5 KiB, count=289, average=215 B
+C:\Program Files\Python313\Lib\collections\__init__.py:444: size=19.5 KiB, count=234, average=85 B
+C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=34, average=417 B
+<frozen importlib._bootstrap>:488: size=11.6 KiB, count=102, average=116 B
+C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.7 KiB, count=192, average=57 B
+C:\Program Files\Python313\Lib\collections\__init__.py:451: size=7168 B, count=64, average=112 B
+C:\Program Files\Python313\Lib\collections\__init__.py:510: size=7056 B, count=147, average=48 B
+C:\Program Files\Python313\Lib\collections\__init__.py:473: size=6912 B, count=64, average=108 B
+C:\Program Files\Python313\Lib\collections\__init__.py:460: size=6912 B, count=64, average=108 B
+Achieved 60.50 updates/s
+Achieved 60.50 draws/s
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22778.37 MB, Total: 9907.80 MB
+Executing module <module 'tests.validate_device.validate_b_game_object' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_b_game_object.py'>
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22776.98 MB, Total: 9909.19 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22775.12 MB, Total: 9911.05 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22775.68 MB, Total: 9910.48 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22771.06 MB, Total: 9915.11 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22769.75 MB, Total: 9916.41 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22769.34 MB, Total: 9916.83 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22769.37 MB, Total: 9916.80 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22762.59 MB, Total: 9923.57 MB
+[ Top 10 ]
+<frozen importlib._bootstrap_external>:784: size=248 KiB, count=2265, average=112 B
+C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
+C:\Workspace\repos\pmpge\tests\validate_device\validate_b_game_object.py:12: size=18.2 KiB, count=100, average=187 B
+C:\Program Files\Python313\Lib\collections\__init__.py:444: size=17.6 KiB, count=205, average=88 B
+C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=34, average=417 B
+<frozen importlib._bootstrap>:488: size=11.6 KiB, count=102, average=116 B
+C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.4 KiB, count=186, average=57 B
+C:\Program Files\Python313\Lib\collections\__init__.py:451: size=6944 B, count=62, average=112 B
+C:\Program Files\Python313\Lib\collections\__init__.py:510: size=6864 B, count=143, average=48 B
+C:\Program Files\Python313\Lib\collections\__init__.py:473: size=6696 B, count=62, average=108 B
+Achieved 62.00 updates/s
+Achieved 62.00 draws/s
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22766.38 MB, Total: 9919.79 MB
+Executing module <module 'tests.validate_device.validate_c_hierarchy' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_c_hierarchy.py'>
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22765.48 MB, Total: 9920.69 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22766.28 MB, Total: 9919.89 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22765.93 MB, Total: 9920.24 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22759.23 MB, Total: 9926.94 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22762.04 MB, Total: 9924.13 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22782.37 MB, Total: 9903.80 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22778.75 MB, Total: 9907.42 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22779.02 MB, Total: 9907.15 MB
+[ Top 10 ]
+<frozen importlib._bootstrap_external>:784: size=248 KiB, count=2265, average=112 B
+C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
+C:\Workspace\repos\pmpge\tests\validate_device\validate_b_game_object.py:12: size=18.2 KiB, count=100, average=187 B
+C:\Program Files\Python313\Lib\collections\__init__.py:444: size=17.6 KiB, count=205, average=88 B
+C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=34, average=417 B
+<frozen importlib._bootstrap>:488: size=11.6 KiB, count=102, average=116 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:385: size=11.0 KiB, count=202, average=56 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:123: size=11.0 KiB, count=202, average=56 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:121: size=11.0 KiB, count=202, average=56 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:119: size=11.0 KiB, count=202, average=56 B
+Achieved 62.00 updates/s
+Achieved 62.00 draws/s
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22780.84 MB, Total: 9905.32 MB
+Executing module <module 'tests.validate_device.validate_c_huge_hierarchy' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_c_huge_hierarchy.py'>
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22712.57 MB, Total: 9973.59 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22712.11 MB, Total: 9974.06 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22711.17 MB, Total: 9975.00 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22711.76 MB, Total: 9974.41 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22711.77 MB, Total: 9974.39 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22709.40 MB, Total: 9976.77 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22709.92 MB, Total: 9976.25 MB
+[ Top 10 ]
+C:\Workspace\repos\pmpge\tests\validate_device\validate_c_huge_hierarchy.py:18: size=6875 KiB, count=40000, average=176 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:385: size=2861 KiB, count=52313, average=56 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:123: size=2861 KiB, count=52312, average=56 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:121: size=2861 KiB, count=52312, average=56 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:119: size=2861 KiB, count=52312, average=56 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:117: size=2861 KiB, count=52312, average=56 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:115: size=2861 KiB, count=52312, average=56 B
+C:\Workspace\repos\pmpge\tests\validate_device\validate_c_huge_hierarchy.py:16: size=1719 KiB, count=10000, average=176 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:386: size=466 KiB, count=12252, average=39 B
+C:\Workspace\repos\pmpge\tests\validate_device\validate_c_huge_hierarchy.py:15: size=344 KiB, count=2000, average=176 B
+Achieved 3.50 updates/s
+Achieved 3.50 draws/s
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22701.29 MB, Total: 9984.88 MB
+Executing module <module 'tests.validate_device.validate_d_traits' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_d_traits.py'>
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22700.42 MB, Total: 9985.75 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22700.61 MB, Total: 9985.56 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22697.75 MB, Total: 9988.42 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22697.31 MB, Total: 9988.86 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22697.50 MB, Total: 9988.67 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22697.91 MB, Total: 9988.26 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22697.77 MB, Total: 9988.39 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22698.04 MB, Total: 9988.12 MB
+[ Top 10 ]
+C:\Workspace\repos\pmpge\tests\validate_device\validate_c_huge_hierarchy.py:18: size=6875 KiB, count=40000, average=176 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:385: size=2861 KiB, count=52319, average=56 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:119: size=2861 KiB, count=52309, average=56 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:117: size=2861 KiB, count=52309, average=56 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:115: size=2861 KiB, count=52309, average=56 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:121: size=2861 KiB, count=52307, average=56 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:123: size=2860 KiB, count=52304, average=56 B
+C:\Workspace\repos\pmpge\tests\validate_device\validate_c_huge_hierarchy.py:16: size=1719 KiB, count=10000, average=176 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:386: size=466 KiB, count=12245, average=39 B
+C:\Workspace\repos\pmpge\tests\validate_device\validate_c_huge_hierarchy.py:15: size=344 KiB, count=2000, average=176 B
+Achieved 61.50 updates/s
+Achieved 61.50 draws/s
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 22754.09 MB, Total: 9932.08 MB
+
+Process finished with exit code 0

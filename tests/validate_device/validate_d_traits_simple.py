@@ -11,15 +11,15 @@ from pmpge.traits.position import Position, StayInBounds
 
 
 def setup(game: Game):
-    trait_as_class = GameObject(Position)
+    trait_as_class = GameObject(Lifetime)
     game.add_child(trait_as_class)
 
     trait_as_instance = GameObject(Lifetime(10))
     game.add_child(trait_as_instance)
 
     two_traits = GameObject(
-        Position,
-        Velocity(20, 10)
+        Position(100, 30),
+        Lifetime
     )
     game.add_child(two_traits)
 

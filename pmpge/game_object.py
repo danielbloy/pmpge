@@ -481,7 +481,13 @@ class GameObject:
             trait.__init__(self)
             cls = trait
         else:
-            self.__dict__.update(trait.__dict__)
+            # TODO: Optimise
+            attributes = [
+                attribute for attribute in dir(trait)
+                if not (attribute.startswith('__') and attribute.endswith('__'))
+                   and not callable(getattr(trait, attribute))]
+            for attribute in attributes:
+                setattr(self, attribute, getattr(trait, attribute))
             cls = trait.__class__
 
         if hasattr(cls, 'draw'):

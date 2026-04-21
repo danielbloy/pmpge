@@ -20,3 +20,21 @@ class Sprite(GameObject, Position):
     def __init__(self, x: float, y: float, *traits, **kwargs):
         super().__init__(*traits, **kwargs)
         Position.__init__(self, x, y)
+
+    @property
+    def position(self) -> tuple[int, int]:
+        return int(self.x), int(self.y)
+
+    @position.setter
+    def position(self, position: tuple[int, int]) -> None:
+        self.x = position[0]
+        self.y = position[1]
+
+    @property
+    def pos(self) -> tuple[int, int]:
+        return int(self.x), int(self.y)
+
+    @pos.setter
+    def pos(self, pos: tuple[int, int]) -> None:
+        self.x = pos[0]
+        self.y = pos[1]

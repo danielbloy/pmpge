@@ -466,6 +466,8 @@ class GameObject:
             self.__destroy_handlers.remove(handler)
         return self
 
+    not_allowed_attributes = ['draw', 'update', 'activated', 'deactivated', 'destroyed', 'merged']
+
     def apply_trait(self, trait: Any) -> Self:
         """
         Merge the properties and handlers of a trait object into this GameObject. It will
@@ -481,7 +483,11 @@ class GameObject:
             trait.__init__(self)
             cls = trait
         else:
-            self.__dict__.update(trait.__dict__)
+            # Copy across attributes
+            for attribute in dir(trait):
+                if attribute.startswith('__') or attribute in GameObject.not_allowed_attributes:
+                    continue
+                setattr(self, attribute, getattr(trait, attribute))
             cls = trait.__class__
 
         if hasattr(cls, 'draw'):

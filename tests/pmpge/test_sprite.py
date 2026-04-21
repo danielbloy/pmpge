@@ -23,6 +23,50 @@ def test_sprite_constructor():
     assert sprite.y == -7
 
 
+def test_pos_and_position_properties_work():
+    """
+    Validates the position and pos properties work
+    """
+    # Test the getters first
+    sprite = Sprite(0, 0)
+    assert sprite.x == 0
+    assert sprite.y == 0
+
+    assert sprite.pos == (0, 0)
+    assert sprite.position == (0, 0)
+
+    sprite = Sprite(10, 20)
+    assert sprite.x == 10
+    assert sprite.y == 20
+
+    assert sprite.pos == (10, 20)
+    assert sprite.position == (10, 20)
+
+    sprite = Sprite(-1, -2)
+    assert sprite.x == -1
+    assert sprite.y == -2
+
+    assert sprite.pos == (-1, -2)
+    assert sprite.position == (-1, -2)
+
+    # Test the setters
+    sprite = Sprite(0, 0)
+    sprite.pos = (10, 20)
+
+    assert sprite.x == 10
+    assert sprite.y == 20
+
+    assert sprite.pos == (10, 20)
+    assert sprite.position == (10, 20)
+
+    sprite.position = (-1, -2)
+    assert sprite.x == -1
+    assert sprite.y == -2
+
+    assert sprite.pos == (-1, -2)
+    assert sprite.position == (-1, -2)
+
+
 def test_sprite_constructor_with_other_properties():
     """
     Validates the Sprite constructor with some of the other GameObject properties.

@@ -15,7 +15,7 @@ def execute():
             utils.execute(module.setup)
             del module
         except MemoryError:
-            pass
+            print("Memory Error")
 
 
 if utils.should_execute(__name__):

@@ -15,6 +15,7 @@ def setup(game: Game):
     # Short-circuit if running on a microcontroller.
     from pmpge.environment import is_running_on_microcontroller
     if is_running_on_microcontroller():
+        print("Skipping creating huge hierarchy of GameObjects on microcontroller")
         return
 
     for _ in range(10):

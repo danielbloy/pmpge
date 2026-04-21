@@ -7,13 +7,13 @@ if it does have enough RAM, it takes ages to construct the
 """
 
 import tests.validate_device.utils as utils
+from pmpge.environment import is_running_on_microcontroller
 from pmpge.game import Game
 from pmpge.game_object import GameObject
 
 
 def setup(game: Game):
     # Short-circuit if running on a microcontroller.
-    from pmpge.environment import is_running_on_microcontroller
     if is_running_on_microcontroller():
         print("Skipping creating huge hierarchy of GameObjects on microcontroller")
         return

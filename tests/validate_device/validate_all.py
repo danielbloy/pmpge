@@ -4,8 +4,9 @@ import tests.validate_device.validate_b_game_object as b
 import tests.validate_device.validate_c_hierarchy as c
 import tests.validate_device.validate_c_huge_hierarchy as ch
 import tests.validate_device.validate_d_traits as d
+import tests.validate_device.validate_d_traits_simple as ds
 
-modules = [a, b, c, ch, d]
+modules = [a, b, c, ch, ds, d]
 
 
 def execute():

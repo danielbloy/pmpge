@@ -481,12 +481,10 @@ class GameObject:
             trait.__init__(self)
             cls = trait
         else:
-            # TODO: Optimise
-            attributes = [
-                attribute for attribute in dir(trait)
-                if not (attribute.startswith('__') and attribute.endswith('__'))
-                   and not callable(getattr(trait, attribute))]
-            for attribute in attributes:
+            # Copy across attributes
+            for attribute in dir(trait):
+                if attribute.startswith('__') or attribute.endswith('__') or callable(getattr(trait, attribute)):
+                    continue
                 setattr(self, attribute, getattr(trait, attribute))
             cls = trait.__class__
 

@@ -1,43 +1,39 @@
 from typing import Any, Callable
 
+# TODO: Remove dependency on pgzero
+from pgzero.loaders import images
+
 from pmpge.game_object import GameObject
-from pmpge.graphics import ImageResource
 from pmpge.palette import WHITE
-from pmpge.sprite import Bounds
 
 
 class DrawImage:
     """
     This works without requiring properties.
     See notes on Sprite for rules of positioning an image.
-    TODO: Update the documentation
     """
-    x: float
-    y: float
-    bounds: Bounds
-    image: ImageResource
-
-    def on_notify(self, width: int, height: int):
-        bounds = self.bounds
-        bounds.width = width
-        bounds.height = height
-        if hasattr(self, 'x'):
-            bounds.x = self.x
-            bounds.y = self.y
-        else:
-            bounds.x = 0
-            bounds.y = 0
 
     def __init__(self, image: str):
-        self.bounds = Bounds()
-        self.image = ImageResource(image, self.on_notify)
+        self._surface = None
+        self._offset_x = None
+        self._offset_y = None
+
+        self._image = None
+        self.image = image
+        self.update(0)
 
     def update(self, dt: float):
-        self.bounds.x = self.x
-        self.bounds.y = self.y
+        if self.image != self._image:
+            self._image = self.image
+
+            # TODO: need to delegate to the hal resource.
+            self._surface = images.load(self.image)
+
+            self._offset_x = self._surface.get_width() // 2
+            self._offset_y = self._surface.get_height() // 2
 
     def draw(self, surface: Any):
-        self.image.draw(surface, self.bounds.top_left)
+        surface.blit(self._surface, (self.x - self._offset_x, self.y - self._offset_y))
 
 
 class DrawText:

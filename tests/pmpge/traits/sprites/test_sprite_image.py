@@ -75,6 +75,9 @@ def test_using_with_game_object():
     with pytest.raises(AttributeError):
         assert go.top_left == (0, 0)  # this will fail because there are no bounds properties
 
+    with pytest.raises(AttributeError):
+        go.draw_hierarchy(None)
+
     go.update_hierarchy(0)
 
     go.image.load("7x3.png")
@@ -83,3 +86,6 @@ def test_using_with_game_object():
     assert go.image.height == 3
     with pytest.raises(AttributeError):
         assert go.top_left == (0, 0)  # this will fail because there are no bounds properties
+
+    with pytest.raises(AttributeError):
+        go.draw_hierarchy(None)

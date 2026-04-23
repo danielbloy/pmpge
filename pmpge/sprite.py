@@ -48,8 +48,8 @@ class Bounds:
 
 class Sprite(GameObject, Position, Bounds):
     """
-    A Sprite is a GameObject with a Position trait. The position of a Sprite is the
-    center of the Sprite's image and bounding box if it has one.
+    A Sprite is a GameObject with a position and size. The position of a Sprite is the
+    center of the Sprite's image and bounding box.
 
     If a sprite has an image of 15 pixels by 15 pixels, the position of the Sprite
     will be the 8th pixel from the left and 8th pixel from the top.

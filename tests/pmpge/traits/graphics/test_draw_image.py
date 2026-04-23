@@ -32,6 +32,18 @@ def test_constructor():
     assert trait.image.offset_y == 4
     assert trait.image.name == "8x8.png"
 
+    trait = DrawImage("7x7.png", centered=False)
+    assert trait.image.surface is not None
+    assert trait.image.offset_x == 0
+    assert trait.image.offset_y == 0
+    assert trait.image.name == "7x7.png"
+
+    trait = DrawImage("8x8.png", centered=False)
+    assert trait.image.surface is not None
+    assert trait.image.offset_x == 0
+    assert trait.image.offset_y == 0
+    assert trait.image.name == "8x8.png"
+
 
 # noinspection PyUnresolvedReferences
 def test_changing_image():
@@ -61,6 +73,31 @@ def test_changing_image():
     assert go.image.surface is not None
     assert go.image.offset_x == 3
     assert go.image.offset_y == 1
+    assert go.image.name == "7x3.png"
+
+    # Now try it using non-centered images
+    go = GameObject(DrawImage("8x8.png", centered=False))
+    assert go.image.surface is not None
+    assert go.image.offset_x == 0
+    assert go.image.offset_y == 0
+    assert go.image.name == "8x8.png"
+
+    go.update_hierarchy(0)
+    assert go.image.surface is not None
+    assert go.image.offset_x == 0
+    assert go.image.offset_y == 0
+    assert go.image.name == "8x8.png"
+
+    go.image.name = "7x3.png"
+    assert go.image.surface is not None
+    assert go.image.offset_x == 0
+    assert go.image.offset_y == 0
+    assert go.image.name == "7x3.png"
+
+    go.update_hierarchy(0)
+    assert go.image.surface is not None
+    assert go.image.offset_x == 0
+    assert go.image.offset_y == 0
     assert go.image.name == "7x3.png"
 
 

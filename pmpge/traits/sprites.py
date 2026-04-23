@@ -5,8 +5,9 @@ from pmpge.graphics import ImageResource
 
 class SpriteImage:
     """
-    This trait displays a static image and uses the size of that image
-    to give a Sprite it's width and height.
+    This trait displays a static image and uses the size of that image to give the
+    Sprite it's width and height; thus setting its bounds. It is a specialisation of
+    DrawImage that is specifically designed to work with Sprites.
     """
     width: int
     height: int

@@ -79,7 +79,7 @@ def test_changing_sprite_image():
     assert sprite.top_left == (-4, -4)
     assert sprite.bottom_right == (3, 3)
 
-    sprite.image.load("7x3.png")
+    sprite.image.name = "7x3.png"
     assert sprite.image.surface is not None
     assert sprite.image.width == 7
     assert sprite.image.height == 3

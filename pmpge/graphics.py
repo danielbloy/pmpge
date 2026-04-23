@@ -1,27 +1,28 @@
-from typing import Any, Callable
-
-from pgzero.loaders import images
+from typing import Callable
 
 import pmpge.environment as environment
 
+__graphics = environment.import_driver('graphics')
+ImageLoader = __graphics.ImageLoader
 
-class ImageResource:
+
+class ImageResource(ImageLoader):
     """
-    Represents an image resource that can be loaded and drawn.
+    Represents an image resource that can be loaded and drawn. The actual image
+    loading and drawing is done by the graphics driver. Setting the name property
+    will trigger a reload of the image. There is an optional notify callback that
+    is called with the new width and height of the image after a successful reload.
     """
-    surface: Any
     width: int
     height: int
     _name: str
     notify: Callable[[int, int], None] | None
 
     def __init__(self, name: str, notify: Callable[[int, int], None] = None):
-        self.surface = None
         self.width = 0
         self.height = 0
-        self._name = name
         self.notify = notify
-        self.load(name)
+        self.name = name
 
     @property
     def name(self) -> str:
@@ -31,25 +32,6 @@ class ImageResource:
     def name(self, value: str) -> None:
         self._name = value
         self.load(value)
-
-    def load(self, image: str):
-        """
-        Loads the named image resource. This will call the notify method.
-        """
-        surface = images.load(image)
-        self.surface = surface
-        self.width = self.surface.get_width()
-        self.height = self.surface.get_height()
-
         notify = self.notify
         if notify:
-            notify(surface.get_width(), surface.get_height())
-
-    def draw(self, surface: Any, pos: tuple[float, float]):
-        """
-        Draws the image, with pos representing the top left corner.
-        """
-        surface.blit(self.surface, pos)
-
-
-__graphics = environment.import_driver('graphics')
+            notify(self.width, self.height)

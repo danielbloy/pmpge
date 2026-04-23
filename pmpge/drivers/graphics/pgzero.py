@@ -1,6 +1,8 @@
 import sys
+from typing import Any
 
 import pygame
+from pgzero.loaders import images
 from pygame import Surface
 
 width: int
@@ -59,3 +61,28 @@ def draw(screen):
         pygame.transform.scale(
             scale_surface,
             (screen_width, screen_height), screen.surface)  # noqa: F821
+
+
+# TODO: Document this in the required interface.
+class ImageLoader:
+    """
+    Implementation specific class to load and draw an image.
+    """
+    surface: Any
+    width: int
+    height: int
+
+    def load(self, image: str):
+        """
+        Loads the named image resource. This will call the notify method.
+        """
+        surface = images.load(image)
+        self.surface = surface
+        self.width = self.surface.get_width()
+        self.height = self.surface.get_height()
+
+    def draw(self, surface: Any, pos: tuple[float, float]):
+        """
+        Draws the image, with pos representing the top left corner.
+        """
+        surface.blit(self.surface, pos)

@@ -15,22 +15,22 @@ def test_constructor():
     """
     setup_pgzero(__file__)
     trait = DrawImage("7x3.png")
-    assert trait.image_resource.surface is not None
-    assert trait.image_resource.offset_x == 3
-    assert trait.image_resource.offset_y == 1
-    assert trait.image_resource.name == "7x3.png"
+    assert trait.image.surface is not None
+    assert trait.image.offset_x == 3
+    assert trait.image.offset_y == 1
+    assert trait.image.name == "7x3.png"
 
     trait = DrawImage("7x7.png")
-    assert trait.image_resource.surface is not None
-    assert trait.image_resource.offset_x == 3
-    assert trait.image_resource.offset_y == 3
-    assert trait.image_resource.name == "7x7.png"
+    assert trait.image.surface is not None
+    assert trait.image.offset_x == 3
+    assert trait.image.offset_y == 3
+    assert trait.image.name == "7x7.png"
 
     trait = DrawImage("8x8.png")
-    assert trait.image_resource.surface is not None
-    assert trait.image_resource.offset_x == 4
-    assert trait.image_resource.offset_y == 4
-    assert trait.image_resource.name == "8x8.png"
+    assert trait.image.surface is not None
+    assert trait.image.offset_x == 4
+    assert trait.image.offset_y == 4
+    assert trait.image.name == "8x8.png"
 
 
 # noinspection PyUnresolvedReferences
@@ -40,28 +40,28 @@ def test_changing_image():
     """
     setup_pgzero(__file__)
     go = GameObject(DrawImage("8x8.png"))
-    assert go.image_resource.surface is not None
-    assert go.image_resource.offset_x == 4
-    assert go.image_resource.offset_y == 4
-    assert go.image_resource.name == "8x8.png"
+    assert go.image.surface is not None
+    assert go.image.offset_x == 4
+    assert go.image.offset_y == 4
+    assert go.image.name == "8x8.png"
 
     go.update_hierarchy(0)
-    assert go.image_resource.surface is not None
-    assert go.image_resource.offset_x == 4
-    assert go.image_resource.offset_y == 4
-    assert go.image_resource.name == "8x8.png"
+    assert go.image.surface is not None
+    assert go.image.offset_x == 4
+    assert go.image.offset_y == 4
+    assert go.image.name == "8x8.png"
 
-    go.image_resource.name = "7x3.png"
-    assert go.image_resource.surface is not None
-    assert go.image_resource.offset_x == 3
-    assert go.image_resource.offset_y == 1
-    assert go.image_resource.name == "7x3.png"
+    go.image.name = "7x3.png"
+    assert go.image.surface is not None
+    assert go.image.offset_x == 3
+    assert go.image.offset_y == 1
+    assert go.image.name == "7x3.png"
 
     go.update_hierarchy(0)
-    assert go.image_resource.surface is not None
-    assert go.image_resource.offset_x == 3
-    assert go.image_resource.offset_y == 1
-    assert go.image_resource.name == "7x3.png"
+    assert go.image.surface is not None
+    assert go.image.offset_x == 3
+    assert go.image.offset_y == 1
+    assert go.image.name == "7x3.png"
 
 
 # noinspection PyUnresolvedReferences
@@ -71,17 +71,17 @@ def test_using_with_game_object():
     """
     setup_pgzero(__file__)
     go = GameObject(DrawImage("8x8.png"))
-    assert go.image_resource.surface is not None
-    assert go.image_resource.offset_x == 4
-    assert go.image_resource.offset_y == 4
-    assert go.image_resource.name == "8x8.png"
+    assert go.image.surface is not None
+    assert go.image.offset_x == 4
+    assert go.image.offset_y == 4
+    assert go.image.name == "8x8.png"
     go.update_hierarchy(0)
 
     go = GameObject(Position(10, 20), DrawImage("7x3.png"))
-    assert go.image_resource.surface is not None
-    assert go.image_resource.offset_x == 3
-    assert go.image_resource.offset_y == 1
-    assert go.image_resource.name == "7x3.png"
+    assert go.image.surface is not None
+    assert go.image.offset_x == 3
+    assert go.image.offset_y == 1
+    assert go.image.name == "7x3.png"
     go.update_hierarchy(0)
 
 

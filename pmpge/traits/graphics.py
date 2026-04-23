@@ -11,17 +11,17 @@ class DrawImage:
     y: int
     width: int
     height: int
-    image_resource: ImageResource
+    image: ImageResource
 
     def __init__(self, image: str):
         image_resource = ImageResource(image)
         image_resource.offset_x = image_resource.width // 2
         image_resource.offset_y = image_resource.height // 2
-        self.image_resource = image_resource
+        self.image = image_resource
 
     def draw(self, surface: Any):
-        self.image_resource.draw(
-            surface, (self.x - self.image_resource.offset_x, self.y - self.image_resource.offset_y))
+        self.image.draw(
+            surface, (self.x - self.image.offset_x, self.y - self.image.offset_y))
 
     def merged(self):
         """
@@ -33,9 +33,9 @@ class DrawImage:
         def on_notify(width: int, height: int):
             self.width = width
             self.height = height
-            self.image_resource.offset_x = width // 2
-            self.image_resource.offset_y = height // 2
+            self.image.offset_x = width // 2
+            self.image.offset_y = height // 2
 
-        self.image_resource.notify = on_notify
+        self.image.notify = on_notify
 
     # TODO: support using x, y as well as centered (anchor)

@@ -63,7 +63,6 @@ def draw(screen):
             (screen_width, screen_height), screen.surface)  # noqa: F821
 
 
-# TODO: Document this in the required interface.
 class ImageLoader:
     """
     Implementation specific class to load and draw an image.
@@ -74,7 +73,7 @@ class ImageLoader:
 
     def load(self, image: str):
         """
-        Loads the named image resource. This will call the notify method.
+        Loads the named image resource.
         """
         surface = images.load(image)
         self.surface = surface

@@ -14,19 +14,10 @@ class DrawImage:
     image_resource: ImageResource
 
     def __init__(self, image: str):
-        self._image = image
-        self.image = image
         image_resource = ImageResource(image)
         image_resource.offset_x = image_resource.width // 2
         image_resource.offset_y = image_resource.height // 2
         self.image_resource = image_resource
-
-    def update(self, dt: float):
-        image = self.image
-        if image != self._image:
-            self._image = image
-
-            self.image_resource.load(image)
 
     def draw(self, surface: Any):
         self.image_resource.draw(

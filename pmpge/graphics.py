@@ -5,30 +5,32 @@ from pgzero.loaders import images
 import pmpge.environment as environment
 
 
-# TODO: This is a temporary solution, the pgzero specific stuff need to be moved out.
 class ImageResource:
     """
     Represents an image resource that can be loaded and drawn.
     """
+    surface: Any
+    width: int
+    height: int
+    _name: str
+    notify: Callable[[int, int], None] | None
 
-    def __init__(self, image: str, notify: Callable[[int, int], None] = None):
+    def __init__(self, name: str, notify: Callable[[int, int], None] = None):
         self.surface = None
+        self.width = 0
+        self.height = 0
+        self._name = name
         self.notify = notify
-        self.load(image)
+        self.load(name)
 
     @property
-    def width(self) -> int:
-        """
-        The height of the image resource in pixels.
-        """
-        return self.surface.get_width()
+    def name(self) -> str:
+        return self._name
 
-    @property
-    def height(self) -> int:
-        """
-        The width of the image resource in pixels.
-        """
-        return self.surface.get_height()
+    @name.setter
+    def name(self, value: str) -> None:
+        self._name = value
+        self.load(value)
 
     def load(self, image: str):
         """
@@ -36,6 +38,9 @@ class ImageResource:
         """
         surface = images.load(image)
         self.surface = surface
+        self.width = self.surface.get_width()
+        self.height = self.surface.get_height()
+
         notify = self.notify
         if notify:
             notify(surface.get_width(), surface.get_height())

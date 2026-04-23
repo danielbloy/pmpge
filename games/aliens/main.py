@@ -12,9 +12,11 @@ from pmpge.game_object import GameObject
 from pmpge.palette import CYAN, RED, WHITE, YELLOW
 from pmpge.sprite import Sprite
 from pmpge.traits.controller import MoveWithController
-from pmpge.traits.graphics import DrawImage, DrawText
+from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import Velocity
 from pmpge.traits.position import StayInBounds, RelativeToParent, Position
+from pmpge.traits.sprites import SpriteImage
+from typing import Any, Callable
 
 clock: Clock
 keyboard: Keyboard
@@ -244,13 +246,44 @@ PLAYER_SHIP_START_HEIGHT = LOWER_BORDER_START - (PLAYER_SHIP_HEIGHT / 2)
 
 player = Sprite(
     game.width / 2, PLAYER_SHIP_START_HEIGHT,
-    DrawImage('player'))
+    SpriteImage('player'))
 
-# TODO: Should controller be accessed via get_controller()?
 controller = Controller()
 player.apply_trait(MoveWithController(200, 0, controller))
 player.apply_trait(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, game.height))
 game_hud.add_child(player)
+
+
+class DrawText:
+
+    # TODO: Document this class
+
+    def __init__(self,
+                 text: str | Callable[[GameObject], str],
+                 colour: tuple[int, int, int] = WHITE,
+                 background: tuple[int, int, int] | None = None,
+                 fontname: str | None = None,
+                 fontsize: int = 16):
+        self.text = text
+        self.colour = colour
+        self.background = background
+        self.fontname = fontname
+        self.fontsize = fontsize
+
+    def draw(self, surface: Any):
+        text = self.text
+        if not isinstance(text, str):
+            text = self.text(self)
+
+        # TODO: need to delegate to the hal resource.
+        surface.draw.text(
+            text,
+            bottomleft=self.pos,
+            color=self.colour,
+            background=self.background,
+            fontname=self.fontname,
+            fontsize=self.fontsize)
+
 
 player.add_child(
     Sprite(

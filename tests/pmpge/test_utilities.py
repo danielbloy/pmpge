@@ -1,9 +1,12 @@
 import os
 import pathlib
 from collections.abc import Callable
+from types import ModuleType
 from typing import Self
 
+import pgzero.loaders as loaders
 import pytest
+from pgzero.game import PGZeroGame
 
 import pmpge.environment as environment
 from pmpge.game_object import GameObject
@@ -353,3 +356,17 @@ class Hierarchy:
             print(self.called_order)
 
         assert self.called_order == expected_shared_called_order
+
+
+def setup_pgzero(filename: str):
+    """
+    Because a bunch of other tests execute and quit pgzero, there is a strong chance
+    the display has been shutdown. We therefore perform a minimal "reboot" along with
+    setting the current resource loading directory to the directory of the current test
+    file so we can run the tests.
+    """
+    dir_path = os.path.dirname(os.path.realpath(filename))
+    loaders.set_root(dir_path)
+
+    mod = ModuleType("test")
+    PGZeroGame(mod).reinit_screen()

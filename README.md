@@ -108,7 +108,8 @@ for specific drivers. The optional methods are:
 * `update(delta_time: float)` - called once every update cycle.
 * `deinit()` - called once when the game finishes.
 
-Additionally, a graphics driver must implement the following mandatory methods:
+Additionally, a graphics driver must implement the following mandatory methods and
+classes (see `drivers/pgzero.py` for an example):
 
 * `clear(surface, colour)` - called once per frame and sets the screen to the
   specified RGB colour triplet. Called before any other displayed operations.

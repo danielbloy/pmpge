@@ -1,5 +1,7 @@
 from pygments.lexers import go
 
+import pmpge.environment as environment
+from pmpge.game import Game
 from pmpge.game_object import GameObject
 from pmpge.traits.graphics import DrawImage
 from pmpge.traits.position import Position
@@ -68,6 +70,7 @@ def test_changing_image():
     assert go.image == "7x3.png"
 
 
+# noinspection PyUnresolvedReferences
 def test_using_with_game_object():
     """
     Validates it can be used as a GameObject trait.
@@ -89,4 +92,24 @@ def test_using_with_game_object():
     assert go.image == "7x3.png"
     go.update_hierarchy(0)
 
-# TODO: Add test to draw to draw the object
+
+def test_draws_when_combined_with_game_object():
+    """
+    Validates that DrawImage draws without throwing an exception when combined with GameObject.
+    """
+    setup_pgzero(__file__)
+    update_counter = 2
+
+    def draw(surface):
+        nonlocal update_counter
+        update_counter -= 1
+        if update_counter <= 0:
+            environment.terminate()
+
+    game = Game(320, 200)
+    game.add_draw_func(draw)
+
+    setup_pgzero(__file__)
+    go = GameObject(Position(10, 20), DrawImage("7x3.png"))
+    game.add_child(go)
+    game.run()

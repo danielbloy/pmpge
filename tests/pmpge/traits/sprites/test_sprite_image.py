@@ -1,5 +1,7 @@
 import pytest
 
+import pmpge.environment as environment
+from pmpge.game import Game
 from pmpge.game_object import GameObject
 from pmpge.sprite import Sprite
 from pmpge.traits.position import Position
@@ -87,6 +89,28 @@ def test_changing_sprite_image():
     assert sprite.bottom_right == (3, 1)
 
 
+def test_draws_when_combined_with_sprite():
+    """
+    Validates that SpriteImage draws without throwing an exception when combined with Sprite.
+    """
+    setup_pgzero(__file__)
+    update_counter = 2
+
+    def draw(surface):
+        nonlocal update_counter
+        update_counter -= 1
+        if update_counter <= 0:
+            environment.terminate()
+
+    game = Game(320, 200)
+    game.add_draw_func(draw)
+
+    setup_pgzero(__file__)
+    sprite = Sprite(0, 0, SpriteImage("8x8.png"))
+    game.add_child(sprite)
+    game.run()
+
+
 # noinspection PyUnresolvedReferences
 def test_using_with_game_object():
     """
@@ -115,4 +139,26 @@ def test_using_with_game_object():
     with pytest.raises(AttributeError):
         go.draw_hierarchy(None)
 
-# TODO: Add test to draw to draw the object
+
+def test_draws_fails_when_combined_with_game_object():
+    """
+    VValidates that SpriteImage fails with an exception when combined with Sprite.
+    """
+    setup_pgzero(__file__)
+    update_counter = 2
+
+    def draw(surface):
+        nonlocal update_counter
+        update_counter -= 1
+        if update_counter <= 0:
+            environment.terminate()
+
+    game = Game(320, 200)
+    game.add_draw_func(draw)
+
+    setup_pgzero(__file__)
+    go = GameObject(Position(0, 0), SpriteImage("8x8.png"))
+    game.add_child(go)
+
+    with pytest.raises(AttributeError):
+        game.run()

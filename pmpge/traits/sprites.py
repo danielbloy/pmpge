@@ -10,6 +10,7 @@ class SpriteImage:
     """
     width: int
     height: int
+    top_left: tuple[int, int]
     image: ImageResource
 
     def __init__(self, image: str):

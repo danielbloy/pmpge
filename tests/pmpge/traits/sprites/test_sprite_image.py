@@ -63,6 +63,31 @@ def test_using_with_sprite():
 
 
 # noinspection PyUnresolvedReferences
+def test_changing_sprite_image():
+    """
+    Validates that the image can be changed.
+    """
+    setup_pgzero(__file__)
+    sprite = Sprite(0, 0, SpriteImage("8x8.png"))
+    assert sprite.image.surface is not None
+    assert sprite.image.width == 8
+    assert sprite.image.height == 8
+    assert sprite.width == 8
+    assert sprite.height == 8
+    assert sprite.top_left == (-4, -4)
+    assert sprite.bottom_right == (3, 3)
+
+    sprite.image.load("7x3.png")
+    assert sprite.image.surface is not None
+    assert sprite.image.width == 7
+    assert sprite.image.height == 3
+    assert sprite.width == 7
+    assert sprite.height == 3
+    assert sprite.top_left == (-3, -1)
+    assert sprite.bottom_right == (3, 1)
+
+
+# noinspection PyUnresolvedReferences
 def test_using_with_game_object():
     """
     Confirms that this cannot be used with a GameObject, even with a Position.
@@ -89,3 +114,5 @@ def test_using_with_game_object():
 
     with pytest.raises(AttributeError):
         go.draw_hierarchy(None)
+
+# TODO: Add test to draw to draw the object

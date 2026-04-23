@@ -11,9 +11,9 @@ class ImageResource:
     Represents an image resource that can be loaded and drawn.
     """
 
-    def __init__(self, image: str, notify: Callable[[int, int], None]):
+    def __init__(self, image: str, notify: Callable[[int, int], None] = None):
         self.surface = None
-        self.__notify = notify
+        self.notify = notify
         self.load(image)
 
     @property
@@ -36,7 +36,9 @@ class ImageResource:
         """
         surface = images.load(image)
         self.surface = surface
-        self.__notify(surface.get_width(), surface.get_height())
+        notify = self.notify
+        if notify:
+            notify(surface.get_width(), surface.get_height())
 
     def draw(self, surface: Any, pos: tuple[float, float]):
         """

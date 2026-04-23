@@ -22,3 +22,10 @@ class SpriteImage:
     # noinspection PyUnresolvedReferences
     def draw(self, surface: Any):
         self.image.draw(surface, self.top_left)
+
+    def merged(self):
+        def on_notify(width: int, height: int):
+            self.width = width
+            self.height = height
+
+        self.image.notify = on_notify

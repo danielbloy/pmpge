@@ -5,11 +5,9 @@ but as many can be attached as you like. They are executed in the order they
 are added. In this example, the update function terminates the game after 1
 second has elapsed.
 """
-import os
-
-os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
 import time
+
 from pmpge.game import Game
 
 game: Game = Game()

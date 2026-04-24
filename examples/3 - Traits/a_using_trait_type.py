@@ -10,17 +10,15 @@ subclassing.
 A trait can be provided as either a type (as in this example) or as an
 instance (see `b_using_trait_instance.py`). If a type is passed in, it must
 have a constructor that takes no argument other than self.
-"""
-import os
 
-os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
+NOTE: This example only works with Pygame Zero as it directly uses
+`screen.draw.text()` to draw the text.
+"""
 
 import time
+
 from pmpge.game import Game
 from pmpge.game_object import GameObject
-from pgzero.screen import Screen
-
-screen: Screen
 
 game: Game = Game()
 

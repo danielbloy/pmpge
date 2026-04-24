@@ -3,17 +3,16 @@ This example shows how to subclass from GameObject to add additional custom
 behaviour. There are 5 methods that can be overridden, this example just
 overrides 3 of them. The 5 methods that can be overridden are: activated(),
 deactivated(), draw(), update() and destroyed().
-"""
-import os
 
-os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
+NOTE: This example only works with Pygame Zero as it directly uses
+`screen.draw.text()` to draw the text.
+"""
 
 import time
+
 from pmpge.game import Game
 from pmpge.game_object import GameObject
-from pgzero.screen import Screen
 
-screen: Screen
 game: Game = Game()
 
 RED = (255, 0, 0)

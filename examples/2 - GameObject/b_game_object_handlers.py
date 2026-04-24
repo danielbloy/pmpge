@@ -4,17 +4,16 @@ without subclassing. This is achieved by creating a class that handles the new
 functionality. This example is shown for completeness. This is not the recommended
 way to add functionality. It is recommended to either subclass or use traits. Those
 examples can be seen in `a_game_object_subclassed.py1 and `c_game_object_with_trait.py`.
-"""
-import os
 
-os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
+NOTE: This example only works with Pygame Zero as it directly uses
+`screen.draw.text()` to draw the text.
+"""
 
 import time
+
 from pmpge.game import Game
 from pmpge.game_object import GameObject
-from pgzero.screen import Screen
 
-screen: Screen
 game: Game = Game()
 
 RED = (255, 0, 0)
@@ -26,14 +25,9 @@ def terminate(dt: float):
 
 
 class BlinkOneUp:
-    # The constructor is not actually needed and does not get executed but is included
-    # to prevent PyCharm warnings.
-    def __init__(self):
-        self.draw_one_up = True
-        self.one_up_transition = 0
+    draw_one_up: bool
+    one_up_transition: float
 
-    # This method both creates and initialises the properties on the GameObject. Remember,
-    # the __init()__ method is never actually called in the example.
     def activated(self):
         self.draw_one_up = True
         self.one_up_transition = time.time() + 0.5

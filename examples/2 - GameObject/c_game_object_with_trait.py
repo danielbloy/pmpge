@@ -11,20 +11,18 @@ A trait can be provided as either a type (as in the first GameObject in
 this example) or as an instance. If a type is passed in, it must have
 a constructor that takes no argument other than self. If an instance is
 provided, all properties are copied across to the GameObject (shallow copy).
-"""
-import os
 
-os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
+NOTE: This example only works with Pygame Zero as it directly uses
+`screen.draw.text()` to draw the text.
+"""
 
 import time
+
 from pmpge.game import Game
 from pmpge.game_object import GameObject
 from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import Velocity
 from pmpge.traits.position import Position
-from pgzero.screen import Screen
-
-screen: Screen
 
 game: Game = Game()
 
@@ -60,8 +58,7 @@ class BlinkOneUp:
 game_object = GameObject(BlinkOneUp)
 game.add_child(game_object)
 
-# Construct a GameObject using an instance (because it does not have default
-# constructor).
+# Construct a GameObject using an instance (because it does not have default constructor).
 game_object_2 = GameObject(
     Position(100, 100),
     Velocity(20, 20),

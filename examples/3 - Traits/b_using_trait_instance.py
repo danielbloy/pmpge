@@ -11,9 +11,6 @@ A trait can be provided as either an instance (as in this example) or as a
 type (see `a_using_trait_type.py`). If an instance is provided, all
 properties are copied across to the GameObject (shallow copy).
 """
-import os
-
-os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
 import time
 

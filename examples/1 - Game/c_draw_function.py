@@ -8,15 +8,11 @@ they are called in the order added.
 In this example, we blit to the surface the player image which is moved by
 the update_image function.
 """
-import os
-
-os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
 import time
-from pmpge.game import Game
-from pgzero.screen import Screen
 
-screen: Screen
+from pmpge.game import Game
+
 game: Game = Game()
 
 

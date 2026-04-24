@@ -2,16 +2,13 @@
 This example demonstrates a Sprite which is a GameObject with both a
 position and size. The two Sprites move away from each other.
 """
-import os
-
-os.environ['SDL_VIDEO_WINDOW_POS'] = f'700,100'
 
 import time
 
 from pmpge.game import Game
 from pmpge.sprite import Sprite
-from pmpge.traits.sprites import SpriteImage
 from pmpge.traits.physics import Velocity
+from pmpge.traits.sprites import SpriteImage
 
 game: Game = Game(320, 240)
 

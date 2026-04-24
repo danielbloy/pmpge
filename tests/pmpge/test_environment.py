@@ -180,10 +180,10 @@ def test_get_graphics_driver():
         'd', lambda: environment.get_graphics_driver() == "pmpge.drivers.graphics.pgzero")
 
     with_forced_system(
-        'c', lambda: environment.get_graphics_driver() == "pmpge.drivers.graphics.displayio")
+        'c', lambda: environment.get_graphics_driver() == "pmpge.drivers.graphics.none")
 
     with_forced_system(
-        'm', lambda: environment.get_graphics_driver() == "pmpge.drivers.graphics.picographics")
+        'm', lambda: environment.get_graphics_driver() == "pmpge.drivers.graphics.none")
 
     with_config_file(
         'GRAPHICS_DRIVER = "my.graphics.driver"\n',

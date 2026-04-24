@@ -159,13 +159,7 @@ def get_graphics_driver() -> str:
     if is_running_on_desktop():
         return "pmpge.drivers.graphics.pgzero"
 
-    if is_running_on_micropython():
-        return "pmpge.drivers.graphics.picographics"
-
-    if is_running_on_circuitpython():
-        return "pmpge.drivers.graphics.displayio"
-
-    raise NotImplementedError("Cannot determine graphics driver")
+    return "pmpge.drivers.graphics.none"
 
 
 def get_sound_driver() -> str:
@@ -390,6 +384,31 @@ if is_running_on_microcontroller():
     # This is required on microcontrollers as we implement the game loop
     # ourselves.
     import time
+
+# Now we will do some device specific initialisation providing defaults
+if is_running_on_circuitpython():
+    try:
+        import board as board
+
+        # If the board has a built-in display, we provide the screen width,
+        # screen height and graphics driver if they have not been provided.
+        if hasattr(board, 'DISPLAY'):
+            display = board.DISPLAY
+            print("Device has built-in display")
+            if config and not hasattr(config, 'SCREEN_WIDTH'):
+                config.SCREEN_WIDTH = display.width
+                print(f"Setting SCREEN_WIDTH = {config.SCREEN_WIDTH}")
+
+            if config and not hasattr(config, 'SCREEN_HEIGHT'):
+                config.SCREEN_HEIGHT = display.height
+                print(f"Setting SCREEN_HEIGHT = {config.SCREEN_HEIGHT}")
+
+            if config and not hasattr(config, 'GRAPHICS_DRIVER'):
+                config.GRAPHICS_DRIVER = "pmpge.drivers.graphics.displayio"
+                print(f"Setting GRAPHICS_DRIVER = {config.GRAPHICS_DRIVER}")
+
+    except ImportError:
+        pass
 
 # Initialise the device next to allow it to perform any setup.
 import_driver('device')

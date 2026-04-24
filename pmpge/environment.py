@@ -78,10 +78,10 @@ def screen_size() -> tuple[int, int]:
     """
     width, height = None, None
 
-    if config and hasattr(config, 'SCREEN_WIDTH'):
+    if hasattr(config, 'SCREEN_WIDTH'):
         width = config.SCREEN_WIDTH
 
-    if config and hasattr(config, 'SCREEN_HEIGHT'):
+    if hasattr(config, 'SCREEN_HEIGHT'):
         height = config.SCREEN_HEIGHT
 
     if (width and not height) or (height and not width):
@@ -126,7 +126,7 @@ def get_controller_driver() -> str:
     an override, otherwise a default will be provided depending on the system we are executing
     within.
     """
-    if config and hasattr(config, 'CONTROLLER_DRIVER'):
+    if hasattr(config, 'CONTROLLER_DRIVER'):
         return config.CONTROLLER_DRIVER
 
     if is_running_on_desktop():
@@ -141,7 +141,7 @@ def get_device_driver() -> str:
     an override, otherwise the `none.py` device driver will be used. This is different
     from the other drivers which have system specific drivers.
     """
-    if config and hasattr(config, 'DEVICE_DRIVER'):
+    if hasattr(config, 'DEVICE_DRIVER'):
         return config.DEVICE_DRIVER
 
     return "pmpge.drivers.device.none"
@@ -153,7 +153,7 @@ def get_graphics_driver() -> str:
     an override, otherwise a default will be provided depending on the system we are
     executing within.
     """
-    if config and hasattr(config, 'GRAPHICS_DRIVER'):
+    if hasattr(config, 'GRAPHICS_DRIVER'):
         return config.GRAPHICS_DRIVER
 
     if is_running_on_desktop():
@@ -168,7 +168,7 @@ def get_sound_driver() -> str:
     an override, otherwise a default will be provided depending on the system we are
     executing within.
     """
-    if config and hasattr(config, 'SOUND_DRIVER'):
+    if hasattr(config, 'SOUND_DRIVER'):
         return config.SOUND_DRIVER
 
     if is_running_on_desktop():
@@ -371,6 +371,10 @@ def import_config():
     except ImportError:
         print("No config file found.")
 
+    # If there was not a config file found then we create a placeholder instance.
+    if not config:
+        config = type('Config', (), {})
+
 
 import_config()
 
@@ -395,15 +399,15 @@ if is_running_on_circuitpython():
         if hasattr(board, 'DISPLAY'):
             display = board.DISPLAY
             print("Device has built-in display")
-            if config and not hasattr(config, 'SCREEN_WIDTH'):
+            if not hasattr(config, 'SCREEN_WIDTH'):
                 config.SCREEN_WIDTH = display.width
                 print(f"Setting SCREEN_WIDTH = {config.SCREEN_WIDTH}")
 
-            if config and not hasattr(config, 'SCREEN_HEIGHT'):
+            if not hasattr(config, 'SCREEN_HEIGHT'):
                 config.SCREEN_HEIGHT = display.height
                 print(f"Setting SCREEN_HEIGHT = {config.SCREEN_HEIGHT}")
 
-            if config and not hasattr(config, 'GRAPHICS_DRIVER'):
+            if not hasattr(config, 'GRAPHICS_DRIVER'):
                 config.GRAPHICS_DRIVER = "pmpge.drivers.graphics.displayio"
                 print(f"Setting GRAPHICS_DRIVER = {config.GRAPHICS_DRIVER}")
 

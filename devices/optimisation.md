@@ -5,15 +5,10 @@ investigated and what has already been done.
 
 ## Reference test hardware
 
-All performance testing has been done on the following devices:
-
-* Desktop PC
-* Adafruit EdgeBadge running CircuitPython 10.1.4.
-* Raspberry Pi Pico running CircuitPython 10.1.4.
-* Raspberry Pi Pico 2 running CircuitPython 10.1.4.
-* Waveshare S3 Zero running CircuitPython 10.1.4.
-
-Using the following `config.py`
+All performance testing has been done on the following devices using a mix
+of microcontrollers to compare performance. All testing was done using
+CircuitPython 10.1.4 using the following `config.py` except where a specific
+`config.py` file is provided:
 
 ```
 SCREEN_WIDTH = 1
@@ -24,6 +19,19 @@ REPORT_FREQUENCY = 4
 PROFILE = True
 PROFILE_TOP = 10
 ```
+
+### Plain boards: No screens, buttons or buzzers
+
+* Raspberry Pi Pico running (Pico)
+* Raspberry Pi Pico 2 running (Pico 2)
+* Waveshare S3 Zero running
+* Itsy Bitsy M4 Express (ATSAMD51)
+
+### Rich boards: With screens, buttons, buzzers
+
+* Desktop PC (for comparison)
+* Pico System (Pico)
+* Adafruit EdgeBadge (ATSAMD51)
 
 The tests executed is the code found in `tests/validate_device`
 
@@ -48,6 +56,12 @@ Vanilla results:
 Use the following tool to program the Waveshare ESP-S3 Zero:
 
 * https://learn.adafruit.com/circuitpython-with-esp32-quick-start/web-serial-esptool
+
+Use the following method to flash the Pico system:
+
+1. Turn your PicoSystem off.
+2. Hold down the X button.
+3. While holding X, turn on the device or connect it to your computer via USB.
 
 The following references have been used:
 

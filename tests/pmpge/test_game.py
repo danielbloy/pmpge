@@ -12,7 +12,7 @@ def test_empty_constructor():
     game = Game()
     assert game.width == 640
     assert game.height == 480
-    assert game.background_color == (0, 0, 0)
+    assert game.background_colour == (0, 0, 0)
     assert game.root
     assert len(game.children) == 0
 
@@ -30,7 +30,7 @@ def test_constructor_with_width_and_height():
     game = Game(width=100, height=100)
     assert game.width == 100
     assert game.height == 100
-    assert game.background_color == (0, 0, 0)
+    assert game.background_colour == (0, 0, 0)
     assert game.root
     assert len(game.children) == 0
 
@@ -64,21 +64,21 @@ def test_constructor_with_background_colour():
     game = Game()
     assert game.width == 640
     assert game.height == 480
-    assert game.background_color == (0, 0, 0)
+    assert game.background_colour == (0, 0, 0)
     assert game.root
     assert len(game.children) == 0
 
-    game = Game(background_color=(1, 2, 3))
+    game = Game(background_colour=(1, 2, 3))
     assert game.width == 640
     assert game.height == 480
-    assert game.background_color == (1, 2, 3)
+    assert game.background_colour == (1, 2, 3)
     assert game.root
     assert len(game.children) == 0
 
-    game = Game(background_color=(6, 5, 4))
+    game = Game(background_colour=(6, 5, 4))
     assert game.width == 640
     assert game.height == 480
-    assert game.background_color == (6, 5, 4)
+    assert game.background_colour == (6, 5, 4)
     assert game.root
     assert len(game.children) == 0
 
@@ -320,12 +320,12 @@ def test_properties_passed_to_execute():
         expected_bgc = (0, 0, 0)
         game.run()
 
-        game = Game(320, 240, background_color=(1, 2, 3))
+        game = Game(320, 240, background_colour=(1, 2, 3))
         expected_size = (320, 240)
         expected_bgc = (1, 2, 3)
         game.run()
 
-        game = Game(800, 300, background_color=(5, 4, 7))
+        game = Game(800, 300, background_colour=(5, 4, 7))
         expected_size = (800, 300)
         expected_bgc = (5, 4, 7)
         game.run()

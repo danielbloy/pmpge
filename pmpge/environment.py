@@ -353,6 +353,7 @@ def import_config():
     global config
     try:
         if is_running_on_desktop():
+            # noinspection PyUnusedImports
             import importlib.util
             config = importlib.import_module('config')
             config = importlib.reload(config)
@@ -392,6 +393,7 @@ if is_running_on_microcontroller():
 # Now we will do some device specific initialisation providing defaults
 if is_running_on_circuitpython():
     try:
+        # noinspection PyUnusedImports,PyPackageRequirements
         import board as board
 
         # If the board has a built-in display, we provide the screen width,

@@ -1,5 +1,3 @@
-from typing import Any
-
 from pmpge.graphics import ImageResource
 
 
@@ -26,7 +24,7 @@ class SpriteImage:
         self.width = image.width
         self.height = image.height
 
-    def draw(self, surface: Any):
+    def draw(self, surface):
         """
         Uses the Sprites bounds to draw the image. The Sprite will provide the
         `top_left` property.

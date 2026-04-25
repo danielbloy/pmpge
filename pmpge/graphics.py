@@ -1,6 +1,8 @@
-from typing import Callable
-
 import pmpge.environment as environment
+
+# These are not available in CircuitPython.
+if environment.is_running_on_desktop():
+    from typing import Callable
 
 __graphics = environment.import_driver('graphics')
 ImageLoader = __graphics.ImageLoader

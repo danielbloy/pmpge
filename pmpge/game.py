@@ -16,15 +16,17 @@ class Game:
     The desired width and height of the game can be specified. If they are not specified then
     the system defaults will be used.
     """
+    background_colour: tuple[int, int, int]
+    __draw_funcs: list[Callable[[Any], None]]
+    __update_funcs: list[Callable[[float], None]]
+    __root: GameObject
 
     def __init__(self, width: int = None, height: int = None,
-                 background_color: tuple[int, int, int] = None):
+                 background_colour: tuple[int, int, int] = None):
 
-        self.background_color: tuple[int, int, int] = background_color if (
-            background_color) else (0, 0, 0)
-
-        self.__draw_funcs: list[Callable[[Any], None]] = []
-        self.__update_funcs: list[Callable[[float], None]] = []
+        self.background_colour = background_colour if background_colour else (0, 0, 0)
+        self.__draw_funcs = []
+        self.__update_funcs = []
         self.__root = GameObject(name="root")
 
         if (width and not height) or (height and not width):
@@ -124,4 +126,4 @@ class Game:
         """
         Runs the actual game at the desired resolution.
         """
-        execute(self, self.background_color)
+        execute(self, self.background_colour)

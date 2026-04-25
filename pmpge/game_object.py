@@ -77,6 +77,19 @@ class GameObject:
     For example, methods, property getter and setter methods. For an example of a subclass using traits,
     see the Sprite class.
     """
+    __parent: Self | None
+    __name: str | None
+    __active: bool
+    visible: bool
+    enabled: bool
+    __children: list[Self]
+    __alive: bool
+
+    __draw_handlers: list[Callable[[Self, Any], None]]
+    __update_handlers: list[Callable[[Self, float], None]]
+    __activate_handlers: list[Callable[[Self], None]]
+    __deactivate_handlers: list[Callable[[Self], None]]
+    __destroy_handlers: list[Callable[[Self], None]]
 
     def __init__(self,
                  *traits,
@@ -102,25 +115,20 @@ class GameObject:
         twice to force on of the activate() or deactivate() methods and corresponding events
         handlers to be called.
         """
-        self.__parent: Self | None = None
-        self.__name: str | None = name
-        self.visible: bool = visible
-        self.enabled: bool = enabled
-        self.__children: list[Self] = []
-        self.__alive: bool = True
+        self.__parent = None
+        self.__name = name
+        self.visible = visible
+        self.enabled = enabled
+        self.__children = []
+        self.__alive = True
 
         # Copy across the handler lists first; this creates empty lists if there are no
         # handler lists specified.
-        self.__draw_handlers: list[
-            Callable[[Self, Any], None]] = draw_handlers.copy() if draw_handlers else []
-        self.__update_handlers: list[
-            Callable[[Self, float], None]] = update_handlers.copy() if update_handlers else []
-        self.__activate_handlers: list[
-            Callable[[Self], None]] = activate_handlers.copy() if activate_handlers else []
-        self.__deactivate_handlers: list[
-            Callable[[Self], None]] = deactivate_handlers.copy() if deactivate_handlers else []
-        self.__destroy_handlers: list[
-            Callable[[Self], None]] = destroy_handlers.copy() if destroy_handlers else []
+        self.__draw_handlers = draw_handlers.copy() if draw_handlers else []
+        self.__update_handlers = update_handlers.copy() if update_handlers else []
+        self.__activate_handlers = activate_handlers.copy() if activate_handlers else []
+        self.__deactivate_handlers = deactivate_handlers.copy() if deactivate_handlers else []
+        self.__destroy_handlers = destroy_handlers.copy() if destroy_handlers else []
 
         # Now add the individual handlers.
         self.__draw_handlers.append(draw_handler) if draw_handler else None

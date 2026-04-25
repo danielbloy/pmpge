@@ -26,7 +26,7 @@ class ImageLoader:
         self.width = 0
         self.height = 0
 
-    def draw(self, surface, pos: tuple[float, float]):
+    def draw(self, surface, pos: tuple[int, int]):
         """
         Draws the image, with pos representing the top left corner.
         """

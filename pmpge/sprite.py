@@ -14,35 +14,35 @@ class Bounds:
     height: int
 
     @property
-    def left(self) -> float:
-        return self.x - (self.width // 2)
+    def left(self) -> int:
+        return int(self.x - (self.width // 2))
 
     @property
-    def right(self) -> float:
+    def right(self) -> int:
         return self.left + self.width - 1
 
     @property
-    def top(self) -> float:
-        return self.y - (self.height // 2)
+    def top(self) -> int:
+        return int(self.y - (self.height // 2))
 
     @property
-    def bottom(self) -> float:
+    def bottom(self) -> int:
         return self.top + self.height - 1
 
     @property
-    def top_left(self) -> tuple[float, float]:
+    def top_left(self) -> tuple[int, int]:
         return self.left, self.top
 
     @property
-    def top_right(self) -> tuple[float, float]:
+    def top_right(self) -> tuple[int, int]:
         return self.right, self.top
 
     @property
-    def bottom_left(self) -> tuple[float, float]:
+    def bottom_left(self) -> tuple[int, int]:
         return self.left, self.bottom
 
     @property
-    def bottom_right(self) -> tuple[float, float]:
+    def bottom_right(self) -> tuple[int, int]:
         return self.right, self.bottom
 
 

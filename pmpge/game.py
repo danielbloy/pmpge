@@ -16,7 +16,7 @@ class Game:
     The desired width and height of the game can be specified. If they are not specified then
     the system defaults will be used.
     """
-    __background_colour: tuple[int, int, int]
+    background_colour: tuple[int, int, int]
     __draw_funcs: list[Callable[[Any], None]]
     __update_funcs: list[Callable[[float], None]]
     __root: GameObject
@@ -24,7 +24,7 @@ class Game:
     def __init__(self, width: int = None, height: int = None,
                  background_colour: tuple[int, int, int] = None):
 
-        self.__background_colour = background_colour if background_colour else (0, 0, 0)
+        self.background_colour = background_colour if background_colour else (0, 0, 0)
         self.__draw_funcs = []
         self.__update_funcs = []
         self.__root = GameObject(name="root")
@@ -37,14 +37,6 @@ class Game:
             self.__width, self.__height = width, height
         else:
             self.__width, self.__height = screen_size()
-
-    @property
-    def background_colour(self) -> tuple[int, int, int]:
-        return self.__background_colour
-
-    @background_colour.setter
-    def background_colour(self, background_colour: tuple[int, int, int]):
-        self.__background_colour = background_colour
 
     @property
     def width(self) -> int:
@@ -134,4 +126,4 @@ class Game:
         """
         Runs the actual game at the desired resolution.
         """
-        execute(self, self.__background_colour)
+        execute(self, self.background_colour)

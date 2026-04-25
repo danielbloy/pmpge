@@ -374,7 +374,7 @@ def import_config():
 
     # If there was not a config file found then we create a placeholder instance.
     if not config:
-        config = type('Config', (), {})
+        config = type('Config', (), {})()
 
 
 import_config()

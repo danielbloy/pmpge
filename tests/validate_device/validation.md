@@ -10,4 +10,7 @@ on a device.
 4. Create a `images` directory in the root of the device.
 5. Copy all Python files from `tests/validate_device/images` into the
    `images` directory on the device.
-6. Use Thonny to run `validate_all.py`.
+6. Create a `lib` directory in the root of the device.
+7. Copy across the contents of `tests/validate_device/lib` into the `lib`
+   directory on the device.
+8. Use Thonny to run `validate_all.py`.

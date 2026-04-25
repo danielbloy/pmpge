@@ -50,7 +50,7 @@ sprite_data: list[SpriteData] = [
 
 
 def setup(game: Game):
-    game.background_colour = (250, 0, 250)  # Pink
+    game.background_colour = (250, 120, 0)  # Orange
     for data in sprite_data:
         sprite = Sprite(
             data.x, data.y,

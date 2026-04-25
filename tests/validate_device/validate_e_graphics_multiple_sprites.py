@@ -26,7 +26,26 @@ class SpriteData:
 
 
 sprite_data: list[SpriteData] = [
-    SpriteData(0, 0, 5, 5, "player.png")
+    SpriteData(0, 0, 5, 5, "player.png"),
+    SpriteData(10, 10, 10, 10, "alien.png"),
+    SpriteData(100, 10, -5, 20, "alien_b.png"),
+    SpriteData(10, 10, 5, -25, "alien_c.png"),
+    SpriteData(20, 20, -15, 15, "alien_d.png"),
+    SpriteData(30, 30, 25, -5, "alien_e.png"),
+    SpriteData(40, 40, -5, 25, "alien_f.png"),
+    SpriteData(50, 50, 15, -15, "alien_g.png"),
+    SpriteData(60, 60, -25, 5, "alien_h.png"),
+    SpriteData(80, 60, 5, 5, "bomb.png"),
+    SpriteData(80, 60, -5, -5, "laser.png"),
+    SpriteData(80, 60, -5, 5, "marker.png"),
+    SpriteData(80, 60, 5, -5, "7x3.png"),
+    SpriteData(80, 60, 15, 15, "7x7.png"),
+    SpriteData(80, 60, -15, -15, "8x8.png"),
+    SpriteData(80, 60, -15, 15, "7x3.png"),
+    SpriteData(80, 60, 15, -15, "7x7.png"),
+    SpriteData(60, 118, 5, -20, "8x8.png"),
+    SpriteData(150, 118, -10, -10, "alien_g.png"),
+    SpriteData(160, 128, -5, -5, "alien_h.png"),
 ]
 
 

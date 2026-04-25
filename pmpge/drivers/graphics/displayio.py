@@ -1,8 +1,12 @@
 # TODO: This current implementation is only designed to work with a device with a built-in display.
-
-import adafruit_imageload
 # See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/display-a-bitmap
 # See: https://docs.circuitpython.org/en/latest/shared-bindings/displayio/
+# TODO: Current issues:
+# * No transparency of images (png files)
+# * When starting up the game, and sprites are loading, they are displayed on the screen.
+# * 20 sprites gives around 30 fps on an EdgeBadge in the multi-sprite validate test
+# * Console displays output on EdgeBadge when games starts up.
+import adafruit_imageload
 import board
 
 import displayio

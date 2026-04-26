@@ -23,7 +23,7 @@ methods are:
         * `screen_width` - the width of the screen in pixels.
         * `screen_height` - the height of the screen in pixels.
         * `background_colour` - the default colour of the background in RGB format.
-* `update(delta_time: float)` - called once every update cycle.
+* `update(delta_time: float)` - called once every update cycle before anything else.
 * `deinit()` - called once when the game finishes.
 
 For details on the mandatory implementations, see the relevant subpages:

@@ -16,7 +16,7 @@ Called once when the game first runs.
 
 ### `update(delta_time: float)`
 
-Called once every update cycle.
+Called once every update cycle before anything else.
 
 #### Parameters
 

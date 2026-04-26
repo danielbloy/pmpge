@@ -141,3 +141,8 @@ class ImageLoader:
         tile_grid = self.tile_grid
         tile_grid.x = pos[0]
         tile_grid.y = pos[1]
+
+        # TODO: Somehow we have to set tile_grid.hidden based on the owning GameObjects
+        #       visibility setting. Sadly, if visibility is off, the object wont get its
+        #       draw() method called to hook this up nicely so we need to think more logically.
+        tile_grid.hidden = not tile_grid.hidden

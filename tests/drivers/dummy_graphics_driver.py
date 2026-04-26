@@ -16,20 +16,21 @@ background_colour = None
 screen_draw = None
 
 
-def init(w: int, h: int, sw: int, sh: int):
-    global width, height, screen_width, screen_height
+def init(w: int, h: int, sw: int, sh: int, bgc: tuple[int, int, int]):
+    global width, height, screen_width, screen_height, background_colour
     width = w
     height = h
     screen_width = sw
     screen_height = sh
+    background_colour = bgc
+
     global init_called
     init_called = time.monotonic_ns()
     call_order.append('init')
 
 
-def clear(screen, bgc: tuple[int, int, int]):
-    global screen_clear, background_colour
-    background_colour = bgc
+def clear(screen):
+    global screen_clear
     screen_clear = screen
     call_order.append('clear')
 

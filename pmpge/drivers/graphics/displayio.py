@@ -24,9 +24,13 @@ root.append(background)
 
 # TODO: If we use a tilmemap at a later point, we can remove the need for the background layer.
 
-def init(w: int, h: int, sw: int, sh: int):
+def init(w: int, h: int, sw: int, sh: int, bgc: tuple[int, int, int]):
     # TODO: We need to sort out scaling and drawing at some point.
     # Setting up the root here stops all the graphics from showing as they are loading.
+    r = bgc[0] & 255
+    g = bgc[1] & 255
+    b = bgc[2] & 255
+    palette[0] = r << 16 | g << 8 | b
     display.root_group = root
 
 
@@ -36,16 +40,11 @@ def deinit():
     pass
 
 
-def clear(screen, bgc: tuple[int, int, int]):
+def clear(screen):
     """
-    Clears the screen, but actually all it does it reset the background palette
-    colour. Strictly, this only needs to happen if the background colour is
-    changed so may be a potential future optimisation.
+    Does not actually need to do anything as displayio handles this for us.
     """
-    r = bgc[0] & 255
-    g = bgc[1] & 255
-    b = bgc[2] & 255
-    palette[0] = r << 16 | g << 8 | b
+    pass
 
 
 def draw(screen):

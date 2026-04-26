@@ -5,17 +5,17 @@ import pygame
 from pgzero.loaders import images
 from pygame import Surface
 
-width: int
-height: int
-screen_width: int
-screen_height: int
-
+width: int = 0
+height: int = 0
+screen_width: int = 0
+screen_height: int = 0
+background_colour: tuple[int, int, int] = (0, 0, 0)
 scale_surface: Surface = None
 
 mod = sys.modules['__main__']
 
 
-def init(w: int, h: int, sw: int, sh: int):
+def init(w: int, h: int, sw: int, sh: int, bgc: tuple[int, int, int]):
     """
     This sets up the game to run at the desired resolution in a python/pygame zero
     environment. If the games specified width or height is smaller than the provided
@@ -27,10 +27,11 @@ def init(w: int, h: int, sw: int, sh: int):
     hook into pygame zero. This will overwrite those values if they are set in the
     main Python file.
     """
-    global width, height, screen_width, screen_height, scale_surface
+    global width, height, screen_width, screen_height, background_colour, scale_surface
 
     width, height = w, h
     screen_width, screen_height = sw, sh
+    background_colour = bgc
 
     if width > screen_width:
         screen_width = width
@@ -45,7 +46,7 @@ def init(w: int, h: int, sw: int, sh: int):
         scale_surface = pygame.Surface((width, height))
 
 
-def clear(screen, background_colour: tuple[int, int, int]):
+def clear(screen):
     """
     Clears the screen with the specified background colour.
     """

@@ -16,7 +16,11 @@
 # * 20 sprites gives around 29 fps on an EdgeBadge in the multi-sprite validate test with:
 #      SAMPLE_FREQUENCY = 1
 #      REPORT_FREQUENCY = 1
+#
 # * Using transparency is expensive and removing it increases the above test to 40 fps
+#
+# * Doing manual refreshing seems to seriously hurt performance. It is however worth investigating
+#   further when we have a fully working driver to see if we can get smoother updates.
 #
 # REFERENCES
 #
@@ -78,6 +82,10 @@ def init(w: int, h: int, sw: int, sh: int, bgc: tuple[int, int, int]):
     display.brightness = 1
     # ISSUE: Adding this statement in stops the console being displayed briefly but negatively impacts framerate
     # display.refresh(target_frames_per_second=30)
+
+    # ISSUE: At this point, the GameObjects will be displayed in the top left corner as they have not
+    #        been updated and their initial position is (0, 0). There is no coupling between an
+    #        ImageLoader/ImageResource and the corresponding GameObject.
 
 
 def clear(screen):

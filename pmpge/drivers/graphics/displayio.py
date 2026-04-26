@@ -20,8 +20,20 @@
 #
 # REFERENCES
 #
-# * https://learn.adafruit.com/circuitpython-display-support-using-displayio/display-a-bitmap
 # * https://docs.circuitpython.org/en/latest/shared-bindings/displayio/
+# * https://learn.adafruit.com/circuitpython-display-support-using-displayio/display-a-bitmap
+# * https://learn.adafruit.com/creating-your-first-tilemap-game-with-circuitpython/overview
+#
+# NOTES
+#
+# * The display variable is a BusDisplay:
+#   See: https://docs.circuitpython.org/en/latest/shared-bindings/busdisplay/index.html#module-busdisplay
+#
+# * Experiment with visibility of the objects. Group.visible is probably what is needed here.
+#   See: https://docs.circuitpython.org/en/latest/shared-bindings/displayio/#displayio.Group
+#
+# * Investigate supporting different bitmap types:
+#   See: https://learn.adafruit.com/creating-your-first-tilemap-game-with-circuitpython/indexed-bmp-graphics
 #
 
 # noinspection PyUnresolvedReferences
@@ -34,16 +46,17 @@ from displayio import Group, Palette, Bitmap, TileGrid
 
 # LIMITATION: Using board.DISPLAY will fail if the device does not have a built-in display.
 display = board.DISPLAY
+display.refresh(target_frames_per_second=30)
+display.brightness = 0.0  # Turn the display off until the game starts
 
 # Create a root group to place all items to draw.
 root = Group()
 
 # Create a single colour bitmap for the background.
 # Source: https://learn.adafruit.com/circuitpython-display-support-using-displayio/draw-pixels
-background_bmp = Bitmap(display.width, display.height, 1)
 palette = Palette(1)
 palette[0] = 0x000000
-background = TileGrid(background_bmp, pixel_shader=palette)
+background = TileGrid(Bitmap(display.width, display.height, 1), pixel_shader=palette)
 root.append(background)
 
 
@@ -54,14 +67,17 @@ def init(w: int, h: int, sw: int, sh: int, bgc: tuple[int, int, int]):
     # FUTURE: We need to sort out scaling at some point. This can be done by setting: `root.scale = 2`
     #         See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/group#group-scale-3162091
 
-    # Setting up the root here stops all the graphics from showing as they are loading.
-    display.root_group = root
-
     # Set the single colour in the palette for our background to the desired background colour
     r = bgc[0] & 255
     g = bgc[1] & 255
     b = bgc[2] & 255
     palette[0] = r << 16 | g << 8 | b
+
+    # Setting up the root here stops all the graphics from showing as they are loading.
+    display.root_group = root
+    display.brightness = 1
+    # ISSUE: Adding this statement in stops the console being displayed briefly but negatively impacts framerate
+    # display.refresh(target_frames_per_second=30)
 
 
 def clear(screen):
@@ -91,10 +107,6 @@ class ImageLoader:
         """
         Loads the named image resource.
         """
-        # LIMITATION: Add support for bitmaps as it would probably be faster and use less memory
-        # bitmap = displayio.OnDiskBitmap(f"/images/{image}")
-        # tile_grid = displayio.TileGrid(bitmap, pixel_shader=bitmap.pixel_shader)
-
         if hasattr(self, 'bitmap'):
             self.bitmap.deinint()
 

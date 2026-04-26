@@ -8,6 +8,9 @@ import time
 
 from pmpge.environment import is_running_on_desktop, config
 from pmpge.game import Game
+from pmpge.sprite import Sprite
+from pmpge.traits.physics import Velocity
+from pmpge.traits.sprites import SpriteImage
 
 # These are not available in CircuitPython.
 if is_running_on_desktop():
@@ -33,6 +36,57 @@ if hasattr(config, 'PROFILE'):
 
 if hasattr(config, 'PROFILE_TOP'):
     PROFILE_TOP = config.PROFILE_TOP
+
+
+class SpriteData:
+    x: int
+    y: int
+    vx: int
+    vy: int
+    image: str
+    sprite: Sprite
+
+    def __init__(self, x: int, y: int, vx: int, vy: int, image: str):
+        self.x = x
+        self.y = y
+        self.vx = vx
+        self.vy = vy
+        self.image = image
+
+
+def create_sprites(game: Game, sprite_data: list[SpriteData]):
+    """
+    Simple utility method to create a range of sprites at the root of the
+    Game instance
+    """
+    for data in sprite_data:
+        sprite = Sprite(
+            data.x, data.y,
+            Velocity(data.vx, data.vy),
+            SpriteImage(data.image))
+        data.sprite = sprite
+        game.add_child(sprite)
+
+
+def add_update_method(game: Game, callable: Callable[[Game], None], fps: int = 5):
+    """
+    Adds an update method to a Game instance that gets called at the desired fps (roughly).
+    """
+    next_call = None
+    call_delta = 1 / fps
+
+    def inner(dt):
+        nonlocal next_call
+        if next_call is None:
+            next_call = time.monotonic()
+
+        now = time.monotonic()
+
+        if now >= next_call:
+            next_call += call_delta
+            callable(game)
+
+    game.add_update_func(inner)
 
 
 def should_execute(name: str):
@@ -104,7 +158,7 @@ def execute(
         nonlocal draw_cycles
         draw_cycles += 1
 
-    game: Game = Game()
+    game: Game = Game(160, 120)
     setup_func(game)
     game.add_update_func(monitor_ram)
     game.add_update_func(update)

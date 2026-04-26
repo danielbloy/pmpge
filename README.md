@@ -95,27 +95,8 @@ non-default driver requires setting of the following configuration properties:
 * `SOUND_DRIVER`
 * `GRAPHICS_DRIVER`
 
-Implementing a driver is pretty simple for the most part. There are optional
-common hook methods for all drivers and mandatory methods that must be implemented
-for specific drivers. The optional methods are:
-
-* `init()` - called once when the game first runs.
-    * The screen variant of `init()` accepts 4 parameters:
-        * `width` - the width of the game in pixels.
-        * `height` - the height of the game in pixels.
-        * `screen_width` - the width of the screen in pixels.
-        * `screen_height` - the height of the screen in pixels.
-* `update(delta_time: float)` - called once every update cycle.
-* `deinit()` - called once when the game finishes.
-
-Additionally, a graphics driver must implement the following mandatory methods and
-classes (see `drivers/pgzero.py` for an example):
-
-* `clear(surface, colour)` - called once per frame and sets the screen to the
-  specified RGB colour triplet. Called before any other displayed operations.
-* `draw(surface)` - called once per frame and passed a surface object that is
-  implementation-dependent. Called after the game is drawn to the screen to
-  allow for any final operations such as scaling or flipping.
+For more information on how to implement a driver, see the documentation in
+[drivers](./pmpge/drivers/README.md).
 
 ## License
 

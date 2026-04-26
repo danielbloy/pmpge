@@ -1,4 +1,4 @@
-def clear(screen, background_colour: tuple[int, int, int]):
+def clear(screen):
     """
     Mandatory clear method, does nothing.
     """

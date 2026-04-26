@@ -273,7 +273,7 @@ def execute(game, background_colour: tuple[int, int, int] = None):
     device.init() if hasattr(device, 'init') else None
     controller.init() if hasattr(controller, 'init') else None
     sound.init() if hasattr(sound, 'init') else None
-    graphics.init(width, height, screen_width, screen_height) if hasattr(graphics, 'init') else None
+    graphics.init(width, height, screen_width, screen_height, background_colour) if hasattr(graphics, 'init') else None
 
     device_update = device.update if hasattr(device, 'update') else None
     controller_update = controller.update if hasattr(controller, 'update') else None
@@ -289,7 +289,7 @@ def execute(game, background_colour: tuple[int, int, int] = None):
             game.update(dt)
 
         def draw(surface):
-            graphics.clear(surface, background_colour)
+            graphics.clear(surface)
             game.draw(surface)
             graphics.draw(surface)
 

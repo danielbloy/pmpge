@@ -1,43 +1,67 @@
-# TODO: This current implementation is only designed to work with a device with a built-in display.
-# See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/display-a-bitmap
-# See: https://docs.circuitpython.org/en/latest/shared-bindings/displayio/
-# TODO: Current issues:
-# * No transparency of images (png files)
-# * 20 sprites gives around 40 fps on an EdgeBadge in the multi-sprite validate test with sample turned to minimum
-# * Console displays output on EdgeBadge when games starts up.
+#
+# NOTE: This driver is very much a work in progress and has not yet been optimised and only
+#       provides a subset of the required functionality. It is suitable to run the examples
+#       and on-device validation tests only. Use with caution.
+#
+# The code below is marked up with the following tags to indicate where further work is
+# required:
+#
+# * LIMITATION
+# * PERFORMANCE
+# * ISSUE
+# * FUTURE
+#
+# PERFORMANCE
+#
+# * 20 sprites gives around 29 fps on an EdgeBadge in the multi-sprite validate test with:
+#      SAMPLE_FREQUENCY = 1
+#      REPORT_FREQUENCY = 1
+# * Using transparency is expensive and removing it increases the above test to 40 fps
+#
+# REFERENCES
+#
+# * https://learn.adafruit.com/circuitpython-display-support-using-displayio/display-a-bitmap
+# * https://docs.circuitpython.org/en/latest/shared-bindings/displayio/
+#
+
+# noinspection PyUnresolvedReferences
 import adafruit_imageload
+# noinspection PyUnresolvedReferences,PyPackageRequirements
 import board
 
-import displayio
+# noinspection PyUnresolvedReferences,PyPackageRequirements
+from displayio import Group, Palette, Bitmap, TileGrid
 
+# LIMITATION: Using board.DISPLAY will fail if the device does not have a built-in display.
 display = board.DISPLAY
-root = displayio.Group()
 
-# Hack for background - this probably needs a better method and more colours:
+# Create a root group to place all items to draw.
+root = Group()
+
+# Create a single colour bitmap for the background.
 # Source: https://learn.adafruit.com/circuitpython-display-support-using-displayio/draw-pixels
-background_bmp = displayio.Bitmap(display.width, display.height, 1)
-palette = displayio.Palette(1)
+background_bmp = Bitmap(display.width, display.height, 1)
+palette = Palette(1)
 palette[0] = 0x000000
-background = displayio.TileGrid(background_bmp, pixel_shader=palette)
+background = TileGrid(background_bmp, pixel_shader=palette)
 root.append(background)
 
 
-# TODO: If we use a tilmemap at a later point, we can remove the need for the background layer.
+# FUTURE: If we use a tilmemap at a later point, we can probably remove the need for the background layer.
+
 
 def init(w: int, h: int, sw: int, sh: int, bgc: tuple[int, int, int]):
-    # TODO: We need to sort out scaling and drawing at some point.
+    # FUTURE: We need to sort out scaling at some point. This can be done by setting: `root.scale = 2`
+    #         See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/group#group-scale-3162091
+
     # Setting up the root here stops all the graphics from showing as they are loading.
+    display.root_group = root
+
+    # Set the single colour in the palette for our background to the desired background colour
     r = bgc[0] & 255
     g = bgc[1] & 255
     b = bgc[2] & 255
     palette[0] = r << 16 | g << 8 | b
-    display.root_group = root
-
-
-def deinit():
-    # TODO: This will clear the display, though in testing we probably don't want to do this.
-    # display.root_group = None
-    pass
 
 
 def clear(screen):
@@ -60,32 +84,30 @@ class ImageLoader:
     """
     width: int
     height: int
-    bitmap: displayio.Bitmap
-    tile_grid: displayio.TileGrid
+    bitmap: Bitmap
+    tile_grid: TileGrid
 
     def load(self, image: str):
         """
         Loads the named image resource.
         """
-        # TODO: This is only supported for bitmaps but would probably be faster and smaller in memory
+        # LIMITATION: Add support for bitmaps as it would probably be faster and use less memory
         # bitmap = displayio.OnDiskBitmap(f"/images/{image}")
         # tile_grid = displayio.TileGrid(bitmap, pixel_shader=bitmap.pixel_shader)
 
         if hasattr(self, 'bitmap'):
             self.bitmap.deinint()
 
-        # TODO: Maybe look at some optimisations here.
-        bitmap, palette = adafruit_imageload.load(
-            f"/images/{image}", bitmap=displayio.Bitmap, palette=displayio.Palette)
+        bitmap, palette = adafruit_imageload.load(f"/images/{image}", bitmap=Bitmap, palette=Palette)
 
-        # TODO: This has a pretty harsh impact on fps, dropping EdgeBadge from 40 to 28 fps
+        # PERFORMANCE: This has a pretty harsh impact on fps, dropping EdgeBadge from 40 to 29 fps
         palette.make_transparent(0)
 
         # Create a TileGrid to hold the bitmap
-        tile_grid = displayio.TileGrid(bitmap, pixel_shader=palette)
-
+        tile_grid = TileGrid(bitmap, pixel_shader=palette)
         root.append(tile_grid)
 
+        # Now set the properties on the containing object
         self.width = bitmap.width
         self.height = bitmap.height
         self.bitmap = bitmap
@@ -93,8 +115,8 @@ class ImageLoader:
 
     def draw(self, surface, pos: tuple[int, int]):
         """
-        This doesn't actually draw anything, just moves it. thankfully, pos represents
-        the top left corner of the image.
+        This doesn't actually draw anything, just moves it. The parameter pos represents
+        the top left corner of the image so the movement is trivial.
         """
         tile_grid = self.tile_grid
         tile_grid.x = pos[0]

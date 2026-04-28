@@ -39,6 +39,9 @@
 # * The Z-order of objects is not actually honoured and currently controlled by the order the
 #   GameObjects are created. We need to mimic the GameObject hierarchy in Groups/TileGrids.
 #
+# * The deinit() method needs to remove all assets as currently the validation will run out of
+#   memory as we do not seem to clear up after ourselves.
+#
 # * Investigate supporting different bitmap types:
 #   See: https://learn.adafruit.com/creating-your-first-tilemap-game-with-circuitpython/indexed-bmp-graphics
 #

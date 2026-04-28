@@ -11,8 +11,8 @@ CircuitPython 10.1.4 using the following `config.py` except where a specific
 `config.py` file is provided:
 
 ```
-SCREEN_WIDTH = 1
-SCREEN_HEIGHT = 1
+SCREEN_WIDTH = 160
+SCREEN_HEIGHT = 128
 RUNTIME = 2
 SAMPLE_FREQUENCY = 50
 REPORT_FREQUENCY = 4

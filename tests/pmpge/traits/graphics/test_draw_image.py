@@ -1,3 +1,4 @@
+import pytest
 from pygments.lexers import go
 
 import pmpge.environment as environment
@@ -122,6 +123,7 @@ def test_using_with_game_object():
     go.update_hierarchy(0)
 
 
+@pytest.mark.skip(reason="this will not work with draw() disabled")
 def test_draws_when_combined_with_game_object():
     """
     Validates that DrawImage draws without throwing an exception when combined with GameObject.

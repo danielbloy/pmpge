@@ -245,6 +245,12 @@ def terminate():
         pygame.event.post(pygame.event.Event(pygame.QUIT))
 
 
+# TODO: Control to stop the draw() method via the GameObjects. I'm not taking the old draw()
+#       methods out yet as we may eventually want to keep this in to make Pygame Zero games
+#       simpler, so for now it's controlled with this switch.
+USE_GAME_OBJECT_DRAW = False
+
+
 def execute(game, background_colour: tuple[int, int, int] = None):
     """
     Executes the game at the desired resolution. If the screen display is larger than
@@ -290,7 +296,8 @@ def execute(game, background_colour: tuple[int, int, int] = None):
 
         def draw(surface):
             graphics.clear(surface)
-            game.draw(surface)
+            if USE_GAME_OBJECT_DRAW:
+                game.draw(surface)
             graphics.draw(surface)
 
         global __execute

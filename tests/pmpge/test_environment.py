@@ -239,6 +239,7 @@ def test_import_driver():
         environment.import_driver("unknown")
 
 
+@pytest.mark.skip(reason="this will not work with draw() disabled")
 def test_basic_execute_and_terminate_on_desktop():
     """
     Validates that terminate() can be called when pygame is running it actually terminates.

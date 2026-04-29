@@ -361,4 +361,4 @@ def test_run_and_terminate():
     game.run()
 
     assert update_counter == 10
-    assert draw_counter == 10
+    assert draw_counter == 0

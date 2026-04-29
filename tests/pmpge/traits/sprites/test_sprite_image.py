@@ -89,6 +89,7 @@ def test_changing_sprite_image():
     assert sprite.bottom_right == (3, 1)
 
 
+@pytest.mark.skip(reason="this will not work with draw() disabled")
 def test_draws_when_combined_with_sprite():
     """
     Validates that SpriteImage draws without throwing an exception when combined with Sprite.
@@ -140,9 +141,10 @@ def test_using_with_game_object():
         go.draw_hierarchy(None)
 
 
+@pytest.mark.skip(reason="this will not work with draw() disabled")
 def test_draws_fails_when_combined_with_game_object():
     """
-    VValidates that SpriteImage fails with an exception when combined with Sprite.
+    Validates that SpriteImage fails with an exception when combined with a GameObject.
     """
     setup_pgzero(__file__)
     update_counter = 2

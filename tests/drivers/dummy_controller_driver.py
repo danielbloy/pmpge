@@ -1,5 +1,7 @@
 import time
 
+from pmpge.game import Game
+
 loaded = time.monotonic_ns()
 
 call_order = []
@@ -8,7 +10,7 @@ update_called = 0
 deinit_called = 0
 
 
-def init():
+def init(game: Game):
     global init_called
     init_called = time.monotonic_ns()
     call_order.append('init')

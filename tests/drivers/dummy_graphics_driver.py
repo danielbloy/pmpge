@@ -1,5 +1,7 @@
 import time
 
+from pmpge.game import Game
+
 loaded = time.monotonic_ns()
 
 call_order = []
@@ -16,10 +18,9 @@ background_colour = None
 screen_draw = None
 
 
-def init(w: int, h: int, sw: int, sh: int, bgc: tuple[int, int, int]):
+def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     global width, height, screen_width, screen_height, background_colour
-    width = w
-    height = h
+    width, height = g.width, g.height
     screen_width = sw
     screen_height = sh
     background_colour = bgc
@@ -27,12 +28,6 @@ def init(w: int, h: int, sw: int, sh: int, bgc: tuple[int, int, int]):
     global init_called
     init_called = time.monotonic_ns()
     call_order.append('init')
-
-
-def clear(screen):
-    global screen_clear
-    screen_clear = screen
-    call_order.append('clear')
 
 
 def draw(screen):

@@ -1,10 +1,3 @@
-def clear(screen):
-    """
-    Mandatory clear method, does nothing.
-    """
-    pass
-
-
 def draw(screen):
     """
     Mandatory draw method, does nothing.

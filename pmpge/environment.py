@@ -258,11 +258,11 @@ def execute(game, background_colour: tuple[int, int, int] = None):
         background_colour = (0, 0, 0)
 
     width, height = game.width, game.height
-    screen_width, screen_height = screen_size()
+    s_width, s_height = screen_size()
 
     # On a microcontroller, a larger game size than screen size is an error.
     if is_running_on_microcontroller():
-        if width > screen_width or height > screen_height:
+        if width > s_width or height > s_height:
             raise ValueError("Game width and height cannot be larger than screen")
 
     device = import_driver('device')
@@ -270,15 +270,17 @@ def execute(game, background_colour: tuple[int, int, int] = None):
     sound = import_driver('sound')
     graphics = import_driver('graphics')
 
-    device.init() if hasattr(device, 'init') else None
-    controller.init() if hasattr(controller, 'init') else None
-    sound.init() if hasattr(sound, 'init') else None
-    graphics.init(width, height, screen_width, screen_height, background_colour) if hasattr(graphics, 'init') else None
+    device.init(game) if hasattr(device, 'init') else None
+    controller.init(game) if hasattr(controller, 'init') else None
+    sound.init(game) if hasattr(sound, 'init') else None
+    graphics.init(game, s_width, s_height, background_colour) if hasattr(graphics, 'init') else None
 
     device_update = device.update if hasattr(device, 'update') else None
     controller_update = controller.update if hasattr(controller, 'update') else None
     sound_update = sound.update if hasattr(sound, 'update') else None
     graphics_update = graphics.update if hasattr(graphics, 'update') else None
+
+    graphics_draw = graphics.draw
 
     try:
         def update(dt: float):
@@ -287,11 +289,6 @@ def execute(game, background_colour: tuple[int, int, int] = None):
             sound_update(dt) if sound_update else None
             graphics_update(dt) if graphics_update else None
             game.update(dt)
-
-        def draw(surface):
-            graphics.clear(surface)
-            game.draw(surface)
-            graphics.draw(surface)
 
         global __execute
         __execute = True
@@ -302,14 +299,14 @@ def execute(game, background_colour: tuple[int, int, int] = None):
             mod = sys.modules['__main__']
             screen = None
 
-            def pgzero_draw():
+            def draw():
                 nonlocal screen
                 if not screen:
                     screen = getattr(mod, 'screen')
 
-                draw(screen)
+                graphics_draw(screen)
 
-            setattr(mod, 'draw', pgzero_draw)
+            setattr(mod, 'draw', draw)
             setattr(mod, 'update', update)
 
             pgzrun.go()
@@ -323,7 +320,7 @@ def execute(game, background_colour: tuple[int, int, int] = None):
                 last = now
 
                 update(delta_time)
-                draw(None)
+                graphics_draw(None)
 
     finally:
         __execute = False

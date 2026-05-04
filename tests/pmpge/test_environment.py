@@ -269,8 +269,6 @@ def test_basic_execute_and_terminate_on_desktop():
 
     # This will be the pgzero driver so we take a peek at the internals.
     graphics = environment.import_driver('graphics')
-    assert graphics.width == 320
-    assert graphics.height == 200
     assert graphics.screen_width == 640
     assert graphics.screen_height == 480
 
@@ -305,7 +303,7 @@ def test_execute_calls_drivers_correctly():
         assert graphics.height == 456
         assert graphics.screen_width == 640
         assert graphics.screen_height == 480
-        assert graphics.screen_clear == graphics.screen_draw
+        assert graphics.screen_draw is not None
         assert graphics.background_colour == (7, 8, 9)
 
         # Validate the order the drivers were loaded.
@@ -319,7 +317,7 @@ def test_execute_calls_drivers_correctly():
             'init', 'update', 'update', 'deinit'
         ]
         assert graphics.call_order == [
-            'init', 'update', 'clear', 'draw', 'update', 'clear', 'draw', 'deinit'
+            'init', 'update', 'draw', 'update', 'draw', 'deinit'
         ]
         assert controller.call_order == [
             'init', 'update', 'update', 'deinit'

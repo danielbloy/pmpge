@@ -18,8 +18,7 @@ methods are:
 
 * `init()` - called once when the game first runs.
     * The screen variant of `init()` accepts 5 parameters:
-        * `width` - the width of the game in pixels.
-        * `height` - the height of the game in pixels.
+        * `game` - the Game object that is being executed.
         * `screen_width` - the width of the screen in pixels.
         * `screen_height` - the height of the screen in pixels.
         * `background_colour` - the default colour of the background in RGB format.

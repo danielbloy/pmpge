@@ -45,6 +45,7 @@
 # * Investigate supporting different bitmap types:
 #   See: https://learn.adafruit.com/creating-your-first-tilemap-game-with-circuitpython/indexed-bmp-graphics
 #
+import gc
 
 # noinspection PyUnresolvedReferences
 import adafruit_imageload
@@ -53,13 +54,16 @@ import board
 
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 from displayio import Group, Palette, Bitmap, TileGrid
+from pmpge.game import Game
+
+game: Game | None = None
 
 # LIMITATION: Using board.DISPLAY will fail if the device does not have a built-in display.
 display = board.DISPLAY
 display.refresh(target_frames_per_second=30)
 display.brightness = 0.0  # Turn the display off until the game starts
 
-# Create a root group to place all items to draw.
+# Root group to place all items to draw.
 root = Group()
 
 # Create a single colour bitmap for the background.
@@ -67,21 +71,23 @@ root = Group()
 palette = Palette(1)
 palette[0] = 0x000000
 background = TileGrid(Bitmap(display.width, display.height, 1), pixel_shader=palette)
-root.append(background)
+root.append(background)  # Needs to be the first item.
 
 
 # FUTURE: If we use a tilmemap at a later point, we can probably remove the need for the background layer.
 
 
-def init(w: int, h: int, sw: int, sh: int, bgc: tuple[int, int, int]):
+def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     # FUTURE: We need to sort out scaling at some point. This can be done by setting: `root.scale = 2`
     #         See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/group#group-scale-3162091
+    global game
+    game = g
 
     # Set the single colour in the palette for our background to the desired background colour
-    r = bgc[0] & 255
-    g = bgc[1] & 255
-    b = bgc[2] & 255
-    palette[0] = r << 16 | g << 8 | b
+    red = bgc[0] & 255
+    green = bgc[1] & 255
+    blue = bgc[2] & 255
+    palette[0] = red << 16 | green << 8 | blue
 
     # Setting up the root here stops all the graphics from showing as they are loading.
     display.root_group = root
@@ -94,18 +100,23 @@ def init(w: int, h: int, sw: int, sh: int, bgc: tuple[int, int, int]):
     #        ImageLoader/ImageResource and the corresponding GameObject.
 
 
-def clear(screen):
-    """
-    Does not actually need to do anything as displayio handles this for us.
-    """
-    pass
+def deinit():
+    global game, root
+    game = None
+
+    root.remove(background)
+    del root
+    gc.collect()
+    root = Group()
+    root.append(background)  # Needs to be the first item.
 
 
 def draw(screen):
     """
-    Does not actually need to do anything as displayio handles this for us.
+    Does not need to draw the hierarchy as we handle that separately with our own
+    data structure for displayio.
     """
-    pass
+    game.draw(screen)
 
 
 class ImageLoader:

@@ -2,9 +2,13 @@
 
 ## Optional methods
 
-### `init()`
+### `init(game)`
 
 Called once when the game first runs.
+
+#### Parameters
+
+* `game` - the Game object that is being executed
 
 ### `update(delta_time: float)`
 

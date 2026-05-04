@@ -314,6 +314,10 @@ def execute(game, background_colour: tuple[int, int, int] = None):
         else:
             # On a microcontroller, we implement our own game loop.
             last = time.monotonic()
+            # TODO: Add in a rate limiter here to see if we can get smoother performance.
+            #       Limit update to 60 fps
+            #       Limit draw to 30 fps
+            #       Test if something like display.refresh(target_frames_per_second=30) with the pause option helps.
             while __execute:
                 now = time.monotonic()
                 delta_time = now - last

@@ -375,7 +375,7 @@ class GameObject:
         """
         Draws the GameObject (if `active` and `visible`) and propagates to children (if `active`).
         The surface is passed down through all objects but does not need to be a Pygame surface.
-        This doesn't use traverse_hierarchy as it is slower.
+        This doesn't use traverse_hierarchy() as it is slower.
         """
         if not self.active:
             return self
@@ -401,7 +401,7 @@ class GameObject:
     def update_hierarchy(self, dt: float) -> Self:
         """
         Updates the GameObject (if `active` and `enabled`) and propagates to children (if `active`).
-        Also removes any destroyed children. This doesn't use traverse_hierarchy as it is slower.
+        Also removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
         """
         # Remove any destroyed children.
         children = self.__children
@@ -547,3 +547,69 @@ class GameObject:
             cls.merged(self)
 
         return self
+
+
+# ********************************************************************************
+# H I E R A R C H Y    B A S E D    F U N C T I O N S
+# ********************************************************************************
+#
+# A GameObject has the following built-in properties that interact:
+#
+#   * active: This has to be True for the GameObject to be updated or drawn (visible and
+#             enabled also need to be True). The value of a parents active property does affect
+#             its children; i.e., if the parent is inactive, the children as also inactive.
+#   * enabled: If this is True and active is also True, the object will be updated. This is not
+#              cascaded to children.
+#   * visible: If this is True and active is also True, the object will be drawn. This is not
+#              cascaded to children.
+#
+
+def calculate_is_active(root: GameObject, callback: Callable[[GameObject, bool], None]):
+    """
+    Traverses the entire hierarchy from root, calculating whether each instance is
+    active or not. The callback is invoked for each node in the hierarchy.
+
+    TODO: Test
+    """
+
+    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
+        is_active = state and go.active
+        callback(go, is_active)
+
+        return True, is_active
+
+    root.traverse_hierarchy(process, True)
+
+
+def calculate_is_enabled(root: GameObject, callback: Callable[[GameObject, bool], None]):
+    """
+    Traverses the entire hierarchy from root, calculating whether each instance is
+    enabled or not. The callback is invoked for each node in the hierarchy.
+
+    TODO: Test
+    """
+
+    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
+        is_active = state and go.active
+        callback(go, is_active and go.enabled)
+
+        return True, is_active
+
+    root.traverse_hierarchy(process, True)
+
+
+def calculate_is_visible(root: GameObject, callback: Callable[[GameObject, bool], None]):
+    """
+    Traverses the entire hierarchy from root, calculating whether each instance is
+    visible or not. The callback is invoked for each node in the hierarchy.
+
+    TODO: Test
+    """
+
+    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
+        is_active = state and go.active
+        callback(go, is_active and go.visible)
+
+        return True, is_active
+
+    root.traverse_hierarchy(process, True)

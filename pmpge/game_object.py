@@ -348,12 +348,34 @@ class GameObject:
         self.__children.remove(child)
         return self
 
+    def traverse_hierarchy(self, func: Callable[[Self, Any], tuple[bool, Any]], initial_state: Any = None) -> Self:
+        """
+        Provides a way to traverse the entire hierarchy, executing a function on
+        each node and passing state. The `func` accepts two parameters:
+        * The GameObject instance.
+        * Some state (which can be `None`).
+
+        The `func` returns two values:
+        * A boolean indicating whether to process nodes children or not.
+        * A new value for state to be passed to the children (which can be `None`)
+
+        The GameObject that `traverse_hierarchy` is called on is always processed.
+        """
+
+        def process(go: Self, state: Any):
+            process_children, new_state = func(go, state)
+            if process_children:
+                for child in go.__children:
+                    process(child, new_state)
+
+        process(self, initial_state)
+        return self
+
     def draw_hierarchy(self, surface: Any) -> Self:
         """
         Draws the GameObject (if `active` and `visible`) and propagates to children (if `active`).
-        The surface is passed down through all objects but does not need to be a Pygame surface. It
-        can be any object you like provided it has a `fill()` method that accepts am RGB colour
-        tuple.
+        The surface is passed down through all objects but does not need to be a Pygame surface.
+        This doesn't use traverse_hierarchy as it is slower.
         """
         if not self.active:
             return self
@@ -379,7 +401,7 @@ class GameObject:
     def update_hierarchy(self, dt: float) -> Self:
         """
         Updates the GameObject (if `active` and `enabled`) and propagates to children (if `active`).
-        Also removes any destroyed children.
+        Also removes any destroyed children. This doesn't use traverse_hierarchy as it is slower.
         """
         # Remove any destroyed children.
         children = self.__children

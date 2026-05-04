@@ -218,7 +218,7 @@ class Hierarchy:
 
     def find(self, name: str) -> Item:
         """
-        Finds an returns an item by name.
+        Finds and returns an item by name.
         """
         result = None
         for item in self.everyone:
@@ -276,10 +276,10 @@ class Hierarchy:
 
     def validate_called_order(self,
                               expected_handler_order: list[str],
-                              reverse=False,
-                              interlace=False,
-                              debug=False,
-                              exclude=None):
+                              reverse: bool = False,
+                              interlace: bool = False,
+                              debug: bool = False,
+                              exclude: list[GameObject] | None = None):
         """
         Validates that the handlers were all invoked in the expected order.
 
@@ -292,7 +292,7 @@ class Hierarchy:
         having each handler invoked in turn.
 
         An exclude list can be passed in which lists all GameObjects expected to be excluded from
-        having the handlers called..
+        having the handlers called.
         """
 
         def include(item: Hierarchy.Item):

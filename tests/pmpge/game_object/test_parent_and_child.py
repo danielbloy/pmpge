@@ -2,6 +2,8 @@
 This suite of tests validates the propagation of state and handlers between
 parent and children.
 """
+from typing import Any
+
 import pytest
 
 from pmpge.game_object import GameObject
@@ -61,7 +63,6 @@ def parent_three_children_six_grandchildren():
         .add_child("child-3")
         .add_grandchild("child-3", "grandchild-5")
         .add_grandchild("child-3", "grandchild-6")
-
     )
 
 
@@ -84,12 +85,103 @@ def all_hierarchies():
     return hierarchies
 
 
+def test_traverse_entire_hierarchy():
+    """
+    For testing traverse_hierrarchy(), we hook into the test classes used
+    to test the well-defined handlers.
+
+    Validates that the entire hierarchy is traversed when func returns True.
+    """
+
+    def test_func(hierarchy):
+        def callback(go: GameObject, state: Any) -> tuple[bool, Any]:
+            item = hierarchy.find(go.name)
+            handlers = item.handlers
+
+            if handlers.shared_called_order is not None:
+                handlers.shared_called_order.append(f"callback {go.name}")
+
+            handlers.called_order.append("callback")
+
+            return True, None
+
+        hierarchy.reset()
+        hierarchy.parent.go.traverse_hierarchy(callback)
+        hierarchy.validate_called_order(['callback'])
+
+    for h in all_hierarchies():
+        test_func(h)
+
+
+def test_traverse_only_root():
+    """
+    For testing traverse_hierrarchy(), we hook into the test classes used
+    to test the well-defined handlers.
+
+    Validates that only the root is processed when func returns False.
+    """
+
+    def test_func(hierarchy):
+        def callback(go: GameObject, state: Any) -> tuple[bool, Any]:
+            item = hierarchy.find(go.name)
+            handlers = item.handlers
+
+            if handlers.shared_called_order is not None:
+                handlers.shared_called_order.append(f"callback {go.name}")
+
+            handlers.called_order.append("callback")
+
+            return False, None
+
+        hierarchy.reset()
+        hierarchy.parent.go.traverse_hierarchy(callback)
+
+        exclude_list = [item.go for item in hierarchy.everyone]
+        exclude_list.remove(hierarchy.parent.go)
+        hierarchy.validate_called_order(['callback'], exclude=exclude_list)
+
+    for h in all_hierarchies():
+        test_func(h)
+
+
+def test_traverse_one_level_deep():
+    """
+    For testing traverse_hierrarchy(), we hook into the test classes used
+    to test the well-defined handlers.
+
+    Validates that only the root and its children are processed
+    when.
+    """
+
+    def test_func(hierarchy):
+        def callback(go: GameObject, state: Any) -> tuple[bool, Any]:
+            item = hierarchy.find(go.name)
+            handlers = item.handlers
+
+            if handlers.shared_called_order is not None:
+                handlers.shared_called_order.append(f"callback {go.name}")
+
+            handlers.called_order.append("callback")
+
+            return state > 0, state - 1
+
+        hierarchy.reset()
+        hierarchy.parent.go.traverse_hierarchy(callback, 1)
+
+        exclude_list = [item.go for item in hierarchy.grandchildren]
+        hierarchy.validate_called_order(['callback'], exclude=exclude_list, debug=True)
+
+    test_func(parent_two_children_one_grandchild())
+    for h in all_hierarchies():
+        test_func(h)
+
+
 def test_activate_deactivate_propagates_to_children():
     """
     Validates that the active state is propagated to children.
     """
 
-    def test_when_all_active(hierarchy):
+    def test_func(hierarchy):
         hierarchy.parent.go.active = False
         hierarchy.validate_properties(active=False)
         hierarchy.validate_called_order(["deactivate"])
@@ -112,7 +204,7 @@ def test_activate_deactivate_propagates_to_children():
         hierarchy.validate_called_order([])
 
     for h in all_hierarchies():
-        test_when_all_active(h)
+        test_func(h)
 
 
 def test_reset_propagates_to_children():
@@ -120,7 +212,7 @@ def test_reset_propagates_to_children():
     Validates that the active state is propagated to children.
     """
 
-    def test_when_all_active(hierarchy):
+    def test_func(hierarchy: Hierarchy):
         hierarchy.parent.go.reset()
         hierarchy.validate_properties(active=True)
         hierarchy.validate_called_order(["deactivate", "activate"])
@@ -146,7 +238,7 @@ def test_reset_propagates_to_children():
         hierarchy.validate_called_order(["activate", "deactivate"])
 
     for h in all_hierarchies():
-        test_when_all_active(h)
+        test_func(h)
 
 
 def test_draw_propagates_to_children():
@@ -154,7 +246,7 @@ def test_draw_propagates_to_children():
     Validates that draw is propagated to children all active children.
     """
 
-    def test_when_all_active(hierarchy):
+    def test_func(hierarchy: Hierarchy):
         hierarchy.parent.go.draw_hierarchy("surface")
         hierarchy.validate_called_order(["draw"])
 
@@ -164,7 +256,7 @@ def test_draw_propagates_to_children():
         hierarchy.validate_called_order(["draw"])
 
     for h in all_hierarchies():
-        test_when_all_active(h)
+        test_func(h)
 
 
 def test_update_propagates_to_children():
@@ -172,7 +264,7 @@ def test_update_propagates_to_children():
     Validates that update is propagated to all active children.
     """
 
-    def test_when_all_active(hierarchy):
+    def test_func(hierarchy: Hierarchy):
         hierarchy.parent.go.update_hierarchy(0.1)
         hierarchy.validate_called_order(["update"])
 
@@ -182,7 +274,7 @@ def test_update_propagates_to_children():
         hierarchy.validate_called_order(["update"])
 
     for h in all_hierarchies():
-        test_when_all_active(h)
+        test_func(h)
 
 
 def test_destroy_propagates_to_children():
@@ -190,7 +282,7 @@ def test_destroy_propagates_to_children():
     Validates that destroy is propagated to all active children.
     """
 
-    def test_when_all_active(hierarchy):
+    def test_func(hierarchy: Hierarchy):
         hierarchy.parent.go.destroy()
         hierarchy.validate_properties(active=False, alive=False)
         hierarchy.validate_called_order(
@@ -203,7 +295,7 @@ def test_destroy_propagates_to_children():
         hierarchy.validate_called_order([])
 
     for h in all_hierarchies():
-        test_when_all_active(h)
+        test_func(h)
 
 
 def test_activated_deactivated_propagated_through_disabled_objects():
@@ -285,7 +377,7 @@ def test_destroy_works_on_disabled_object():
     Ensures destroy works on disabled objects.
     """
 
-    def test_when_disabled(hierarchy):
+    def test_func(hierarchy: Hierarchy):
         # Disable the parent and first child if one exists.
         hierarchy.parent.go.enabled = False
         if len(hierarchy.children) > 0:
@@ -295,7 +387,7 @@ def test_destroy_works_on_disabled_object():
         hierarchy.validate_called_order(["deactivate", "destroy"], reverse=True, interlace=True)
 
     for h in all_hierarchies():
-        test_when_disabled(h)
+        test_func(h)
 
 
 def test_destroy_works_on_deactivated_object():
@@ -303,7 +395,7 @@ def test_destroy_works_on_deactivated_object():
     Ensures destroy works on deactivated objects.
     """
 
-    def test_when_deactivated(hierarchy):
+    def test_func(hierarchy: Hierarchy):
         # Deactivate the parent (this deactivates the entire hierarchy)
         hierarchy.parent.go.active = False
         hierarchy.reset()
@@ -313,7 +405,7 @@ def test_destroy_works_on_deactivated_object():
         hierarchy.validate_called_order(["destroy"], reverse=True)
 
     for h in all_hierarchies():
-        test_when_deactivated(h)
+        test_func(h)
 
 
 def test_draw_does_nothing_when_inactive():
@@ -321,7 +413,7 @@ def test_draw_does_nothing_when_inactive():
     Ensures draw_hierarchy() does nothing on inactive objects. It should also not propagate.
     """
 
-    def test_when_inactive(hierarchy):
+    def test_func(hierarchy: Hierarchy):
         # Deactivate the parent (this deactivates the entire hierarchy)
         hierarchy.parent.go.active = False
         # Reactivate all grandchildren and first child
@@ -335,7 +427,7 @@ def test_draw_does_nothing_when_inactive():
         hierarchy.validate_called_order([])
 
     for h in all_hierarchies():
-        test_when_inactive(h)
+        test_func(h)
 
 
 def test_draw_does_nothing_when_invisible():
@@ -344,7 +436,7 @@ def test_draw_does_nothing_when_invisible():
     applies to the object itself so the update still propagates
     """
 
-    def test_when_invisible(hierarchy):
+    def test_func(hierarchy: Hierarchy):
         invisible = [hierarchy.parent.go]
 
         # Hide the parent and first child if one exists.
@@ -357,7 +449,7 @@ def test_draw_does_nothing_when_invisible():
         hierarchy.validate_called_order(["draw"], exclude=invisible)
 
     for h in all_hierarchies():
-        test_when_invisible(h)
+        test_func(h)
 
 
 def test_draw_works_when_disabled():
@@ -366,7 +458,7 @@ def test_draw_works_when_disabled():
     applies to update_hierarchy().
     """
 
-    def test_when_disabled(hierarchy):
+    def test_func(hierarchy: Hierarchy):
 
         # Disable the parent and first child if one exists.
         hierarchy.parent.go.enabled = False
@@ -377,7 +469,7 @@ def test_draw_works_when_disabled():
         hierarchy.validate_called_order(["draw"])
 
     for h in all_hierarchies():
-        test_when_disabled(h)
+        test_func(h)
 
 
 def test_updated_removes_destroyed_children():
@@ -408,7 +500,7 @@ def test_update_does_nothing_when_inactive():
     Ensures update_hierarchy() does nothing on inactive objects. It should also not propagate.
     """
 
-    def test_when_inactive(hierarchy):
+    def test_func(hierarchy: Hierarchy):
         # Deactivate the parent (this deactivates the entire hierarchy)
         hierarchy.parent.go.active = False
         # Reactivate all grandchildren and first child
@@ -422,7 +514,7 @@ def test_update_does_nothing_when_inactive():
         hierarchy.validate_called_order([])
 
     for h in all_hierarchies():
-        test_when_inactive(h)
+        test_func(h)
 
 
 def test_update_does_nothing_when_disabled():
@@ -431,7 +523,7 @@ def test_update_does_nothing_when_disabled():
     applies to the object itself so the update still propagates
     """
 
-    def test_when_disabled(hierarchy):
+    def test_func(hierarchy: Hierarchy):
         disabled = [hierarchy.parent.go]
 
         # Disable the parent and first child if one exists.
@@ -444,7 +536,7 @@ def test_update_does_nothing_when_disabled():
         hierarchy.validate_called_order(["update"], exclude=disabled)
 
     for h in all_hierarchies():
-        test_when_disabled(h)
+        test_func(h)
 
 
 def test_update_works_when_invisible():
@@ -453,7 +545,7 @@ def test_update_works_when_invisible():
     applies to draw_hierarchy().
     """
 
-    def test_when_disabled(hierarchy):
+    def test_func(hierarchy: Hierarchy):
 
         # Hide the parent and first child if one exists.
         hierarchy.parent.go.visible = False
@@ -464,7 +556,7 @@ def test_update_works_when_invisible():
         hierarchy.validate_called_order(["update"])
 
     for h in all_hierarchies():
-        test_when_disabled(h)
+        test_func(h)
 
 
 def test_add_child():
@@ -549,7 +641,7 @@ def test_remove_child():
     assert child2.parent is None
     assert child3.parent == parent
 
-    # Remove a second child
+    # TODO: Remove a second child
 
 
 def test_remove_child_from_another_parent():

@@ -90,7 +90,7 @@ class Game:
         """
         self.__update_funcs.append(func)
 
-    def draw(self, surface: Any):
+    def draw(self, surface: Any, draw_root: bool = True):
         """
         Draws the entire GameObject hierarchy starting with the root GameObject and then the
         custom draw functions.
@@ -98,8 +98,12 @@ class Game:
         The surface is passed down through all objects but does not need to be a Pygame
         surface, it can be any object you like provided it is compatible with the selected
         graphics driver.
+
+        # TODO: Test draw_root.
+        # TODO: Can we remove the need to call draw at all?
         """
-        self.__root.draw_hierarchy(surface)
+        if draw_root:
+            self.__root.draw_hierarchy(surface)
 
         for draw_func in self.__draw_funcs:
             draw_func(surface)

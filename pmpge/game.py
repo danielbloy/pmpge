@@ -1,5 +1,5 @@
 from pmpge.environment import is_running_on_desktop, screen_size, execute, terminate
-from pmpge.game_object import GameObject, draw_hierarchy
+from pmpge.game_object import GameObject, draw_hierarchy, update_hierarchy
 
 # These are not available in CircuitPython.
 if is_running_on_desktop():
@@ -113,7 +113,7 @@ class Game:
         Updates the entire GameObject hierarchy starting with the root GameObject and then
         the custom update functions.
         """
-        self.__root.update_hierarchy(dt)
+        update_hierarchy(self.__root, dt)  # TODO: Should this be moved to environment when we remove draw?
 
         for update_func in self.__update_funcs:
             update_func(dt)

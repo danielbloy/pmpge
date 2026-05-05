@@ -4,7 +4,7 @@ many optional arguments.
 """
 import pytest
 
-from pmpge.game_object import GameObject, draw_hierarchy
+from pmpge.game_object import GameObject, draw_hierarchy, update_hierarchy
 from tests.pmpge.game_object.test_traits import TraitWithDrawHandler, TraitWithUpdateHandler, \
     TraitWithEverything
 from tests.pmpge.test_utilities import Handlers
@@ -325,7 +325,7 @@ def test_update_handler_called():
     handlers.validate(activate=go, activate_count=1)
     handlers.reset()
 
-    go.update_hierarchy(0.1)
+    update_hierarchy(go, 0.1)
     handlers.validate(update=(go, 0.1), update_count=1)
 
 
@@ -355,7 +355,7 @@ def test_activate_draw_update_deactivate_destroy_handlers_called():
     handlers.validate(draw=(go, "surface"), draw_count=1)
 
     handlers.reset()
-    go.update_hierarchy(0.1)
+    update_hierarchy(go, 0.1)
     handlers.validate(update=(go, 0.1), update_count=1)
 
     handlers.reset()
@@ -446,7 +446,7 @@ def test_multiple_update_handlers_called():
         destroy_handler=handlers.destroy)
 
     handlers.reset()
-    go.update_hierarchy(0.1)
+    update_hierarchy(go, 0.1)
     handlers.validate(update=(go, 0.1), update_count=1)
     handlers1.validate(update=(go, 0.1), update_count=1)
     handlers2.validate(update=(go, 0.1), update_count=2)
@@ -515,7 +515,7 @@ def test_validate_handlers_copied():
     handlers.validate(draw=(go, "surface"), draw_count=3)
 
     handlers.reset()
-    go.update_hierarchy(0.2)
+    update_hierarchy(go, 0.2)
     handlers.validate(update=(go, 0.2), update_count=3)
 
     handlers.reset()
@@ -542,7 +542,7 @@ def test_traits_are_applied():
     assert go.surface == "surface"
     assert go.count == 1
 
-    go.update_hierarchy(1.2)
+    update_hierarchy(go, 1.2)
 
     assert go.go == go
     assert go.surface == "surface"
@@ -567,7 +567,7 @@ def test_traits_are_applied():
     assert go.dt is None
     assert go.called == ["activated", "merged", "deactivated", "activated", "draw"]
 
-    go.update_hierarchy(1.2)
+    update_hierarchy(go, 1.2)
     assert go.go == go
     assert go.surface == "surface"
     assert go.dt == 1.2

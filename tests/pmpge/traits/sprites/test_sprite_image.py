@@ -2,7 +2,7 @@ import pytest
 
 import pmpge.environment as environment
 from pmpge.game import Game
-from pmpge.game_object import GameObject
+from pmpge.game_object import GameObject, update_hierarchy
 from pmpge.sprite import Sprite
 from pmpge.traits.position import Position
 from pmpge.traits.sprites import SpriteImage
@@ -127,7 +127,7 @@ def test_using_with_game_object():
     with pytest.raises(AttributeError):
         go.draw_hierarchy(None)
 
-    go.update_hierarchy(0)
+    update_hierarchy(go, 0)
 
     go.image.load("7x3.png")
     assert go.image.surface is not None

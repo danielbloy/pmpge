@@ -6,7 +6,7 @@ from typing import Any
 
 import pytest
 
-from pmpge.game_object import GameObject, draw_hierarchy, traverse_hierarchy
+from pmpge.game_object import GameObject, draw_hierarchy, traverse_hierarchy, update_hierarchy
 from tests.pmpge.test_utilities import Hierarchy
 
 
@@ -265,12 +265,12 @@ def test_update_propagates_to_children():
     """
 
     def test_func(hierarchy: Hierarchy):
-        hierarchy.parent.go.update_hierarchy(0.1)
+        update_hierarchy(hierarchy.parent.go, 0.1)
         hierarchy.validate_called_order(["update"])
 
         # Try a second invocation, we should get the same result.
         hierarchy.reset()
-        hierarchy.parent.go.update_hierarchy(0.1)
+        update_hierarchy(hierarchy.parent.go, 0.1)
         hierarchy.validate_called_order(["update"])
 
     for h in all_hierarchies():
@@ -483,7 +483,7 @@ def test_updated_removes_destroyed_children():
     hierarchy.find('child-3').go.destroy()
     hierarchy.reset()
 
-    parent.go.update_hierarchy(0.1)
+    update_hierarchy(parent.go, 0.1)
 
     assert len(parent.go.children) == 1
     parent.handlers.validate(update=(parent.go, 0.1), update_count=1, called_order=["update"])
@@ -510,7 +510,7 @@ def test_update_does_nothing_when_inactive():
             grandchild.go.active = True
         hierarchy.reset()
 
-        hierarchy.parent.go.update_hierarchy(0.1)
+        update_hierarchy(hierarchy.parent.go, 0.1)
         hierarchy.validate_called_order([])
 
     for h in all_hierarchies():
@@ -532,7 +532,7 @@ def test_update_does_nothing_when_disabled():
             hierarchy.children[0].go.enabled = False
             disabled.append(hierarchy.children[0].go)
 
-        hierarchy.parent.go.update_hierarchy(0.1)
+        update_hierarchy(hierarchy.parent.go, 0.1)
         hierarchy.validate_called_order(["update"], exclude=disabled)
 
     for h in all_hierarchies():
@@ -552,7 +552,7 @@ def test_update_works_when_invisible():
         if len(hierarchy.children) > 0:
             hierarchy.children[0].go.visible = False
 
-        hierarchy.parent.go.update_hierarchy(0.1)
+        update_hierarchy(hierarchy.parent.go, 0.1)
         hierarchy.validate_called_order(["update"])
 
     for h in all_hierarchies():

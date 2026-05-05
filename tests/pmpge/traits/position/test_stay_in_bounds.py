@@ -1,6 +1,6 @@
 import pytest
 
-from pmpge.game_object import GameObject
+from pmpge.game_object import GameObject, update_hierarchy
 from pmpge.traits.position import Position, StayInBounds
 
 
@@ -48,7 +48,7 @@ def test_using_with_game_object():
     assert go.max_y == 40
 
     # Inside bounds, nothing changes.
-    go.update_hierarchy(0)
+    update_hierarchy(go, 0)
     assert go.x == 10
     assert go.y == 20
     assert go.min_x == 0
@@ -58,7 +58,7 @@ def test_using_with_game_object():
 
     # Outside lower x
     go.x = -1
-    go.update_hierarchy(0)
+    update_hierarchy(go, 0)
     assert go.x == 0
     assert go.y == 20
     assert go.min_x == 0
@@ -68,7 +68,7 @@ def test_using_with_game_object():
 
     # Outside lower y
     go.y = 9
-    go.update_hierarchy(0)
+    update_hierarchy(go, 0)
     assert go.x == 0
     assert go.y == 10
     assert go.min_x == 0
@@ -78,7 +78,7 @@ def test_using_with_game_object():
 
     # Outside upper x
     go.x = 51
-    go.update_hierarchy(0)
+    update_hierarchy(go, 0)
     assert go.x == 50
     assert go.y == 10
     assert go.min_x == 0
@@ -88,7 +88,7 @@ def test_using_with_game_object():
 
     # Outside upper y
     go.y = 41
-    go.update_hierarchy(0)
+    update_hierarchy(go, 0)
     assert go.x == 50
     assert go.y == 40
     assert go.min_x == 0

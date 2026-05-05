@@ -77,13 +77,13 @@ class GameObject:
     For example, methods, property getter and setter methods. For an example of a subclass using traits,
     see the Sprite class.
     """
-    __parent: Self | None
-    __name: str | None
-    __active: bool
+    _parent: Self | None
+    _name: str | None
+    _active: bool
     visible: bool
     enabled: bool
     _children: list[Self]
-    __alive: bool
+    _alive: bool
 
     _draw_handlers: list[Callable[[Self, Any], None]]
     _update_handlers: list[Callable[[Self, float], None]]
@@ -115,12 +115,12 @@ class GameObject:
         twice to force on of the activate() or deactivate() methods and corresponding events
         handlers to be called.
         """
-        self.__parent = None
-        self.__name = name
+        self._parent = None
+        self._name = name
         self.visible = visible
         self.enabled = enabled
         self._children = []
-        self.__alive = True
+        self._alive = True
 
         # Copy across the handler lists first; this creates empty lists if there are no
         # handler lists specified.
@@ -146,7 +146,7 @@ class GameObject:
                 self.add_child(child)
 
         # This forces the active or deactivate events to be called.
-        self.__active: bool = not active
+        self._active: bool = not active
         self.active = active
 
         # Add in the traits after triggering the active or deactivate events. This has to be
@@ -162,14 +162,14 @@ class GameObject:
 
         :return: The name of this GameObject or None if the GameObject has no name.
         """
-        return self.__name
+        return self._name
 
     @property
     def active(self) -> bool:
         """"
         Returns whether the GameObject is active or not.
         """
-        return self.__active
+        return self._active
 
     @active.setter
     def active(self, value: bool) -> None:
@@ -179,12 +179,12 @@ class GameObject:
         all children. In the case where this object is `destroyed` then no action is taken.
         """
         # Cannot activate a destroyed GameObject.
-        if not self.__alive:
+        if not self._alive:
             return
 
-        do_handlers = self.__active != value
+        do_handlers = self._active != value
 
-        self.__active = value
+        self._active = value
 
         if do_handlers:
             if value:
@@ -264,7 +264,7 @@ class GameObject:
         """
         Returns whether this object is alive or not. An alive object is not destroyed.
         """
-        return self.__alive
+        return self._alive
 
     def destroy(self) -> None:
         """
@@ -281,11 +281,11 @@ class GameObject:
         for child in self._children:
             child.destroy()
 
-        if not self.__alive:
+        if not self._alive:
             return
 
         self.deactivate()
-        self.__alive = False
+        self._alive = False
 
         self.destroyed()
         for handler in self._destroy_handlers:
@@ -303,7 +303,7 @@ class GameObject:
         """
         The parent GameObject or None if this GameObject has no parent.
         """
-        return self.__parent
+        return self._parent
 
     @property
     def children(self) -> list[Self]:
@@ -321,13 +321,13 @@ class GameObject:
         if not child:
             return self
 
-        if child.__parent:
-            if child.__parent == self:
+        if child._parent:
+            if child._parent == self:
                 return self
 
             raise ValueError("child already has a parent")
 
-        child.__parent = self
+        child._parent = self
         self._children.append(child)
         return self
 
@@ -338,13 +338,13 @@ class GameObject:
         parent).
         """
         # If this child does not have a parent, ignore.
-        if not child or not child.__parent:
+        if not child or not child._parent:
             return self
 
-        if child.__parent != self:
+        if child._parent != self:
             raise ValueError("child is not a child of this GameObject")
 
-        child.__parent = None
+        child._parent = None
         self._children.remove(child)
         return self
 
@@ -355,31 +355,6 @@ class GameObject:
         superclass.
         """
         pass
-
-    def update_hierarchy(self, dt: float) -> Self:
-        """
-        Updates the GameObject (if `active` and `enabled`) and propagates to children (if `active`).
-        Also removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
-        """
-        # Remove any destroyed children.
-        children = self._children
-        for child in children:
-            if not child.__alive:
-                child.__parent = None
-                children.remove(child)
-
-        if not self.active:
-            return self
-
-        if self.enabled:
-            self.update(dt)
-            for handler in self._update_handlers:
-                handler(self, dt)
-
-        for child in self._children:
-            child.update_hierarchy(dt)
-
-        return self
 
     def update(self, dt: float) -> None:
         """
@@ -546,11 +521,42 @@ def traverse_hierarchy(
     process(root, initial_state)
 
 
+def update_hierarchy(root: GameObject, dt: float):
+    """
+    Updates the GameObject (if `active` and `enabled`) and propagates to children (if `active`).
+    Also removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
+
+    # TODO: this can be optimised later by unwinding the use of traverse_hierarchy.
+    """
+
+    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
+        # Remove any destroyed children.
+        children = go._children
+        for child in children:
+            if not child._alive:
+                go._parent = None
+                children.remove(child)
+
+        if not go.active:
+            return False, None
+
+        if go.enabled:
+            go.update(dt)
+            for handler in go._update_handlers:
+                handler(go, dt)
+
+        return True, None
+
+    traverse_hierarchy(root, process)
+
+
 def draw_hierarchy(root: GameObject, surface: Any):
     """
     Draws the GameObject (if `active` and `visible`) and propagates to children (if `active`).
     The surface is passed down through all objects but does not need to be a Pygame surface.
     This doesn't use traverse_hierarchy() as it is slower.
+
+    # TODO: this can be optimised later by unwinding the use of traverse_hierarchy.
     """
 
     def process(go: GameObject, state: Any) -> tuple[bool, Any]:

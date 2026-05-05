@@ -3,7 +3,7 @@ This suite of tests validates the main GameObject methods. This file focuses on 
 single GameObject. There are related tests covering hierarchies and subclassing in the
 relevant test files.
 """
-from pmpge.game_object import GameObject, draw_hierarchy
+from pmpge.game_object import GameObject, draw_hierarchy, update_hierarchy
 from pmpge.traits.position import Position
 from tests.pmpge.game_object.test_parent_and_child import parent_three_children
 from tests.pmpge.test_utilities import Handlers
@@ -50,7 +50,7 @@ def test_update_does_nothing_on_destroyed_object():
     go.destroy()
     handlers.reset()
 
-    go.update_hierarchy(0.1)
+    update_hierarchy(go, 0.1)
 
     handlers.validate(called_order=[])
 
@@ -170,7 +170,7 @@ def test_updated_removes_destroyed_children():
     hierarchy.find('child-1').go.destroy()
     hierarchy.find('child-3').go.destroy()
     parent.handlers.reset()
-    parent.go.update_hierarchy(0.1)
+    update_hierarchy(parent.go, 0.1)
     assert len(parent.go.children) == 1
     parent.handlers.validate(update=(parent.go, 0.1), update_count=1, called_order=["update"])
 
@@ -184,7 +184,7 @@ def test_update_does_nothing_when_inactive():
     go.active = False
     handlers.reset()
 
-    go.update_hierarchy(0.1)
+    update_hierarchy(go, 0.1)
 
     handlers.validate(called_order=[])
 
@@ -198,7 +198,7 @@ def test_update_does_nothing_when_disabled():
     go.enabled = False
     handlers.reset()
 
-    go.update_hierarchy(0.1)
+    update_hierarchy(go, 0.1)
 
     handlers.validate(called_order=[])
 
@@ -212,7 +212,7 @@ def test_update_works_when_invisible():
     go.visible = False
     handlers.reset()
 
-    go.update_hierarchy(0.1)
+    update_hierarchy(go, 0.1)
 
     handlers.validate(update=(go, 0.1), update_count=1, called_order=["update"])
 
@@ -225,8 +225,6 @@ def test_methods_return_self():
     assert go.activate() == go
     assert go.deactivate() == go
     assert go.reset() == go
-
-    assert go.update_hierarchy(0.001) == go
 
     child = GameObject()
     assert go.add_child(child) == go

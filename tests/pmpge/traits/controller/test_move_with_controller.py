@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from pmpge.game_object import GameObject
+from pmpge.game_object import GameObject, update_hierarchy
 from pmpge.traits.controller import MoveWithController
 from pmpge.traits.physics import Velocity
 from pmpge.traits.position import Position
@@ -93,7 +93,7 @@ def test_without_position():
     controller = ControllerWith4Buttons(False, False, False, False)
     go = GameObject(MoveWithController(10, 20, controller))
     with pytest.raises(AttributeError):
-        go.update_hierarchy(0)
+        update_hierarchy(go, 0)
 
 
 # noinspection PyUnresolvedReferences
@@ -111,7 +111,7 @@ def test_with_2_buttons():
     # Should change nothing
     controller.left = True
     controller.right = True
-    go.update_hierarchy(0)
+    update_hierarchy(go, 0)
     assert go.x == 0
     assert go.y == 0
     assert go.mx == 10
@@ -120,7 +120,7 @@ def test_with_2_buttons():
     # Right
     controller.left = False
     controller.right = True
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 10
     assert go.y == 0
     assert go.mx == 10
@@ -129,7 +129,7 @@ def test_with_2_buttons():
     # Left
     controller.left = True
     controller.right = False
-    go.update_hierarchy(1.5)
+    update_hierarchy(go, 1.5)
     assert go.x == -5
     assert go.y == 0
     assert go.mx == 10
@@ -138,7 +138,7 @@ def test_with_2_buttons():
     # Right again
     controller.left = False
     controller.right = True
-    go.update_hierarchy(1.5)
+    update_hierarchy(go, 1.5)
     assert go.x == 10
     assert go.y == 0
     assert go.mx == 10
@@ -147,7 +147,7 @@ def test_with_2_buttons():
     # Left again
     controller.left = True
     controller.right = False
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 0
     assert go.y == 0
     assert go.mx == 10
@@ -156,7 +156,7 @@ def test_with_2_buttons():
     # Left and right (left wins)
     controller.left = True
     controller.right = True
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == -10
     assert go.y == 0
     assert go.mx == 10
@@ -180,7 +180,7 @@ def test_with_4_buttons():
     controller.right = True
     controller.up = True
     controller.down = True
-    go.update_hierarchy(0)
+    update_hierarchy(go, 0)
     assert go.x == 0
     assert go.y == 0
     assert go.mx == 10
@@ -191,7 +191,7 @@ def test_with_4_buttons():
     controller.right = True
     controller.up = False
     controller.down = False
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 10
     assert go.y == 0
     assert go.mx == 10
@@ -202,7 +202,7 @@ def test_with_4_buttons():
     controller.right = False
     controller.up = False
     controller.down = False
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 0
     assert go.y == 0
     assert go.mx == 10
@@ -213,7 +213,7 @@ def test_with_4_buttons():
     controller.right = False
     controller.up = False
     controller.down = True
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 0
     assert go.y == 0
     assert go.mx == 10
@@ -224,7 +224,7 @@ def test_with_4_buttons():
     controller.right = False
     controller.up = True
     controller.down = False
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 0
     assert go.y == 0
     assert go.mx == 10
@@ -248,7 +248,7 @@ def test_with_6_buttons():
     controller.right = True
     controller.up = True
     controller.down = True
-    go.update_hierarchy(0)
+    update_hierarchy(go, 0)
     assert go.x == 0
     assert go.y == 0
     assert go.mx == 10
@@ -259,7 +259,7 @@ def test_with_6_buttons():
     controller.right = True
     controller.up = False
     controller.down = False
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 10
     assert go.y == 0
     assert go.mx == 10
@@ -270,7 +270,7 @@ def test_with_6_buttons():
     controller.right = False
     controller.up = False
     controller.down = False
-    go.update_hierarchy(1.5)
+    update_hierarchy(go, 1.5)
     assert go.x == -5
     assert go.y == 0
     assert go.mx == 10
@@ -281,7 +281,7 @@ def test_with_6_buttons():
     controller.right = True
     controller.up = False
     controller.down = False
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == -15
     assert go.y == 0
     assert go.mx == 10
@@ -292,7 +292,7 @@ def test_with_6_buttons():
     controller.right = False
     controller.up = False
     controller.down = True
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == -15
     assert go.y == 20
     assert go.mx == 10
@@ -303,7 +303,7 @@ def test_with_6_buttons():
     controller.right = False
     controller.up = True
     controller.down = False
-    go.update_hierarchy(1.5)
+    update_hierarchy(go, 1.5)
     assert go.x == -15
     assert go.y == -10
     assert go.mx == 10
@@ -314,7 +314,7 @@ def test_with_6_buttons():
     controller.right = False
     controller.up = False
     controller.down = True
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == -15
     assert go.y == 10
     assert go.mx == 10
@@ -325,7 +325,7 @@ def test_with_6_buttons():
     controller.right = False
     controller.up = True
     controller.down = False
-    go.update_hierarchy(1.5)
+    update_hierarchy(go, 1.5)
     assert go.x == -15
     assert go.y == -20
     assert go.mx == 10
@@ -336,7 +336,7 @@ def test_with_6_buttons():
     controller.right = False
     controller.up = True
     controller.down = True
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == -15
     assert go.y == -40
     assert go.mx == 10
@@ -349,7 +349,7 @@ def test_with_6_buttons():
     controller.right = True
     controller.up = True
     controller.down = True
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == -10
     assert go.y == -20
     assert go.mx == 10
@@ -380,7 +380,7 @@ def test_velocity_and_move_with_controller():
     controller.right = True
     controller.up = True
     controller.down = True
-    go.update_hierarchy(0)
+    update_hierarchy(go, 0)
     assert go.x == 0
     assert go.y == 0
     assert go.vx == 30
@@ -393,7 +393,7 @@ def test_velocity_and_move_with_controller():
     controller.right = False
     controller.up = False
     controller.down = False
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 30
     assert go.y == 40
     assert go.vx == 30
@@ -406,7 +406,7 @@ def test_velocity_and_move_with_controller():
     controller.right = True
     controller.up = False
     controller.down = False
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 70
     assert go.y == 80
     assert go.vx == 30
@@ -419,7 +419,7 @@ def test_velocity_and_move_with_controller():
     controller.right = False
     controller.up = False
     controller.down = False
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 90
     assert go.y == 120
     assert go.vx == 30
@@ -432,7 +432,7 @@ def test_velocity_and_move_with_controller():
     controller.right = False
     controller.up = False
     controller.down = True
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 120
     assert go.y == 180
     assert go.vx == 30
@@ -445,7 +445,7 @@ def test_velocity_and_move_with_controller():
     controller.right = False
     controller.up = True
     controller.down = False
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 150
     assert go.y == 200
     assert go.vx == 30

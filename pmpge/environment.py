@@ -284,11 +284,11 @@ def execute(game, background_colour: tuple[int, int, int] = None):
 
     try:
         def update(dt: float):
+            game.update(dt)
             device_update(dt) if device_update else None
             controller_update(dt) if controller_update else None
             sound_update(dt) if sound_update else None
             graphics_update(dt) if graphics_update else None
-            game.update(dt)
 
         global __execute
         __execute = True

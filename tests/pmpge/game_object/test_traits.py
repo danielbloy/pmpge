@@ -3,7 +3,7 @@ from typing import Any
 
 import pytest
 
-from pmpge.game_object import GameObject
+from pmpge.game_object import GameObject, draw_hierarchy, update_hierarchy
 
 
 @dataclass
@@ -170,7 +170,7 @@ def test_draw_handler_copied_across():
     assert go.surface is None
     assert go.count == 0
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
 
     assert go.go == go
     assert go.surface == "surface"
@@ -188,7 +188,7 @@ def test_update_handler_copied_across():
     assert go.dt is None
     assert go.count == 0
 
-    go.update_hierarchy(1.2)
+    update_hierarchy(go, 1.2)
 
     assert go.go == go
     assert go.dt == 1.2
@@ -282,13 +282,13 @@ def test_all_handlers_copied_across():
     assert go.dt is None
     assert go.called == ["activated", "merged", "deactivated", "activated"]
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
     assert go.go == go
     assert go.surface == "surface"
     assert go.dt is None
     assert go.called == ["activated", "merged", "deactivated", "activated", "draw"]
 
-    go.update_hierarchy(1.2)
+    update_hierarchy(go, 1.2)
     assert go.go == go
     assert go.surface == "surface"
     assert go.dt == 1.2
@@ -315,13 +315,13 @@ def test_add_multiple_traits_copied_across_different_handlers():
     assert go.dt is None
     assert go.count == 0
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
 
     assert go.go == go
     assert go.surface == "surface"
     assert go.count == 1
 
-    go.update_hierarchy(1.2)
+    update_hierarchy(go, 1.2)
 
     assert go.go == go
     assert go.surface == "surface"
@@ -345,13 +345,13 @@ def test_add_multiple_traits_copied_across_same_handlers():
     assert go.dt is None
     assert go.count == 0
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
 
     assert go.go == go
     assert go.surface == "surface"
     assert go.count == 2
 
-    go.update_hierarchy(1.2)
+    update_hierarchy(go, 1.2)
 
     assert go.go == go
     assert go.surface == "surface"

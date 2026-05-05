@@ -55,6 +55,7 @@ import board
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 from displayio import Group, Palette, Bitmap, TileGrid
 from pmpge.game import Game
+from pmpge.game_object import draw_hierarchy
 
 game: Game | None = None
 
@@ -74,7 +75,7 @@ background = TileGrid(Bitmap(display.width, display.height, 1), pixel_shader=pal
 root.append(background)  # Needs to be the first item.
 
 
-# FUTURE: If we use a tilmemap at a later point, we can probably remove the need for the background layer.
+# FUTURE: If we use a tilemap at a later point, we can probably remove the need for the background layer.
 
 
 def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
@@ -116,6 +117,7 @@ def draw(screen):
     Does not need to draw the hierarchy as we handle that separately with our own
     data structure for displayio.
     """
+    draw_hierarchy(game.root, screen)
     game.draw(screen)
 
 

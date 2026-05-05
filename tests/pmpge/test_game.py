@@ -198,27 +198,20 @@ def test_update_functions_and_order():
     assert dt == 0.3
 
 
-def test_root_gets_drawn():
+def test_root_does_not_get_drawn():
     """
-    Validates that the root object gets drawn and is passed the correct values.
+    Validates that the root object does not get drawn.
     """
     called: list[str] = []
-    surface = None
-    that = None
 
     def draw_root(this, value):
-        nonlocal surface, that
-        surface = value
-        that = this
         called.append("draw_root")
 
     game = Game()
     game.root.add_draw_handler(draw_root)
 
     game.draw("thelma")
-    assert called == ["draw_root"]
-    assert surface == "thelma"
-    assert that == game.root
+    assert called == []
 
 
 def test_root_gets_updated():
@@ -242,30 +235,6 @@ def test_root_gets_updated():
     assert called == ["update_root"]
     assert dt == 0.3
     assert that == game.root
-
-
-def test_root_drawn_before_draw_funcs():
-    """
-    Validates that the root GameObject is drawn before draw functions are called.
-    """
-    called: list[str] = []
-
-    def draw_1(value):
-        called.append("draw_1")
-
-    def draw_2(value):
-        called.append("draw_2")
-
-    def draw_root(this, value):
-        called.append("draw_root")
-
-    game = Game()
-    game.add_draw_func(draw_1)
-    game.root.add_draw_handler(draw_root)
-    game.add_draw_func(draw_2)
-
-    game.draw("shaggy")
-    assert called == ["draw_root", "draw_1", "draw_2"]
 
 
 def test_root_updated_before_update_funcs():

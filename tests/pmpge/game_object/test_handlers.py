@@ -1,4 +1,4 @@
-from pmpge.game_object import GameObject
+from pmpge.game_object import GameObject, draw_hierarchy, update_hierarchy
 from tests.pmpge.test_utilities import Handlers
 
 """
@@ -59,13 +59,13 @@ def test_adding_single_handler():
     handlers = Handlers()
     go = GameObject()
     go.add_draw_handler(handlers.draw)
-    go.draw_hierarchy("none")
+    draw_hierarchy(go, "none")
     handlers.validate(draw=(go, "none"), draw_count=1, called_order=["draw"])
 
     handlers.reset()
     go = GameObject()
     go.add_update_handler(handlers.update)
-    go.update_hierarchy(1.0)
+    update_hierarchy(go, 1.0)
     handlers.validate(update=(go, 1.0), update_count=1, called_order=["update"])
     handlers.reset()
 
@@ -103,11 +103,11 @@ def test_adding_all_single_handler():
     go.add_deactivate_handler(handlers.deactivate)
     go.add_destroy_handler(handlers.destroy)
 
-    go.draw_hierarchy("none")
+    draw_hierarchy(go, "none")
     handlers.validate(draw=(go, "none"), draw_count=1, called_order=["draw"])
 
     handlers.reset()
-    go.update_hierarchy(0.0)
+    update_hierarchy(go, 0.0)
     handlers.validate(update=(go, 0.0), update_count=1, called_order=["update"])
 
     handlers.reset()
@@ -132,14 +132,14 @@ def test_adding_and_remove_single_handler():
     go = GameObject()
     go.add_draw_handler(handlers.draw)
     go.remove_draw_handler(handlers.draw)
-    go.draw_hierarchy("none")
+    draw_hierarchy(go, "none")
     handlers.validate()
 
     handlers.reset()
     go = GameObject()
     go.add_update_handler(handlers.update)
     go.remove_update_handler(handlers.update)
-    go.update_hierarchy(1.0)
+    update_hierarchy(go, 1.0)
     handlers.validate()
     handlers.reset()
 
@@ -174,14 +174,14 @@ def test_adding_single_handler_twice():
     go = GameObject()
     go.add_draw_handler(handlers.draw)
     go.add_draw_handler(handlers.draw)
-    go.draw_hierarchy("none")
+    draw_hierarchy(go, "none")
     handlers.validate(draw=(go, "none"), draw_count=2, called_order=["draw", "draw"])
 
     handlers.reset()
     go = GameObject()
     go.add_update_handler(handlers.update)
     go.add_update_handler(handlers.update)
-    go.update_hierarchy(1.0)
+    update_hierarchy(go, 1.0)
     handlers.validate(update=(go, 1.0), update_count=2, called_order=["update", "update"])
     handlers.reset()
 
@@ -223,11 +223,11 @@ def test_adding_handlers_when_added_through_construction():
     go.add_destroy_handler(handlers.destroy)
     handlers.reset()
 
-    go.draw_hierarchy("none")
+    draw_hierarchy(go, "none")
     handlers.validate(draw=(go, "none"), draw_count=2, called_order=["draw", "draw"])
 
     handlers.reset()
-    go.update_hierarchy(0.0)
+    update_hierarchy(go, 0.0)
     handlers.validate(update=(go, 0.0), update_count=2, called_order=["update", "update"])
 
     handlers.reset()
@@ -258,11 +258,11 @@ def test_remove_handlers_when_added_through_construction():
     go.remove_destroy_handler(handlers.destroy)
     handlers.reset()
 
-    go.draw_hierarchy("none")
+    draw_hierarchy(go, "none")
     handlers.validate()
 
     handlers.reset()
-    go.update_hierarchy(0.0)
+    update_hierarchy(go, 0.0)
     handlers.validate()
 
     handlers.reset()

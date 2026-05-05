@@ -2,6 +2,7 @@
 This suite of tests validates that the main overridable placeholder methods are
 called at the expected points.
 """
+from pmpge.game_object import draw_hierarchy, update_hierarchy
 from tests.pmpge.test_utilities import GameObjectSubclass
 
 
@@ -55,7 +56,7 @@ def test_draw_called():
     go.handlers.validate(activate=go, activate_count=1)
     go.handlers.reset()
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
     go.handlers.validate(draw=(go, "surface"), draw_count=1)
 
 
@@ -69,7 +70,7 @@ def test_draw_called_before_draw_handler():
     go.add_draw_handler(lambda obj, surface: go.handlers.called_order.append("draw_handler"))
     go.handlers.reset()
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
     go.handlers.validate(draw=(go, "surface"), draw_count=1, called_order=["draw", "draw_handler"])
 
 
@@ -83,7 +84,7 @@ def test_update_called():
     go.handlers.validate(activate=go, activate_count=1)
     go.handlers.reset()
 
-    go.update_hierarchy(0.1)
+    update_hierarchy(go, 0.1)
     go.handlers.validate(update=(go, 0.1), update_count=1)
 
 
@@ -97,7 +98,7 @@ def test_update_called_before_update_handler_called():
     go.add_update_handler(lambda obj, surface: go.handlers.called_order.append("update_handler"))
     go.handlers.reset()
 
-    go.update_hierarchy(0.1)
+    update_hierarchy(go, 0.1)
     go.handlers.validate(update=(go, 0.1), update_count=1,
                          called_order=["update", "update_handler"])
 
@@ -140,11 +141,11 @@ def test_activate_draw_update_deactivate_destroyed_handlers_called():
     go.handlers.validate(activate=go, activate_count=1)
 
     go.handlers.reset()
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
     go.handlers.validate(draw=(go, "surface"), draw_count=1)
 
     go.handlers.reset()
-    go.update_hierarchy(0.1)
+    update_hierarchy(go, 0.1)
     go.handlers.validate(update=(go, 0.1), update_count=1)
 
     go.handlers.reset()
@@ -162,8 +163,8 @@ def test_methods_not_called_when_destroyed():
     go.handlers.reset()
 
     go.reset()
-    go.draw_hierarchy("surface")
-    go.update_hierarchy(0.1)
+    draw_hierarchy(go, "surface")
+    update_hierarchy(go, 0.1)
     go.destroy()
 
     go.handlers.validate(called_order=[])

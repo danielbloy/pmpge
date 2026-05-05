@@ -3,7 +3,7 @@ This suite of tests validates the main GameObject methods. This file focuses on 
 single GameObject. There are related tests covering hierarchies and subclassing in the
 relevant test files.
 """
-from pmpge.game_object import GameObject
+from pmpge.game_object import GameObject, draw_hierarchy, update_hierarchy
 from pmpge.traits.position import Position
 from tests.pmpge.game_object.test_parent_and_child import parent_three_children
 from tests.pmpge.test_utilities import Handlers
@@ -36,7 +36,7 @@ def test_draw_does_nothing_on_destroyed_object():
     go.destroy()
     handlers.reset()
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
 
     handlers.validate(called_order=[])
 
@@ -50,7 +50,7 @@ def test_update_does_nothing_on_destroyed_object():
     go.destroy()
     handlers.reset()
 
-    go.update_hierarchy(0.1)
+    update_hierarchy(go, 0.1)
 
     handlers.validate(called_order=[])
 
@@ -127,7 +127,7 @@ def test_draw_does_nothing_when_inactive():
     go.active = False
     handlers.reset()
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
 
     handlers.validate(called_order=[])
 
@@ -141,7 +141,7 @@ def test_draw_does_nothing_when_invisible():
     go.visible = False
     handlers.reset()
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
 
     handlers.validate(called_order=[])
 
@@ -155,22 +155,27 @@ def test_draw_works_when_disabled():
     go.disabled = True
     handlers.reset()
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
 
     handlers.validate(draw=(go, "surface"), draw_count=1, called_order=["draw"])
 
 
 def test_updated_removes_destroyed_children():
     """
-    Ensures update_hierarchy() removes destroyed children.
+    Ensures update_hierarchy() removes destroyed children. This also validates
+    the optimisation property.
     """
     hierarchy = parent_three_children()
     parent = hierarchy.parent
     assert len(parent.go.children) == 3
+    GameObject.something_destroyed = False
     hierarchy.find('child-1').go.destroy()
     hierarchy.find('child-3').go.destroy()
+    assert GameObject.something_destroyed == True
     parent.handlers.reset()
-    parent.go.update_hierarchy(0.1)
+    assert GameObject.something_destroyed == True
+    update_hierarchy(parent.go, 0.1)
+    assert GameObject.something_destroyed == False
     assert len(parent.go.children) == 1
     parent.handlers.validate(update=(parent.go, 0.1), update_count=1, called_order=["update"])
 
@@ -184,7 +189,7 @@ def test_update_does_nothing_when_inactive():
     go.active = False
     handlers.reset()
 
-    go.update_hierarchy(0.1)
+    update_hierarchy(go, 0.1)
 
     handlers.validate(called_order=[])
 
@@ -198,7 +203,7 @@ def test_update_does_nothing_when_disabled():
     go.enabled = False
     handlers.reset()
 
-    go.update_hierarchy(0.1)
+    update_hierarchy(go, 0.1)
 
     handlers.validate(called_order=[])
 
@@ -212,7 +217,7 @@ def test_update_works_when_invisible():
     go.visible = False
     handlers.reset()
 
-    go.update_hierarchy(0.1)
+    update_hierarchy(go, 0.1)
 
     handlers.validate(update=(go, 0.1), update_count=1, called_order=["update"])
 
@@ -225,9 +230,6 @@ def test_methods_return_self():
     assert go.activate() == go
     assert go.deactivate() == go
     assert go.reset() == go
-
-    assert go.draw_hierarchy("surface") == go
-    assert go.update_hierarchy(0.001) == go
 
     child = GameObject()
     assert go.add_child(child) == go

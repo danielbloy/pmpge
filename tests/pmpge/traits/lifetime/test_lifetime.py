@@ -1,6 +1,6 @@
 import pytest
 
-from pmpge.game_object import GameObject
+from pmpge.game_object import GameObject, update_hierarchy
 from pmpge.traits.lifetime import Lifetime
 
 
@@ -40,7 +40,7 @@ def test_update_when_no_lifetime_set():
     # Now test when used as a GameObject
     go = GameObject(Lifetime())
     assert trait.lifetime is None
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert trait.lifetime is None
 
 
@@ -84,10 +84,10 @@ def test_update_when_lifetime_set():
     go = GameObject(Lifetime(2))
     assert go.lifetime == 2
     assert go.alive
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.lifetime == 1
     assert go.alive
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.lifetime == 0
     assert not go.alive
 
@@ -113,10 +113,10 @@ def test_update_when_extending_lifetime():
     go = GameObject(Lifetime(2))
     assert go.lifetime == 2
     assert go.alive
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.lifetime == 1
     assert go.alive
     go.lifetime = 6
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.lifetime == 5
     assert go.alive

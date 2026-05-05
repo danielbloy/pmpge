@@ -1,6 +1,6 @@
 import pytest
 
-from pmpge.game_object import GameObject
+from pmpge.game_object import GameObject, update_hierarchy
 from pmpge.traits.physics import Velocity
 from pmpge.traits.position import Position
 
@@ -35,7 +35,7 @@ def test_without_position():
     """
     go = GameObject(Velocity(10, 20))
     with pytest.raises(AttributeError):
-        go.update_hierarchy(0)
+        update_hierarchy(go, 0)
 
 
 # noinspection PyUnresolvedReferences
@@ -50,38 +50,38 @@ def test_using_with_game_object_positive():
     assert go.vy == 20
 
     # Update with 0 makes no changes
-    go.update_hierarchy(0)
-    go.update_hierarchy(0)
-    go.update_hierarchy(0)
+    update_hierarchy(go, 0)
+    update_hierarchy(go, 0)
+    update_hierarchy(go, 0)
     assert go.x == 100
     assert go.y == 100
     assert go.vx == 10
     assert go.vy == 20
 
     # Update with 1 makes changes
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 110
     assert go.y == 120
     assert go.vx == 10
     assert go.vy == 20
 
     # Run a few more
-    go.update_hierarchy(1)
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
+    update_hierarchy(go, 1)
     assert go.x == 130
     assert go.y == 160
     assert go.vx == 10
     assert go.vy == 20
 
     # Run 2 seconds
-    go.update_hierarchy(2)
+    update_hierarchy(go, 2)
     assert go.x == 150
     assert go.y == 200
     assert go.vx == 10
     assert go.vy == 20
 
     # Run a half second
-    go.update_hierarchy(0.5)
+    update_hierarchy(go, 0.5)
     assert go.x == 155
     assert go.y == 210
     assert go.vx == 10
@@ -90,7 +90,7 @@ def test_using_with_game_object_positive():
     # Change velocity
     go.vx = 1
     go.vy = 2
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 156
     assert go.y == 212
     assert go.vx == 1
@@ -109,38 +109,38 @@ def test_using_with_game_object_negative():
     assert go.vy == -20
 
     # Update with 0 makes no changes
-    go.update_hierarchy(0)
-    go.update_hierarchy(0)
-    go.update_hierarchy(0)
+    update_hierarchy(go, 0)
+    update_hierarchy(go, 0)
+    update_hierarchy(go, 0)
     assert go.x == 100
     assert go.y == 100
     assert go.vx == -10
     assert go.vy == -20
 
     # Update with 1 makes changes
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 90
     assert go.y == 80
     assert go.vx == -10
     assert go.vy == -20
 
     # Run a few more
-    go.update_hierarchy(1)
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
+    update_hierarchy(go, 1)
     assert go.x == 70
     assert go.y == 40
     assert go.vx == -10
     assert go.vy == -20
 
     # Run 2 seconds
-    go.update_hierarchy(2)
+    update_hierarchy(go, 2)
     assert go.x == 50
     assert go.y == 0
     assert go.vx == -10
     assert go.vy == -20
 
     # Run a half second
-    go.update_hierarchy(0.5)
+    update_hierarchy(go, 0.5)
     assert go.x == 45
     assert go.y == -10
     assert go.vx == -10
@@ -149,7 +149,7 @@ def test_using_with_game_object_negative():
     # Change velocity
     go.vx = -1
     go.vy = -2
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 44
     assert go.y == -12
     assert go.vx == -1

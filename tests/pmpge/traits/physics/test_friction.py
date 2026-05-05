@@ -1,6 +1,6 @@
 import pytest
 
-from pmpge.game_object import GameObject
+from pmpge.game_object import GameObject, update_hierarchy
 from pmpge.traits.physics import Friction
 from pmpge.traits.physics import Velocity
 from pmpge.traits.position import Position
@@ -36,7 +36,7 @@ def test_without_position():
     """
     go = GameObject(Velocity(0, 0), Friction(10, 10))
     with pytest.raises(AttributeError):
-        go.update_hierarchy(0)
+        update_hierarchy(go, 0)
 
 
 def test_without_velocity():
@@ -45,7 +45,7 @@ def test_without_velocity():
     """
     go = GameObject(Position(10, 20), Friction(10, 10))
     with pytest.raises(AttributeError):
-        go.update_hierarchy(0)
+        update_hierarchy(go, 0)
 
 
 # noinspection PyUnresolvedReferences
@@ -65,9 +65,9 @@ def test_using_with_game_object_positive():
     assert go.fy == 20
 
     # Update with 0 makes no changes
-    go.update_hierarchy(0)
-    go.update_hierarchy(0)
-    go.update_hierarchy(0)
+    update_hierarchy(go, 0)
+    update_hierarchy(go, 0)
+    update_hierarchy(go, 0)
     assert go.x == 1000
     assert go.y == 1000
     assert go.vx == 100
@@ -76,7 +76,7 @@ def test_using_with_game_object_positive():
     assert go.fy == 20
 
     # Update with 1 makes changes
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 1100
     assert go.y == 1100
     assert go.vx == 90  # Remember, friction retards velocity
@@ -85,8 +85,8 @@ def test_using_with_game_object_positive():
     assert go.fy == 20
 
     # Run a few more
-    go.update_hierarchy(1)
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
+    update_hierarchy(go, 1)
     assert go.x == 1270
     assert go.y == 1240
     assert go.vx == 70
@@ -95,7 +95,7 @@ def test_using_with_game_object_positive():
     assert go.fy == 20
 
     # Run 2 seconds
-    go.update_hierarchy(2)
+    update_hierarchy(go, 2)
     assert go.x == 1410
     assert go.y == 1320
     assert go.vx == 50
@@ -104,7 +104,7 @@ def test_using_with_game_object_positive():
     assert go.fy == 20
 
     # Run a half second
-    go.update_hierarchy(0.5)
+    update_hierarchy(go, 0.5)
     assert go.x == 1435
     assert go.y == 1320
     assert go.vx == 45
@@ -115,7 +115,7 @@ def test_using_with_game_object_positive():
     # Change friction
     go.fx = 1
     go.fy = 2
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 1480
     assert go.y == 1320
     assert go.vx == 44
@@ -141,9 +141,9 @@ def test_using_with_game_object_negative():
     assert go.fy == -20
 
     # Update with 0 makes no changes
-    go.update_hierarchy(0)
-    go.update_hierarchy(0)
-    go.update_hierarchy(0)
+    update_hierarchy(go, 0)
+    update_hierarchy(go, 0)
+    update_hierarchy(go, 0)
     assert go.x == 1000
     assert go.y == 1000
     assert go.vx == 100
@@ -152,8 +152,8 @@ def test_using_with_game_object_negative():
     assert go.fy == -20
 
     # Run a few more
-    go.update_hierarchy(1)
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
+    update_hierarchy(go, 1)
     assert go.x == 1210
     assert go.y == 1220
     assert go.vx == 120
@@ -162,7 +162,7 @@ def test_using_with_game_object_negative():
     assert go.fy == -20
 
     # Run 2 seconds
-    go.update_hierarchy(2)
+    update_hierarchy(go, 2)
     assert go.x == 1450
     assert go.y == 1500
     assert go.vx == 140
@@ -171,7 +171,7 @@ def test_using_with_game_object_negative():
     assert go.fy == -20
 
     # Run a half second
-    go.update_hierarchy(0.5)
+    update_hierarchy(go, 0.5)
     assert go.x == 1520
     assert go.y == 1590
     assert go.vx == 145
@@ -182,7 +182,7 @@ def test_using_with_game_object_negative():
     # Change friction
     go.fx = -1
     go.fy = -2
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 1665
     assert go.y == 1780
     assert go.vx == 146
@@ -208,7 +208,7 @@ def test_trait_order_matters():
     assert go.fy == 20
 
     # Update with 1 makes changes
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 1100
     assert go.y == 1100
     assert go.vx == 90  # Remember, friction retards velocity
@@ -229,7 +229,7 @@ def test_trait_order_matters():
     assert go.fy == 20
 
     # Update with 1 makes changes
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 1090
     assert go.y == 1080
     assert go.vx == 90  # Remember, friction retards velocity
@@ -254,7 +254,7 @@ def test_friction_when_velocity_hits_zero():
     assert go.fx == 1
     assert go.fy == 1
 
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 1002
     assert go.y == 1003
     assert go.vx == 1
@@ -262,7 +262,7 @@ def test_friction_when_velocity_hits_zero():
     assert go.fx == 1
     assert go.fy == 1
 
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 1003
     assert go.y == 1005
     assert go.vx == 0
@@ -270,7 +270,7 @@ def test_friction_when_velocity_hits_zero():
     assert go.fx == 1
     assert go.fy == 1
 
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 1003
     assert go.y == 1006
     assert go.vx == 0
@@ -278,9 +278,9 @@ def test_friction_when_velocity_hits_zero():
     assert go.fx == 1
     assert go.fy == 1
 
-    go.update_hierarchy(1)
-    go.update_hierarchy(1)
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
+    update_hierarchy(go, 1)
+    update_hierarchy(go, 1)
     assert go.x == 1003
     assert go.y == 1006
     assert go.vx == 0
@@ -300,7 +300,7 @@ def test_friction_when_velocity_hits_zero():
     assert go.fx == -1
     assert go.fy == -1
 
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 1002
     assert go.y == 1003
     assert go.vx == 3
@@ -321,7 +321,7 @@ def test_friction_when_velocity_hits_zero():
     assert go.fx == -1
     assert go.fy == -1
 
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 998
     assert go.y == 997
     assert go.vx == -2

@@ -1,6 +1,6 @@
 import pytest
 
-from pmpge.game_object import GameObject
+from pmpge.game_object import GameObject, update_hierarchy
 from pmpge.traits.position import Position, RelativeToParent
 
 
@@ -44,13 +44,13 @@ def test_works_without_position_trait():
     with pytest.raises(AttributeError):
         assert go.y == 0
 
-    go.update_hierarchy(0)
+    update_hierarchy(go, 0)
     assert go.x == 1
     assert go.y == 2
     assert go.offset_x == 1
     assert go.offset_y == 2
 
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == 1
     assert go.y == 2
     assert go.offset_x == 1
@@ -69,7 +69,7 @@ def test_works_without_parent():
     assert go.offset_x == 1
     assert go.offset_y == 2
 
-    go.update_hierarchy(0)
+    update_hierarchy(go, 0)
     assert go.x == 1
     assert go.y == 2
     assert go.offset_x == 1
@@ -78,20 +78,20 @@ def test_works_without_parent():
     go.offset_x = -13
     go.offset_y = 17
 
-    go.update_hierarchy(1)
+    update_hierarchy(go, 1)
     assert go.x == -13
     assert go.y == 17
     assert go.offset_x == -13
     assert go.offset_y == 17
 
     # run the update loads of times and there should be no change to the value.
-    go.update_hierarchy(0)
-    go.update_hierarchy(0.1)
-    go.update_hierarchy(2)
-    go.update_hierarchy(6)
-    go.update_hierarchy(5)
-    go.update_hierarchy(1)
-    go.update_hierarchy(0.01)
+    update_hierarchy(go, 0)
+    update_hierarchy(go, 0.1)
+    update_hierarchy(go, 2)
+    update_hierarchy(go, 6)
+    update_hierarchy(go, 5)
+    update_hierarchy(go, 1)
+    update_hierarchy(go, 0.01)
     assert go.x == -13
     assert go.y == 17
     assert go.offset_x == -13

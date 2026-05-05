@@ -162,15 +162,20 @@ def test_draw_works_when_disabled():
 
 def test_updated_removes_destroyed_children():
     """
-    Ensures update_hierarchy() removes destroyed children.
+    Ensures update_hierarchy() removes destroyed children. This also validates
+    the optimisation property.
     """
     hierarchy = parent_three_children()
     parent = hierarchy.parent
     assert len(parent.go.children) == 3
+    GameObject.something_destroyed = False
     hierarchy.find('child-1').go.destroy()
     hierarchy.find('child-3').go.destroy()
+    assert GameObject.something_destroyed == True
     parent.handlers.reset()
+    assert GameObject.something_destroyed == True
     update_hierarchy(parent.go, 0.1)
+    assert GameObject.something_destroyed == False
     assert len(parent.go.children) == 1
     parent.handlers.validate(update=(parent.go, 0.1), update_count=1, called_order=["update"])
 

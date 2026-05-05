@@ -1,5 +1,5 @@
 from pmpge.environment import is_running_on_desktop, screen_size, execute, terminate
-from pmpge.game_object import GameObject
+from pmpge.game_object import GameObject, draw_hierarchy
 
 # These are not available in CircuitPython.
 if is_running_on_desktop():
@@ -103,7 +103,7 @@ class Game:
         # TODO: Can we remove the need to call draw at all?
         """
         if draw_root:
-            self.__root.draw_hierarchy(surface)
+            draw_hierarchy(self.__root, surface)
 
         for draw_func in self.__draw_funcs:
             draw_func(surface)

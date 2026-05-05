@@ -3,7 +3,7 @@ This suite of tests validates the main GameObject methods. This file focuses on 
 single GameObject. There are related tests covering hierarchies and subclassing in the
 relevant test files.
 """
-from pmpge.game_object import GameObject
+from pmpge.game_object import GameObject, draw_hierarchy
 from pmpge.traits.position import Position
 from tests.pmpge.game_object.test_parent_and_child import parent_three_children
 from tests.pmpge.test_utilities import Handlers
@@ -36,7 +36,7 @@ def test_draw_does_nothing_on_destroyed_object():
     go.destroy()
     handlers.reset()
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
 
     handlers.validate(called_order=[])
 
@@ -127,7 +127,7 @@ def test_draw_does_nothing_when_inactive():
     go.active = False
     handlers.reset()
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
 
     handlers.validate(called_order=[])
 
@@ -141,7 +141,7 @@ def test_draw_does_nothing_when_invisible():
     go.visible = False
     handlers.reset()
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
 
     handlers.validate(called_order=[])
 
@@ -155,7 +155,7 @@ def test_draw_works_when_disabled():
     go.disabled = True
     handlers.reset()
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
 
     handlers.validate(draw=(go, "surface"), draw_count=1, called_order=["draw"])
 
@@ -226,7 +226,6 @@ def test_methods_return_self():
     assert go.deactivate() == go
     assert go.reset() == go
 
-    assert go.draw_hierarchy("surface") == go
     assert go.update_hierarchy(0.001) == go
 
     child = GameObject()

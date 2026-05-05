@@ -3,7 +3,7 @@ from typing import Any
 
 import pytest
 
-from pmpge.game_object import GameObject
+from pmpge.game_object import GameObject, draw_hierarchy
 
 
 @dataclass
@@ -170,7 +170,7 @@ def test_draw_handler_copied_across():
     assert go.surface is None
     assert go.count == 0
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
 
     assert go.go == go
     assert go.surface == "surface"
@@ -282,7 +282,7 @@ def test_all_handlers_copied_across():
     assert go.dt is None
     assert go.called == ["activated", "merged", "deactivated", "activated"]
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
     assert go.go == go
     assert go.surface == "surface"
     assert go.dt is None
@@ -315,7 +315,7 @@ def test_add_multiple_traits_copied_across_different_handlers():
     assert go.dt is None
     assert go.count == 0
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
 
     assert go.go == go
     assert go.surface == "surface"
@@ -345,7 +345,7 @@ def test_add_multiple_traits_copied_across_same_handlers():
     assert go.dt is None
     assert go.count == 0
 
-    go.draw_hierarchy("surface")
+    draw_hierarchy(go, "surface")
 
     assert go.go == go
     assert go.surface == "surface"

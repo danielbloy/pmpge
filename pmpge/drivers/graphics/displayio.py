@@ -116,7 +116,7 @@ def draw(screen):
     Does not need to draw the hierarchy as we handle that separately with our own
     data structure for displayio.
     """
-    game.draw(screen, draw_root=False)
+    game.draw(screen, draw_root=True)
 
 
 class ImageLoader:

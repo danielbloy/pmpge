@@ -6,7 +6,7 @@ from typing import Any
 
 import pytest
 
-from pmpge.game_object import GameObject
+from pmpge.game_object import GameObject, draw_hierarchy
 from tests.pmpge.test_utilities import Hierarchy
 
 
@@ -247,12 +247,12 @@ def test_draw_propagates_to_children():
     """
 
     def test_func(hierarchy: Hierarchy):
-        hierarchy.parent.go.draw_hierarchy("surface")
+        draw_hierarchy(hierarchy.parent.go, "surface")
         hierarchy.validate_called_order(["draw"])
 
         # Try a second invocation, we should get the same result.
         hierarchy.reset()
-        hierarchy.parent.go.draw_hierarchy("surface")
+        draw_hierarchy(hierarchy.parent.go, "surface")
         hierarchy.validate_called_order(["draw"])
 
     for h in all_hierarchies():
@@ -423,7 +423,7 @@ def test_draw_does_nothing_when_inactive():
             grandchild.go.active = True
         hierarchy.reset()
 
-        hierarchy.parent.go.draw_hierarchy("surface")
+        draw_hierarchy(hierarchy.parent.go, "surface")
         hierarchy.validate_called_order([])
 
     for h in all_hierarchies():
@@ -445,7 +445,7 @@ def test_draw_does_nothing_when_invisible():
             hierarchy.children[0].go.visible = False
             invisible.append(hierarchy.children[0].go)
 
-        hierarchy.parent.go.draw_hierarchy("surface")
+        draw_hierarchy(hierarchy.parent.go, "surface")
         hierarchy.validate_called_order(["draw"], exclude=invisible)
 
     for h in all_hierarchies():
@@ -465,7 +465,7 @@ def test_draw_works_when_disabled():
         if len(hierarchy.children) > 0:
             hierarchy.children[0].go.enabled = False
 
-        hierarchy.parent.go.draw_hierarchy("surface")
+        draw_hierarchy(hierarchy.parent.go, "surface")
         hierarchy.validate_called_order(["draw"])
 
     for h in all_hierarchies():

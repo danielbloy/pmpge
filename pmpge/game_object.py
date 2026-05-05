@@ -82,14 +82,14 @@ class GameObject:
     __active: bool
     visible: bool
     enabled: bool
-    __children: list[Self]
+    _children: list[Self]
     __alive: bool
 
-    __draw_handlers: list[Callable[[Self, Any], None]]
-    __update_handlers: list[Callable[[Self, float], None]]
-    __activate_handlers: list[Callable[[Self], None]]
-    __deactivate_handlers: list[Callable[[Self], None]]
-    __destroy_handlers: list[Callable[[Self], None]]
+    _draw_handlers: list[Callable[[Self, Any], None]]
+    _update_handlers: list[Callable[[Self, float], None]]
+    _activate_handlers: list[Callable[[Self], None]]
+    _deactivate_handlers: list[Callable[[Self], None]]
+    _destroy_handlers: list[Callable[[Self], None]]
 
     def __init__(self,
                  *traits,
@@ -119,23 +119,23 @@ class GameObject:
         self.__name = name
         self.visible = visible
         self.enabled = enabled
-        self.__children = []
+        self._children = []
         self.__alive = True
 
         # Copy across the handler lists first; this creates empty lists if there are no
         # handler lists specified.
-        self.__draw_handlers = draw_handlers.copy() if draw_handlers else []
-        self.__update_handlers = update_handlers.copy() if update_handlers else []
-        self.__activate_handlers = activate_handlers.copy() if activate_handlers else []
-        self.__deactivate_handlers = deactivate_handlers.copy() if deactivate_handlers else []
-        self.__destroy_handlers = destroy_handlers.copy() if destroy_handlers else []
+        self._draw_handlers = draw_handlers.copy() if draw_handlers else []
+        self._update_handlers = update_handlers.copy() if update_handlers else []
+        self._activate_handlers = activate_handlers.copy() if activate_handlers else []
+        self._deactivate_handlers = deactivate_handlers.copy() if deactivate_handlers else []
+        self._destroy_handlers = destroy_handlers.copy() if destroy_handlers else []
 
         # Now add the individual handlers.
-        self.__draw_handlers.append(draw_handler) if draw_handler else None
-        self.__update_handlers.append(update_handler) if update_handler else None
-        self.__activate_handlers.append(activate_handler) if activate_handler else None
-        self.__deactivate_handlers.append(deactivate_handler) if deactivate_handler else None
-        self.__destroy_handlers.append(destroy_handler) if destroy_handler else None
+        self._draw_handlers.append(draw_handler) if draw_handler else None
+        self._update_handlers.append(update_handler) if update_handler else None
+        self._activate_handlers.append(activate_handler) if activate_handler else None
+        self._deactivate_handlers.append(deactivate_handler) if deactivate_handler else None
+        self._destroy_handlers.append(destroy_handler) if destroy_handler else None
 
         # Now add the parent and children before the activate or deactivate events.
         if parent:
@@ -189,15 +189,15 @@ class GameObject:
         if do_handlers:
             if value:
                 self.activated()
-                for handler in self.__activate_handlers:
+                for handler in self._activate_handlers:
                     handler(self)
             else:
                 self.deactivated()
-                for handler in self.__deactivate_handlers:
+                for handler in self._deactivate_handlers:
                     handler(self)
 
         # Propagate the active state to all children.
-        for child in self.__children:
+        for child in self._children:
             child.active = value
 
     def activated(self) -> None:
@@ -278,7 +278,7 @@ class GameObject:
         """
 
         # Propagate the deactivated state to all children.
-        for child in self.__children:
+        for child in self._children:
             child.destroy()
 
         if not self.__alive:
@@ -288,7 +288,7 @@ class GameObject:
         self.__alive = False
 
         self.destroyed()
-        for handler in self.__destroy_handlers:
+        for handler in self._destroy_handlers:
             handler(self)
 
     def destroyed(self) -> None:
@@ -311,7 +311,7 @@ class GameObject:
         Returns all the children of this GameObject. If there are no children, an empty list
         is returned.
         """
-        return self.__children.copy()
+        return self._children.copy()
 
     def add_child(self, child: Self) -> Self:
         """
@@ -328,7 +328,7 @@ class GameObject:
             raise ValueError("child already has a parent")
 
         child.__parent = self
-        self.__children.append(child)
+        self._children.append(child)
         return self
 
     def remove_child(self, child: Self) -> Self:
@@ -345,7 +345,7 @@ class GameObject:
             raise ValueError("child is not a child of this GameObject")
 
         child.__parent = None
-        self.__children.remove(child)
+        self._children.remove(child)
         return self
 
     def traverse_hierarchy(self, func: Callable[[Self, Any], tuple[bool, Any]], initial_state: Any = None) -> Self:
@@ -365,29 +365,10 @@ class GameObject:
         def process(go: Self, state: Any):
             process_children, new_state = func(go, state)
             if process_children:
-                for child in go.__children:
+                for child in go._children:
                     process(child, new_state)
 
         process(self, initial_state)
-        return self
-
-    def draw_hierarchy(self, surface: Any) -> Self:
-        """
-        Draws the GameObject (if `active` and `visible`) and propagates to children (if `active`).
-        The surface is passed down through all objects but does not need to be a Pygame surface.
-        This doesn't use traverse_hierarchy() as it is slower.
-        """
-        if not self.active:
-            return self
-
-        if self.visible:
-            self.draw(surface)
-            for handler in self.__draw_handlers:
-                handler(self, surface)
-
-        for child in self.__children:
-            child.draw_hierarchy(surface)
-
         return self
 
     def draw(self, surface: Any) -> None:
@@ -404,7 +385,7 @@ class GameObject:
         Also removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
         """
         # Remove any destroyed children.
-        children = self.__children
+        children = self._children
         for child in children:
             if not child.__alive:
                 child.__parent = None
@@ -415,10 +396,10 @@ class GameObject:
 
         if self.enabled:
             self.update(dt)
-            for handler in self.__update_handlers:
+            for handler in self._update_handlers:
                 handler(self, dt)
 
-        for child in self.__children:
+        for child in self._children:
             child.update_hierarchy(dt)
 
         return self
@@ -434,66 +415,66 @@ class GameObject:
     def add_draw_handler(self, handler: Callable[[Self, Any], None]) -> Self:
         """Adds a `draw` handler."""
         # noinspection PyTypeChecker
-        self.__draw_handlers.append(handler) if handler else None
+        self._draw_handlers.append(handler) if handler else None
         return self
 
     def remove_draw_handler(self, handler: Callable[[Self, Any], None]) -> Self:
         """Removes a `draw` handler."""
-        if handler and handler in self.__draw_handlers:
+        if handler and handler in self._draw_handlers:
             # noinspection PyTypeChecker
-            self.__draw_handlers.remove(handler)
+            self._draw_handlers.remove(handler)
         return self
 
     def add_update_handler(self, handler: Callable[[Self, float], None]) -> Self:
         """Adds a `update` handler."""
         # noinspection PyTypeChecker
-        self.__update_handlers.append(handler) if handler else None
+        self._update_handlers.append(handler) if handler else None
         return self
 
     def remove_update_handler(self, handler: Callable[[Self, float], None]) -> Self:
         """Removes a `update` handler."""
-        if handler and handler in self.__update_handlers:
+        if handler and handler in self._update_handlers:
             # noinspection PyTypeChecker
-            self.__update_handlers.remove(handler)
+            self._update_handlers.remove(handler)
         return self
 
     def add_activate_handler(self, handler: Callable[[Self], None]) -> Self:
         """Adds a `activate` handler."""
         # noinspection PyTypeChecker
-        self.__activate_handlers.append(handler) if handler else None
+        self._activate_handlers.append(handler) if handler else None
         return self
 
     def remove_activate_handler(self, handler: Callable[[Self], None]) -> Self:
         """Removes a `activate` handler."""
-        if handler and handler in self.__activate_handlers:
+        if handler and handler in self._activate_handlers:
             # noinspection PyTypeChecker
-            self.__activate_handlers.remove(handler)
+            self._activate_handlers.remove(handler)
         return self
 
     def add_deactivate_handler(self, handler: Callable[[Self], None]) -> Self:
         """Adds a `deactivate` handler."""
         # noinspection PyTypeChecker
-        self.__deactivate_handlers.append(handler) if handler else None
+        self._deactivate_handlers.append(handler) if handler else None
         return self
 
     def remove_deactivate_handler(self, handler: Callable[[Self], None]) -> Self:
         """Removes a `deactivate` handler."""
-        if handler and handler in self.__deactivate_handlers:
+        if handler and handler in self._deactivate_handlers:
             # noinspection PyTypeChecker
-            self.__deactivate_handlers.remove(handler)
+            self._deactivate_handlers.remove(handler)
         return self
 
     def add_destroy_handler(self, handler: Callable[[Self], None]) -> Self:
         """Adds a `destroy` handler."""
         # noinspection PyTypeChecker
-        self.__destroy_handlers.append(handler) if handler else None
+        self._destroy_handlers.append(handler) if handler else None
         return self
 
     def remove_destroy_handler(self, handler: Callable[[Self], None]) -> Self:
         """Removes a `destroy` handler."""
-        if handler and handler in self.__destroy_handlers:
+        if handler and handler in self._destroy_handlers:
             # noinspection PyTypeChecker
-            self.__destroy_handlers.remove(handler)
+            self._destroy_handlers.remove(handler)
         return self
 
     not_allowed_attributes = ['draw', 'update', 'activated', 'deactivated', 'destroyed', 'merged']
@@ -563,6 +544,27 @@ class GameObject:
 #   * visible: If this is True and active is also True, the object will be drawn. This is not
 #              cascaded to children.
 #
+
+def draw_hierarchy(root: GameObject, surface: Any):
+    """
+    Draws the GameObject (if `active` and `visible`) and propagates to children (if `active`).
+    The surface is passed down through all objects but does not need to be a Pygame surface.
+    This doesn't use traverse_hierarchy() as it is slower.
+    """
+
+    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
+        if not go.active:
+            return False, None
+
+        if go.visible:
+            go.draw(surface)
+            for handler in go._draw_handlers:
+                handler(go, surface)
+
+        return True, None
+
+    root.traverse_hierarchy(process, None)
+
 
 def calculate_is_active(root: GameObject, callback: Callable[[GameObject, bool], None]):
     """

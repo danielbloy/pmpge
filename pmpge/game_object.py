@@ -46,8 +46,8 @@ class GameObject:
         * destroy_handlers = Destroy handlers are called when `destroy()` is called on the
           GameObject.
 
-    The `update_hierarchy()` and `draw_hierarchy()` methods propagate down the hierarchy if active
-    is True and regardless of the visible and active properties (which only apply to this
+    The `update_hierarchy()` and `draw_hierarchy()` functions propagate down the hierarchy if
+    active is True and regardless of the visible and active properties (which only apply to this
     GameObject instance). i.e. a child can be enabled or visible even if the parent is not.
 
     Destroy, activate and deactivate are propagated to all children irrespective of whether
@@ -266,6 +266,10 @@ class GameObject:
         """
         return self._alive
 
+    # This class variable is used to optimise the automatic pruning of the
+    # hierarchy during updates.
+    something_destroyed: bool = False
+
     def destroy(self) -> None:
         """
         Destroys the object, propagating to all children before the handlers for this object are
@@ -284,6 +288,7 @@ class GameObject:
         if not self._alive:
             return
 
+        GameObject.something_destroyed = True
         self.deactivate()
         self._alive = False
 
@@ -497,6 +502,88 @@ class GameObject:
 #              cascaded to children.
 #
 
+
+def update_hierarchy(root: GameObject, dt: float):
+    """
+    Updates the GameObject (if `active` and `enabled`) and propagates to children (if `active`).
+    Also removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
+    """
+
+    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
+        # Remove any destroyed children.
+        children = go._children
+        for child in children:
+            if not child._alive:
+                go._parent = None
+                children.remove(child)
+
+        if not go.active:
+            return False, None
+
+        if go.enabled:
+            go.update(dt)
+            for handler in go._update_handlers:
+                handler(go, dt)
+
+        return True, None
+
+    traverse_hierarchy(root, process)
+    GameObject.something_destroyed = False
+
+
+def draw_hierarchy(root: GameObject, surface: Any):
+    """
+    Draws the GameObject (if `active` and `visible`) and propagates to children (if `active`).
+    The surface is passed down through all objects but does not need to be a Pygame surface.
+    This doesn't use traverse_hierarchy() as it is slower.
+    """
+
+    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
+        if not go.active:
+            return False, None
+
+        if go.visible:
+            go.draw(surface)
+            for handler in go._draw_handlers:
+                handler(go, surface)
+
+        return True, None
+
+    traverse_hierarchy(root, process)
+
+
+def prune_hierarchy(root: GameObject, only_active: bool = True, children_first: bool = False):
+    """
+    Removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
+
+    * only_active - will only prune if this node is active, irrespective of children_frist.
+    * children_first - prunes from the leaf nodes first and works up.
+
+    # TODO: Test
+    """
+
+    def process(go: GameObject):
+        if only_active and not go.active:
+            return
+
+        if children_first:
+            for child in go._children:
+                process(child)
+
+        # Remove any destroyed children.
+        children = go._children
+        for child in children:
+            if not child._alive:
+                child._parent = None
+                children.remove(child)
+
+        if not children_first:
+            for child in go._children:
+                process(child)
+
+    process(root)
+
+
 def traverse_hierarchy(
         root: GameObject, func: Callable[[GameObject, Any], tuple[bool, Any]], initial_state: Any = None):
     """
@@ -519,58 +606,6 @@ def traverse_hierarchy(
                 process(child, new_state)
 
     process(root, initial_state)
-
-
-def update_hierarchy(root: GameObject, dt: float):
-    """
-    Updates the GameObject (if `active` and `enabled`) and propagates to children (if `active`).
-    Also removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
-
-    # TODO: this can be optimised later by unwinding the use of traverse_hierarchy.
-    """
-
-    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
-        # Remove any destroyed children.
-        children = go._children
-        for child in children:
-            if not child._alive:
-                go._parent = None
-                children.remove(child)
-
-        if not go.active:
-            return False, None
-
-        if go.enabled:
-            go.update(dt)
-            for handler in go._update_handlers:
-                handler(go, dt)
-
-        return True, None
-
-    traverse_hierarchy(root, process)
-
-
-def draw_hierarchy(root: GameObject, surface: Any):
-    """
-    Draws the GameObject (if `active` and `visible`) and propagates to children (if `active`).
-    The surface is passed down through all objects but does not need to be a Pygame surface.
-    This doesn't use traverse_hierarchy() as it is slower.
-
-    # TODO: this can be optimised later by unwinding the use of traverse_hierarchy.
-    """
-
-    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
-        if not go.active:
-            return False, None
-
-        if go.visible:
-            go.draw(surface)
-            for handler in go._draw_handlers:
-                handler(go, surface)
-
-        return True, None
-
-    traverse_hierarchy(root, process)
 
 
 def calculate_is_active(root: GameObject, callback: Callable[[GameObject, bool], None]):

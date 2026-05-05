@@ -509,7 +509,7 @@ def update_hierarchy(root: GameObject, dt: float):
     Also removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
     """
 
-    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
+    def process(go: GameObject):
         # Remove any destroyed children.
         children = go._children
         for child in children:
@@ -518,16 +518,17 @@ def update_hierarchy(root: GameObject, dt: float):
                 children.remove(child)
 
         if not go.active:
-            return False, None
+            return
 
         if go.enabled:
             go.update(dt)
             for handler in go._update_handlers:
                 handler(go, dt)
 
-        return True, None
+        for child in go._children:
+            process(child)
 
-    traverse_hierarchy(root, process)
+    process(root)
     GameObject.something_destroyed = False
 
 
@@ -538,18 +539,19 @@ def draw_hierarchy(root: GameObject, surface: Any):
     This doesn't use traverse_hierarchy() as it is slower.
     """
 
-    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
+    def process(go: GameObject):
         if not go.active:
-            return False, None
+            return
 
         if go.visible:
             go.draw(surface)
             for handler in go._draw_handlers:
                 handler(go, surface)
 
-        return True, None
+        for child in go._children:
+            process(child)
 
-    traverse_hierarchy(root, process)
+    process(root)
 
 
 def prune_hierarchy(root: GameObject, only_active: bool = True, children_first: bool = False):

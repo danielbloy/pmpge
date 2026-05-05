@@ -348,29 +348,6 @@ class GameObject:
         self._children.remove(child)
         return self
 
-    def traverse_hierarchy(self, func: Callable[[Self, Any], tuple[bool, Any]], initial_state: Any = None) -> Self:
-        """
-        Provides a way to traverse the entire hierarchy, executing a function on
-        each node and passing state. The `func` accepts two parameters:
-        * The GameObject instance.
-        * Some state (which can be `None`).
-
-        The `func` returns two values:
-        * A boolean indicating whether to process nodes children or not.
-        * A new value for state to be passed to the children (which can be `None`)
-
-        The GameObject that `traverse_hierarchy` is called on is always processed.
-        """
-
-        def process(go: Self, state: Any):
-            process_children, new_state = func(go, state)
-            if process_children:
-                for child in go._children:
-                    process(child, new_state)
-
-        process(self, initial_state)
-        return self
-
     def draw(self, surface: Any) -> None:
         """
         This is called when the GameObject is drawn. It provides an easy way for subclasses to
@@ -545,6 +522,30 @@ class GameObject:
 #              cascaded to children.
 #
 
+def traverse_hierarchy(
+        root: GameObject, func: Callable[[GameObject, Any], tuple[bool, Any]], initial_state: Any = None):
+    """
+    Provides a way to traverse the entire hierarchy, executing a function on
+    each node and passing state. The `func` accepts two parameters:
+    * The GameObject instance.
+    * Some state (which can be `None`).
+
+    The `func` returns two values:
+    * A boolean indicating whether to process nodes children or not.
+    * A new value for state to be passed to the children (which can be `None`)
+
+    The GameObject that `traverse_hierarchy` is called on is always processed.
+    """
+
+    def process(go: GameObject, state: Any):
+        process_children, new_state = func(go, state)
+        if process_children:
+            for child in go._children:
+                process(child, new_state)
+
+    process(root, initial_state)
+
+
 def draw_hierarchy(root: GameObject, surface: Any):
     """
     Draws the GameObject (if `active` and `visible`) and propagates to children (if `active`).
@@ -563,7 +564,7 @@ def draw_hierarchy(root: GameObject, surface: Any):
 
         return True, None
 
-    root.traverse_hierarchy(process, None)
+    traverse_hierarchy(root, process)
 
 
 def calculate_is_active(root: GameObject, callback: Callable[[GameObject, bool], None]):
@@ -580,7 +581,7 @@ def calculate_is_active(root: GameObject, callback: Callable[[GameObject, bool],
 
         return True, is_active
 
-    root.traverse_hierarchy(process, True)
+    traverse_hierarchy(root, process, True)
 
 
 def calculate_is_enabled(root: GameObject, callback: Callable[[GameObject, bool], None]):
@@ -597,7 +598,7 @@ def calculate_is_enabled(root: GameObject, callback: Callable[[GameObject, bool]
 
         return True, is_active
 
-    root.traverse_hierarchy(process, True)
+    traverse_hierarchy(root, process, True)
 
 
 def calculate_is_visible(root: GameObject, callback: Callable[[GameObject, bool], None]):
@@ -614,4 +615,4 @@ def calculate_is_visible(root: GameObject, callback: Callable[[GameObject, bool]
 
         return True, is_active
 
-    root.traverse_hierarchy(process, True)
+    traverse_hierarchy(root, process, True)

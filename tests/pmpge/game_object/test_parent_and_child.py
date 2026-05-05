@@ -6,7 +6,7 @@ from typing import Any
 
 import pytest
 
-from pmpge.game_object import GameObject, draw_hierarchy
+from pmpge.game_object import GameObject, draw_hierarchy, traverse_hierarchy
 from tests.pmpge.test_utilities import Hierarchy
 
 
@@ -106,7 +106,7 @@ def test_traverse_entire_hierarchy():
             return True, None
 
         hierarchy.reset()
-        hierarchy.parent.go.traverse_hierarchy(callback)
+        traverse_hierarchy(hierarchy.parent.go, callback)
         hierarchy.validate_called_order(['callback'])
 
     for h in all_hierarchies():
@@ -134,7 +134,7 @@ def test_traverse_only_root():
             return False, None
 
         hierarchy.reset()
-        hierarchy.parent.go.traverse_hierarchy(callback)
+        traverse_hierarchy(hierarchy.parent.go, callback)
 
         exclude_list = [item.go for item in hierarchy.everyone]
         exclude_list.remove(hierarchy.parent.go)
@@ -166,7 +166,7 @@ def test_traverse_one_level_deep():
             return state > 0, state - 1
 
         hierarchy.reset()
-        hierarchy.parent.go.traverse_hierarchy(callback, 1)
+        traverse_hierarchy(hierarchy.parent.go, callback, 1)
 
         exclude_list = [item.go for item in hierarchy.grandchildren]
         hierarchy.validate_called_order(['callback'], exclude=exclude_list, debug=True)

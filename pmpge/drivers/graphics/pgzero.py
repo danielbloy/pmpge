@@ -6,6 +6,7 @@ from pgzero.loaders import images
 from pygame import Surface
 
 from pmpge.game import Game
+from pmpge.game_object import draw_hierarchy
 
 game: Game | None = None
 scale_surface: Surface | None = None
@@ -62,6 +63,7 @@ def draw(screen):
     """
     screen.fill(background_colour)
 
+    draw_hierarchy(game.root, screen)
     game.draw(screen)
 
     if scale_surface:

@@ -1,5 +1,5 @@
 from pmpge.environment import is_running_on_desktop, screen_size, execute, terminate
-from pmpge.game_object import GameObject, draw_hierarchy, update_hierarchy
+from pmpge.game_object import GameObject, update_hierarchy
 
 # These are not available in CircuitPython.
 if is_running_on_desktop():
@@ -90,33 +90,29 @@ class Game:
         """
         self.__update_funcs.append(func)
 
-    def draw(self, surface: Any, draw_root: bool = True):
-        """
-        Draws the entire GameObject hierarchy starting with the root GameObject and then the
-        custom draw functions.
-
-        The surface is passed down through all objects but does not need to be a Pygame
-        surface, it can be any object you like provided it is compatible with the selected
-        graphics driver.
-
-        # TODO: Test draw_root.
-        # TODO: Can we remove the need to call draw at all?
-        """
-        if draw_root:
-            draw_hierarchy(self.__root, surface)
-
-        for draw_func in self.__draw_funcs:
-            draw_func(surface)
-
     def update(self, dt: float):
         """
         Updates the entire GameObject hierarchy starting with the root GameObject and then
         the custom update functions.
         """
-        update_hierarchy(self.__root, dt)  # TODO: Should this be moved to environment when we remove draw?
+        update_hierarchy(self.__root, dt)
 
         for update_func in self.__update_funcs:
             update_func(dt)
+
+    def draw(self, surface: Any):
+        """
+        Executes the custom draw functions that are attached. This does not draw the object
+        hierarchy as that is managed by the graphics driver. The primary purpose of the
+        draw functions are to provide a hook point for specialised code to run as part of
+        the draw cycle. The graphics driver will call these after rendering the hierarchy.
+
+        The surface is passed down through all objects but does not need to be a Pygame
+        surface, it can be any object you like provided it is compatible with the selected
+        graphics driver.
+        """
+        for draw_func in self.__draw_funcs:
+            draw_func(surface)
 
     def terminate(self):
         """

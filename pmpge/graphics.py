@@ -5,10 +5,10 @@ if environment.is_running_on_desktop():
     from typing import Callable
 
 __graphics = environment.import_driver('graphics')
-ImageLoader = __graphics.ImageLoader
+DriverImageResource = __graphics.DriverImageResource
 
 
-class ImageResource(ImageLoader):
+class ImageResource(DriverImageResource):
     """
     Represents an image resource that can be loaded and drawn. The actual image
     loading and drawing is done by the graphics driver. Setting the name property

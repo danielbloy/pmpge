@@ -111,6 +111,9 @@ def deinit():
     root = Group()
     root.append(background)  # Needs to be the first item.
 
+    # Erase all loaded images
+    images.clear()
+
 
 def draw(screen):
     """
@@ -121,13 +124,31 @@ def draw(screen):
     game.draw(screen)
 
 
-class ImageLoader:
+# TODO: Do something better.
+images: dict[str, tuple[Bitmap, Palette]] = {}
+
+
+# This extraction has a massive positive impact on draw speed
+def load_image(image: str) -> tuple[Bitmap, Palette]:
+    if image in images:
+        image = images[image]
+        return image[0], image[1]
+
+    bitmap, palette = adafruit_imageload.load(f"/images/{image}", bitmap=Bitmap, palette=Palette)
+    images[image] = bitmap, palette
+
+    # PERFORMANCE: This has a pretty harsh impact on fps, dropping EdgeBadge from 40 to 29 fps
+    palette.make_transparent(0)
+
+    return bitmap, palette
+
+
+class DriverImageResource:
     """
     Mandatory implementation specific class to load and draw an image. Does nothing.
     """
     width: int
     height: int
-    bitmap: Bitmap
     tile_grid: TileGrid
 
     def load(self, image: str):
@@ -137,10 +158,7 @@ class ImageLoader:
         if hasattr(self, 'bitmap'):
             self.bitmap.deinint()
 
-        bitmap, palette = adafruit_imageload.load(f"/images/{image}", bitmap=Bitmap, palette=Palette)
-
-        # PERFORMANCE: This has a pretty harsh impact on fps, dropping EdgeBadge from 40 to 29 fps
-        palette.make_transparent(0)
+        bitmap, palette = load_image(image)
 
         # Create a TileGrid to hold the bitmap
         tile_grid = TileGrid(bitmap, pixel_shader=palette)
@@ -149,7 +167,6 @@ class ImageLoader:
         # Now set the properties on the containing object
         self.width = bitmap.width
         self.height = bitmap.height
-        self.bitmap = bitmap
         self.tile_grid = tile_grid
 
     def draw(self, surface, pos: tuple[int, int]):

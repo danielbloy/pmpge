@@ -353,6 +353,14 @@ class GameObject:
         self._children.remove(child)
         return self
 
+    def _draw(self, surface: Any) -> None:
+        """
+        TODO: Comment. Draws irrespective of visibility
+        """
+        self.draw(surface)
+        for handler in self._draw_handlers:
+            handler(self, surface)
+
     def draw(self, surface: Any) -> None:
         """
         This is called when the GameObject is drawn. It provides an easy way for subclasses to
@@ -544,9 +552,7 @@ def draw_hierarchy(root: GameObject, surface: Any):
             return
 
         if go.visible:
-            go.draw(surface)
-            for handler in go._draw_handlers:
-                handler(go, surface)
+            go._draw(surface)
 
         for child in go._children:
             process(child)

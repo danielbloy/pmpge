@@ -61,7 +61,7 @@ game: Game | None = None
 
 # LIMITATION: Using board.DISPLAY will fail if the device does not have a built-in display.
 display = board.DISPLAY
-display.refresh(target_frames_per_second=30)
+display.refresh()
 display.brightness = 0.0  # Turn the display off until the game starts
 
 # Root group to place all items to draw.
@@ -93,6 +93,7 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     # Setting up the root here stops all the graphics from showing as they are loading.
     display.root_group = root
     display.brightness = 1
+    display.auto_refresh = False
     # ISSUE: Adding this statement in stops the console being displayed briefly but negatively impacts framerate
     # display.refresh(target_frames_per_second=30)
 
@@ -114,6 +115,8 @@ def deinit():
     # Erase all loaded images
     images.clear()
 
+    display.auto_refresh = True
+
 
 def do_draw(go: GameObject, visible: bool):
     # TODO: This unfortunately intrinsically ties us to the Traits structure so we need to break that.
@@ -131,6 +134,8 @@ def draw(screen):
     # TODO: This is slightly painful on performance as we have to traverse all GameObjects eachdraw cycle.
     calculate_is_visible(game.root, do_draw)
     game.draw(screen)
+    # TODO: Extract the desired refresh rate out into config. The default should probably be 30
+    display.refresh(target_frames_per_second=30)
 
 
 # TODO: Do something better.

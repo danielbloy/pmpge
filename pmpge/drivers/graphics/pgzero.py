@@ -73,7 +73,7 @@ def draw(screen):
             (screen_width, screen_height), screen.surface)  # noqa: F821
 
 
-class ImageLoader:
+class DriverImageResource:
     """
     Implementation specific class to load and draw an image.
     """

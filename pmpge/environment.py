@@ -313,9 +313,10 @@ def execute(game, background_colour: tuple[int, int, int] = None):
 
         else:
             # On a microcontroller, we implement our own game loop.
-            last = time.monotonic()
+            time_func = time.monotonic
+            last = time_func()
             while __execute:
-                now = time.monotonic()
+                now = time_func()
                 delta_time = now - last
                 last = now
 

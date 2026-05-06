@@ -50,6 +50,16 @@ Vanilla results:
 ## Optimisation roadmap
 
 * Replace all `float` based maths with `int` by changing units from pixels per second to thousandth pixels per second
+* Call gc.collect() at known safepoints to avoid fragmentation
+* Prefer local variables over globals in hot paths
+* Avoid wildcard imports
+* Reduce display I/O overhead
+    * Lower refresh rates and auto_refresh = False with explicit refresh
+* Prefer Comprehensions and Generators
+    * List/dist/set comprehensions are faster than equivalent for-loops
+    * Generators avoid building intermediate lists
+* Use built-ins and the Stnadrad Library as they are faster than hand rolled loops
+* Use mpy-cross to convert .py -> .mpy
 
 ### References
 

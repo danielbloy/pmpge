@@ -74,13 +74,14 @@ def add_update_method(game: Game, callable: Callable[[Game], None], fps: int = 5
     """
     next_call = None
     call_delta = 1 / fps
+    time_func = time.monotonic
 
     def inner(dt):
         nonlocal next_call
         if next_call is None:
-            next_call = time.monotonic()
+            next_call = time_func()
 
-        now = time.monotonic()
+        now = time_func()
 
         if now >= next_call:
             next_call += call_delta
@@ -119,10 +120,10 @@ def execute(
     @param sample_frequency - The number of memory samples per second.
     @param report_frequency - The number of time to report memory usage per second.
     """
-    sample_period = 1_000_000_000 // sample_frequency
+    sample_period = 1_000_000_000 // max(sample_frequency, 1)
     last_sample = 0
 
-    reporting_period = 1_000_000_000 // report_frequency
+    reporting_period = 1_000_000_000 // max(report_frequency, 1)
     last_report = 0
 
     def monitor_ram(dt: float):
@@ -160,7 +161,8 @@ def execute(
 
     game: Game = Game(160, 120)
     setup_func(game)
-    game.add_update_func(monitor_ram)
+    if sample_frequency * report_frequency != 0:
+        game.add_update_func(monitor_ram)
     game.add_update_func(update)
     game.add_draw_func(draw)
 

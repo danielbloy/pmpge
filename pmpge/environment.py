@@ -4,7 +4,6 @@
 #
 # THIS FILE SHOULD NOT IMPORT ANY OTHER FILE IN THE FRAMEWORK OTHER THAN DRIVERS
 #
-import gc
 import sys
 
 ################################################################################
@@ -290,7 +289,6 @@ def execute(game, background_colour: tuple[int, int, int] = None):
             controller_update(dt) if controller_update else None
             sound_update(dt) if sound_update else None
             graphics_update(dt) if graphics_update else None
-            gc.collect()
 
         global __execute
         __execute = True
@@ -307,7 +305,6 @@ def execute(game, background_colour: tuple[int, int, int] = None):
                     screen = getattr(mod, 'screen')
 
                 graphics_draw(screen)
-                gc.collect()
 
             setattr(mod, 'draw', draw)
             setattr(mod, 'update', update)
@@ -325,7 +322,6 @@ def execute(game, background_colour: tuple[int, int, int] = None):
 
                 update(delta_time)
                 graphics_draw(None)
-                gc.collect()
 
     finally:
         __execute = False

@@ -1,7 +1,7 @@
-from pmpge.graphics import ImageResource, GraphicsDrawImage
+from pmpge.graphics import ImageResource, GraphicsDrawImageTrait
 
 
-class DrawImage(GraphicsDrawImage):
+class DrawImage(GraphicsDrawImageTrait):
     """
     DrawImage draws an image at the specified position. By default the image is drawn
     centered on the position (centered according to the same specification as a sprites
@@ -11,24 +11,17 @@ class DrawImage(GraphicsDrawImage):
     """
     x: int
     y: int
+
+    # The width and height properties are required for Sprites but useful generally
     width: int
     height: int
-    # TODO: Need a generic observable property that notifies when changed.
+
     image: ImageResource
 
-    def __init__(self, image: str, centered=True):
-        image = ImageResource(image)
-        image.centered = centered
+    def __init__(self, image: str, centered: bool = True):
+        image = ImageResource(image, centered=centered)
         self.width = image.width
         self.height = image.height
-
-        if centered:
-            image.offset_x = image.width // 2
-            image.offset_y = image.height // 2
-        else:
-            image.offset_x = 0
-            image.offset_y = 0
-
         self.image = image
 
     def merged(self):
@@ -38,14 +31,9 @@ class DrawImage(GraphicsDrawImage):
         loaded.
         """
 
-        def on_notify(width: int, height: int):
+        def on_notify():
+            width, height = self.image.width, self.image.height
             self.width = width
             self.height = height
-            if self.image.centered:
-                self.image.offset_x = width // 2
-                self.image.offset_y = height // 2
-            else:
-                self.image.offset_x = 0
-                self.image.offset_y = 0
 
         self.image.notify = on_notify

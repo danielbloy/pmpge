@@ -121,6 +121,7 @@ def deinit():
     root.append(background)  # Needs to be the first item.
 
     # Erase all loaded images
+    # TODO: see if doing bitmap.deinit() here saves RAM.
     images.clear()
 
 
@@ -164,16 +165,55 @@ def load_image(image: str) -> tuple[Bitmap, Palette]:
     return bitmap, palette
 
 
-class GraphicsDrawImage:
+class DriverImageResource:
+    """
+    Mandatory implementation specific class to load and draw an image. Does nothing.
+    """
+    offset_x: int
+    offset_y: int
+    tile_grid: TileGrid
 
-    def draw(self, surface):
+    # TODO: Need a Group too.
+
+    # TODO: This needs to be combined with a ImageResource trait
+    def load(self, image: str) -> tuple[int, int]:
+        """
+        Loads the named image resource.
+        """
+        bitmap, palette = load_image(image)
+
+        # Create a TileGrid to hold the bitmap
+        tile_grid = TileGrid(bitmap, pixel_shader=palette)
+        tile_grid.hidden = True
+
+        # TODO: We need to mimic the hierarchy here as a future optimisation.
+        # TODO: This needs to be done at init or when objects are added as children.
+        root.append(tile_grid)
+
+        # Now set the properties on the containing object
+
+        self.tile_grid = tile_grid
+        return bitmap.width, bitmap.height
+
+    def draw(self, surface, x: int, y: int):
         """
         This doesn't actually draw anything, just moves it. The parameter pos represents
         the top left corner of the image so the movement is trivial.
         """
-        tile_grid = self.image.tile_grid
-        tile_grid.x = int(self.x - self.image.offset_x)
-        tile_grid.y = int(self.y - self.image.offset_y)
+        tile_grid = self.tile_grid
+        tile_grid.x = int(x - self.offset_x)
+        tile_grid.y = int(y - self.offset_y)
+
+
+class GraphicsDrawImageTrait:
+    x: int
+    y: int
+
+    image: DriverImageResource
+
+    # TODO: This needs to be combined with a DrawImage trait
+    def draw(self, surface):
+        self.image.draw(surface, self.x, self.y)
 
     def update(self, dt: float):
         pass
@@ -185,36 +225,3 @@ class GraphicsDrawImage:
     def destroyed(self):
         # TODO: Hook into destroy() in displayio to remove tile_grid
         pass
-
-
-class DriverImageResource:
-    """
-    Mandatory implementation specific class to load and draw an image. Does nothing.
-    """
-    width: int
-    height: int
-    tile_grid: TileGrid
-
-    # TODO: Need a Group too.
-
-    def load(self, image: str):
-        """
-        Loads the named image resource.
-        """
-        if hasattr(self, 'bitmap'):
-            self.bitmap.deinint()
-
-        bitmap, palette = load_image(image)
-
-        # Create a TileGrid to hold the bitmap
-        tile_grid = TileGrid(bitmap, pixel_shader=palette)
-        tile_grid.hidden = True
-
-        # TODO: We could potentially mimic the hierarchy here as a future optimisation.
-        # TODO: This needs to be done at init or when objects are added as children.
-        root.append(tile_grid)
-
-        # Now set the properties on the containing object
-        self.width = bitmap.width
-        self.height = bitmap.height
-        self.tile_grid = tile_grid

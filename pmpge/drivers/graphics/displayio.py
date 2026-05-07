@@ -101,6 +101,15 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     #        ImageLoader/ImageResource and the corresponding GameObject.
 
 
+# TODO: The order that GameObjects are turned into Groups/TileGrid needs to match the hierarchy to
+# ensure the draw order is correct. Therefore, we should traverse the entire network at this point
+# to create the corresponding structure.
+#
+# TODO: If the hierarchy changes due to destroyed objects then that is fine as we get an event.
+#
+# TODO: If the hierarchy changes due to remove_child then the hierarchy needs to be regenerated.
+
+
 def deinit():
     global game, root
     game = None
@@ -119,6 +128,7 @@ def do_draw(go: GameObject, visible: bool):
     # TODO: This unfortunately intrinsically ties us to the Traits structure so we need to break that.
     if hasattr(go, 'image'):
         go.image.tile_grid.hidden = not visible
+        # TODO: This can be moved into draw now.
 
     if visible:
         go._draw(None)
@@ -128,7 +138,9 @@ def draw(screen):
     """
     We have to process the entire hierarchy to ensure visbility is set.
     """
-    # TODO: This is slightly painful on performance as we have to traverse all GameObjects eachdraw cycle.
+    # TODO: This is slightly painful on performance as we have to traverse all GameObjects each draw cycle.
+    # TODO: Hook into deactivate which allows us to set visible == False, we still need to traverse all active
+    #       objects regardless of visibility to set visibility
     calculate_is_visible(game.root, do_draw)
     game.draw(screen)
 
@@ -152,6 +164,29 @@ def load_image(image: str) -> tuple[Bitmap, Palette]:
     return bitmap, palette
 
 
+class GraphicsDrawImage:
+
+    def draw(self, surface):
+        """
+        This doesn't actually draw anything, just moves it. The parameter pos represents
+        the top left corner of the image so the movement is trivial.
+        """
+        tile_grid = self.image.tile_grid
+        tile_grid.x = int(self.x - self.image.offset_x)
+        tile_grid.y = int(self.y - self.image.offset_y)
+
+    def update(self, dt: float):
+        pass
+
+    def deactivated(self):
+        # TODO: Hook into deactivate() in displayio to set tile_grid to hidden
+        pass
+
+    def destroyed(self):
+        # TODO: Hook into destroy() in displayio to remove tile_grid
+        pass
+
+
 class DriverImageResource:
     """
     Mandatory implementation specific class to load and draw an image. Does nothing.
@@ -159,6 +194,8 @@ class DriverImageResource:
     width: int
     height: int
     tile_grid: TileGrid
+
+    # TODO: Need a Group too.
 
     def load(self, image: str):
         """
@@ -174,19 +211,10 @@ class DriverImageResource:
         tile_grid.hidden = True
 
         # TODO: We could potentially mimic the hierarchy here as a future optimisation.
-
+        # TODO: This needs to be done at init or when objects are added as children.
         root.append(tile_grid)
 
         # Now set the properties on the containing object
         self.width = bitmap.width
         self.height = bitmap.height
         self.tile_grid = tile_grid
-
-    def draw(self, surface, pos: tuple[int, int]):
-        """
-        This doesn't actually draw anything, just moves it. The parameter pos represents
-        the top left corner of the image so the movement is trivial.
-        """
-        tile_grid = self.tile_grid
-        tile_grid.x = pos[0]
-        tile_grid.y = pos[1]

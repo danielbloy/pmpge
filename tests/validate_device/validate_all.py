@@ -10,6 +10,7 @@ import tests.validate_device.validate_e_graphics_single_sprite as ess
 import tests.validate_device.validate_e_graphics_sprite_movement as esm
 import tests.validate_device.validate_e_graphics_sprite_visibility as esv
 
+# TODO: Need another graphics test that implements a hierarchy to demonstrate draw order
 modules = [a, b, c, ch, ds, d, ess, ems, esm, esv]
 
 

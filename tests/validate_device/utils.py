@@ -9,8 +9,8 @@ import time
 from pmpge.environment import is_running_on_desktop, config
 from pmpge.game import Game
 from pmpge.sprite import Sprite
+from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import Velocity
-from pmpge.traits.sprites import SpriteImage
 
 # These are not available in CircuitPython.
 if is_running_on_desktop():
@@ -63,7 +63,7 @@ def create_sprites(game: Game, sprite_data: list[SpriteData]):
         sprite = Sprite(
             data.x, data.y,
             Velocity(data.vx, data.vy),
-            SpriteImage(data.image))
+            DrawImage(data.image))
         data.sprite = sprite
         game.add_child(sprite)
 

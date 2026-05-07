@@ -6,6 +6,7 @@ if environment.is_running_on_desktop():
 
 __graphics = environment.import_driver('graphics')
 DriverImageResource = __graphics.DriverImageResource
+GraphicsDrawImage = __graphics.GraphicsDrawImage
 
 
 class ImageResource(DriverImageResource):
@@ -17,12 +18,16 @@ class ImageResource(DriverImageResource):
     """
     width: int
     height: int
+    offset_x: int  # TODO: Document what this is for.
+    offset_y: int
     _name: str
     notify: Callable[[int, int], None] | None
 
     def __init__(self, name: str, notify: Callable[[int, int], None] = None):
         self.width = 0
         self.height = 0
+        self.offset_x = 0
+        self.offset_y = 0
         self.notify = notify
         self.name = name
 

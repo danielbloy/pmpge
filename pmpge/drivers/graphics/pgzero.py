@@ -73,6 +73,15 @@ def draw(screen):
             (screen_width, screen_height), screen.surface)  # noqa: F821
 
 
+class GraphicsDrawImage:
+    # TODO: This needs to be combined with a DrawImage trait
+    def draw(self, surface: Any):
+        """
+        Draws the image at the specified position, centered by default.
+        """
+        surface.blit(self.image.surface, (self.x - self.image.offset_x, self.y - self.image.offset_y))
+
+
 class DriverImageResource:
     """
     Implementation specific class to load and draw an image.
@@ -89,9 +98,3 @@ class DriverImageResource:
         self.surface = surface
         self.width = self.surface.get_width()
         self.height = self.surface.get_height()
-
-    def draw(self, surface: Any, pos: tuple[int, int]):
-        """
-        Draws the image, with pos representing the top left corner.
-        """
-        surface.blit(self.surface, pos)

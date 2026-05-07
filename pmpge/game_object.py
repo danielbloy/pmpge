@@ -182,6 +182,9 @@ class GameObject:
         if not self._alive:
             return
 
+        # TODO: If the parent is not activated, this should error. This avoids having some activated
+        #       objects in deactivated parts of the hierarchy.
+
         do_handlers = self._active != value
 
         self._active = value
@@ -540,6 +543,9 @@ def update_hierarchy(root: GameObject, dt: float):
     GameObject.something_destroyed = False
 
 
+# TODO: This can be renamed draw_only_visible.
+# TODO: We can then have a draw_all_active to draw irrespective of visibility
+# TODO: This will allow us to remove _draw from GameObject if we wanted.
 def draw_hierarchy(root: GameObject, surface: Any):
     """
     Draws the GameObject (if `active` and `visible`) and propagates to children (if `active`).

@@ -15,7 +15,6 @@ from pmpge.traits.controller import MoveWithController
 from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import Velocity
 from pmpge.traits.position import StayInBounds, RelativeToParent, Position
-from pmpge.traits.sprites import SpriteImage
 from typing import Any, Callable
 
 clock: Clock
@@ -244,9 +243,10 @@ PLAYER_SHIP_MAX_LEFT = (PLAYER_SHIP_WIDTH / 2)
 PLAYER_SHIP_MAX_RIGHT = game.width - (PLAYER_SHIP_WIDTH / 2)
 PLAYER_SHIP_START_HEIGHT = LOWER_BORDER_START - (PLAYER_SHIP_HEIGHT / 2)
 
+# TODO: Make DrawImage also support SpriteImage requirements.
 player = Sprite(
     game.width / 2, PLAYER_SHIP_START_HEIGHT,
-    SpriteImage('player'))
+    DrawImage('player'))
 
 controller = Controller()
 player.apply_trait(MoveWithController(200, 0, controller))

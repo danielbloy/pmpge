@@ -1,5 +1,5 @@
 from pmpge.sprite import Sprite
-from pmpge.traits.sprites import SpriteImage
+from pmpge.traits.graphics import DrawImage
 from tests.pmpge.game_object.test_constructors import validate_properties
 from tests.pmpge.test_utilities import Handlers
 from tests.pmpge.test_utilities import setup_pgzero
@@ -75,7 +75,7 @@ def test_bounds_property():
     Validates that the bounds properties work and returns the correct values.
     """
     setup_pgzero(__file__)
-    sprite = Sprite(0, 0, SpriteImage("7x3.png"))
+    sprite = Sprite(0, 0, DrawImage("7x3.png"))
     assert sprite.image.surface is not None
     assert sprite.image.width == 7
     assert sprite.image.height == 3
@@ -84,7 +84,7 @@ def test_bounds_property():
     assert sprite.top_left == (-3, -1)
     assert sprite.bottom_right == (3, 1)
 
-    sprite = Sprite(10, 20, SpriteImage("7x7.png"))
+    sprite = Sprite(10, 20, DrawImage("7x7.png"))
     assert sprite.image.surface is not None
     assert sprite.image.width == 7
     assert sprite.image.height == 7
@@ -93,7 +93,7 @@ def test_bounds_property():
     assert sprite.top_left == (7, 17)
     assert sprite.bottom_right == (13, 23)
 
-    sprite = Sprite(10, 20, SpriteImage("8x8.png"))
+    sprite = Sprite(10, 20, DrawImage("8x8.png"))
     assert sprite.x == 10
     assert sprite.y == 20
     assert sprite.image.surface is not None

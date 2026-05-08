@@ -7,6 +7,7 @@ if environment.is_running_on_desktop():
 __graphics = environment.import_driver('graphics')
 DriverImageResource = __graphics.DriverImageResource
 GraphicsDrawImageTrait = __graphics.GraphicsDrawImageTrait
+game_object_hierarchy_changed = __graphics.game_object_hierarchy_changed
 
 
 # TODO: Note these cannot be shared. The underlying bitmap may be shared but this could have

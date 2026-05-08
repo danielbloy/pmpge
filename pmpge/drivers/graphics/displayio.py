@@ -55,7 +55,7 @@ import board
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 from displayio import Group, Palette, Bitmap, TileGrid
 from pmpge.game import Game
-from pmpge.game_object import draw_hierarchy
+from pmpge.game_object import GameObject, draw_hierarchy, traverse_hierarchy
 
 game: Game | None = None
 
@@ -72,20 +72,9 @@ root = Group()
 palette = Palette(1)
 palette[0] = 0x000000
 background = TileGrid(Bitmap(display.width, display.height, 1), pixel_shader=palette)
-root.append(background)  # Needs to be the first item.
 
 
 # FUTURE: If we use a tilemap at a later point, we can probably remove the need for the background layer.
-
-
-# TODO: The order that GameObjects are turned into Groups/TileGrid needs to match the hierarchy to
-# ensure the draw order is correct. Therefore, we should traverse the entire network at this point
-# to create the corresponding structure.
-#
-# TODO: If the hierarchy changes due to destroyed objects then that is fine as we get an event.
-#
-# TODO: If the hierarchy changes due to remove_child then the hierarchy needs to be regenerated.
-# TODO: How to handle new objects added?
 
 
 def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
@@ -100,15 +89,21 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     blue = bgc[2] & 255
     palette[0] = red << 16 | green << 8 | blue
 
+    # Here we build the entire graphics hierarchy in order to place the tileGrid
+    # instances in the correct order.
+    game_object_hierarchy_changed()
+
     # Setting up the root here stops all the graphics from showing as they are loading.
     display.root_group = root
     display.brightness = 1
     # ISSUE: Adding this statement in stops the console being displayed briefly but negatively impacts framerate
     # display.refresh(target_frames_per_second=30)
 
-    # ISSUE: At this point, the GameObjects will be displayed in the top left corner as they have not
-    #        been updated and their initial position is (0, 0). There is no coupling between an
-    #        ImageLoader/ImageResource and the corresponding GameObject.
+    # LIMITATION: After this point:
+    # * If the hierarchy changes due to remove_child then the hierarchy needs to be regenerated.
+    # * Added objects after the game is initialised will be added to the end of the draw list which
+    #   is not necessarily in the correct place.
+    # * This is not easy to fix because there is no guarantee the parent has a graphics object.
 
 
 def deinit():
@@ -133,6 +128,30 @@ def draw(screen):
     """
     draw_hierarchy(game.root, screen, draw_only_visible=False)
     game.draw(screen)
+
+
+force_rebuild = False
+
+
+def game_object_hierarchy_changed():
+    """
+    TODO: Add documentation for this mandatory function which should be called if
+    the hierarchy changes. This is a limitation of the displayio driver
+    """
+    global force_rebuild
+    force_rebuild = True
+
+    while len(root) > 0:
+        root.pop()
+
+    root.append(background)  # Needs to be the first item.
+
+    def forced_draw(go: GameObject, state):
+        go._draw(None)
+        return True, None
+
+    traverse_hierarchy(game.root, forced_draw)
+    force_rebuild = False
 
 
 # FUTURE: Do something better.
@@ -164,9 +183,7 @@ class DriverImageResource:
     offset_x: int
     offset_y: int
     tile_grid: TileGrid
-    to_add: bool
-
-    # TODO: Need a Group too.
+    add_to_root: bool
 
     # TODO: This needs to be combined with a ImageResource trait
     def load(self, image: str) -> tuple[int, int]:
@@ -178,7 +195,7 @@ class DriverImageResource:
         # Create a TileGrid to hold the bitmap
         tile_grid = TileGrid(bitmap, pixel_shader=palette)
         tile_grid.hidden = True
-        self.to_add = True
+        self.add_to_root = True
 
         # Now set the properties on the containing object
         self.tile_grid = tile_grid
@@ -207,9 +224,9 @@ class GraphicsDrawImageTrait:
 
     # TODO: This needs to be combined with a DrawImage trait
     def draw(self, surface):
-        if self.image.to_add:
+        if self.image.add_to_root or force_rebuild:
             root.append(self.image.tile_grid)
-            self.image.to_add = False
+            self.image.add_to_root = False
 
         self.image.render(self.x, self.y, self.active and self.visible)
 
@@ -220,7 +237,7 @@ class GraphicsDrawImageTrait:
         tile_grid = self.image.tile_grid
         tile_grid.hidden = True
 
-        if not self.image.to_add:
+        if not self.image.add_to_root:
             root.remove(tile_grid)
 
         del tile_grid

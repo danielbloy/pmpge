@@ -73,6 +73,13 @@ def draw(screen: Screen):
             (screen_width, screen_height), screen.surface)  # noqa: F821
 
 
+def game_object_hierarchy_changed():
+    """
+    Mandatory function that does nothing in the Pygame Zero.
+    """
+    pass
+
+
 class DriverImageResource:
     """
     Implementation specific class to load and draw an image.

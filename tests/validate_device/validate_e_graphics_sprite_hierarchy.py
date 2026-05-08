@@ -9,10 +9,13 @@ to check the hierarchy works:
   are added.
 * The fourth row is completely created at start-up and then later the children
   are destroyed.
+
+This also tests the game_object_hierarchy_changed() function.
 """
 
 import tests.validate_device.utils as utils
 from pmpge.game import Game
+from pmpge.graphics import game_object_hierarchy_changed
 
 sprite_data_row_1: list[utils.SpriteData] = [
     utils.SpriteData(65, 15, 0, 0, "alien_c.png"),
@@ -46,7 +49,11 @@ sprite_data_row_4: list[utils.SpriteData] = [
 ]
 
 
-def switch_activated(game: Game):
+def rebuild_graphics_hierarchy(game: Game):
+    game_object_hierarchy_changed()
+
+
+def alternate_activated(game: Game):
     sprite_data_row_2[2].sprite.active = not sprite_data_row_2[2].sprite.active
 
 
@@ -78,6 +85,8 @@ def destroy_children(game: Game):
 
 def setup(game: Game):
     game.background_colour = (250, 120, 0)  # Orange
+    utils.add_update_method(game, rebuild_graphics_hierarchy, fps=1)
+
     utils.create_sprites(game, sprite_data_row_1, add_to_root=False)
     game.root.add_child(sprite_data_row_1[3].sprite)
     sprite_data_row_1[3].sprite.add_child(sprite_data_row_1[2].sprite)
@@ -90,7 +99,7 @@ def setup(game: Game):
     sprite_data_row_2[3].sprite.add_child(sprite_data_row_2[2].sprite)
     sprite_data_row_2[2].sprite.add_child(sprite_data_row_2[1].sprite)
     sprite_data_row_2[1].sprite.add_child(sprite_data_row_2[0].sprite)
-    utils.add_update_method(game, switch_activated, fps=3)
+    utils.add_update_method(game, alternate_activated, fps=3)
 
     utils.create_sprites(game, sprite_data_row_3, add_to_root=False)
     game.root.add_child(sprite_data_row_3[0].sprite)

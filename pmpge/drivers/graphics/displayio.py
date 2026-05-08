@@ -132,7 +132,7 @@ def draw(screen):
     """
     We have to process the entire hierarchy to ensure visbility is set.
     """
-    draw_hierarchy(game.root, screen, draw_everything=True)
+    draw_hierarchy(game.root, screen, draw_only_visible=False)
     game.draw(screen)
 
 

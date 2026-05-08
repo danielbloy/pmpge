@@ -165,6 +165,7 @@ class DriverImageResource:
     offset_x: int
     offset_y: int
     tile_grid: TileGrid
+    group: Group
 
     # TODO: Need a Group too.
 
@@ -179,13 +180,17 @@ class DriverImageResource:
         tile_grid = TileGrid(bitmap, pixel_shader=palette)
         tile_grid.hidden = True
 
+        group = Group()
+        group.append(tile_grid)
+
         # TODO: We need to mimic the hierarchy here as a future optimisation.
         # TODO: This needs to be done at init or when objects are added as children.
-        root.append(tile_grid)
+        root.append(group)
 
         # Now set the properties on the containing object
 
         self.tile_grid = tile_grid
+        self.group = group
         return bitmap.width, bitmap.height
 
     # TODO: Render is implementation defined

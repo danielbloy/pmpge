@@ -1,6 +1,6 @@
 """
-Creates a single sprite and moves it on the screen. This should work
-on all devices as there are no implementation specific details here.
+Creates a single sprite and moves it on the screen.
+This is useful for judging how smoothly the sprite moves.
 """
 import tests.validate_device.utils as utils
 from pmpge.game import Game

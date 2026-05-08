@@ -54,7 +54,7 @@ class SpriteData:
         self.image = image
 
 
-def create_sprites(game: Game, sprite_data: list[SpriteData]):
+def create_sprites(game: Game, sprite_data: list[SpriteData], add_to_root: bool = True):
     """
     Simple utility method to create a range of sprites at the root of the
     Game instance
@@ -65,7 +65,8 @@ def create_sprites(game: Game, sprite_data: list[SpriteData]):
             Velocity(data.vx, data.vy),
             DrawImage(data.image))
         data.sprite = sprite
-        game.add_child(sprite)
+        if add_to_root:
+            game.add_child(sprite)
 
 
 def add_update_method(game: Game, callable: Callable[[Game], None], fps: int = 5):

@@ -1,6 +1,6 @@
 """
-Creates many sprites and moves them around on the screen. This should work
-on all devices as there are no implementation specific details here.
+Creates many sprites and moves them around on the screen.
+This shows how well the device copes with 20 on-screen sprites.
 """
 import tests.validate_device.utils as utils
 

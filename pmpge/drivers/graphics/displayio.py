@@ -206,13 +206,9 @@ class GraphicsDrawImageTrait:
     def draw(self, surface):
         self.image.render(self.x, self.y, self.active and self.visible)
 
-    def update(self, dt: float):
-        pass
-
     def deactivated(self):
-        # TODO: Hook into deactivate() in displayio to set tile_grid to hidden
-        pass
+        self.image.tile_grid.hidden = True
 
     def destroyed(self):
-        # TODO: Hook into destroy() in displayio to remove tile_grid
-        pass
+        self.image.tile_grid.hidden = True
+        del self.image.tile_grid

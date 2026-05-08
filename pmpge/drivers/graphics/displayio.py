@@ -110,15 +110,12 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     #        been updated and their initial position is (0, 0). There is no coupling between an
     #        ImageLoader/ImageResource and the corresponding GameObject.
 
-    # TODO: Construct initial hierarchy?
-
 
 def deinit():
     global game, root
     game = None
 
     display.root_group = None
-
     root.remove(background)
     del root
     gc.collect()
@@ -167,6 +164,7 @@ class DriverImageResource:
     offset_x: int
     offset_y: int
     tile_grid: TileGrid
+    to_add: bool
 
     # TODO: Need a Group too.
 
@@ -180,8 +178,7 @@ class DriverImageResource:
         # Create a TileGrid to hold the bitmap
         tile_grid = TileGrid(bitmap, pixel_shader=palette)
         tile_grid.hidden = True
-
-        root.append(tile_grid)
+        self.to_add = True
 
         # Now set the properties on the containing object
         self.tile_grid = tile_grid
@@ -210,7 +207,10 @@ class GraphicsDrawImageTrait:
 
     # TODO: This needs to be combined with a DrawImage trait
     def draw(self, surface):
-        # root.append(self.image.tile_grid)
+        if self.image.to_add:
+            root.append(self.image.tile_grid)
+            self.image.to_add = False
+
         self.image.render(self.x, self.y, self.active and self.visible)
 
     def deactivated(self):
@@ -218,6 +218,9 @@ class GraphicsDrawImageTrait:
 
     def destroyed(self):
         tile_grid = self.image.tile_grid
-        root.remove(tile_grid)
         tile_grid.hidden = True
+
+        if not self.image.to_add:
+            root.remove(tile_grid)
+
         del tile_grid

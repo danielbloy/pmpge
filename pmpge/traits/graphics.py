@@ -18,6 +18,7 @@ class DrawImage(GraphicsDrawImageTrait):
 
     image: ImageResource
 
+    # TODO: Centered should be true for sprites
     def __init__(self, image: str, centered: bool = True):
         image = ImageResource(image, centered=centered)
         self.width = image.width

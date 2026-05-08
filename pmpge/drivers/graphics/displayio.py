@@ -55,7 +55,7 @@ import board
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 from displayio import Group, Palette, Bitmap, TileGrid
 from pmpge.game import Game
-from pmpge.game_object import calculate_is_visible, GameObject
+from pmpge.game_object import draw_hierarchy
 
 game: Game | None = None
 
@@ -125,24 +125,11 @@ def deinit():
     images.clear()
 
 
-def do_draw(go: GameObject, visible: bool):
-    # TODO: This unfortunately intrinsically ties us to the Traits structure so we need to break that.
-    if hasattr(go, 'image'):
-        go.image.tile_grid.hidden = not visible
-        # TODO: This can be moved into draw now.
-
-    if visible:
-        go._draw(None)
-
-
 def draw(screen):
     """
     We have to process the entire hierarchy to ensure visbility is set.
     """
-    # TODO: This is slightly painful on performance as we have to traverse all GameObjects each draw cycle.
-    # TODO: Hook into deactivate which allows us to set visible == False, we still need to traverse all active
-    #       objects regardless of visibility to set visibility
-    calculate_is_visible(game.root, do_draw)
+    draw_hierarchy(game.root, screen, draw_everything=True)
     game.draw(screen)
 
 
@@ -195,12 +182,14 @@ class DriverImageResource:
         self.tile_grid = tile_grid
         return bitmap.width, bitmap.height
 
-    def draw(self, surface, x: int, y: int):
+    # TODO: Render is implementation defined
+    def render(self, x: int, y: int, visible: bool):
         """
-        This doesn't actually draw anything, just moves it. The parameter pos represents
+        This moves and sets the visibility of the underlying tile_grid. The parameter pos represents
         the top left corner of the image so the movement is trivial.
         """
         tile_grid = self.tile_grid
+        tile_grid.hidden = not visible
         tile_grid.x = int(x - self.offset_x)
         tile_grid.y = int(y - self.offset_y)
 
@@ -208,12 +197,14 @@ class DriverImageResource:
 class GraphicsDrawImageTrait:
     x: int
     y: int
+    active: bool
+    visible: bool
 
     image: DriverImageResource
 
     # TODO: This needs to be combined with a DrawImage trait
     def draw(self, surface):
-        self.image.draw(surface, self.x, self.y)
+        self.image.render(self.x, self.y, self.active and self.visible)
 
     def update(self, dt: float):
         pass

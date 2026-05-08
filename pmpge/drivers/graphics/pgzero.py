@@ -90,7 +90,8 @@ class DriverImageResource:
         self.surface = surface
         return self.surface.get_width(), self.surface.get_height()
 
-    def draw(self, surface: Surface, x: int, y: int) -> None:
+    # TODO: render is implementation defined.
+    def render(self, surface: Surface, x: int, y: int) -> None:
         surface.blit(self.surface, (x - self.offset_x, y - self.offset_y))
 
 
@@ -105,4 +106,4 @@ class GraphicsDrawImageTrait:
         """
         Draws the image at the specified position, centered by default.
         """
-        self.image.draw(surface, self.x, self.y)
+        self.image.render(surface, self.x, self.y)

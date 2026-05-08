@@ -78,6 +78,16 @@ root.append(background)  # Needs to be the first item.
 # FUTURE: If we use a tilemap at a later point, we can probably remove the need for the background layer.
 
 
+# TODO: The order that GameObjects are turned into Groups/TileGrid needs to match the hierarchy to
+# ensure the draw order is correct. Therefore, we should traverse the entire network at this point
+# to create the corresponding structure.
+#
+# TODO: If the hierarchy changes due to destroyed objects then that is fine as we get an event.
+#
+# TODO: If the hierarchy changes due to remove_child then the hierarchy needs to be regenerated.
+# TODO: How to handle new objects added?
+
+
 def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     # FUTURE: We need to sort out scaling at some point. This can be done by setting: `root.scale = 2`
     #         See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/group#group-scale-3162091
@@ -100,14 +110,7 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     #        been updated and their initial position is (0, 0). There is no coupling between an
     #        ImageLoader/ImageResource and the corresponding GameObject.
 
-
-# TODO: The order that GameObjects are turned into Groups/TileGrid needs to match the hierarchy to
-# ensure the draw order is correct. Therefore, we should traverse the entire network at this point
-# to create the corresponding structure.
-#
-# TODO: If the hierarchy changes due to destroyed objects then that is fine as we get an event.
-#
-# TODO: If the hierarchy changes due to remove_child then the hierarchy needs to be regenerated.
+    # TODO: Construct initial hierarchy?
 
 
 def deinit():
@@ -133,12 +136,15 @@ def draw(screen):
     game.draw(screen)
 
 
-# TODO: Do something better.
+# FUTURE: Do something better.
 images: dict[str, tuple[Bitmap, Palette]] = {}
 
 
 # This extraction has a massive positive impact on draw speed
 def load_image(image: str) -> tuple[Bitmap, Palette]:
+    """
+    TODO: Comments. Note that it will use the cached version.
+    """
     if image in images:
         image = images[image]
         return image[0], image[1]
@@ -183,6 +189,7 @@ class DriverImageResource:
         return bitmap.width, bitmap.height
 
     # TODO: Render is implementation defined
+    # TODO: See if we can move the offset code out
     def render(self, x: int, y: int, visible: bool):
         """
         This moves and sets the visibility of the underlying tile_grid. The parameter pos represents

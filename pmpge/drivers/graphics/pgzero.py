@@ -91,6 +91,7 @@ class DriverImageResource:
         return self.surface.get_width(), self.surface.get_height()
 
     # TODO: render is implementation defined.
+    # TODO: See if we can move the offset code out
     def render(self, surface: Surface, x: int, y: int) -> None:
         surface.blit(self.surface, (x - self.offset_x, y - self.offset_y))
 

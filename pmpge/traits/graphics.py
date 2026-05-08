@@ -1,6 +1,8 @@
 from pmpge.graphics import ImageResource, GraphicsDrawImageTrait
 
 
+# FUTURE: This could actually be DrawResource with the Resource being passed in.
+
 class DrawImage(GraphicsDrawImageTrait):
     """
     DrawImage draws an image at the specified position. By default the image is drawn
@@ -20,6 +22,7 @@ class DrawImage(GraphicsDrawImageTrait):
 
     # TODO: Centered should be true for sprites
     def __init__(self, image: str, centered: bool = True):
+        # FUTURE: We could extract ImageResource to be passed in.
         image = ImageResource(image, centered=centered)
         self.width = image.width
         self.height = image.height

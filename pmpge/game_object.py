@@ -543,15 +543,22 @@ def update_hierarchy(root: GameObject, dt: float):
     GameObject.something_destroyed = False
 
 
-# TODO: This can be renamed draw_only_visible.
-# TODO: We can then have a draw_all_active to draw irrespective of visibility
-# TODO: This will allow us to remove _draw from GameObject if we wanted.
-def draw_hierarchy(root: GameObject, surface: Any, draw_everything: bool = False):
+def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = True):
     """
-    Draws the GameObject (if `active` and `visible`) and propagates to children (if `active`).
+    Draws the GameObject (if `active` and `visible` - see below) and propagates to children
+    (if `active`). The parameter `draw_only_visible` is used to control what gets drawn. By
+    default, only `visible` items get drawn but setting draw_only_visible to False will also
+    draw items that are invisible (though they still need to be `active`). Why this functionality?
+    this is because some drivers don't actually draw anything but rather set properties on
+    graphics objects so need to be able to do that with the entire hierarchy.
+
     The surface is passed down through all objects but does not need to be a Pygame surface.
     This doesn't use traverse_hierarchy() as it is slower.
+
+
+    # TODO: test draw_only_visible
     """
+    draw_everything = not draw_only_visible
 
     def process(go: GameObject):
         if not go.active:

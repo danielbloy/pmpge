@@ -93,6 +93,9 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     Initialises the display by creating the desired background, building the entire
     hierarchy of TileGrids and turning on the display.
     """
+    # FUTURE: When the game is smaller than the display and we don't scale, we need to add a border.
+    #         The most common is 160 x 120 on a 160 x 128 display.
+
     # FUTURE: We need to sort out scaling at some point. This can be done by setting: `root.scale = 2`
     #         See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/group#group-scale-3162091
     global game, root

@@ -106,6 +106,8 @@ def should_execute(name: str):
 
 def execute(
         setup_func: Callable[[Game], None],
+        screen_width: int = 160,
+        screen_height: int = 120,
         runtime: int = RUNTIME,
         sample_frequency: int = SAMPLE_FREQUENCY,
         report_frequency: int = REPORT_FREQUENCY):
@@ -160,7 +162,7 @@ def execute(
         nonlocal draw_cycles
         draw_cycles += 1
 
-    game: Game = Game(160, 120)
+    game: Game = Game(screen_width, screen_height)
     setup_func(game)
     if sample_frequency * report_frequency != 0:
         game.add_update_func(monitor_ram)

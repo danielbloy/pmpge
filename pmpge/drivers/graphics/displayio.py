@@ -8,12 +8,12 @@
 # There is one notable limitation of this driver versus the Pygame zero driver
 # that it is important to be aware of and it is related to how the TileGrid
 # instances which are used to contain the graphics are constructed. When the
-# game is initialise (init() is called) we traverse the entire hierarchy and
-# generate the TileGrid instances. These are all added to the root Group
-# instance. Because we add them in the order that we traverse the hierarchy,
-# the implicit Z-order is preserved. We also only generate the TileGrid instances
-# we need. Some GameObjects can have multiple TileGrid instances and some
-# GameObjects will have none.
+# game is initialise (init() is called) we traverse the entire hierarchy (all
+# active AND inactive GameObjects) and generate the TileGrid instances. These
+# are all added to the root Group instance. Because we add them in the order
+# that we traverse the hierarchy, the implicit Z-order is preserved - even
+# with the deactivated objects. We also only generate the TileGrid instances
+# we need. See the note below about why we don't minic the hierarchy structure.
 #
 # However, if the hierarchy later changes, we do not rebuild the order of the
 # TileGrid instances. New GameObjects will get added to the end of the list in
@@ -28,10 +28,20 @@
 #    which will force a rebuild of the entire hierarchy. This is expensive so
 #    use it sparingly and at points that can accomodate the performance hit.
 #
-# Destroyed objects always get removed correctly.
+# Destroyed objects always get removed correctly. Deactivated objects get correctly
+# hidden.
 #
-
-
+# Why don't we mimic the hierarchy structure?
+# Some GameObjects can have multiple TileGrid instances and some GameObjects will
+# have none. We could in theory place a single Group instance on each GameObject
+# in the hierarchy and attach the TileGrids to those and connect up the Groups in
+# the hierarchy. Whilst a definitie potential improvement, it does come with an
+# extra memory requirement and unfortunately doesn't address all issues. This is
+# because under normal operation the draw() function only cycles over enabled
+# objects so if a mix of disabled and enabled objects are added then the z-order
+# won't be correct. therefore, the lower memory cost and faster performance option
+# was taken.
+#
 # REFERENCES
 #
 # * https://docs.circuitpython.org/en/latest/shared-bindings/displayio/

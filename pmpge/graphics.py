@@ -54,5 +54,3 @@ class ImageResource(DriverImageResource):
 
         if self.notify:
             self.notify()
-
-        # TODO: Note that render is implementation specific

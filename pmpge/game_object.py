@@ -361,7 +361,7 @@ class GameObject:
         This internal method will call all the draw methods irrespective of the GameObject's
         visibility.
 
-        TODO: Test
+        TODO: Test _draw()
         """
         self.draw(surface)
         for handler in self._draw_handlers:

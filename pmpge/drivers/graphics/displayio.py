@@ -201,7 +201,7 @@ def load_image(image: str) -> tuple[Bitmap, Palette]:
 
 class DriverImageResource:
     """
-    Mandatory implementation specific class to load and draw an image. Does nothing.
+    Mandatory implementation specific class to load an image resource.
     """
     offset_x: int
     offset_y: int
@@ -224,7 +224,6 @@ class DriverImageResource:
         self.tile_grid = tile_grid
         return bitmap.width, bitmap.height
 
-    # TODO: Render is implementation defined
     # TODO: See if we can move the offset code out
     def render(self, x: int, y: int, visible: bool):
         """

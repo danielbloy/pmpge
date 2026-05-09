@@ -82,7 +82,7 @@ def game_object_hierarchy_changed():
 
 class DriverImageResource:
     """
-    Implementation specific class to load and draw an image.
+    Implementation specific class to load an image resource.
     """
     offset_x: int
     offset_y: int
@@ -97,7 +97,6 @@ class DriverImageResource:
         self.surface = surface
         return self.surface.get_width(), self.surface.get_height()
 
-    # TODO: render is implementation defined.
     # TODO: See if we can move the offset code out
     def render(self, surface: Surface, x: int, y: int) -> None:
         surface.blit(self.surface, (x - self.offset_x, y - self.offset_y))

@@ -598,3 +598,54 @@ def traverse_hierarchy(
                 process(child, new_state)
 
     process(root, initial_state)
+
+
+def calculate_is_active(root: GameObject, callback: Callable[[GameObject, bool], None]):
+    """
+    Traverses the entire hierarchy from root, calculating whether each instance is
+    active or not. The callback is invoked for each node in the hierarchy.
+
+    TODO: Test calculate_is_active - does not actually need to use state
+    """
+
+    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
+        is_active = state and go.active
+        callback(go, is_active)
+
+        return True, is_active
+
+    traverse_hierarchy(root, process, True)
+
+
+def calculate_is_enabled(root: GameObject, callback: Callable[[GameObject, bool], None]):
+    """
+    Traverses the entire hierarchy from root, calculating whether each instance is
+    enabled or not. The callback is invoked for each node in the hierarchy.
+
+    TODO: Test calculate_is_enabled - does not actually need to use state
+    """
+
+    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
+        is_active = state and go.active
+        callback(go, is_active and go.enabled)
+
+        return True, is_active
+
+    traverse_hierarchy(root, process, True)
+
+
+def calculate_is_visible(root: GameObject, callback: Callable[[GameObject, bool], None]):
+    """
+    Traverses the entire hierarchy from root, calculating whether each instance is
+    visible or not. The callback is invoked for each node in the hierarchy.
+
+    TODO: Test calculate_is_visible - does not actually need to use state
+    """
+
+    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
+        is_active = state and go.active
+        callback(go, is_active and go.visible)
+
+        return True, is_active
+
+    traverse_hierarchy(root, process, True)

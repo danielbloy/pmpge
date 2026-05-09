@@ -205,7 +205,7 @@ class DriverImageResource:
     method is load(). This class is designed to be combined with `ImageResource`.
     """
     tile_grid: TileGrid
-    add_to_root: bool
+    new_image_loaded: bool  # Set to True when load is called.
 
     def load(self, image: str) -> tuple[int, int]:
         """
@@ -216,7 +216,7 @@ class DriverImageResource:
         # Create a TileGrid to hold the bitmap
         tile_grid = TileGrid(bitmap, pixel_shader=palette)
         tile_grid.hidden = True
-        self.add_to_root = True
+        self.new_image_loaded = True
 
         # Now set the properties on the containing object
         self.tile_grid = tile_grid
@@ -239,12 +239,12 @@ class GraphicsDrawImageTrait:
         Draws the image at the specified position, offset from the GameObjects position.
         """
         image = self.image
-        if image.add_to_root or force_add_to_root:
+        if image.new_image_loaded or force_add_to_root:
             root.append(image.tile_grid)
-            image.add_to_root = False
+            image.new_image_loaded = False
 
         tile_grid = image.tile_grid
-        tile_grid.hidden = self._active and self.visible
+        tile_grid.hidden = not (self._active and self.visible)
         tile_grid.x = int(self.x - image.offset_x)
         tile_grid.y = int(self.y - image.offset_y)
 
@@ -261,5 +261,6 @@ class GraphicsDrawImageTrait:
         tile_grid = self.image.tile_grid
         tile_grid.hidden = True
 
-        if not self.image.add_to_root:
+        # Only remove from root if it has previously been attached.
+        if not self.image.new_image_loaded:
             root.remove(tile_grid)

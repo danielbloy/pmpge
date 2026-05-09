@@ -11,64 +11,64 @@ Hello from the pygame community. https://www.pygame.org/contribute.html
 No device driver.
 Running on pgzero with (640, 480) screen and 12 button controller.
 Executing module <module 'tests.validate_device.validate_a_game' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_a_game.py'>
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19721.52 MB, Total: 12964.65 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19720.86 MB, Total: 12965.31 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19711.31 MB, Total: 12974.86 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19721.01 MB, Total: 12965.16 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19723.53 MB, Total: 12962.64 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19723.50 MB, Total: 12962.66 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19715.97 MB, Total: 12970.20 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19721.44 MB, Total: 12964.73 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19217.93 MB, Total: 13468.24 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19215.69 MB, Total: 13470.48 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19221.53 MB, Total: 13464.64 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19221.59 MB, Total: 13464.58 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19221.14 MB, Total: 13465.03 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19212.00 MB, Total: 13474.17 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19214.33 MB, Total: 13471.84 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19214.70 MB, Total: 13471.47 MB
 [ Top 10 ]
-<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2263, average=111 B
+<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2264, average=111 B
 C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
-C:\Program Files\Python313\Lib\collections\__init__.py:444: size=17.7 KiB, count=206, average=88 B
-C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=35, average=407 B
-<frozen importlib._bootstrap>:488: size=11.5 KiB, count=101, average=117 B
-C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.4 KiB, count=186, average=57 B
-C:\Program Files\Python313\Lib\collections\__init__.py:451: size=6944 B, count=62, average=112 B
-C:\Program Files\Python313\Lib\collections\__init__.py:510: size=6864 B, count=143, average=48 B
-C:\Program Files\Python313\Lib\collections\__init__.py:473: size=6696 B, count=62, average=108 B
-C:\Program Files\Python313\Lib\collections\__init__.py:460: size=6696 B, count=62, average=108 B
-Achieved 60.00 updates/s
-Achieved 60.00 draws/s
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19724.14 MB, Total: 12962.02 MB
-Executing module <module 'tests.validate_device.validate_b_game_object' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_b_game_object.py'>
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19723.36 MB, Total: 12962.81 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19722.95 MB, Total: 12963.22 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19725.27 MB, Total: 12960.90 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19720.64 MB, Total: 12965.53 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19725.86 MB, Total: 12960.31 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19717.94 MB, Total: 12968.23 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19718.12 MB, Total: 12968.04 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19725.15 MB, Total: 12961.02 MB
-[ Top 10 ]
-<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2263, average=111 B
-C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
-C:\Workspace\repos\pmpge\tests\validate_device\validate_b_game_object.py:12: size=18.2 KiB, count=100, average=187 B
-C:\Program Files\Python313\Lib\collections\__init__.py:444: size=17.7 KiB, count=206, average=88 B
+C:\Program Files\Python313\Lib\collections\__init__.py:444: size=20.2 KiB, count=227, average=91 B
 C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=35, average=407 B
 <frozen importlib._bootstrap>:488: size=11.5 KiB, count=100, average=118 B
 C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.4 KiB, count=186, average=57 B
 C:\Program Files\Python313\Lib\collections\__init__.py:451: size=6944 B, count=62, average=112 B
 C:\Program Files\Python313\Lib\collections\__init__.py:510: size=6864 B, count=143, average=48 B
 C:\Program Files\Python313\Lib\collections\__init__.py:473: size=6696 B, count=62, average=108 B
-Achieved 61.50 updates/s
-Achieved 61.50 draws/s
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19728.74 MB, Total: 12957.43 MB
-Executing module <module 'tests.validate_device.validate_c_hierarchy' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_c_hierarchy.py'>
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19728.24 MB, Total: 12957.93 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19718.20 MB, Total: 12967.97 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19719.45 MB, Total: 12966.71 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19725.81 MB, Total: 12960.36 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19728.21 MB, Total: 12957.96 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19720.80 MB, Total: 12965.37 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19725.31 MB, Total: 12960.86 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19726.59 MB, Total: 12959.58 MB
+C:\Program Files\Python313\Lib\collections\__init__.py:460: size=6696 B, count=62, average=108 B
+Achieved 60.50 updates/s
+Achieved 60.50 draws/s
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19216.78 MB, Total: 13469.39 MB
+Executing module <module 'tests.validate_device.validate_b_game_object' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_b_game_object.py'>
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19213.58 MB, Total: 13472.59 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19214.07 MB, Total: 13472.10 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19214.08 MB, Total: 13472.09 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19214.98 MB, Total: 13471.19 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19217.13 MB, Total: 13469.04 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19216.40 MB, Total: 13469.77 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19216.43 MB, Total: 13469.73 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19216.54 MB, Total: 13469.63 MB
 [ Top 10 ]
-<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2263, average=111 B
+<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2264, average=111 B
 C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
-C:\Program Files\Python313\Lib\collections\__init__.py:444: size=17.7 KiB, count=206, average=88 B
+C:\Program Files\Python313\Lib\collections\__init__.py:444: size=20.2 KiB, count=227, average=91 B
+C:\Workspace\repos\pmpge\tests\validate_device\validate_b_game_object.py:12: size=18.2 KiB, count=100, average=187 B
+C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=35, average=407 B
+<frozen importlib._bootstrap>:488: size=11.5 KiB, count=100, average=118 B
+C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.4 KiB, count=186, average=57 B
+C:\Program Files\Python313\Lib\collections\__init__.py:451: size=6944 B, count=62, average=112 B
+C:\Program Files\Python313\Lib\collections\__init__.py:510: size=6864 B, count=143, average=48 B
+C:\Program Files\Python313\Lib\collections\__init__.py:473: size=6696 B, count=62, average=108 B
+Achieved 63.00 updates/s
+Achieved 63.00 draws/s
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19216.69 MB, Total: 13469.48 MB
+Executing module <module 'tests.validate_device.validate_c_hierarchy' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_c_hierarchy.py'>
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19215.64 MB, Total: 13470.53 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19216.00 MB, Total: 13470.17 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19216.98 MB, Total: 13469.19 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19217.18 MB, Total: 13468.99 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19216.49 MB, Total: 13469.68 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19216.58 MB, Total: 13469.59 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19216.73 MB, Total: 13469.43 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19218.92 MB, Total: 13467.25 MB
+[ Top 10 ]
+<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2264, average=111 B
+C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
+C:\Program Files\Python313\Lib\collections\__init__.py:444: size=20.2 KiB, count=227, average=91 B
 C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=35, average=407 B
 <frozen importlib._bootstrap>:488: size=11.5 KiB, count=100, average=118 B
 C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.4 KiB, count=186, average=57 B
@@ -78,15 +78,14 @@ C:\Program Files\Python313\Lib\collections\__init__.py:510: size=6864 B, count=1
 C:\Program Files\Python313\Lib\collections\__init__.py:473: size=6696 B, count=62, average=108 B
 Achieved 62.50 updates/s
 Achieved 62.50 draws/s
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19717.16 MB, Total: 12969.01 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19217.91 MB, Total: 13468.25 MB
 Executing module <module 'tests.validate_device.validate_c_huge_hierarchy' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_c_huge_hierarchy.py'>
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19654.58 MB, Total: 13031.59 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19650.59 MB, Total: 13035.58 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19650.30 MB, Total: 13035.87 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19651.50 MB, Total: 13034.67 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19650.91 MB, Total: 13035.26 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19651.08 MB, Total: 13035.09 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19651.15 MB, Total: 13035.02 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19152.43 MB, Total: 13533.74 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19153.21 MB, Total: 13532.96 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19153.36 MB, Total: 13532.81 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19154.66 MB, Total: 13531.50 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19154.71 MB, Total: 13531.45 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19154.72 MB, Total: 13531.45 MB
 [ Top 10 ]
 C:\Workspace\repos\pmpge\tests\validate_device\validate_c_huge_hierarchy.py:28: size=6875 KiB, count=40000, average=176 B
 C:\Workspace\repos\pmpge\pmpge\game_object.py:131: size=2855 KiB, count=52211, average=56 B
@@ -98,22 +97,22 @@ C:\Workspace\repos\pmpge\pmpge\game_object.py:122: size=2855 KiB, count=52211, a
 C:\Workspace\repos\pmpge\tests\validate_device\validate_c_huge_hierarchy.py:26: size=1719 KiB, count=10000, average=176 B
 C:\Workspace\repos\pmpge\pmpge\game_object.py:339: size=464 KiB, count=12211, average=39 B
 C:\Workspace\repos\pmpge\tests\validate_device\validate_c_huge_hierarchy.py:25: size=344 KiB, count=2000, average=176 B
-Achieved 6.50 updates/s
-Achieved 6.50 draws/s
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19645.05 MB, Total: 13041.12 MB
+Achieved 6.00 updates/s
+Achieved 6.00 draws/s
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19150.99 MB, Total: 13535.18 MB
 Executing module <module 'tests.validate_device.validate_d_traits_simple' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_d_traits_simple.py'>
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19644.30 MB, Total: 13041.87 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19645.36 MB, Total: 13040.80 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19645.75 MB, Total: 13040.42 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19644.11 MB, Total: 13042.05 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19644.18 MB, Total: 13041.99 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19644.38 MB, Total: 13041.79 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19645.48 MB, Total: 13040.68 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19645.74 MB, Total: 13040.43 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19149.59 MB, Total: 13536.58 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19149.84 MB, Total: 13536.32 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19150.78 MB, Total: 13535.39 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19148.98 MB, Total: 13537.19 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19149.27 MB, Total: 13536.90 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19149.31 MB, Total: 13536.86 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19149.42 MB, Total: 13536.75 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19151.36 MB, Total: 13534.80 MB
 [ Top 10 ]
-<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2263, average=111 B
+<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2264, average=111 B
 C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
-C:\Program Files\Python313\Lib\collections\__init__.py:444: size=17.7 KiB, count=206, average=88 B
+C:\Program Files\Python313\Lib\collections\__init__.py:444: size=20.2 KiB, count=227, average=91 B
 C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=35, average=407 B
 <frozen importlib._bootstrap>:488: size=11.5 KiB, count=100, average=118 B
 C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.4 KiB, count=186, average=57 B
@@ -123,43 +122,66 @@ C:\Program Files\Python313\Lib\collections\__init__.py:473: size=6696 B, count=6
 C:\Program Files\Python313\Lib\collections\__init__.py:460: size=6696 B, count=62, average=108 B
 Achieved 62.50 updates/s
 Achieved 62.50 draws/s
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19709.62 MB, Total: 12976.54 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19214.63 MB, Total: 13471.54 MB
 Executing module <module 'tests.validate_device.validate_d_traits' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_d_traits.py'>
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19708.71 MB, Total: 12977.46 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19708.94 MB, Total: 12977.23 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19703.34 MB, Total: 12982.83 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19704.27 MB, Total: 12981.90 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19704.31 MB, Total: 12981.86 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19705.23 MB, Total: 12980.93 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19705.22 MB, Total: 12980.95 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19705.28 MB, Total: 12980.89 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19213.56 MB, Total: 13472.61 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.96 MB, Total: 13475.21 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.00 MB, Total: 13475.17 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.20 MB, Total: 13474.96 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.31 MB, Total: 13474.86 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19213.17 MB, Total: 13473.00 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19213.17 MB, Total: 13473.00 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19213.22 MB, Total: 13472.95 MB
 [ Top 10 ]
-<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2263, average=111 B
+<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2264, average=111 B
 C:\Workspace\repos\pmpge\pmpge\game_object.py:472: size=69.1 KiB, count=170, average=416 B
 C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
-C:\Program Files\Python313\Lib\collections\__init__.py:444: size=17.7 KiB, count=206, average=88 B
+C:\Program Files\Python313\Lib\collections\__init__.py:444: size=20.2 KiB, count=227, average=91 B
 C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=35, average=407 B
 <frozen importlib._bootstrap>:488: size=11.5 KiB, count=100, average=118 B
 C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.4 KiB, count=186, average=57 B
 C:\Workspace\repos\pmpge\tests\validate_device\validate_d_traits.py:31: size=8448 B, count=48, average=176 B
 C:\Program Files\Python313\Lib\collections\__init__.py:451: size=6944 B, count=62, average=112 B
 C:\Program Files\Python313\Lib\collections\__init__.py:510: size=6864 B, count=143, average=48 B
-Achieved 62.50 updates/s
-Achieved 62.50 draws/s
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19705.90 MB, Total: 12980.27 MB
+Achieved 62.00 updates/s
+Achieved 62.00 draws/s
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19213.60 MB, Total: 13472.57 MB
 Executing module <module 'tests.validate_device.validate_e_graphics_single_sprite' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_e_graphics_single_sprite.py'>
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19705.00 MB, Total: 12981.17 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19705.93 MB, Total: 12980.24 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19702.83 MB, Total: 12983.34 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19707.82 MB, Total: 12978.35 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19708.09 MB, Total: 12978.08 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19705.41 MB, Total: 12980.76 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19705.43 MB, Total: 12980.73 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19705.81 MB, Total: 12980.36 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19212.13 MB, Total: 13474.04 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.36 MB, Total: 13474.81 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.63 MB, Total: 13474.54 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.63 MB, Total: 13474.54 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19212.49 MB, Total: 13473.68 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.69 MB, Total: 13474.48 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.73 MB, Total: 13474.43 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.66 MB, Total: 13474.51 MB
 [ Top 10 ]
-<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2263, average=111 B
+<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2264, average=111 B
 C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
-C:\Program Files\Python313\Lib\collections\__init__.py:444: size=17.7 KiB, count=206, average=88 B
+C:\Program Files\Python313\Lib\collections\__init__.py:444: size=20.2 KiB, count=227, average=91 B
+C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=35, average=407 B
+<frozen importlib._bootstrap>:488: size=11.5 KiB, count=100, average=118 B
+C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.4 KiB, count=186, average=57 B
+C:\Program Files\Python313\Lib\collections\__init__.py:451: size=6944 B, count=62, average=112 B
+C:\Program Files\Python313\Lib\collections\__init__.py:510: size=6864 B, count=143, average=48 B
+C:\Program Files\Python313\Lib\collections\__init__.py:473: size=6696 B, count=62, average=108 B
+C:\Program Files\Python313\Lib\collections\__init__.py:460: size=6696 B, count=62, average=108 B
+Achieved 63.00 updates/s
+Achieved 63.00 draws/s
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.86 MB, Total: 13474.31 MB
+Executing module <module 'tests.validate_device.validate_e_graphics_multiple_sprites' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_e_graphics_multiple_sprites.py'>
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.80 MB, Total: 13475.37 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.46 MB, Total: 13475.71 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.04 MB, Total: 13475.13 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.20 MB, Total: 13474.97 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19212.18 MB, Total: 13473.99 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.53 MB, Total: 13474.64 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.59 MB, Total: 13474.57 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.61 MB, Total: 13474.56 MB
+[ Top 10 ]
+<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2264, average=111 B
+C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
+C:\Program Files\Python313\Lib\collections\__init__.py:444: size=20.2 KiB, count=227, average=91 B
 C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=35, average=407 B
 <frozen importlib._bootstrap>:488: size=11.5 KiB, count=100, average=118 B
 C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.4 KiB, count=186, average=57 B
@@ -169,43 +191,20 @@ C:\Program Files\Python313\Lib\collections\__init__.py:473: size=6696 B, count=6
 C:\Program Files\Python313\Lib\collections\__init__.py:460: size=6696 B, count=62, average=108 B
 Achieved 62.00 updates/s
 Achieved 62.00 draws/s
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19707.48 MB, Total: 12978.69 MB
-Executing module <module 'tests.validate_device.validate_e_graphics_multiple_sprites' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_e_graphics_multiple_sprites.py'>
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19705.93 MB, Total: 12980.24 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19705.03 MB, Total: 12981.14 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19705.28 MB, Total: 12980.89 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19706.28 MB, Total: 12979.89 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19706.53 MB, Total: 12979.64 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19705.84 MB, Total: 12980.33 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19704.38 MB, Total: 12981.79 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19704.46 MB, Total: 12981.71 MB
-[ Top 10 ]
-<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2263, average=111 B
-C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
-C:\Program Files\Python313\Lib\collections\__init__.py:444: size=17.7 KiB, count=206, average=88 B
-C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=35, average=407 B
-<frozen importlib._bootstrap>:488: size=11.5 KiB, count=100, average=118 B
-C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.4 KiB, count=186, average=57 B
-C:\Program Files\Python313\Lib\collections\__init__.py:451: size=6944 B, count=62, average=112 B
-C:\Program Files\Python313\Lib\collections\__init__.py:510: size=6864 B, count=143, average=48 B
-C:\Program Files\Python313\Lib\collections\__init__.py:473: size=6696 B, count=62, average=108 B
-C:\Program Files\Python313\Lib\collections\__init__.py:460: size=6696 B, count=62, average=108 B
-Achieved 63.00 updates/s
-Achieved 63.00 draws/s
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19706.28 MB, Total: 12979.89 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19212.63 MB, Total: 13473.54 MB
 Executing module <module 'tests.validate_device.validate_e_graphics_sprite_movement' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_e_graphics_sprite_movement.py'>
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19704.92 MB, Total: 12981.25 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19707.47 MB, Total: 12978.70 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19708.80 MB, Total: 12977.37 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19709.09 MB, Total: 12977.07 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19705.55 MB, Total: 12980.62 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19705.87 MB, Total: 12980.30 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19705.93 MB, Total: 12980.23 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19707.20 MB, Total: 12978.97 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.85 MB, Total: 13475.32 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.02 MB, Total: 13475.15 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.07 MB, Total: 13475.10 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.93 MB, Total: 13474.23 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.02 MB, Total: 13475.15 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.02 MB, Total: 13475.14 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.04 MB, Total: 13475.12 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.48 MB, Total: 13475.69 MB
 [ Top 10 ]
-<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2263, average=111 B
+<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2264, average=111 B
 C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
-C:\Program Files\Python313\Lib\collections\__init__.py:444: size=17.7 KiB, count=206, average=88 B
+C:\Program Files\Python313\Lib\collections\__init__.py:444: size=20.2 KiB, count=227, average=91 B
 C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=35, average=407 B
 <frozen importlib._bootstrap>:488: size=11.5 KiB, count=100, average=118 B
 C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.4 KiB, count=186, average=57 B
@@ -215,52 +214,52 @@ C:\Program Files\Python313\Lib\collections\__init__.py:510: size=6864 B, count=1
 C:\Program Files\Python313\Lib\collections\__init__.py:473: size=6696 B, count=62, average=108 B
 Achieved 62.50 updates/s
 Achieved 62.50 draws/s
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19707.22 MB, Total: 12978.95 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.84 MB, Total: 13474.33 MB
 Executing module <module 'tests.validate_device.validate_e_graphics_sprite_hierarchy' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_e_graphics_sprite_hierarchy.py'>
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19706.04 MB, Total: 12980.13 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19706.32 MB, Total: 12979.84 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19707.21 MB, Total: 12978.95 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19707.33 MB, Total: 12978.84 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19706.30 MB, Total: 12979.86 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19706.37 MB, Total: 12979.80 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19706.83 MB, Total: 12979.34 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19708.79 MB, Total: 12977.38 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.12 MB, Total: 13476.05 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.15 MB, Total: 13476.02 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.15 MB, Total: 13476.02 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19209.93 MB, Total: 13476.23 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.11 MB, Total: 13476.06 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.14 MB, Total: 13476.03 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.20 MB, Total: 13475.97 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.95 MB, Total: 13474.22 MB
 [ Top 10 ]
-<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2263, average=111 B
+<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2264, average=111 B
 C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
-C:\Program Files\Python313\Lib\collections\__init__.py:444: size=17.7 KiB, count=206, average=88 B
+C:\Program Files\Python313\Lib\collections\__init__.py:444: size=20.2 KiB, count=227, average=91 B
 C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=35, average=407 B
 <frozen importlib._bootstrap>:488: size=11.5 KiB, count=100, average=118 B
 C:\Workspace\repos\pmpge\tests\validate_device\utils.py:63: size=11.4 KiB, count=47, average=249 B
 C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.4 KiB, count=186, average=57 B
-C:\Workspace\repos\pmpge\pmpge\traits\graphics.py:38: size=9776 B, count=94, average=104 B
-C:\Workspace\repos\pmpge\pmpge\traits\graphics.py:26: size=8592 B, count=47, average=183 B
+C:\Workspace\repos\pmpge\pmpge\traits\graphics.py:56: size=9776 B, count=94, average=104 B
+C:\Workspace\repos\pmpge\pmpge\traits\graphics.py:35: size=8592 B, count=47, average=183 B
 C:\Program Files\Python313\Lib\collections\__init__.py:451: size=6944 B, count=62, average=112 B
 Achieved 62.50 updates/s
 Achieved 62.50 draws/s
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19719.64 MB, Total: 12966.53 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.89 MB, Total: 13474.27 MB
 Executing module <module 'tests.validate_device.validate_e_graphics_sprite_visibility' from 'C:\\Workspace\\repos\\pmpge\\tests\\validate_device\\validate_e_graphics_sprite_visibility.py'>
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19718.45 MB, Total: 12967.72 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19718.98 MB, Total: 12967.19 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19719.26 MB, Total: 12966.91 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19708.96 MB, Total: 12977.20 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19721.59 MB, Total: 12964.58 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19721.66 MB, Total: 12964.51 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19722.87 MB, Total: 12963.30 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19719.87 MB, Total: 12966.30 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.58 MB, Total: 13475.59 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.72 MB, Total: 13475.45 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.68 MB, Total: 13474.49 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.49 MB, Total: 13475.68 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.55 MB, Total: 13475.62 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.63 MB, Total: 13475.54 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19210.34 MB, Total: 13475.83 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19212.03 MB, Total: 13474.14 MB
 [ Top 10 ]
-<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2263, average=111 B
+<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2264, average=111 B
 C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
-C:\Program Files\Python313\Lib\collections\__init__.py:444: size=17.7 KiB, count=206, average=88 B
+C:\Program Files\Python313\Lib\collections\__init__.py:444: size=20.2 KiB, count=227, average=91 B
 C:\Workspace\repos\pmpge\tests\validate_device\utils.py:63: size=14.2 KiB, count=59, average=247 B
 C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=35, average=407 B
-C:\Workspace\repos\pmpge\pmpge\traits\graphics.py:38: size=12.0 KiB, count=118, average=104 B
+C:\Workspace\repos\pmpge\pmpge\traits\graphics.py:56: size=12.0 KiB, count=118, average=104 B
 <frozen importlib._bootstrap>:488: size=11.5 KiB, count=100, average=118 B
 C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.4 KiB, count=186, average=57 B
-C:\Workspace\repos\pmpge\pmpge\traits\graphics.py:26: size=10.1 KiB, count=59, average=175 B
+C:\Workspace\repos\pmpge\pmpge\traits\graphics.py:35: size=10.1 KiB, count=59, average=175 B
 C:\Program Files\Python313\Lib\collections\__init__.py:451: size=6944 B, count=62, average=112 B
 Achieved 63.00 updates/s
 Achieved 63.00 draws/s
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19719.37 MB, Total: 12966.80 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 19211.86 MB, Total: 13474.31 MB
 
 Process finished with exit code 0

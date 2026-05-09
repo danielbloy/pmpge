@@ -72,3 +72,6 @@ NOTE: Instances of `DriverImageResource` are not intended to be sharable across 
 instances as they may contain `GameObject` specific state.
 
 ### `GraphicsDrawImageTrait`
+
+Requires the implementation of the `draw()` method to provide the drawing part of `DrawImage`.
+There is no other dependency between the two classes.

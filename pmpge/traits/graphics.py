@@ -5,9 +5,16 @@ class DrawImage(GraphicsDrawImageTrait):
     """
     DrawImage draws an image at the specified position. By default the image is drawn
     centered on the position (centered according to the same specification as a sprites
-    image). Optionally, this can be drawn using the x, y position as the top left corner.
+    image). Optionally, this can be drawn using the x, y position as the top left corner
+    by setting centered = False.
 
     The DrawImage trait requires a Position trait to be present on the GameObject.
+
+    The DrawImage trait requires a graphics specific implementation called
+    GraphicsDrawImageTrait which does the actual drawing (and therefore needs to
+    provide at least a `draw()`) method. It should use the `offset_x` and `offset_y`
+    properties (which are placed on `image`) to adjust the position of the drawn
+    image relative to the GameObjects x and y position.
     """
     x: int
     y: int
@@ -18,14 +25,26 @@ class DrawImage(GraphicsDrawImageTrait):
 
     image: ImageResource
 
-    # TODO: Centered should be true for sprites
     def __init__(self, image: str, centered: bool = True):
+        """
+        Creates the DrawImage trait using the given image resource name.
+
+        When used with Sprites, the `centered` parameter should be `True`.
+        """
         # FUTURE: We could extract ImageResource to be passed in.
         image = ImageResource(image)
+        image.centered = centered
 
+        self.image = image
         self.width = image.width
         self.height = image.height
-        self.image = image
+
+        if image.centered:
+            image.offset_x = image.width // 2
+            image.offset_y = image.height // 2
+        else:
+            image.offset_x = 0
+            image.offset_y = 0
 
     def merged(self):
         """
@@ -35,15 +54,16 @@ class DrawImage(GraphicsDrawImageTrait):
         """
 
         def on_notify():
-            width, height = self.image.width, self.image.height
+            image = self.image
+            width, height = image.width, image.height
             self.width = width
             self.height = height
 
-        self.image.notify = on_notify
+            if image.centered:
+                image.offset_x = width // 2
+                image.offset_y = height // 2
+            else:
+                image.offset_x = 0
+                image.offset_y = 0
 
-        if self.centered:
-            self.offset_x = self.width // 2
-            self.offset_y = self.height // 2
-        else:
-            self.offset_x = 0
-            self.offset_y = 0
+        self.image.notify = on_notify

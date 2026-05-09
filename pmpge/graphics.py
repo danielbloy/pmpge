@@ -20,8 +20,8 @@ class ImageResource(DriverImageResource):
 
     NOTE: Instances of `DriverImageResource` are not intended to be sharable across
           `GameObject` instances as they may contain `GameObject` specific state
-          required by the graphics driver. Therefore instances of `ImageResource`
-          are also NOT shareable.
+          required by the graphics driver. Therefore, instances of `ImageResource`
+          are also NOT sharable.
     """
     width: int
     height: int
@@ -36,10 +36,16 @@ class ImageResource(DriverImageResource):
 
     @property
     def name(self) -> str:
+        """
+        Returns the name of the image resource.
+        """
         return self._name
 
     @name.setter
     def name(self, value: str) -> None:
+        """
+        Sets the name of the image resource and fires the notify event.
+        """
         self._name = value
         self.width, self.height = self.load(value)
 

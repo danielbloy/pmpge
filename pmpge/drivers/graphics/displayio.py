@@ -224,28 +224,40 @@ class DriverImageResource:
 
 
 class GraphicsDrawImageTrait:
+    """
+    This class is designed to be combined with a `DrawImage` trait.
+    """
     x: int
     y: int
-    active: bool
-    visible: bool
+    _active: bool  # From GameObject
+    visible: bool  # From GameObject
 
     image: DriverImageResource
 
-    # TODO: This needs to be combined with a DrawImage trait
     def draw(self, surface):
-        if self.image.add_to_root or force_add_to_root:
-            root.append(self.image.tile_grid)
-            self.image.add_to_root = False
+        """
+        Draws the image at the specified position, offset from the GameObjects position.
+        """
+        image = self.image
+        if image.add_to_root or force_add_to_root:
+            root.append(image.tile_grid)
+            image.add_to_root = False
 
-        tile_grid = self.image.tile_grid
-        tile_grid.hidden = self.active and self.visible
-        tile_grid.x = int(self.x)
-        tile_grid.y = int(self.y)
+        tile_grid = image.tile_grid
+        tile_grid.hidden = self._active and self.visible
+        tile_grid.x = int(self.x - image.offset_x)
+        tile_grid.y = int(self.y - image.offset_y)
 
     def deactivated(self):
+        """
+        We just set `hidden` on the TileGrid to stop it being displayed.
+        """
         self.image.tile_grid.hidden = True
 
     def destroyed(self):
+        """
+        We hide the TileGrid and then remove it from the root.
+        """
         tile_grid = self.image.tile_grid
         tile_grid.hidden = True
 

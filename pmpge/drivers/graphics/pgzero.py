@@ -97,14 +97,17 @@ class DriverImageResource:
 
 
 class GraphicsDrawImageTrait:
+    """
+    This class is designed to be combined with a `DrawImage` trait.
+    """
     x: int
     y: int
 
     image: DriverImageResource
 
-    # TODO: This needs to be combined with a DrawImage trait
     def draw(self, surface: Surface):
         """
-        Draws the image at the specified position, centered by default.
+        Draws the image at the specified position, offset from the GameObjects position.
         """
-        surface.blit(self.image.surface, (self.x, self.y))
+        image = self.image
+        surface.blit(image.surface, (self.x - image.offset_x, self.y - image.offset_y))

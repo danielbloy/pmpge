@@ -16,7 +16,7 @@
 # game is initialise (init() is called) we traverse the entire hierarchy (all
 # active AND inactive GameObjects) and generate the TileGrid instances. These
 # are all added to the root Group instance. Because we add them in the order
-# that we traverse the hierarchy, the implicit Z-order is preserved - even
+# that we traverse the hierarchy, the implicit draw order is preserved - even
 # with the deactivated objects. We also only generate the TileGrid instances
 # we need. See the note below about why we don't minic the hierarchy structure.
 #
@@ -43,7 +43,7 @@
 # the hierarchy. Whilst a definitie potential improvement, it does come with an
 # extra memory requirement and unfortunately doesn't address all issues. This is
 # because under normal operation the draw() function only cycles over enabled
-# objects so if a mix of disabled and enabled objects are added then the z-order
+# objects so if a mix of disabled and enabled objects are added then the draw order
 # won't be correct. therefore, the lower memory cost and faster performance option
 # was taken.
 #
@@ -141,16 +141,21 @@ def draw(screen):
     game.draw(screen)
 
 
-force_rebuild = False
+# This global setting is used to force all GameObjects to re-add their displayio
+# objects back to the root Group. This is used when rebuilding the hierarchy.
+force_add_to_root = False
 
 
 def game_object_hierarchy_changed():
     """
-    TODO: Add documentation for this mandatory function which should be called if
-    the hierarchy changes. This is a limitation of the displayio driver
+    This notifies us that the game has made changes to the GameObject hierarchy. We don't
+    know what those changes are so we forcibly remove and re-add all displayio objects
+    to the root Group. This ensures that the draw order of the objects is correct.
+
+    This is an expensive operation so use sparingly.
     """
-    global force_rebuild
-    force_rebuild = True
+    global force_add_to_root
+    force_add_to_root = True
 
     while len(root) > 0:
         root.pop()
@@ -162,10 +167,10 @@ def game_object_hierarchy_changed():
         return True, None
 
     traverse_hierarchy(game.root, forced_draw)
-    force_rebuild = False
+    force_add_to_root = False
 
 
-# FUTURE: Do something better.
+# FUTURE: Do something better for caching. We could also extract out the code in deinit().
 images: dict[str, tuple[Bitmap, Palette]] = {}
 
 
@@ -235,7 +240,7 @@ class GraphicsDrawImageTrait:
 
     # TODO: This needs to be combined with a DrawImage trait
     def draw(self, surface):
-        if self.image.add_to_root or force_rebuild:
+        if self.image.add_to_root or force_add_to_root:
             root.append(self.image.tile_grid)
             self.image.add_to_root = False
 

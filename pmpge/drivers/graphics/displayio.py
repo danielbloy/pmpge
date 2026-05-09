@@ -127,10 +127,7 @@ def deinit():
     while len(root) > 0:
         root.pop()
 
-    # Erase all cached images
-    for bitmap, _ in images.values():
-        bitmap.deinit()
-    images.clear()
+    clear_image_cache()
 
 
 def draw(screen):
@@ -171,20 +168,30 @@ def game_object_hierarchy_changed():
 
 
 # FUTURE: Do something better for caching. We could also extract out the code in deinit().
-images: dict[str, tuple[Bitmap, Palette]] = {}
+image_cache: dict[str, tuple[Bitmap, Palette]] = {}
+
+
+def clear_image_cache():
+    """
+    Erases all cached images.
+    """
+    for bitmap, _ in image_cache.values():
+        bitmap.deinit()
+    image_cache.clear()
 
 
 # This extraction has a massive positive impact on draw speed
 def load_image(image: str) -> tuple[Bitmap, Palette]:
     """
-    TODO: Comments. Note that it will use the cached version.
+    This will populate the image_cache with the specified image resource if it
+    does not already exist in the cache. It will then return the cached image.
     """
-    if image in images:
-        image = images[image]
+    if image in image_cache:
+        image = image_cache[image]
         return image[0], image[1]
 
     bitmap, palette = adafruit_imageload.load(f"/images/{image}", bitmap=Bitmap, palette=Palette)
-    images[image] = bitmap, palette
+    image_cache[image] = bitmap, palette
 
     # PERFORMANCE: This has a pretty harsh impact on fps, dropping EdgeBadge from 40 to 29 fps
     palette.make_transparent(0)

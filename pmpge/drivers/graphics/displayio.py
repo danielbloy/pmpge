@@ -1,27 +1,37 @@
 #
-# NOTE: This driver is very much a work in progress and has not yet been optimised and only
-#       provides a subset of the required functionality. It is suitable to run the examples
-#       and on-device validation tests only. Use with caution.
+# This graphics driver is functional and has reasonable performance on modest
+# hardware such as a Pybadge. Presently it provides enough functionality to
+# support the desired background colour and the DrawImage trait.
 #
-# The code below is marked up with the following tags to indicate where further work is
-# required:
+# LIMITATION:
 #
-# * LIMITATION
-# * PERFORMANCE
-# * ISSUE
-# * FUTURE
+# There is one notable limitation of this driver versus the Pygame zero driver
+# that it is important to be aware of and it is related to how the TileGrid
+# instances which are used to contain the graphics are constructed. When the
+# game is initialise (init() is called) we traverse the entire hierarchy and
+# generate the TileGrid instances. These are all added to the root Group
+# instance. Because we add them in the order that we traverse the hierarchy,
+# the implicit Z-order is preserved. We also only generate the TileGrid instances
+# we need. Some GameObjects can have multiple TileGrid instances and some
+# GameObjects will have none.
 #
-# PERFORMANCE
+# However, if the hierarchy later changes, we do not rebuild the order of the
+# TileGrid instances. New GameObjects will get added to the end of the list in
+# the order they are process. Further, if the parent and child relationships are
+# changed for existing objects, the TileGrid order is NOT changed to reflect this.
 #
-# * 20 sprites gives around 29 fps on an EdgeBadge in the multi-sprite validate test with:
-#      SAMPLE_FREQUENCY = 1
-#      REPORT_FREQUENCY = 1
+# The way to work around this is straightforward.
+#  * Ensure you entire hierarchy is consistent from the start and when adding
+#    new branches to the hierarchy, do it in a way that works additively (i.e.
+#    add the entire new branch to the Game.root instance).
+#  * If you need to rework the hierarchy, call Graphics.game_object_hierarchy_changed()
+#    which will force a rebuild of the entire hierarchy. This is expensive so
+#    use it sparingly and at points that can accomodate the performance hit.
 #
-# * Using transparency is expensive and removing it increases the above test to 40 fps
+# Destroyed objects always get removed correctly.
 #
-# * Doing manual refreshing seems to seriously hurt performance. It is however worth investigating
-#   further when we have a fully working driver to see if we can get smoother updates.
-#
+
+
 # REFERENCES
 #
 # * https://docs.circuitpython.org/en/latest/shared-bindings/displayio/
@@ -33,21 +43,13 @@
 # * The display variable is a BusDisplay:
 #   See: https://docs.circuitpython.org/en/latest/shared-bindings/busdisplay/index.html#module-busdisplay
 #
-# * Experiment with visibility of the objects. Group.visible is probably what is needed here.
-#   See: https://docs.circuitpython.org/en/latest/shared-bindings/displayio/#displayio.Group
-#
-# * The Z-order of objects is not actually honoured and currently controlled by the order the
-#   GameObjects are created. We need to mimic the GameObject hierarchy in Groups/TileGrids.
-#
-# * The deinit() method needs to remove all assets as currently the validation will run out of
-#   memory as we do not seem to clear up after ourselves.
-#
 # * Investigate supporting different bitmap types:
 #   See: https://learn.adafruit.com/creating-your-first-tilemap-game-with-circuitpython/indexed-bmp-graphics
 #
-import gc
 
-# noinspection PyUnresolvedReferences
+from gc import collect as gc_collect
+
+# noinspection PyUnresolvedReferences,PyPackageRequirements
 import adafruit_imageload
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 import board
@@ -74,9 +76,6 @@ palette[0] = 0x000000
 background = TileGrid(Bitmap(display.width, display.height, 1), pixel_shader=palette)
 
 
-# FUTURE: If we use a tilemap at a later point, we can probably remove the need for the background layer.
-
-
 def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     # FUTURE: We need to sort out scaling at some point. This can be done by setting: `root.scale = 2`
     #         See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/group#group-scale-3162091
@@ -99,12 +98,6 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     # ISSUE: Adding this statement in stops the console being displayed briefly but negatively impacts framerate
     # display.refresh(target_frames_per_second=30)
 
-    # LIMITATION: After this point:
-    # * If the hierarchy changes due to remove_child then the hierarchy needs to be regenerated.
-    # * Added objects after the game is initialised will be added to the end of the draw list which
-    #   is not necessarily in the correct place.
-    # * This is not easy to fix because there is no guarantee the parent has a graphics object.
-
 
 def deinit():
     global game, root
@@ -113,7 +106,7 @@ def deinit():
     display.root_group = None
     root.remove(background)
     del root
-    gc.collect()
+    gc_collect()
     root = Group()
     root.append(background)  # Needs to be the first item.
 

@@ -243,7 +243,6 @@ PLAYER_SHIP_MAX_LEFT = (PLAYER_SHIP_WIDTH / 2)
 PLAYER_SHIP_MAX_RIGHT = game.width - (PLAYER_SHIP_WIDTH / 2)
 PLAYER_SHIP_START_HEIGHT = LOWER_BORDER_START - (PLAYER_SHIP_HEIGHT / 2)
 
-# TODO: Make DrawImage also support SpriteImage requirements.
 player = Sprite(
     game.width / 2, PLAYER_SHIP_START_HEIGHT,
     DrawImage('player'))

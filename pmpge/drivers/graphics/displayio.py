@@ -3,7 +3,12 @@
 # hardware such as a Pybadge. Presently it provides enough functionality to
 # support the desired background colour and the DrawImage trait.
 #
-# LIMITATION:
+# LIMITATION: DISPLAY
+#
+# Currently, this driver will only work on controllers with built-in displays
+# as the board.DISPLAY variable is used.
+#
+# LIMITATION: HIERARCHY
 #
 # There is one notable limitation of this driver versus the Pygame zero driver
 # that it is important to be aware of and it is related to how the TileGrid
@@ -56,7 +61,6 @@
 # * Investigate supporting different bitmap types:
 #   See: https://learn.adafruit.com/creating-your-first-tilemap-game-with-circuitpython/indexed-bmp-graphics
 #
-
 from gc import collect as gc_collect
 
 # noinspection PyUnresolvedReferences,PyPackageRequirements
@@ -71,9 +75,8 @@ from pmpge.game_object import GameObject, draw_hierarchy, traverse_hierarchy
 
 game: Game | None = None
 
-# LIMITATION: Using board.DISPLAY will fail if the device does not have a built-in display.
 display = board.DISPLAY
-display.refresh(target_frames_per_second=30)
+display.root_group = None
 display.brightness = 0.0  # Turn the display off until the game starts
 
 # Root group to place all items to draw.
@@ -87,6 +90,10 @@ background = TileGrid(Bitmap(display.width, display.height, 1), pixel_shader=pal
 
 
 def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
+    """
+    Initialises the display by creating the desired background, building the entire
+    hierarchy of TileGrids and turning on the display.
+    """
     # FUTURE: We need to sort out scaling at some point. This can be done by setting: `root.scale = 2`
     #         See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/group#group-scale-3162091
     global game
@@ -105,17 +112,19 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     # Setting up the root here stops all the graphics from showing as they are loading.
     display.root_group = root
     display.brightness = 1
-    # ISSUE: Adding this statement in stops the console being displayed briefly but negatively impacts framerate
-    # display.refresh(target_frames_per_second=30)
 
 
 def deinit():
+    """
+
+    """
     global game, root
     game = None
 
     display.root_group = None
     root.remove(background)
     del root
+
     gc_collect()
     root = Group()
     root.append(background)  # Needs to be the first item.

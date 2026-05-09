@@ -578,6 +578,38 @@ def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = Tru
     process(root)
 
 
+def prune_hierarchy(root: GameObject, only_active: bool = True, children_first: bool = False):
+    """
+    Removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
+
+    * only_active - will only prune if this node is active, irrespective of children_frist.
+    * children_first - prunes from the leaf nodes first and works up.
+
+    # TODO: Test prune_hierarchy
+    """
+
+    def process(go: GameObject):
+        if only_active and not go.active:
+            return
+
+        if children_first:
+            for child in go._children:
+                process(child)
+
+        # Remove any destroyed children.
+        children = go._children
+        for child in children:
+            if not child._alive:
+                child._parent = None
+                children.remove(child)
+
+        if not children_first:
+            for child in go._children:
+                process(child)
+
+    process(root)
+
+
 def traverse_hierarchy(
         root: GameObject, func: Callable[[GameObject, Any], tuple[bool, Any]], initial_state: Any = None):
     """

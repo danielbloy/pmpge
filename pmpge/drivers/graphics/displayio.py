@@ -80,7 +80,7 @@ display.root_group = None
 display.brightness = 0.0  # Turn the display off until the game starts
 
 # Root group to place all items to draw.
-root = Group()
+root: Group
 
 # Create a single colour bitmap for the background.
 # Source: https://learn.adafruit.com/circuitpython-display-support-using-displayio/draw-pixels
@@ -96,7 +96,7 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     """
     # FUTURE: We need to sort out scaling at some point. This can be done by setting: `root.scale = 2`
     #         See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/group#group-scale-3162091
-    global game
+    global game, root
     game = g
 
     # Set the single colour in the palette for our background to the desired background colour
@@ -107,6 +107,7 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
 
     # Here we build the entire graphics hierarchy in order to place the tileGrid
     # instances in the correct order.
+    root = Group()
     game_object_hierarchy_changed()
 
     # Setting up the root here stops all the graphics from showing as they are loading.
@@ -126,8 +127,6 @@ def deinit():
     del root
 
     gc_collect()
-    root = Group()
-    root.append(background)  # Needs to be the first item.
 
     # Erase all loaded images
     # TODO: see if doing bitmap.deinit() here saves RAM.

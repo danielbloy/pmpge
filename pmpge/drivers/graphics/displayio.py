@@ -79,7 +79,7 @@ display.root_group = None
 display.brightness = 0.0  # Turn the display off until the game starts
 
 # Root group to place all items to draw.
-root: Group
+root = Group()
 
 # Create a single colour bitmap for the background.
 # Source: https://learn.adafruit.com/circuitpython-display-support-using-displayio/draw-pixels
@@ -121,8 +121,11 @@ def deinit():
     global game
     game = None
 
+    # Remove all the items from the root group (most should
+    # have been removed via the GameObject.destroy() method.
     display.root_group = None
-    root.remove(background)
+    while len(root) > 0:
+        root.pop()
 
     # Erase all cached images
     # TODO: see if doing bitmap.deinit() here saves RAM.

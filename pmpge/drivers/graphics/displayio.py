@@ -145,7 +145,7 @@ def game_object_hierarchy_changed():
     TODO: Add documentation for this mandatory function which should be called if
     the hierarchy changes. This is a limitation of the displayio driver
     """
-    global force_rebuild, root
+    global force_rebuild
     force_rebuild = True
 
     while len(root) > 0:
@@ -241,7 +241,6 @@ class GraphicsDrawImageTrait:
         self.image.tile_grid.hidden = True
 
     def destroyed(self):
-        global root
         tile_grid = self.image.tile_grid
         tile_grid.hidden = True
 

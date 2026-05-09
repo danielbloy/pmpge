@@ -358,7 +358,10 @@ class GameObject:
 
     def _draw(self, surface: Any) -> None:
         """
-        TODO: Comment. Draws irrespective of visibility
+        This internal method will call all the draw methods irrespective of the GameObject's
+        visibility.
+
+        TODO: Test
         """
         self.draw(surface)
         for handler in self._draw_handlers:

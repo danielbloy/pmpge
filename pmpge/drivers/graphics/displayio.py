@@ -116,7 +116,7 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
 
 def deinit():
     """
-    TODO: Notes
+    Removes everything left from the root group.
     """
     global game
     game = None

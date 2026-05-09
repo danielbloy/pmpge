@@ -1,8 +1,8 @@
 import sys
-from typing import Any
 
 import pygame
 from pgzero.loaders import images
+from pgzero.screen import Screen
 from pygame import Surface
 
 from pmpge.game import Game
@@ -57,7 +57,7 @@ def deinit():
     scale_surface = None
 
 
-def draw(screen):
+def draw(screen: Screen):
     """
     Performs any scaling that is required.
     """
@@ -73,25 +73,44 @@ def draw(screen):
             (screen_width, screen_height), screen.surface)  # noqa: F821
 
 
+def game_object_hierarchy_changed():
+    """
+    Mandatory function that does nothing in the Pygame Zero.
+    """
+    pass
+
+
 class DriverImageResource:
     """
-    Implementation specific class to load and draw an image.
+    Implementation specific class to load an image resource.
     """
-    surface: Any
-    width: int
-    height: int
+    offset_x: int
+    offset_y: int
+    surface: Surface
 
-    def load(self, image: str):
+    # TODO: This needs to be combined with a ImageResource trait
+    def load(self, image: str) -> tuple[int, int]:
         """
         Loads the named image resource.
         """
         surface = images.load(image)
         self.surface = surface
-        self.width = self.surface.get_width()
-        self.height = self.surface.get_height()
+        return self.surface.get_width(), self.surface.get_height()
 
-    def draw(self, surface: Any, pos: tuple[int, int]):
+    # TODO: See if we can move the offset code out
+    def render(self, surface: Surface, x: int, y: int) -> None:
+        surface.blit(self.surface, (x - self.offset_x, y - self.offset_y))
+
+
+class GraphicsDrawImageTrait:
+    x: int
+    y: int
+
+    image: DriverImageResource
+
+    # TODO: This needs to be combined with a DrawImage trait
+    def draw(self, surface: Surface):
         """
-        Draws the image, with pos representing the top left corner.
+        Draws the image at the specified position, centered by default.
         """
-        surface.blit(self.surface, pos)
+        self.image.render(surface, self.x, self.y)

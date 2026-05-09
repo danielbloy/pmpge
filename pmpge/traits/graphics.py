@@ -1,9 +1,9 @@
-from typing import Any
-
-from pmpge.graphics import ImageResource
+from pmpge.graphics import ImageResource, GraphicsDrawImageTrait
 
 
-class DrawImage:
+# FUTURE: This could actually be DrawResource with the Resource being passed in.
+
+class DrawImage(GraphicsDrawImageTrait):
     """
     DrawImage draws an image at the specified position. By default the image is drawn
     centered on the position (centered according to the same specification as a sprites
@@ -13,28 +13,20 @@ class DrawImage:
     """
     x: int
     y: int
+
+    # The width and height properties are required for Sprites but useful generally
     width: int
     height: int
+
     image: ImageResource
 
-    def __init__(self, image: str, centered=True):
-        image_resource = ImageResource(image)
-        image_resource.centered = centered
-
-        if centered:
-            image_resource.offset_x = image_resource.width // 2
-            image_resource.offset_y = image_resource.height // 2
-        else:
-            image_resource.offset_x = 0
-            image_resource.offset_y = 0
-
-        self.image = image_resource
-
-    def draw(self, surface: Any):
-        """
-        Draws the image at the specified position, centered by default.
-        """
-        self.image.draw(surface, (self.x - self.image.offset_x, self.y - self.image.offset_y))
+    # TODO: Centered should be true for sprites
+    def __init__(self, image: str, centered: bool = True):
+        # FUTURE: We could extract ImageResource to be passed in.
+        image = ImageResource(image, centered=centered)
+        self.width = image.width
+        self.height = image.height
+        self.image = image
 
     def merged(self):
         """
@@ -43,14 +35,9 @@ class DrawImage:
         loaded.
         """
 
-        def on_notify(width: int, height: int):
+        def on_notify():
+            width, height = self.image.width, self.image.height
             self.width = width
             self.height = height
-            if self.image.centered:
-                self.image.offset_x = width // 2
-                self.image.offset_y = height // 2
-            else:
-                self.image.offset_x = 0
-                self.image.offset_y = 0
 
         self.image.notify = on_notify

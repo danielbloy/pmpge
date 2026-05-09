@@ -1,7 +1,8 @@
 """
 Creates sprites and on the screen, alternating visibility. This test also
 uses the same resource for each sprite which can be used to validate
-optimisations on image resource sharing.
+optimisations on image resource sharing. This is useful for visually checking
+that visibility works.
 """
 
 import tests.validate_device.utils as utils

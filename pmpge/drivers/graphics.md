@@ -51,10 +51,16 @@ as scaling or flipping.
   surface to draw to. For Pgzero this will be the `screen` variable. For
   microcontrollers this will be None.
 
+### `game_object_hierarchy_changed()`
+
+Called to indicate there have been changes to the GameObject hierarchy. This gives
+the graphics driver an opportunity to rebuild the graphics objects should it need
+to do so. This can be an expensive operation on microcontrollers so use sparingly.
+
 ## Mandatory classes
 
 A graphics driver must implement the following mandatory classes:
 
-### `ImageLoader`
+### `DriverImageResource`
 
-# TODO: Document ImageLoader.
+### `GraphicsDrawImageTrait`

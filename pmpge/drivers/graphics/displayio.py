@@ -1,26 +1,51 @@
 #
-# NOTE: This driver is very much a work in progress and has not yet been optimised and only
-#       provides a subset of the required functionality. It is suitable to run the examples
-#       and on-device validation tests only. Use with caution.
+# This graphics driver is functional and has reasonable performance on modest
+# hardware such as a Pybadge. Presently it provides enough functionality to
+# support the desired background colour and the DrawImage trait.
 #
-# The code below is marked up with the following tags to indicate where further work is
-# required:
+# LIMITATION: DISPLAY
 #
-# * LIMITATION
-# * PERFORMANCE
-# * ISSUE
-# * FUTURE
+# Currently, this driver will only work on controllers with built-in displays
+# as the board.DISPLAY variable is used.
 #
-# PERFORMANCE
+# LIMITATION: HIERARCHY
 #
-# * 20 sprites gives around 29 fps on an EdgeBadge in the multi-sprite validate test with:
-#      SAMPLE_FREQUENCY = 1
-#      REPORT_FREQUENCY = 1
+# There is one notable limitation of this driver versus the Pygame zero driver
+# that it is important to be aware of and it is related to how the TileGrid
+# instances which are used to contain the graphics are constructed. When the
+# game is initialise (init() is called) we traverse the entire hierarchy (all
+# active AND inactive GameObjects) and generate the TileGrid instances. These
+# are all added to the root Group instance. Because we add them in the order
+# that we traverse the hierarchy, the implicit draw order is preserved - even
+# with the deactivated objects. We also only generate the TileGrid instances
+# we need. See the note below about why we don't minic the hierarchy structure.
 #
-# * Using transparency is expensive and removing it increases the above test to 40 fps
+# However, if the hierarchy later changes, we do not rebuild the order of the
+# TileGrid instances. New GameObjects will get added to the end of the list in
+# the order they are process. Further, if the parent and child relationships are
+# changed for existing objects, the TileGrid order is NOT changed to reflect this.
 #
-# * Doing manual refreshing seems to seriously hurt performance. It is however worth investigating
-#   further when we have a fully working driver to see if we can get smoother updates.
+# The way to work around this is straightforward.
+#  * Ensure you entire hierarchy is consistent from the start and when adding
+#    new branches to the hierarchy, do it in a way that works additively (i.e.
+#    add the entire new branch to the Game.root instance).
+#  * If you need to rework the hierarchy, call Graphics.game_object_hierarchy_changed()
+#    which will force a rebuild of the entire hierarchy. This is expensive so
+#    use it sparingly and at points that can accomodate the performance hit.
+#
+# Destroyed objects always get removed correctly. Deactivated objects get correctly
+# hidden.
+#
+# Why don't we mimic the hierarchy structure?
+# Some GameObjects can have multiple TileGrid instances and some GameObjects will
+# have none. We could in theory place a single Group instance on each GameObject
+# in the hierarchy and attach the TileGrids to those and connect up the Groups in
+# the hierarchy. Whilst a definitie potential improvement, it does come with an
+# extra memory requirement and unfortunately doesn't address all issues. This is
+# because under normal operation the draw() function only cycles over enabled
+# objects so if a mix of disabled and enabled objects are added then the draw order
+# won't be correct. therefore, the lower memory cost and faster performance option
+# was taken.
 #
 # REFERENCES
 #
@@ -33,21 +58,11 @@
 # * The display variable is a BusDisplay:
 #   See: https://docs.circuitpython.org/en/latest/shared-bindings/busdisplay/index.html#module-busdisplay
 #
-# * Experiment with visibility of the objects. Group.visible is probably what is needed here.
-#   See: https://docs.circuitpython.org/en/latest/shared-bindings/displayio/#displayio.Group
-#
-# * The Z-order of objects is not actually honoured and currently controlled by the order the
-#   GameObjects are created. We need to mimic the GameObject hierarchy in Groups/TileGrids.
-#
-# * The deinit() method needs to remove all assets as currently the validation will run out of
-#   memory as we do not seem to clear up after ourselves.
-#
 # * Investigate supporting different bitmap types:
 #   See: https://learn.adafruit.com/creating-your-first-tilemap-game-with-circuitpython/indexed-bmp-graphics
 #
-import gc
 
-# noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences,PyPackageRequirements
 import adafruit_imageload
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 import board
@@ -55,13 +70,12 @@ import board
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 from displayio import Group, Palette, Bitmap, TileGrid
 from pmpge.game import Game
-from pmpge.game_object import calculate_is_visible, GameObject
+from pmpge.game_object import GameObject, draw_hierarchy, traverse_hierarchy
 
 game: Game | None = None
 
-# LIMITATION: Using board.DISPLAY will fail if the device does not have a built-in display.
 display = board.DISPLAY
-display.refresh(target_frames_per_second=30)
+display.root_group = None
 display.brightness = 0.0  # Turn the display off until the game starts
 
 # Root group to place all items to draw.
@@ -72,16 +86,16 @@ root = Group()
 palette = Palette(1)
 palette[0] = 0x000000
 background = TileGrid(Bitmap(display.width, display.height, 1), pixel_shader=palette)
-root.append(background)  # Needs to be the first item.
-
-
-# FUTURE: If we use a tilemap at a later point, we can probably remove the need for the background layer.
 
 
 def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
+    """
+    Initialises the display by creating the desired background, building the entire
+    hierarchy of TileGrids and turning on the display.
+    """
     # FUTURE: We need to sort out scaling at some point. This can be done by setting: `root.scale = 2`
     #         See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/group#group-scale-3162091
-    global game
+    global game, root
     game = g
 
     # Set the single colour in the palette for our background to the desired background colour
@@ -90,61 +104,94 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     blue = bgc[2] & 255
     palette[0] = red << 16 | green << 8 | blue
 
+    # Here we build the entire graphics hierarchy in order to place the tileGrid
+    # instances in the correct order.
+    root = Group()
+    game_object_hierarchy_changed()
+
     # Setting up the root here stops all the graphics from showing as they are loading.
     display.root_group = root
     display.brightness = 1
-    # ISSUE: Adding this statement in stops the console being displayed briefly but negatively impacts framerate
-    # display.refresh(target_frames_per_second=30)
-
-    # ISSUE: At this point, the GameObjects will be displayed in the top left corner as they have not
-    #        been updated and their initial position is (0, 0). There is no coupling between an
-    #        ImageLoader/ImageResource and the corresponding GameObject.
 
 
 def deinit():
-    global game, root
+    """
+    Removes everything left from the root group.
+    """
+    global game
     game = None
 
-    root.remove(background)
-    del root
-    gc.collect()
-    root = Group()
-    root.append(background)  # Needs to be the first item.
+    # Remove all the items from the root group (most should
+    # have been removed via the GameObject.destroy() method.
+    display.root_group = None
+    while len(root) > 0:
+        root.pop()
 
-    # Erase all loaded images
-    images.clear()
-
-
-def do_draw(go: GameObject, visible: bool):
-    # TODO: This unfortunately intrinsically ties us to the Traits structure so we need to break that.
-    if hasattr(go, 'image'):
-        go.image.tile_grid.hidden = not visible
-
-    if visible:
-        go._draw(None)
+    clear_image_cache()
 
 
 def draw(screen):
     """
     We have to process the entire hierarchy to ensure visbility is set.
     """
-    # TODO: This is slightly painful on performance as we have to traverse all GameObjects eachdraw cycle.
-    calculate_is_visible(game.root, do_draw)
+    draw_hierarchy(game.root, screen, draw_only_visible=False)
     game.draw(screen)
 
 
-# TODO: Do something better.
-images: dict[str, tuple[Bitmap, Palette]] = {}
+# This global setting is used to force all GameObjects to re-add their displayio
+# objects back to the root Group. This is used when rebuilding the hierarchy.
+force_add_to_root = False
+
+
+def game_object_hierarchy_changed():
+    """
+    This notifies us that the game has made changes to the GameObject hierarchy. We don't
+    know what those changes are so we forcibly remove and re-add all displayio objects
+    to the root Group. This ensures that the draw order of the objects is correct.
+
+    This is an expensive operation so use sparingly.
+    """
+    global force_add_to_root
+    force_add_to_root = True
+
+    while len(root) > 0:
+        root.pop()
+
+    root.append(background)  # Needs to be the first item.
+
+    def forced_draw(go: GameObject, state):
+        go._draw(None)
+        return True, None
+
+    traverse_hierarchy(game.root, forced_draw)
+    force_add_to_root = False
+
+
+# FUTURE: Do something better for caching. We could also extract out the code in deinit().
+image_cache: dict[str, tuple[Bitmap, Palette]] = {}
+
+
+def clear_image_cache():
+    """
+    Erases all cached images.
+    """
+    for bitmap, _ in image_cache.values():
+        bitmap.deinit()
+    image_cache.clear()
 
 
 # This extraction has a massive positive impact on draw speed
 def load_image(image: str) -> tuple[Bitmap, Palette]:
-    if image in images:
-        image = images[image]
+    """
+    This will populate the image_cache with the specified image resource if it
+    does not already exist in the cache. It will then return the cached image.
+    """
+    if image in image_cache:
+        image = image_cache[image]
         return image[0], image[1]
 
     bitmap, palette = adafruit_imageload.load(f"/images/{image}", bitmap=Bitmap, palette=Palette)
-    images[image] = bitmap, palette
+    image_cache[image] = bitmap, palette
 
     # PERFORMANCE: This has a pretty harsh impact on fps, dropping EdgeBadge from 40 to 29 fps
     palette.make_transparent(0)
@@ -154,39 +201,63 @@ def load_image(image: str) -> tuple[Bitmap, Palette]:
 
 class DriverImageResource:
     """
-    Mandatory implementation specific class to load and draw an image. Does nothing.
+    Mandatory implementation specific class to load an image resource.
     """
-    width: int
-    height: int
+    offset_x: int
+    offset_y: int
     tile_grid: TileGrid
+    add_to_root: bool
 
-    def load(self, image: str):
+    # TODO: This needs to be combined with a ImageResource trait
+    def load(self, image: str) -> tuple[int, int]:
         """
         Loads the named image resource.
         """
-        if hasattr(self, 'bitmap'):
-            self.bitmap.deinint()
-
         bitmap, palette = load_image(image)
 
         # Create a TileGrid to hold the bitmap
         tile_grid = TileGrid(bitmap, pixel_shader=palette)
         tile_grid.hidden = True
-
-        # TODO: We could potentially mimic the hierarchy here as a future optimisation.
-
-        root.append(tile_grid)
+        self.add_to_root = True
 
         # Now set the properties on the containing object
-        self.width = bitmap.width
-        self.height = bitmap.height
         self.tile_grid = tile_grid
+        return bitmap.width, bitmap.height
 
-    def draw(self, surface, pos: tuple[int, int]):
+    # TODO: See if we can move the offset code out
+    def render(self, x: int, y: int, visible: bool):
         """
-        This doesn't actually draw anything, just moves it. The parameter pos represents
+        This moves and sets the visibility of the underlying tile_grid. The parameter pos represents
         the top left corner of the image so the movement is trivial.
         """
         tile_grid = self.tile_grid
-        tile_grid.x = pos[0]
-        tile_grid.y = pos[1]
+        tile_grid.hidden = not visible
+        tile_grid.x = int(x - self.offset_x)
+        tile_grid.y = int(y - self.offset_y)
+
+
+class GraphicsDrawImageTrait:
+    x: int
+    y: int
+    active: bool
+    visible: bool
+
+    image: DriverImageResource
+
+    # TODO: This needs to be combined with a DrawImage trait
+    def draw(self, surface):
+        if self.image.add_to_root or force_add_to_root:
+            root.append(self.image.tile_grid)
+            self.image.add_to_root = False
+
+        self.image.render(self.x, self.y, self.active and self.visible)
+
+    def deactivated(self):
+        self.image.tile_grid.hidden = True
+
+    def destroyed(self):
+        tile_grid = self.image.tile_grid
+        tile_grid.hidden = True
+
+        if not self.image.add_to_root:
+            root.remove(tile_grid)

@@ -9,8 +9,8 @@ import time
 from pmpge.environment import is_running_on_desktop, config
 from pmpge.game import Game
 from pmpge.sprite import Sprite
+from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import Velocity
-from pmpge.traits.sprites import SpriteImage
 
 # These are not available in CircuitPython.
 if is_running_on_desktop():
@@ -54,7 +54,7 @@ class SpriteData:
         self.image = image
 
 
-def create_sprites(game: Game, sprite_data: list[SpriteData]):
+def create_sprites(game: Game, sprite_data: list[SpriteData], add_to_root: bool = True):
     """
     Simple utility method to create a range of sprites at the root of the
     Game instance
@@ -63,9 +63,10 @@ def create_sprites(game: Game, sprite_data: list[SpriteData]):
         sprite = Sprite(
             data.x, data.y,
             Velocity(data.vx, data.vy),
-            SpriteImage(data.image))
+            DrawImage(data.image))
         data.sprite = sprite
-        game.add_child(sprite)
+        if add_to_root:
+            game.add_child(sprite)
 
 
 def add_update_method(game: Game, callable: Callable[[Game], None], fps: int = 5):
@@ -176,6 +177,7 @@ def execute(
     print(f"Achieved {draw_cycles / runtime:.2f} draws/s")
 
     # Free all memory and reset
+    game.root.destroy()
     del game
     gc.collect()
     sample_period, last_sample, reporting_period, last_report = 0, 0, 0, 0

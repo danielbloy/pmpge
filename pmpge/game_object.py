@@ -182,6 +182,9 @@ class GameObject:
         if not self._alive:
             return
 
+        # TODO: If the parent is not activated, this should error. This avoids having some activated
+        #       objects in deactivated parts of the hierarchy.
+
         do_handlers = self._active != value
 
         self._active = value
@@ -355,7 +358,10 @@ class GameObject:
 
     def _draw(self, surface: Any) -> None:
         """
-        TODO: Comment. Draws irrespective of visibility
+        This internal method will call all the draw methods irrespective of the GameObject's
+        visibility.
+
+        TODO: Test _draw()
         """
         self.draw(surface)
         for handler in self._draw_handlers:
@@ -540,54 +546,32 @@ def update_hierarchy(root: GameObject, dt: float):
     GameObject.something_destroyed = False
 
 
-def draw_hierarchy(root: GameObject, surface: Any):
+def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = True):
     """
-    Draws the GameObject (if `active` and `visible`) and propagates to children (if `active`).
+    Draws the GameObject (if `active` and `visible` - see below) and propagates to children
+    (if `active`). The parameter `draw_only_visible` is used to control what gets drawn. By
+    default, only `visible` items get drawn but setting draw_only_visible to False will also
+    draw items that are invisible (though they still need to be `active`). Why this functionality?
+    this is because some drivers don't actually draw anything but rather set properties on
+    graphics objects so need to be able to do that with the entire hierarchy.
+
     The surface is passed down through all objects but does not need to be a Pygame surface.
     This doesn't use traverse_hierarchy() as it is slower.
+
+
+    # TODO: test draw_only_visible
     """
+    draw_everything = not draw_only_visible
 
     def process(go: GameObject):
         if not go.active:
             return
 
-        if go.visible:
+        if draw_everything or go.visible:
             go._draw(surface)
 
         for child in go._children:
             process(child)
-
-    process(root)
-
-
-def prune_hierarchy(root: GameObject, only_active: bool = True, children_first: bool = False):
-    """
-    Removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
-
-    * only_active - will only prune if this node is active, irrespective of children_frist.
-    * children_first - prunes from the leaf nodes first and works up.
-
-    # TODO: Test
-    """
-
-    def process(go: GameObject):
-        if only_active and not go.active:
-            return
-
-        if children_first:
-            for child in go._children:
-                process(child)
-
-        # Remove any destroyed children.
-        children = go._children
-        for child in children:
-            if not child._alive:
-                child._parent = None
-                children.remove(child)
-
-        if not children_first:
-            for child in go._children:
-                process(child)
 
     process(root)
 
@@ -614,54 +598,3 @@ def traverse_hierarchy(
                 process(child, new_state)
 
     process(root, initial_state)
-
-
-def calculate_is_active(root: GameObject, callback: Callable[[GameObject, bool], None]):
-    """
-    Traverses the entire hierarchy from root, calculating whether each instance is
-    active or not. The callback is invoked for each node in the hierarchy.
-
-    TODO: Test
-    """
-
-    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
-        is_active = state and go.active
-        callback(go, is_active)
-
-        return True, is_active
-
-    traverse_hierarchy(root, process, True)
-
-
-def calculate_is_enabled(root: GameObject, callback: Callable[[GameObject, bool], None]):
-    """
-    Traverses the entire hierarchy from root, calculating whether each instance is
-    enabled or not. The callback is invoked for each node in the hierarchy.
-
-    TODO: Test
-    """
-
-    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
-        is_active = state and go.active
-        callback(go, is_active and go.enabled)
-
-        return True, is_active
-
-    traverse_hierarchy(root, process, True)
-
-
-def calculate_is_visible(root: GameObject, callback: Callable[[GameObject, bool], None]):
-    """
-    Traverses the entire hierarchy from root, calculating whether each instance is
-    visible or not. The callback is invoked for each node in the hierarchy.
-
-    TODO: Test
-    """
-
-    def process(go: GameObject, state: Any) -> tuple[bool, Any]:
-        is_active = state and go.active
-        callback(go, is_active and go.visible)
-
-        return True, is_active
-
-    traverse_hierarchy(root, process, True)

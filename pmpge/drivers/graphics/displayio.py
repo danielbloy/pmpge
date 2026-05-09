@@ -201,17 +201,15 @@ def load_image(image: str) -> tuple[Bitmap, Palette]:
 
 class DriverImageResource:
     """
-    Mandatory implementation specific class to load an image resource.
+    Implementation specific class to load an image resource. The only mandatory
+    method is load(). This class is designed to be combined with `ImageResource`.
     """
-    offset_x: int
-    offset_y: int
     tile_grid: TileGrid
     add_to_root: bool
 
-    # TODO: This needs to be combined with a ImageResource trait
     def load(self, image: str) -> tuple[int, int]:
         """
-        Loads the named image resource.
+        Loads the named image resource, returning the width and height.
         """
         bitmap, palette = load_image(image)
 
@@ -223,17 +221,6 @@ class DriverImageResource:
         # Now set the properties on the containing object
         self.tile_grid = tile_grid
         return bitmap.width, bitmap.height
-
-    # TODO: See if we can move the offset code out
-    def render(self, x: int, y: int, visible: bool):
-        """
-        This moves and sets the visibility of the underlying tile_grid. The parameter pos represents
-        the top left corner of the image so the movement is trivial.
-        """
-        tile_grid = self.tile_grid
-        tile_grid.hidden = not visible
-        tile_grid.x = int(x - self.offset_x)
-        tile_grid.y = int(y - self.offset_y)
 
 
 class GraphicsDrawImageTrait:
@@ -250,7 +237,10 @@ class GraphicsDrawImageTrait:
             root.append(self.image.tile_grid)
             self.image.add_to_root = False
 
-        self.image.render(self.x, self.y, self.active and self.visible)
+        tile_grid = self.image.tile_grid
+        tile_grid.hidden = self.active and self.visible
+        tile_grid.x = int(self.x)
+        tile_grid.y = int(self.y)
 
     def deactivated(self):
         self.image.tile_grid.hidden = True

@@ -82,24 +82,18 @@ def game_object_hierarchy_changed():
 
 class DriverImageResource:
     """
-    Implementation specific class to load an image resource.
+    Implementation specific class to load an image resource. The only mandatory
+    method is load(). This class is designed to be combined with `ImageResource`.
     """
-    offset_x: int
-    offset_y: int
     surface: Surface
 
-    # TODO: This needs to be combined with a ImageResource trait
     def load(self, image: str) -> tuple[int, int]:
         """
-        Loads the named image resource.
+        Loads the named image resource, returning the width and height.
         """
         surface = images.load(image)
         self.surface = surface
         return self.surface.get_width(), self.surface.get_height()
-
-    # TODO: See if we can move the offset code out
-    def render(self, surface: Surface, x: int, y: int) -> None:
-        surface.blit(self.surface, (x - self.offset_x, y - self.offset_y))
 
 
 class GraphicsDrawImageTrait:
@@ -113,4 +107,4 @@ class GraphicsDrawImageTrait:
         """
         Draws the image at the specified position, centered by default.
         """
-        self.image.render(surface, self.x, self.y)
+        surface.blit(self.image.surface, (self.x, self.y))

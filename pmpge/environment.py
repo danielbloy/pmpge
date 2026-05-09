@@ -4,6 +4,7 @@
 #
 # THIS FILE SHOULD NOT IMPORT ANY OTHER FILE IN THE FRAMEWORK OTHER THAN DRIVERS
 #
+import gc
 import sys
 
 ################################################################################
@@ -330,6 +331,7 @@ def execute(game, background_colour: tuple[int, int, int] = None):
         sound.deinit() if hasattr(sound, 'deinit') else None
         controller.deinit() if hasattr(controller, 'deinit') else None
         device.deinit() if hasattr(device, 'deinit') else None
+        gc.collect()
 
 
 ################################################################################

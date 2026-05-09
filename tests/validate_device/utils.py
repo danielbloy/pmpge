@@ -177,6 +177,7 @@ def execute(
     print(f"Achieved {draw_cycles / runtime:.2f} draws/s")
 
     # Free all memory and reset
+    game.root.destroy()
     del game
     gc.collect()
     sample_period, last_sample, reporting_period, last_report = 0, 0, 0, 0

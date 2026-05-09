@@ -61,7 +61,6 @@
 # * Investigate supporting different bitmap types:
 #   See: https://learn.adafruit.com/creating-your-first-tilemap-game-with-circuitpython/indexed-bmp-graphics
 #
-from gc import collect as gc_collect
 
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 import adafruit_imageload
@@ -117,18 +116,15 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
 
 def deinit():
     """
-
+    TODO: Notes
     """
     global game, root
     game = None
 
     display.root_group = None
     root.remove(background)
-    del root
 
-    gc_collect()
-
-    # Erase all loaded images
+    # Erase all cached images
     # TODO: see if doing bitmap.deinit() here saves RAM.
     images.clear()
 
@@ -250,5 +246,3 @@ class GraphicsDrawImageTrait:
 
         if not self.image.add_to_root:
             root.remove(tile_grid)
-
-        del tile_grid

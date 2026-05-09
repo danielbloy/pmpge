@@ -201,63 +201,66 @@ def load_image(image: str) -> tuple[Bitmap, Palette]:
 
 class DriverImageResource:
     """
-    Mandatory implementation specific class to load an image resource.
+    Implementation specific class to load an image resource. The only mandatory
+    method is load(). This class is designed to be combined with `ImageResource`.
     """
-    offset_x: int
-    offset_y: int
     tile_grid: TileGrid
-    add_to_root: bool
+    new_image_loaded: bool  # Set to True when load is called.
 
-    # TODO: This needs to be combined with a ImageResource trait
     def load(self, image: str) -> tuple[int, int]:
         """
-        Loads the named image resource.
+        Loads the named image resource, returning the width and height.
         """
         bitmap, palette = load_image(image)
 
         # Create a TileGrid to hold the bitmap
         tile_grid = TileGrid(bitmap, pixel_shader=palette)
         tile_grid.hidden = True
-        self.add_to_root = True
+        self.new_image_loaded = True
 
         # Now set the properties on the containing object
         self.tile_grid = tile_grid
         return bitmap.width, bitmap.height
 
-    # TODO: See if we can move the offset code out
-    def render(self, x: int, y: int, visible: bool):
-        """
-        This moves and sets the visibility of the underlying tile_grid. The parameter pos represents
-        the top left corner of the image so the movement is trivial.
-        """
-        tile_grid = self.tile_grid
-        tile_grid.hidden = not visible
-        tile_grid.x = int(x - self.offset_x)
-        tile_grid.y = int(y - self.offset_y)
-
 
 class GraphicsDrawImageTrait:
+    """
+    This class is designed to be combined with a `DrawImage` trait.
+    """
     x: int
     y: int
-    active: bool
-    visible: bool
+    _active: bool  # From GameObject
+    visible: bool  # From GameObject
 
     image: DriverImageResource
 
-    # TODO: This needs to be combined with a DrawImage trait
     def draw(self, surface):
-        if self.image.add_to_root or force_add_to_root:
-            root.append(self.image.tile_grid)
-            self.image.add_to_root = False
+        """
+        Draws the image at the specified position, offset from the GameObjects position.
+        """
+        image = self.image
+        if image.new_image_loaded or force_add_to_root:
+            root.append(image.tile_grid)
+            image.new_image_loaded = False
 
-        self.image.render(self.x, self.y, self.active and self.visible)
+        tile_grid = image.tile_grid
+        tile_grid.hidden = not (self._active and self.visible)
+        tile_grid.x = int(self.x - image.offset_x)
+        tile_grid.y = int(self.y - image.offset_y)
 
     def deactivated(self):
+        """
+        We just set `hidden` on the TileGrid to stop it being displayed.
+        """
         self.image.tile_grid.hidden = True
 
     def destroyed(self):
+        """
+        We hide the TileGrid and then remove it from the root.
+        """
         tile_grid = self.image.tile_grid
         tile_grid.hidden = True
 
-        if not self.image.add_to_root:
+        # Only remove from root if it has previously been attached.
+        if not self.image.new_image_loaded:
             root.remove(tile_grid)

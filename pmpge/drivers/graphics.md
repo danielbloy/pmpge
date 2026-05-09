@@ -63,4 +63,15 @@ A graphics driver must implement the following mandatory classes:
 
 ### `DriverImageResource`
 
+Requires the implementation of a single method: `def load(self, image: str) -> tuple[int, int]:`
+which performs the driver specific loading of the named image resource. The returned tuple
+contains the image width and height. This class is for combining with the `ImageResource`
+class in the graphics library.
+
+NOTE: Instances of `DriverImageResource` are not intended to be sharable across `GameObject`
+instances as they may contain `GameObject` specific state.
+
 ### `GraphicsDrawImageTrait`
+
+Requires the implementation of the `draw()` method to provide the drawing part of `DrawImage`.
+There is no other dependency between the two classes.

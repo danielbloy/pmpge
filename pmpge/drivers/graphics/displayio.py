@@ -128,7 +128,8 @@ def deinit():
         root.pop()
 
     # Erase all cached images
-    # TODO: see if doing bitmap.deinit() here saves RAM.
+    for bitmap, _ in images.values():
+        bitmap.deinit()
     images.clear()
 
 

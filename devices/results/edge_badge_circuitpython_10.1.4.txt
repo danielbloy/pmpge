@@ -15,54 +15,63 @@ No controller driver.
 Running on circuit with (160, 128) screen and 0 button controller.
 Executing module <module 'tests.validate_device.validate_e_graphics_single_sprite' from 'tests/validate_device/validate_e_graphics_single_sprite.py'>
 No sound driver.
-Peak: 50688 bytes, Used: 50688 bytes, Free: 94720 bytes, Total: 145408 bytes
-Peak: 59232 bytes, Used: 54800 bytes, Free: 90608 bytes, Total: 145408 bytes
-Peak: 59776 bytes, Used: 50688 bytes, Free: 94720 bytes, Total: 145408 bytes
-Peak: 63152 bytes, Used: 55040 bytes, Free: 90368 bytes, Total: 145408 bytes
-Peak: 63152 bytes, Used: 59392 bytes, Free: 86016 bytes, Total: 145408 bytes
-Peak: 63152 bytes, Used: 50624 bytes, Free: 94784 bytes, Total: 145408 bytes
-Peak: 63152 bytes, Used: 59392 bytes, Free: 86016 bytes, Total: 145408 bytes
-Peak: 63152 bytes, Used: 50624 bytes, Free: 94784 bytes, Total: 145408 bytes
-Peak: 63360 bytes, Used: 54768 bytes, Free: 90640 bytes, Total: 145408 bytes
-Achieved 641.50 updates/s
-Achieved 641.50 draws/s
-Peak: 63360 bytes, Used: 50080 bytes, Free: 95328 bytes, Total: 145408 bytes
+Peak: 50544 bytes, Used: 50544 bytes, Free: 94864 bytes, Total: 145408 bytes
+Peak: 61456 bytes, Used: 55008 bytes, Free: 90400 bytes, Total: 145408 bytes
+Peak: 61456 bytes, Used: 50384 bytes, Free: 95024 bytes, Total: 145408 bytes
+Peak: 63392 bytes, Used: 54928 bytes, Free: 90480 bytes, Total: 145408 bytes
+Peak: 63392 bytes, Used: 50576 bytes, Free: 94832 bytes, Total: 145408 bytes
+Peak: 63392 bytes, Used: 55104 bytes, Free: 90304 bytes, Total: 145408 bytes
+Peak: 63392 bytes, Used: 50480 bytes, Free: 94928 bytes, Total: 145408 bytes
+Peak: 63392 bytes, Used: 55008 bytes, Free: 90400 bytes, Total: 145408 bytes
+Achieved 651.00 updates/s
+Achieved 651.00 draws/s
+Peak: 63392 bytes, Used: 47888 bytes, Free: 97520 bytes, Total: 145408 bytes
 Executing module <module 'tests.validate_device.validate_e_graphics_multiple_sprites' from 'tests/validate_device/validate_e_graphics_multiple_sprites.py'>
-Peak: 104048 bytes, Used: 104048 bytes, Free: 42384 bytes, Total: 146432 bytes
-Peak: 105088 bytes, Used: 105088 bytes, Free: 41344 bytes, Total: 146432 bytes
-Peak: 106400 bytes, Used: 106400 bytes, Free: 40032 bytes, Total: 146432 bytes
-Peak: 107712 bytes, Used: 107712 bytes, Free: 38720 bytes, Total: 146432 bytes
-Peak: 109568 bytes, Used: 109568 bytes, Free: 36864 bytes, Total: 146432 bytes
-Peak: 111152 bytes, Used: 111152 bytes, Free: 35280 bytes, Total: 146432 bytes
-Peak: 113008 bytes, Used: 113008 bytes, Free: 33424 bytes, Total: 146432 bytes
-Peak: 114592 bytes, Used: 114592 bytes, Free: 31840 bytes, Total: 146432 bytes
+Peak: 89504 bytes, Used: 89504 bytes, Free: 56928 bytes, Total: 146432 bytes
+Peak: 90544 bytes, Used: 90544 bytes, Free: 55888 bytes, Total: 146432 bytes
+Peak: 92128 bytes, Used: 92128 bytes, Free: 54304 bytes, Total: 146432 bytes
+Peak: 93712 bytes, Used: 93712 bytes, Free: 52720 bytes, Total: 146432 bytes
+Peak: 95024 bytes, Used: 95024 bytes, Free: 51408 bytes, Total: 146432 bytes
+Peak: 96608 bytes, Used: 96608 bytes, Free: 49824 bytes, Total: 146432 bytes
+Peak: 98464 bytes, Used: 98464 bytes, Free: 47968 bytes, Total: 146432 bytes
+Peak: 100048 bytes, Used: 100048 bytes, Free: 46384 bytes, Total: 146432 bytes
 Achieved 17.50 updates/s
 Achieved 17.50 draws/s
-Peak: 115088 bytes, Used: 81552 bytes, Free: 64880 bytes, Total: 146432 bytes
+Peak: 100544 bytes, Used: 61504 bytes, Free: 84928 bytes, Total: 146432 bytes
 Executing module <module 'tests.validate_device.validate_e_graphics_sprite_movement' from 'tests/validate_device/validate_e_graphics_sprite_movement.py'>
-Peak: 135008 bytes, Used: 135008 bytes, Free: 11016 bytes, Total: 146024 bytes
-Peak: 136864 bytes, Used: 136864 bytes, Free: 9160 bytes, Total: 146024 bytes
-Peak: 139536 bytes, Used: 139536 bytes, Free: 6488 bytes, Total: 146024 bytes
-Peak: 141936 bytes, Used: 141936 bytes, Free: 4088 bytes, Total: 146024 bytes
-Peak: 145152 bytes, Used: 145152 bytes, Free: 872 bytes, Total: 146024 bytes
-Peak: 145152 bytes, Used: 107344 bytes, Free: 38680 bytes, Total: 146024 bytes
-Peak: 145152 bytes, Used: 110560 bytes, Free: 35464 bytes, Total: 146024 bytes
-Peak: 145152 bytes, Used: 113776 bytes, Free: 32248 bytes, Total: 146024 bytes
-Achieved 36.50 updates/s
-Achieved 36.50 draws/s
-Peak: 145152 bytes, Used: 104144 bytes, Free: 41880 bytes, Total: 146024 bytes
+Peak: 93024 bytes, Used: 93024 bytes, Free: 53408 bytes, Total: 146432 bytes
+Peak: 95152 bytes, Used: 95152 bytes, Free: 51280 bytes, Total: 146432 bytes
+Peak: 98096 bytes, Used: 98096 bytes, Free: 48336 bytes, Total: 146432 bytes
+Peak: 101040 bytes, Used: 101040 bytes, Free: 45392 bytes, Total: 146432 bytes
+Peak: 104528 bytes, Used: 104528 bytes, Free: 41904 bytes, Total: 146432 bytes
+Peak: 108016 bytes, Used: 108016 bytes, Free: 38416 bytes, Total: 146432 bytes
+Peak: 111504 bytes, Used: 111504 bytes, Free: 34928 bytes, Total: 146432 bytes
+Peak: 114992 bytes, Used: 114992 bytes, Free: 31440 bytes, Total: 146432 bytes
+Achieved 41.00 updates/s
+Achieved 41.00 draws/s
+Peak: 116848 bytes, Used: 67712 bytes, Free: 78720 bytes, Total: 146432 bytes
 Executing module <module 'tests.validate_device.validate_e_graphics_sprite_hierarchy' from 'tests/validate_device/validate_e_graphics_sprite_hierarchy.py'>
-Peak: 131888 bytes, Used: 131888 bytes, Free: 14136 bytes, Total: 146024 bytes
-Peak: 133200 bytes, Used: 133200 bytes, Free: 12824 bytes, Total: 146024 bytes
-Peak: 134784 bytes, Used: 134784 bytes, Free: 11240 bytes, Total: 146024 bytes
-Peak: 136368 bytes, Used: 136368 bytes, Free: 9656 bytes, Total: 146024 bytes
-Peak: 137952 bytes, Used: 137952 bytes, Free: 8072 bytes, Total: 146024 bytes
-Peak: 139536 bytes, Used: 139536 bytes, Free: 6488 bytes, Total: 146024 bytes
-Peak: 141120 bytes, Used: 141120 bytes, Free: 4904 bytes, Total: 146024 bytes
-Peak: 142704 bytes, Used: 142704 bytes, Free: 3320 bytes, Total: 146024 bytes
-Achieved 17.50 updates/s
-Achieved 17.50 draws/s
-Peak: 142704 bytes, Used: 127296 bytes, Free: 18728 bytes, Total: 146024 bytes
+Peak: 120240 bytes, Used: 120240 bytes, Free: 26192 bytes, Total: 146432 bytes
+Peak: 121824 bytes, Used: 121824 bytes, Free: 24608 bytes, Total: 146432 bytes
+Peak: 123408 bytes, Used: 123408 bytes, Free: 23024 bytes, Total: 146432 bytes
+Peak: 124992 bytes, Used: 124992 bytes, Free: 21440 bytes, Total: 146432 bytes
+Peak: 126848 bytes, Used: 126848 bytes, Free: 19584 bytes, Total: 146432 bytes
+Peak: 126848 bytes, Used: 93088 bytes, Free: 53344 bytes, Total: 146432 bytes
+Peak: 126848 bytes, Used: 95216 bytes, Free: 51216 bytes, Total: 146432 bytes
+Peak: 126848 bytes, Used: 96800 bytes, Free: 49632 bytes, Total: 146432 bytes
+Achieved 19.00 updates/s
+Achieved 19.00 draws/s
+Peak: 126848 bytes, Used: 80624 bytes, Free: 65808 bytes, Total: 146432 bytes
 Executing module <module 'tests.validate_device.validate_e_graphics_sprite_visibility' from 'tests/validate_device/validate_e_graphics_sprite_visibility.py'>
-Memory Error
+Peak: 120144 bytes, Used: 120144 bytes, Free: 26288 bytes, Total: 146432 bytes
+Peak: 121728 bytes, Used: 121728 bytes, Free: 24704 bytes, Total: 146432 bytes
+Peak: 124128 bytes, Used: 124128 bytes, Free: 22304 bytes, Total: 146432 bytes
+Peak: 126800 bytes, Used: 126800 bytes, Free: 19632 bytes, Total: 146432 bytes
+Peak: 126800 bytes, Used: 93312 bytes, Free: 53120 bytes, Total: 146432 bytes
+Peak: 126800 bytes, Used: 95984 bytes, Free: 50448 bytes, Total: 146432 bytes
+Peak: 126800 bytes, Used: 98656 bytes, Free: 47776 bytes, Total: 146432 bytes
+Peak: 126800 bytes, Used: 101056 bytes, Free: 45376 bytes, Total: 146432 bytes
+Achieved 28.00 updates/s
+Achieved 28.00 draws/s
+Peak: 126800 bytes, Used: 88752 bytes, Free: 57680 bytes, Total: 146432 bytes
 >>>

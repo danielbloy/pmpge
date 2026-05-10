@@ -95,6 +95,9 @@ palette[0] = 0x000000
 background = TileGrid(Bitmap(display.width, display.height, 1), pixel_shader=palette)
 background_group.append(background)
 
+border_palette = Palette(1)
+border_palette[0] = 0x000000
+
 
 def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     """
@@ -120,9 +123,28 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     # instances in the correct order.
     game_object_hierarchy_changed()
 
-    object_group.scale = calculate_scaling_factor(display.width, display.height, g.width, g.height)
+    scaling_factor = calculate_scaling_factor(display.width, display.height, g.width, g.height)
+    object_group.scale = scaling_factor
 
-    # TODO: Borders
+    # Now generate the borders to crop the screen to the desired game area. This currently
+    # just puts the borders at the bottom of the screen and on the right of the screen.
+    # FUTURE: Spread the borders more evenly.
+    # TODO: The code to generate the borders could be extract out returning a list of tuples
+    #       containing: width, height, x, y
+    game_area_width = g.width * scaling_factor
+    game_area_height = g.height * scaling_factor
+    border_width = display.width - game_area_width
+    border_height = display.height - game_area_height
+
+    if border_height > 0:
+        bottom_border = TileGrid(Bitmap(display.width, border_height, 1), pixel_shader=border_palette)
+        bottom_border.y = game_area_height
+        border_group.append(bottom_border)
+
+    if border_width > 0:
+        right_border = TileGrid(Bitmap(border_width, display.height, 1), pixel_shader=border_palette)
+        right_border.x = game_area_width
+        border_group.append(right_border)
 
     display.root_group = root
     display.brightness = 1
@@ -141,7 +163,10 @@ def deinit():
     while len(object_group) > 0:
         object_group.pop()
 
-    # TODO: Remove borders
+    # Now remove the borders.
+    while len(border_group) > 0:
+        border = border_group.pop()
+        border.bitmap.deinit()
 
     clear_image_cache()
 

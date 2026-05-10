@@ -236,7 +236,16 @@ def calculate_scaling_factor(screen_width: int, screen_height: int, game_width: 
     """
     TODO: Comments
     """
-    return 2
+    if hasattr(config, 'GRAPHICS_SCALING'):
+        return config.GRAPHICS_SCALING
+
+    if game_width >= screen_width or game_height >= screen_height:
+        return 1
+
+    sx = screen_width // game_width
+    sy = screen_height // game_height
+
+    return min(sx, sy)
 
 
 # TODO: Implement where is smooths over quarter seconds, always a quarter second behind.

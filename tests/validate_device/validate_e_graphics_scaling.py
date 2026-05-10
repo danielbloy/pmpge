@@ -18,6 +18,9 @@ sprite_data: list[utils.SpriteData] = [
 index = 0
 count = len(sprite_data)
 
+SCREEN_WIDTH = 80  # Required for validate_all.py
+SCREEN_HEIGHT = 64  # Required for validate_all.py
+
 
 def switch_visibility(game: Game):
     global index
@@ -33,4 +36,4 @@ def setup(game: Game):
 
 
 if utils.should_execute(__name__):
-    utils.execute(setup, screen_width=80, screen_height=60)
+    utils.execute(setup, screen_width=SCREEN_WIDTH, screen_height=SCREEN_HEIGHT)

@@ -22,9 +22,19 @@ def execute():
                 from types import ModuleType
                 from pgzero.game import PGZeroGame
                 PGZeroGame(module).reinit_screen()
+
             print("Executing module {}".format(module))
-            utils.execute(module.setup)
+
+            # This allows the validate script to override the default screen size.
+            screen_width, screen_height = 160, 120
+            if hasattr(module, "SCREEN_WIDTH"):
+                screen_width = module.SCREEN_WIDTH
+            if hasattr(module, "SCREEN_HEIGHT"):
+                screen_height = module.SCREEN_HEIGHT
+
+            utils.execute(module.setup, screen_width=screen_width, screen_height=screen_height)
             del module
+
         except MemoryError:
             print("Memory Error")
 

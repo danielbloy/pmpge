@@ -69,6 +69,7 @@ import board
 
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 from displayio import Group, Palette, Bitmap, TileGrid
+from pmpge.environment import calculate_scaling_factor
 from pmpge.game import Game
 from pmpge.game_object import GameObject, draw_hierarchy, traverse_hierarchy
 
@@ -103,9 +104,7 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     # FUTURE: When the game is smaller than the display and we don't scale, we need to add a border.
     #         The most common is 160 x 120 on a 160 x 128 display.
 
-    # FUTURE: We need to sort out scaling at some point. This can be done by setting: `root.scale = 2`
-    #         See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/group#group-scale-3162091
-    global game, root
+    global game
     game = g
 
     # FUTURE: If the background colour is black we could probably avoid the background object
@@ -120,6 +119,10 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     # Here we build the entire graphics hierarchy in order to place the tileGrid
     # instances in the correct order.
     game_object_hierarchy_changed()
+
+    object_group.scale = calculate_scaling_factor(display.width, display.height, g.width, g.height)
+
+    # TODO: Borders
 
     display.root_group = root
     display.brightness = 1
@@ -137,6 +140,8 @@ def deinit():
     display.root_group = None
     while len(object_group) > 0:
         object_group.pop()
+
+    # TODO: Remove borders
 
     clear_image_cache()
 

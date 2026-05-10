@@ -353,3 +353,5 @@ def test_config_is_loaded() -> None:
                 environment.config.TEST_STRING == "Hello world!")
 
 # TODO: Test (as much as reasonably possible) the added code to environment.py for CircuitPython.
+# TODO: Add tests for calculate_scaling_factor
+# TODO: Add tests for calculate_fps

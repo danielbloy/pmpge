@@ -7,7 +7,7 @@ from typing import Any
 import pytest
 
 from pmpge.game_object import GameObject, draw_hierarchy, traverse_hierarchy, update_hierarchy
-from tests.pmpge.test_utilities import Hierarchy
+from tests.pmpge.testing_utilities import Hierarchy
 
 
 def parent_one_child():
@@ -322,30 +322,6 @@ def test_activated_deactivated_propagated_through_disabled_objects():
     hierarchy.validate_called_order(["deactivate", "activate"])
 
 
-def test_activated_deactivated_propagated_through_inactive_objects():
-    """
-    Ensures activated() and deactivated() are propagated through disabled objects.
-    """
-    hierarchy = parent_two_children_one_grandchild()
-    hierarchy.find(
-        'child-1').go.active = False  # This will disable grandchild-5 and 6 so we re-enable one
-    hierarchy.find('grandchild').go.active = True
-
-    hierarchy.reset()
-    hierarchy.parent.go.active = False
-    hierarchy.validate_properties(active=False)
-
-    parent = hierarchy.parent
-    child1 = hierarchy.find('child-1')
-    child2 = hierarchy.find('child-2')
-    grandchild = hierarchy.find('grandchild')
-
-    parent.handlers.validate(deactivate=parent.go, deactivate_count=1)
-    child1.handlers.validate()  # No deactivate event for child1 but should pass through
-    grandchild.handlers.validate(deactivate=grandchild.go, deactivate_count=1)
-    child2.handlers.validate(deactivate=child2.go, deactivate_count=1)
-
-
 def test_enabled_disabled_does_not_propagate():
     """
     Ensures enabled and disabled does not propagate to children.
@@ -416,11 +392,6 @@ def test_draw_does_nothing_when_inactive():
     def test_func(hierarchy: Hierarchy):
         # Deactivate the parent (this deactivates the entire hierarchy)
         hierarchy.parent.go.active = False
-        # Reactivate all grandchildren and first child
-        if len(hierarchy.children) > 0:
-            hierarchy.children[0].go.active = True
-        for grandchild in hierarchy.grandchildren:
-            grandchild.go.active = True
         hierarchy.reset()
 
         draw_hierarchy(hierarchy.parent.go, "surface")
@@ -430,10 +401,13 @@ def test_draw_does_nothing_when_inactive():
         test_func(h)
 
 
-def test_draw_does_nothing_when_invisible():
+def test_draw_when_invisible():
     """
-    Ensures draw_hierarchy() does nothing on invisible objects. The visible property only
-    applies to the object itself so the update still propagates
+    Ensures draw_hierarchy() does nothing on invisible objects by default
+    but can be forced to process invisible objects.
+
+    The visible property only applies to the object itself so the update
+    still propagates.
     """
 
     def test_func(hierarchy: Hierarchy):
@@ -447,6 +421,11 @@ def test_draw_does_nothing_when_invisible():
 
         draw_hierarchy(hierarchy.parent.go, "surface")
         hierarchy.validate_called_order(["draw"], exclude=invisible)
+
+        # Now force everything to get drawn.
+        hierarchy.reset()
+        draw_hierarchy(hierarchy.parent.go, "surface", draw_only_visible=False)
+        hierarchy.validate_called_order(["draw"])
 
     for h in all_hierarchies():
         test_func(h)
@@ -503,11 +482,6 @@ def test_update_does_nothing_when_inactive():
     def test_func(hierarchy: Hierarchy):
         # Deactivate the parent (this deactivates the entire hierarchy)
         hierarchy.parent.go.active = False
-        # Reactivate all grandchildren and first child
-        if len(hierarchy.children) > 0:
-            hierarchy.children[0].go.active = True
-        for grandchild in hierarchy.grandchildren:
-            grandchild.go.active = True
         hierarchy.reset()
 
         update_hierarchy(hierarchy.parent.go, 0.1)
@@ -635,13 +609,18 @@ def test_remove_child():
     assert child3.parent == parent
 
     # Remove a second time, this should not error.
+    parent.remove_child(child2)
+    assert len(parent.children) == 2
+    assert child1.parent == parent
+    assert child2.parent is None
+    assert child3.parent == parent
+
+    # Remove a second child
     parent.remove_child(child1)
     assert len(parent.children) == 1
     assert child1.parent is None
     assert child2.parent is None
     assert child3.parent == parent
-
-    # TODO: Remove a second child
 
 
 def test_remove_child_from_another_parent():

@@ -3,7 +3,7 @@ This suite of tests validates that the main overridable placeholder methods are
 called at the expected points.
 """
 from pmpge.game_object import draw_hierarchy, update_hierarchy
-from tests.pmpge.test_utilities import GameObjectSubclass
+from tests.pmpge.testing_utilities import GameObjectSubclass
 
 
 def test_activated_in_constructor():

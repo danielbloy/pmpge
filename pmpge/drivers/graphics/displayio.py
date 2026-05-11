@@ -69,9 +69,9 @@ import board
 
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 from displayio import Group, Palette, Bitmap, TileGrid
-from pmpge.environment import calculate_scaling_factor
 from pmpge.game import Game
 from pmpge.game_object import GameObject, draw_hierarchy, traverse_hierarchy
+from pmpge.utilities import calculate_scaling_factor
 
 display = board.DISPLAY
 display.root_group = None
@@ -137,12 +137,14 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     border_height = display.height - game_area_height
 
     if border_height > 0:
-        bottom_border = TileGrid(Bitmap(display.width, border_height, 1), pixel_shader=border_palette)
+        bottom_border = TileGrid(Bitmap(display.width, border_height, 1),
+                                 pixel_shader=border_palette)
         bottom_border.y = game_area_height
         border_group.append(bottom_border)
 
     if border_width > 0:
-        right_border = TileGrid(Bitmap(border_width, display.height, 1), pixel_shader=border_palette)
+        right_border = TileGrid(Bitmap(border_width, display.height, 1),
+                                pixel_shader=border_palette)
         right_border.x = game_area_width
         border_group.append(right_border)
 

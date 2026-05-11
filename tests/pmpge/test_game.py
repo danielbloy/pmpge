@@ -2,7 +2,7 @@ import pytest
 
 from pmpge.game import Game
 from pmpge.game_object import GameObject
-from tests.pmpge.test_utilities import with_config_file
+from tests.pmpge.testing_utilities import with_config_file
 
 
 def test_empty_constructor():

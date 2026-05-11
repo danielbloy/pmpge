@@ -5,7 +5,7 @@ from pmpge.game import Game
 from pmpge.game_object import GameObject, update_hierarchy
 from pmpge.traits.graphics import DrawImage
 from pmpge.traits.position import Position
-from tests.pmpge.test_utilities import setup_pgzero
+from tests.pmpge.testing_utilities import setup_pgzero
 
 
 # noinspection PyUnresolvedReferences

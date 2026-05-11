@@ -12,7 +12,7 @@ import pytest
 
 import pmpge.environment as environment
 from pmpge.game import Game
-from tests.pmpge.test_utilities import with_config_file
+from tests.pmpge.testing_utilities import with_config_file
 
 
 def with_forced_system(dist: str, test: Callable, expect_error: bool = False):
@@ -353,5 +353,3 @@ def test_config_is_loaded() -> None:
                 environment.config.TEST_STRING == "Hello world!")
 
 # TODO: Test (as much as reasonably possible) the added code to environment.py for CircuitPython.
-# TODO: Add tests for calculate_scaling_factor
-# TODO: Add tests for calculate_fps

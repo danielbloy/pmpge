@@ -1,8 +1,8 @@
 from pmpge.sprite import Sprite
 from pmpge.traits.graphics import DrawImage
 from tests.pmpge.game_object.test_constructors import validate_properties
-from tests.pmpge.test_utilities import Handlers
-from tests.pmpge.test_utilities import setup_pgzero
+from tests.pmpge.testing_utilities import Handlers
+from tests.pmpge.testing_utilities import setup_pgzero
 
 
 def test_sprite_constructor():

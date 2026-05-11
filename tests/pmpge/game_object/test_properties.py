@@ -2,8 +2,10 @@
 This suite of tests validates the GameObject properties. the tests are all relatively
 simple and cover the basic functionality of the properties.
 """
+import pytest
+
 from pmpge.game_object import GameObject
-from tests.pmpge.test_utilities import Handlers
+from tests.pmpge.testing_utilities import Handlers
 
 
 def test_name_property():
@@ -62,6 +64,24 @@ def test_active_property():
     go.active = True
     assert go.active is True
     handlers.validate(activate=go, activate_count=1)
+
+
+def test_cannot_active_child_when_parent_is_deactivated():
+    """
+    It should be an invariant that a child cannot be activated if their
+    parent is deactivated as it does not sense to allow this.
+    """
+    # Test at construction
+    parent = GameObject(active=False)
+    with pytest.raises(ValueError):
+        child = GameObject(active=True, parent=parent)
+
+    # Test when added
+    parent = GameObject()
+    child = GameObject(parent=parent)
+    parent.active = False
+    with pytest.raises(ValueError):
+        child.active = True
 
 
 def test_reset():

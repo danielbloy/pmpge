@@ -6,7 +6,7 @@ relevant test files.
 from pmpge.game_object import GameObject, draw_hierarchy, update_hierarchy
 from pmpge.traits.position import Position
 from tests.pmpge.game_object.test_parent_and_child import parent_three_children
-from tests.pmpge.test_utilities import Handlers
+from tests.pmpge.testing_utilities import Handlers
 
 
 def test_activate_deactivate_does_nothing_on_destroyed_object():
@@ -39,6 +39,10 @@ def test_draw_does_nothing_on_destroyed_object():
     draw_hierarchy(go, "surface")
 
     handlers.validate(called_order=[])
+
+    # However, _draw() will execute
+    go._draw("surface")
+    handlers.validate(draw=(go, "surface"), draw_count=1, called_order=["draw"])
 
 
 def test_update_does_nothing_on_destroyed_object():
@@ -131,6 +135,10 @@ def test_draw_does_nothing_when_inactive():
 
     handlers.validate(called_order=[])
 
+    # However, _draw() will execute
+    go._draw("surface")
+    handlers.validate(draw=(go, "surface"), draw_count=1, called_order=["draw"])
+
 
 def test_draw_does_nothing_when_invisible():
     """
@@ -145,6 +153,10 @@ def test_draw_does_nothing_when_invisible():
 
     handlers.validate(called_order=[])
 
+    # However, _draw() will execute
+    go._draw("surface")
+    handlers.validate(draw=(go, "surface"), draw_count=1, called_order=["draw"])
+
 
 def test_draw_works_when_disabled():
     """
@@ -157,6 +169,11 @@ def test_draw_works_when_disabled():
 
     draw_hierarchy(go, "surface")
 
+    handlers.validate(draw=(go, "surface"), draw_count=1, called_order=["draw"])
+
+    # And _draw() will execute
+    handlers.reset()
+    go._draw("surface")
     handlers.validate(draw=(go, "surface"), draw_count=1, called_order=["draw"])
 
 

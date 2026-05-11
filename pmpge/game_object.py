@@ -177,13 +177,17 @@ class GameObject:
         Setting active to True or False will activate or deactivate the object (only if the new
         active state is different to the current active state). The active value is propagated to
         all children. In the case where this object is `destroyed` then no action is taken.
+
+        A child cannot be activated if its parent is deactivated.
         """
         # Cannot activate a destroyed GameObject.
         if not self._alive:
             return
 
-        # TODO: If the parent is not activated, this should error. This avoids having some activated
-        #       objects in deactivated parts of the hierarchy.
+        if value:
+            parent = self._parent
+            if parent is not None and not parent._active:
+                raise ValueError("Cannot activate a child with deactivated parent")
 
         do_handlers = self._active != value
 
@@ -360,8 +364,6 @@ class GameObject:
         """
         This internal method will call all the draw methods irrespective of the GameObject's
         visibility.
-
-        TODO: Test _draw()
         """
         self.draw(surface)
         for handler in self._draw_handlers:
@@ -557,9 +559,6 @@ def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = Tru
 
     The surface is passed down through all objects but does not need to be a Pygame surface.
     This doesn't use traverse_hierarchy() as it is slower.
-
-
-    # TODO: test draw_only_visible
     """
     draw_everything = not draw_only_visible
 
@@ -568,8 +567,10 @@ def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = Tru
             return
 
         if draw_everything or go.visible:
+            # noinspection PyProtectedMember
             go._draw(surface)
 
+        # noinspection PyProtectedMember
         for child in go._children:
             process(child)
 

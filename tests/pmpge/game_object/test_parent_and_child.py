@@ -401,10 +401,13 @@ def test_draw_does_nothing_when_inactive():
         test_func(h)
 
 
-def test_draw_does_nothing_when_invisible():
+def test_draw_when_invisible():
     """
-    Ensures draw_hierarchy() does nothing on invisible objects. The visible property only
-    applies to the object itself so the update still propagates
+    Ensures draw_hierarchy() does nothing on invisible objects by default
+    but can be forced to process invisible objects.
+
+    The visible property only applies to the object itself so the update
+    still propagates.
     """
 
     def test_func(hierarchy: Hierarchy):
@@ -418,6 +421,11 @@ def test_draw_does_nothing_when_invisible():
 
         draw_hierarchy(hierarchy.parent.go, "surface")
         hierarchy.validate_called_order(["draw"], exclude=invisible)
+
+        # Now force everything to get drawn.
+        hierarchy.reset()
+        draw_hierarchy(hierarchy.parent.go, "surface", draw_only_visible=False)
+        hierarchy.validate_called_order(["draw"])
 
     for h in all_hierarchies():
         test_func(h)

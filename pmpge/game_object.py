@@ -561,9 +561,6 @@ def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = Tru
 
     The surface is passed down through all objects but does not need to be a Pygame surface.
     This doesn't use traverse_hierarchy() as it is slower.
-
-
-    # TODO: test draw_only_visible
     """
     draw_everything = not draw_only_visible
 
@@ -572,8 +569,10 @@ def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = Tru
             return
 
         if draw_everything or go.visible:
+            # noinspection PyProtectedMember
             go._draw(surface)
 
+        # noinspection PyProtectedMember
         for child in go._children:
             process(child)
 

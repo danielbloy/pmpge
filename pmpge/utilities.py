@@ -27,6 +27,28 @@ def calculate_scaling_factor(display_width: int, display_height: int, game_width
     return min(sx, sy)
 
 
+def generate_borders(
+        display_width: int, display_height: int, game_width: int, game_height: int, scaling_factor: int) -> list[
+    tuple[int, int, int, int]]:
+    # Now generate the borders to crop the screen to the desired game area. This currently
+    # just puts the borders at the bottom of the screen and on the right of the screen.
+    # FUTURE: Spread the borders more evenly.
+    # TODO: return x, y of where the game area should start.
+    game_area_width = game_width * scaling_factor
+    game_area_height = game_height * scaling_factor
+    border_width = display_width - game_area_width
+    border_height = display_height - game_area_height
+
+    result = []
+    if border_height > 0:
+        result.append((display_width, border_height, 0, game_area_height))
+
+    if border_width > 0:
+        result.append((border_width, display_height, game_area_width, 0))
+
+    return result
+
+
 # TODO: Implement where is smooths over quarter seconds, always a quarter second behind.
 # TODO: Move to a class
 fps_last_4_quarters: list[int] = [0, 0, 0, 0]

@@ -71,7 +71,7 @@ import board
 from displayio import Group, Palette, Bitmap, TileGrid
 from pmpge.game import Game
 from pmpge.game_object import GameObject, draw_hierarchy, traverse_hierarchy
-from pmpge.utilities import calculate_scaling_factor
+from pmpge.utilities import calculate_scaling_factor, generate_borders
 
 display = board.DISPLAY
 display.root_group = None
@@ -126,27 +126,12 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     scaling_factor = calculate_scaling_factor(display.width, display.height, g.width, g.height)
     object_group.scale = scaling_factor
 
-    # Now generate the borders to crop the screen to the desired game area. This currently
-    # just puts the borders at the bottom of the screen and on the right of the screen.
-    # FUTURE: Spread the borders more evenly.
-    # TODO: The code to generate the borders could be extract out returning a list of tuples
-    #       containing: width, height, x, y
-    game_area_width = g.width * scaling_factor
-    game_area_height = g.height * scaling_factor
-    border_width = display.width - game_area_width
-    border_height = display.height - game_area_height
-
-    if border_height > 0:
-        bottom_border = TileGrid(Bitmap(display.width, border_height, 1),
-                                 pixel_shader=border_palette)
-        bottom_border.y = game_area_height
-        border_group.append(bottom_border)
-
-    if border_width > 0:
-        right_border = TileGrid(Bitmap(border_width, display.height, 1),
-                                pixel_shader=border_palette)
-        right_border.x = game_area_width
-        border_group.append(right_border)
+    borders = generate_borders(display.width, display.height, g.width, g.height, scaling_factor)
+    for width, height, x, y in borders:
+        border = TileGrid(Bitmap(width, height, 1), pixel_shader=border_palette)
+        border.x = x
+        border.y = y
+        border_group.append(border)
 
     display.root_group = root
     display.brightness = 1
@@ -162,13 +147,11 @@ def deinit():
     # Remove all the items from the object group (most should
     # have been removed via the GameObject.destroy() method.
     display.root_group = None
-    while len(object_group) > 0:
-        object_group.pop()
 
-    # Now remove the borders.
-    while len(border_group) > 0:
-        border = border_group.pop()
-        border.bitmap.deinit()
+    for group in [object_group, border_group]:
+        while len(group) > 0:
+            obj = group.pop()
+            obj.bitmap.deinit()
 
     clear_image_cache()
 

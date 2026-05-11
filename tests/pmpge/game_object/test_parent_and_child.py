@@ -609,13 +609,18 @@ def test_remove_child():
     assert child3.parent == parent
 
     # Remove a second time, this should not error.
+    parent.remove_child(child2)
+    assert len(parent.children) == 2
+    assert child1.parent == parent
+    assert child2.parent is None
+    assert child3.parent == parent
+
+    # Remove a second child
     parent.remove_child(child1)
     assert len(parent.children) == 1
     assert child1.parent is None
     assert child2.parent is None
     assert child3.parent == parent
-
-    # TODO: Remove a second child
 
 
 def test_remove_child_from_another_parent():

@@ -7,19 +7,22 @@
 from pmpge.environment import config
 
 
-def calculate_scaling_factor(screen_width: int, screen_height: int, game_width: int,
-                             game_height: int) -> int:
+def calculate_scaling_factor(display_width: int, display_height: int, game_width: int, game_height: int) -> int:
     """
-    TODO: Comments
+    Utility function aimed at microcontrollers to help determine the best scaling factor based
+    on the passed in display size and game area. If the configuration value GRAPHICS_SCALING
+    is specified then that value is returned. Otherwise:
+    * If the game area is bigger than the display, the value 1 is returned.
+    * Otherwise, return the smallest of the horizontal and vertical scaling factors.
     """
     if hasattr(config, 'GRAPHICS_SCALING'):
         return config.GRAPHICS_SCALING
 
-    if game_width >= screen_width or game_height >= screen_height:
+    if game_width >= display_width or game_height >= display_height:
         return 1
 
-    sx = screen_width // game_width
-    sy = screen_height // game_height
+    sx = display_width // game_width
+    sy = display_height // game_height
 
     return min(sx, sy)
 

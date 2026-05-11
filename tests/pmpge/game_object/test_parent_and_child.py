@@ -7,7 +7,7 @@ from typing import Any
 import pytest
 
 from pmpge.game_object import GameObject, draw_hierarchy, traverse_hierarchy, update_hierarchy
-from tests.pmpge.test_utilities import Hierarchy
+from tests.pmpge.testing_utilities import Hierarchy
 
 
 def parent_one_child():

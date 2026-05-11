@@ -7,7 +7,7 @@ import pytest
 from pmpge.game_object import GameObject, draw_hierarchy, update_hierarchy
 from tests.pmpge.game_object.test_traits import TraitWithDrawHandler, TraitWithUpdateHandler, \
     TraitWithEverything
-from tests.pmpge.test_utilities import Handlers
+from tests.pmpge.testing_utilities import Handlers
 
 
 def validate_properties(

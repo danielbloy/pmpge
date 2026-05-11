@@ -1,5 +1,5 @@
 from pmpge.game_object import GameObject, draw_hierarchy, update_hierarchy
-from tests.pmpge.test_utilities import Handlers
+from tests.pmpge.testing_utilities import Handlers
 
 """
 This suite of tests validate that event handlers can be added and removed.

@@ -177,13 +177,17 @@ class GameObject:
         Setting active to True or False will activate or deactivate the object (only if the new
         active state is different to the current active state). The active value is propagated to
         all children. In the case where this object is `destroyed` then no action is taken.
+
+        A child cannot be activated if its parent is deactivated.
         """
         # Cannot activate a destroyed GameObject.
         if not self._alive:
             return
 
-        # TODO: If the parent is not activated, this should error. This avoids having some activated
-        #       objects in deactivated parts of the hierarchy.
+        if value:
+            parent = self._parent
+            if parent is not None and not parent._active:
+                raise ValueError("Cannot activate a child with deactivated parent")
 
         do_handlers = self._active != value
 

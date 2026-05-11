@@ -322,30 +322,6 @@ def test_activated_deactivated_propagated_through_disabled_objects():
     hierarchy.validate_called_order(["deactivate", "activate"])
 
 
-def test_activated_deactivated_propagated_through_inactive_objects():
-    """
-    Ensures activated() and deactivated() are propagated through disabled objects.
-    """
-    hierarchy = parent_two_children_one_grandchild()
-    hierarchy.find(
-        'child-1').go.active = False  # This will disable grandchild-5 and 6 so we re-enable one
-    hierarchy.find('grandchild').go.active = True
-
-    hierarchy.reset()
-    hierarchy.parent.go.active = False
-    hierarchy.validate_properties(active=False)
-
-    parent = hierarchy.parent
-    child1 = hierarchy.find('child-1')
-    child2 = hierarchy.find('child-2')
-    grandchild = hierarchy.find('grandchild')
-
-    parent.handlers.validate(deactivate=parent.go, deactivate_count=1)
-    child1.handlers.validate()  # No deactivate event for child1 but should pass through
-    grandchild.handlers.validate(deactivate=grandchild.go, deactivate_count=1)
-    child2.handlers.validate(deactivate=child2.go, deactivate_count=1)
-
-
 def test_enabled_disabled_does_not_propagate():
     """
     Ensures enabled and disabled does not propagate to children.
@@ -416,11 +392,6 @@ def test_draw_does_nothing_when_inactive():
     def test_func(hierarchy: Hierarchy):
         # Deactivate the parent (this deactivates the entire hierarchy)
         hierarchy.parent.go.active = False
-        # Reactivate all grandchildren and first child
-        if len(hierarchy.children) > 0:
-            hierarchy.children[0].go.active = True
-        for grandchild in hierarchy.grandchildren:
-            grandchild.go.active = True
         hierarchy.reset()
 
         draw_hierarchy(hierarchy.parent.go, "surface")
@@ -503,11 +474,6 @@ def test_update_does_nothing_when_inactive():
     def test_func(hierarchy: Hierarchy):
         # Deactivate the parent (this deactivates the entire hierarchy)
         hierarchy.parent.go.active = False
-        # Reactivate all grandchildren and first child
-        if len(hierarchy.children) > 0:
-            hierarchy.children[0].go.active = True
-        for grandchild in hierarchy.grandchildren:
-            grandchild.go.active = True
         hierarchy.reset()
 
         update_hierarchy(hierarchy.parent.go, 0.1)

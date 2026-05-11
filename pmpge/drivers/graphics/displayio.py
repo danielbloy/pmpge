@@ -61,6 +61,9 @@
 # * Investigate supporting different bitmap types:
 #   See: https://learn.adafruit.com/creating-your-first-tilemap-game-with-circuitpython/indexed-bmp-graphics
 #
+# * Create a single colour bitmap for the background.
+#   See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/draw-pixels
+
 
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 import adafruit_imageload
@@ -84,16 +87,13 @@ root = Group()
 background_group: Group = Group()
 object_group: Group = Group()
 border_group: Group = Group()
+
 root.append(background_group)
 root.append(object_group)
 root.append(border_group)
 
-# Create a single colour bitmap for the background.
-# Source: https://learn.adafruit.com/circuitpython-display-support-using-displayio/draw-pixels
-palette = Palette(1)
-palette[0] = 0x000000
-background = TileGrid(Bitmap(display.width, display.height, 1), pixel_shader=palette)
-background_group.append(background)
+background_palette = Palette(1)
+background_palette[0] = 0x000000
 
 border_palette = Palette(1)
 border_palette[0] = 0x000000
@@ -104,20 +104,8 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     Initialises the display by creating the desired background, building the entire
     hierarchy of TileGrids and turning on the display.
     """
-    # FUTURE: When the game is smaller than the display and we don't scale, we need to add a border.
-    #         The most common is 160 x 120 on a 160 x 128 display.
-
     global game
     game = g
-
-    # FUTURE: If the background colour is black we could probably avoid the background object
-    #         entirely to save RAM.
-
-    # Set the single colour in the palette for our background to the desired background colour
-    red = bgc[0] & 255
-    green = bgc[1] & 255
-    blue = bgc[2] & 255
-    palette[0] = red << 16 | green << 8 | blue
 
     # Here we build the entire graphics hierarchy in order to place the tileGrid
     # instances in the correct order.
@@ -133,6 +121,21 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
         border.y = y
         border_group.append(border)
 
+    # Set the single colour in the palette for our background to the desired background colour
+    red = bgc[0] & 255
+    green = bgc[1] & 255
+    blue = bgc[2] & 255
+    background_palette[0] = red << 16 | green << 8 | blue
+
+    # If the background colour is black we can avoid the background object entirely to save RAM.
+    # and make it a tiny bit faster.
+    if background_palette[0] != 0x000000:
+        background = TileGrid(Bitmap(g.width, g.height, 1), pixel_shader=background_palette)
+        background_group.scale = scaling_factor
+        background_group.append(background)
+
+        # TODO: Move start position of background
+
     display.root_group = root
     display.brightness = 1
 
@@ -144,11 +147,11 @@ def deinit():
     global game
     game = None
 
-    # Remove all the items from the object group (most should
-    # have been removed via the GameObject.destroy() method.
     display.root_group = None
 
-    for group in [object_group, border_group]:
+    # Remove all the items from the groups (most items from the object group should
+    # have been removed via the GameObject.destroy() method.
+    for group in [background_group, object_group, border_group]:
         while len(group) > 0:
             obj = group.pop()
             obj.bitmap.deinit()
@@ -269,7 +272,9 @@ class GraphicsDrawImageTrait:
 
         tile_grid = image.tile_grid
         tile_grid.hidden = not (self._active and self.visible)
+        # noinspection PyUnresolvedReferences
         tile_grid.x = int(self.x - image.offset_x)
+        # noinspection PyUnresolvedReferences
         tile_grid.y = int(self.y - image.offset_y)
 
     def deactivated(self):

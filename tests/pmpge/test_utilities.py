@@ -52,15 +52,5 @@ def test_scaling_factor_with_config_property():
     del utilities.config.GRAPHICS_SCALING
 
 # TODO: Add tests for generate_borders
-# Common screen resolutions
-# 160x120 running on
-# 160x128
-# 240x240
-# 320x240
-#
-# 120x120 running on
-# 160x128
-# 240x240
-# 320x240
 
 # TODO: Add tests for calculate_fps

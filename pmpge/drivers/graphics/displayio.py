@@ -74,7 +74,7 @@ import board
 from displayio import Group, Palette, Bitmap, TileGrid
 from pmpge.game import Game
 from pmpge.game_object import GameObject, draw_hierarchy, traverse_hierarchy
-from pmpge.utilities import calculate_scaling_factor, generate_borders
+from pmpge.utilities import calculate_scaling_factor, Borders
 
 display = board.DISPLAY
 display.root_group = None
@@ -114,8 +114,8 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     scaling_factor = calculate_scaling_factor(display.width, display.height, g.width, g.height)
     object_group.scale = scaling_factor
 
-    borders = generate_borders(display.width, display.height, g.width, g.height, scaling_factor)
-    for width, height, x, y in borders:
+    borders = Borders(display.width, display.height, g.width, g.height, scaling_factor)
+    for width, height, x, y in borders.borders:
         border = TileGrid(Bitmap(width, height, 1), pixel_shader=border_palette)
         border.x = x
         border.y = y
@@ -134,7 +134,9 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
         background_group.scale = scaling_factor
         background_group.append(background)
 
-        # TODO: Move start position of background
+        # Now adjust the background based on the borders
+        background.x = borders.game_x
+        background.y = borders.game_y
 
     display.root_group = root
     display.brightness = 1
@@ -163,7 +165,9 @@ def draw(screen):
     """
     We have to process the entire hierarchy to ensure visbility is set.
     """
+    # noinspection PyUnresolvedReferences
     draw_hierarchy(game.root, screen, draw_only_visible=False)
+    # noinspection PyUnresolvedReferences
     game.draw(screen)
 
 

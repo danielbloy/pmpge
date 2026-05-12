@@ -40,6 +40,13 @@ class Borders:
     It also calculates the relative position for the game area as it may
     need to be shifted if there is a left or top border.
 
+    When determining borders, the first 8 pixels go to the bottom border
+    (this is the most common and where the status line goes by default).
+    The next 8 pixels go to the top border. Each pixel after that is
+    alternated bottom, top, bottom, top. Horizontal pixels are shared
+    evening with the right hand side getting the first pixel, the left
+    hand side the next pixel.
+
     The common screen resolutions and game areas that we are looking to
     support are:
 
@@ -47,7 +54,6 @@ class Borders:
     * Screen resolutions: (160 x 128), (240, 240), (320 x 240)
 
     FUTURE: Remove the overlap of the borders.
-    FUTURE: Ensure space for the metrics status bar of 8 pixels.
     """
     borders: list[tuple[int, int, int, int]]
     top: tuple[int, int, int, int] | None
@@ -73,10 +79,10 @@ class Borders:
         border_height = display_height - game_area_height
 
         if border_height > 0:
-            self.right = (display_width, border_height, 0, game_area_height)
+            self.bottom = (display_width, border_height, 0, game_area_height)
 
         if border_width > 0:
-            self.bottom = (border_width, display_height, game_area_width, 0)
+            self.right = (border_width, display_height, game_area_width, 0)
 
         # Adjust the game area starting position
         if self.left:

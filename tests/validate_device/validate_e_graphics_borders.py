@@ -1,25 +1,23 @@
 """
-Creates sprites and on the screen, alternating visibility. This test also
-uses the same resource for each sprite which can be used to validate
-optimisations on image resource sharing. This is useful for visually checking
-that visibility works.
+Creates a non-scalable game area that is small enough to require borders
+at both the top and bottom of the screen.
 """
 
 import tests.validate_device.utils as utils
 from pmpge.game import Game
 
 sprite_data: list[utils.SpriteData] = [
-    utils.SpriteData(15, 15, 0, 0, "alien.png"),
-    utils.SpriteData(65, 15, 0, 0, "alien_b.png"),
-    utils.SpriteData(15, 50, 0, 0, "alien_c.png"),
-    utils.SpriteData(65, 50, 0, 0, "alien_d.png"),
+    utils.SpriteData(25, 30, 0, 0, "alien.png"),
+    utils.SpriteData(75, 30, 0, 0, "alien_b.png"),
+    utils.SpriteData(25, 80, 0, 0, "alien_c.png"),
+    utils.SpriteData(75, 80, 0, 0, "alien_d.png"),
 ]
 
 index = 0
 count = len(sprite_data)
 
-SCREEN_WIDTH = 80  # Required for validate_all.py
-SCREEN_HEIGHT = 64  # Required for validate_all.py
+SCREEN_WIDTH = 100  # Results in a border of 30 pixels left and right
+SCREEN_HEIGHT = 116  # Results in a border of 8 pixels along the bottom and 4 along the top
 
 
 def switch_visibility(game: Game):

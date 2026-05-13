@@ -99,6 +99,12 @@ non-default driver requires setting of the following configuration properties:
 For more information on how to implement a driver, see the documentation in
 [drivers](./pmpge/drivers/README.md).
 
+There are other configuration properties that can be set to control the behaviour
+of the framework, including:
+
+* `GRAPHICS_SCALING` - Enforces a scaling factor for the graphics. Only used by the
+  displayio graphics driver.
+
 ## License
 
 All materials provided in this project is licensed under the Creative Commons

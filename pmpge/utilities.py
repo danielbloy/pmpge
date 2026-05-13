@@ -132,19 +132,39 @@ class Borders:
                 self.borders.append(border)
 
 
-# TODO: Implement where is smooths over quarter seconds, always a quarter second behind.
-# TODO: Move to a class
-# TODO: Count down to zero through ticks and updates.
-fps_last_4_quarters: list[int] = [0, 0, 0, 0]
-fps_current_quarter: int
-fps_current_quarter_index: int = 0
-fps_next_quarter_tick: float = 0
-
-
-def calculate_fps() -> int:
+class CalculateFps:
     """
-    TODO: Comments
+    Class to calculate the FPS over the last 4 intervals to allow a slight smoothing.
     """
-    global fps_current_quarter
-    fps_current_quarter += 1
-    return sum(fps_last_4_quarters)
+    interval: float
+    quarters: list[int]
+    current: int
+    index: int
+    next_quarter: float
+
+    def __init__(self, interval: float = 0.25):
+        self.interval = interval
+        self.quarters: list[int] = [0, 0, 0, 0]
+        self.current: int = 0
+        self.index: int = 0
+        self.time_left: float = interval
+
+    def tick(self, delta_time: float) -> int:
+        """
+        Call to update the FPS counter. The returned value is the FPS over the last 4
+        intervals to allow a slight smoothing.
+        """
+        self.current += 1
+        time_left = self.time_left
+        time_left -= delta_time
+
+        if time_left < 0:
+            index = self.index
+            self.quarters[index] = self.current
+            time_left += self.interval
+            index = (index + 1) % 4
+            self.index = index
+
+        self.time_left = time_left
+
+        return sum(self.quarters)

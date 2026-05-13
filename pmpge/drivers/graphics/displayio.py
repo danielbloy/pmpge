@@ -40,12 +40,12 @@
 # Some GameObjects can have multiple TileGrid instances and some GameObjects will
 # have none. We could in theory place a single Group instance on each GameObject
 # in the hierarchy and attach the TileGrids to those and connect up the Groups in
-# the hierarchy. Whilst a definitie potential improvement, it does come with an
-# extra memory requirement and unfortunately doesn't address all issues. This is
+# the hierarchy. Whilst a definite potential improvement, it does come with an
+# extra memory requirement and unfortunately, doesn't address all issues. This is
 # because under normal operation the draw() function only cycles over enabled
-# objects so if a mix of disabled and enabled objects are added then the draw order
-# won't be correct. therefore, the lower memory cost and faster performance option
-# was taken.
+# objects, so if a mix of disabled and enabled objects are added, then the draw
+# order won't be correct. therefore, the lower memory cost and faster performance
+# option was taken.
 #
 # REFERENCES
 #
@@ -64,6 +64,7 @@
 # * Create a single colour bitmap for the background.
 #   See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/draw-pixels
 
+# TODO: Add an option to specify a framerate in configuration.
 
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 import adafruit_imageload

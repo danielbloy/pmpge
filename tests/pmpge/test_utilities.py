@@ -1,3 +1,5 @@
+import pytest
+
 import pmpge.utilities as utilities
 from pmpge.utilities import calculate_scaling_factor, Borders
 
@@ -55,9 +57,14 @@ def test_scaling_factor_with_config_property():
 def validate_borders(
         display_width: int, display_height: int, game_width: int, game_height,
         left_width: int, right_width: int, top_height: int, bottom_height: int):
+    """
+    Validates that the calculated borders match the expected sizes.
+    """
+
     borders = Borders(display_width, display_height, game_width, game_height, 1)
 
     expected_number_of_borders = 4
+
     print(f"Display: {display_width} x {display_height}: Game: {game_width} x {game_height}")
     print(f"Left: {left_width}, Right: {right_width}, Top: {top_height}, Bottom: {bottom_height}")
     print(borders.borders)
@@ -99,6 +106,9 @@ def validate_borders(
         assert borders.bottom[3] == display_height - bottom_height  # y
 
     assert len(borders.borders) == expected_number_of_borders
+
+    assert borders.game_x == left_width
+    assert borders.game_y == top_height
 
 
 def test_borders_just_top_and_bottom():
@@ -192,9 +202,22 @@ def test_borders_top_bottom_and_left_right():
 
 def test_borders_with_scaling_factor():
     """
-
+    The scaling factor is used to multiply the game area. These are just some simple tests to ensure it works.
     """
-    assert False
+    borders = Borders(160, 120, 80, 60, 1)
+    assert borders.left[0] == 40
+    assert borders.right[0] == 40
+    assert borders.top[1] == 30
+    assert borders.bottom[1] == 30
+
+    borders = Borders(160, 120, 80, 60, 2)
+    assert borders.left is None
+    assert borders.right is None
+    assert borders.top is None
+    assert borders.bottom is None
+
+    with pytest.raises(ValueError):
+        borders = Borders(160, 120, 80, 60, 3)
 
 
 def test_borders_common_size():

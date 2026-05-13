@@ -53,6 +53,14 @@ class Borders:
     * Game areas: (160 x 128), (160 x 120), (120 x 120), (80 x 60)
     * Screen resolutions: (160 x 128), (240, 240), (320 x 240)
 
+    @param display_width: The horizontal resolution of the physical display
+    @param display_height: The vertical resolution of the physical display
+    @param game_width: The horizontal resolution of the game area (unscaled)
+    @param game_height: The vertical resolution of the game area (unscaled)
+    @param scaling_factor: The scaling factor to use for the game area. A scaling factor
+                           of 2 means each pixel on the game area is scaled to 4 pixels
+                           (2 x 2) on the physical display.
+
     FUTURE: Remove the overlap of the borders.
     """
     borders: list[tuple[int, int, int, int]]
@@ -77,6 +85,9 @@ class Borders:
         game_area_height = game_height * scaling_factor
         border_width = display_width - game_area_width
         border_height = display_height - game_area_height
+
+        if border_width < 0 or border_height < 0:
+            raise ValueError("The display is not large enough to support the scaled game area")
 
         if border_height > 0:
             top_height, bottom_height = 0, 0

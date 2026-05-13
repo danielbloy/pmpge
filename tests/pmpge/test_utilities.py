@@ -58,13 +58,16 @@ def validate_borders(
     borders = Borders(display_width, display_height, game_width, game_height, 1)
 
     expected_number_of_borders = 4
+    print(f"Display: {display_width} x {display_height}: Game: {game_width} x {game_height}")
+    print(f"Left: {left_width}, Right: {right_width}, Top: {top_height}, Bottom: {bottom_height}")
+    print(borders.borders)
 
     if left_width == 0:
         assert borders.left is None
         expected_number_of_borders -= 1
     else:
         assert borders.left[0] == left_width  # Width
-        assert borders.left[1] == 128  # Height
+        assert borders.left[1] == display_height  # Height
         assert borders.left[2] == 0  # x
         assert borders.left[3] == 0  # y
 
@@ -73,15 +76,15 @@ def validate_borders(
         expected_number_of_borders -= 1
     else:
         assert borders.right[0] == right_width  # Width
-        assert borders.right[1] == 128  # Height
-        assert borders.right[2] == 160 - right_width  # x
+        assert borders.right[1] == display_height  # Height
+        assert borders.right[2] == display_width - right_width  # x
         assert borders.right[3] == 0  # y
 
     if top_height == 0:
         assert borders.top is None
         expected_number_of_borders -= 1
     else:
-        assert borders.top[0] == 160  # Width
+        assert borders.top[0] == display_width  # Width
         assert borders.top[1] == top_height  # Height
         assert borders.top[2] == 0  # x
         assert borders.top[3] == 0  # y
@@ -90,10 +93,10 @@ def validate_borders(
         assert borders.bottom is None
         expected_number_of_borders -= 1
     else:
-        assert borders.bottom[0] == 160  # Width
+        assert borders.bottom[0] == display_width  # Width
         assert borders.bottom[1] == bottom_height  # Height
         assert borders.bottom[2] == 0  # x
-        assert borders.bottom[3] == 128 - bottom_height  # y
+        assert borders.bottom[3] == display_height - bottom_height  # y
 
     assert len(borders.borders) == expected_number_of_borders
 
@@ -152,7 +155,7 @@ def test_borders_just_left_and_right():
     validate_border(156, 2, 2)
     validate_border(155, 2, 3)
     validate_border(154, 3, 3)
-    validate_border(153, 4, 4)
+    validate_border(153, 3, 4)
 
 
 def test_borders_top_bottom_and_left_right():

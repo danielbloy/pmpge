@@ -82,7 +82,14 @@ class Borders:
             self.bottom = (display_width, border_height, 0, game_area_height)
 
         if border_width > 0:
-            self.right = (border_width, display_height, game_area_width, 0)
+            left_width = border_width // 2
+            right_width = border_width - left_width
+
+            if left_width > 0:
+                self.left = (left_width, display_height, 0, 0)
+
+            if right_width > 0:
+                self.right = (right_width, display_height, display_width - right_width, 0)
 
         # Adjust the game area starting position
         if self.left:

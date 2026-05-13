@@ -61,6 +61,7 @@ importance):
 * `sound.py`       - Provides a standard sound abstraction to support different environments.
 * `sprite.py`      - Provides the `Sprite` class which is used to represent a GameObject with
   position.
+* `utilities.py`   - Provides general utility classes and functions to assist drivers.
 * `traits`         - Directory containing a range of traits that can be added to a `GameObject`.
 
 Some sample games written using the `pmpge` framework can be found in `games` and examples

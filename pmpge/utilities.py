@@ -79,7 +79,23 @@ class Borders:
         border_height = display_height - game_area_height
 
         if border_height > 0:
-            self.bottom = (display_width, border_height, 0, game_area_height)
+            top_height, bottom_height = 0, 0
+
+            # First 8 rows got to the bottom.
+            if border_height <= 8:
+                bottom_height = border_height
+            elif border_height >= 16:
+                top_height = border_height // 2
+                bottom_height = border_height - top_height
+            else:
+                bottom_height = 8
+                top_height = border_height - 8
+
+            if top_height > 0:
+                self.top = (display_width, top_height, 0, 0)
+
+            if bottom_height > 0:
+                self.bottom = (display_width, bottom_height, 0, display_height - bottom_height)
 
         if border_width > 0:
             left_width = border_width // 2

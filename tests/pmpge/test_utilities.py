@@ -133,11 +133,11 @@ def test_borders_just_top_and_bottom():
     validate_border(112, 8, 8)
 
     # Now share
-    validate_border(111, 8, 8)
-    validate_border(110, 8, 9)
-    validate_border(109, 9, 9)
-    validate_border(108, 9, 10)
-    validate_border(107, 10, 10)
+    validate_border(111, 8, 9)
+    validate_border(110, 9, 9)
+    validate_border(109, 9, 10)
+    validate_border(108, 10, 10)
+    validate_border(107, 10, 11)
 
 
 def test_borders_just_left_and_right():

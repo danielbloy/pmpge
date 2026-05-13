@@ -209,11 +209,11 @@ def test_borders_common_size():
     validate_borders(240, 240, 160, 128, 40, 40, 56, 56)
     validate_borders(240, 240, 160, 120, 40, 40, 60, 60)
     validate_borders(240, 240, 120, 120, 60, 60, 60, 60)
-    validate_borders(240, 240, 80, 60, 80, 80, 80, 80)
+    validate_borders(240, 240, 80, 60, 80, 80, 90, 90)
 
-    validate_borders(320, 240, 160, 128, 90, 90, 56, 56)
-    validate_borders(320, 240, 160, 120, 90, 90, 60, 60)
+    validate_borders(320, 240, 160, 128, 80, 80, 56, 56)
+    validate_borders(320, 240, 160, 120, 80, 80, 60, 60)
     validate_borders(320, 240, 120, 120, 100, 100, 60, 60)
-    validate_borders(320, 240, 80, 60, 120, 120, 80, 80)
+    validate_borders(320, 240, 80, 60, 120, 120, 90, 90)
 
 # TODO: Add tests for calculate_fps

@@ -1,7 +1,7 @@
 import pytest
 
-import pmpge.utilities as utilities
 from pmpge.utilities import calculate_scaling_factor, Borders
+from tests.pmpge.testing_utilities import with_config_file
 
 
 def test_scaling_factor_when_display_too_small():
@@ -42,16 +42,19 @@ def test_scaling_factor_with_config_property():
     Regardless of the calculated scaling factor, we always return the configuration scaling factor.
     """
 
-    utilities.config.GRAPHICS_SCALING = 3
-    # Would be a calculated scaling factor of 1
-    assert calculate_scaling_factor(160, 120, 160, 120) == 3
+    def validate():
+        # Would be a calculated scaling factor of 1
+        assert calculate_scaling_factor(160, 120, 160, 120) == 3
 
-    # Would be a calculated scaling factor of 2
-    assert calculate_scaling_factor(160, 120, 80, 60) == 3
+        # Would be a calculated scaling factor of 2
+        assert calculate_scaling_factor(160, 120, 80, 60) == 3
 
-    # Would be a calculated scaling factor of 4
-    assert calculate_scaling_factor(160, 120, 40, 30) == 3
-    del utilities.config.GRAPHICS_SCALING
+        # Would be a calculated scaling factor of 4
+        assert calculate_scaling_factor(160, 120, 40, 30) == 3
+
+        return True
+
+    with_config_file("GRAPHICS_SCALING = 3\n", validate)
 
 
 def validate_borders(
@@ -64,10 +67,6 @@ def validate_borders(
     borders = Borders(display_width, display_height, game_width, game_height, 1)
 
     expected_number_of_borders = 4
-
-    print(f"Display: {display_width} x {display_height}: Game: {game_width} x {game_height}")
-    print(f"Left: {left_width}, Right: {right_width}, Top: {top_height}, Bottom: {bottom_height}")
-    print(borders.borders)
 
     if left_width == 0:
         assert borders.left is None

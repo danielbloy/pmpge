@@ -4,7 +4,6 @@
 ################################################################################
 # G R A P H I C S    U T I L I T I E S
 ################################################################################
-from pmpge.environment import config
 
 
 def calculate_scaling_factor(display_width: int, display_height: int, game_width: int, game_height: int) -> int:
@@ -15,6 +14,8 @@ def calculate_scaling_factor(display_width: int, display_height: int, game_width
     * If the game area is bigger than the display, the value 1 is returned.
     * Otherwise, return the smallest of the horizontal and vertical scaling factors.
     """
+    from pmpge.environment import config
+
     if hasattr(config, 'GRAPHICS_SCALING'):
         return config.GRAPHICS_SCALING
 

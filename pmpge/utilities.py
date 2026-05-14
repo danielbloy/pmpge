@@ -149,7 +149,7 @@ class CalculateFps:
         self.index: int = 0
         self.time_left: float = interval
 
-    def tick(self, delta_time: float) -> int:
+    def update(self, delta_time: float) -> int:
         """
         Call to update the FPS counter. The returned value is the FPS over the last 4
         intervals to allow a slight smoothing.

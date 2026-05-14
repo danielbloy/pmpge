@@ -1,6 +1,6 @@
 import pytest
 
-from pmpge.utilities import calculate_scaling_factor, Borders
+from pmpge.utilities import calculate_scaling_factor, Borders, CalculateFps
 from tests.pmpge.testing_utilities import with_config_file
 
 
@@ -238,4 +238,83 @@ def test_borders_common_size():
     validate_borders(320, 240, 120, 120, 100, 100, 60, 60)
     validate_borders(320, 240, 80, 60, 120, 120, 90, 90)
 
-# TODO: Add tests for calculate_fps
+
+def test_calculate_fps():
+    """
+    This runs through a series of tests to ensure the CalculateFps class works as expected.
+    """
+    calc = CalculateFps()
+    assert calc.update(0) == 0
+    assert calc.current == 1
+    assert calc.index == 0
+    assert calc.quarters == [0, 0, 0, 0]
+
+    assert calc.update(0.1) == 0
+    assert calc.current == 2
+    assert calc.index == 0
+    assert calc.quarters == [0, 0, 0, 0]
+
+    assert calc.update(0.1) == 0
+    assert calc.current == 3
+    assert calc.index == 0
+    assert calc.quarters == [0, 0, 0, 0]
+
+    # This will now tick over.
+    assert calc.update(0.1) == 4
+    assert calc.current == 0
+    assert calc.index == 1
+    assert calc.quarters == [4, 0, 0, 0]
+
+    assert calc.update(0.1) == 4
+    assert calc.current == 1
+    assert calc.index == 1
+    assert calc.quarters == [4, 0, 0, 0]
+
+    # This will now tick over
+    assert calc.update(0.1) == 6
+    assert calc.current == 0
+    assert calc.index == 2
+    assert calc.quarters == [4, 2, 0, 0]
+
+    assert calc.update(0.1) == 6
+    assert calc.current == 1
+    assert calc.index == 2
+    assert calc.quarters == [4, 2, 0, 0]
+
+    assert calc.update(0.1) == 6
+    assert calc.current == 2
+    assert calc.index == 2
+    assert calc.quarters == [4, 2, 0, 0]
+
+    # This will now tick over
+    assert calc.update(0.1) == 9
+    assert calc.current == 0
+    assert calc.index == 3
+    assert calc.quarters == [4, 2, 3, 0]
+
+    assert calc.update(0.1) == 9
+    assert calc.current == 1
+    assert calc.index == 3
+    assert calc.quarters == [4, 2, 3, 0]
+
+    # This will now tick over
+    assert calc.update(0.1) == 11
+    assert calc.current == 0
+    assert calc.index == 0
+    assert calc.quarters == [4, 2, 3, 2]
+
+    assert calc.update(0.1) == 11
+    assert calc.current == 1
+    assert calc.index == 0
+    assert calc.quarters == [4, 2, 3, 2]
+
+    assert calc.update(0.1) == 11
+    assert calc.current == 2
+    assert calc.index == 0
+    assert calc.quarters == [4, 2, 3, 2]
+
+    # This will now tick over
+    assert calc.update(0.1) == 10
+    assert calc.current == 0
+    assert calc.index == 1
+    assert calc.quarters == [3, 2, 3, 2]

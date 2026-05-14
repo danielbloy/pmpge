@@ -161,6 +161,7 @@ class CalculateFps:
         if time_left < 0:
             index = self.index
             self.quarters[index] = self.current
+            self.current = 0
             time_left += self.interval
             index = (index + 1) % 4
             self.index = index

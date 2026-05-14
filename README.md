@@ -61,6 +61,7 @@ importance):
 * `sound.py`       - Provides a standard sound abstraction to support different environments.
 * `sprite.py`      - Provides the `Sprite` class which is used to represent a GameObject with
   position.
+* `utilities.py`   - Provides general utility classes and functions to assist drivers.
 * `traits`         - Directory containing a range of traits that can be added to a `GameObject`.
 
 Some sample games written using the `pmpge` framework can be found in `games` and examples
@@ -97,6 +98,14 @@ non-default driver requires setting of the following configuration properties:
 
 For more information on how to implement a driver, see the documentation in
 [drivers](./pmpge/drivers/README.md).
+
+There are other configuration properties that can be set to control the behaviour
+of the framework, including:
+
+* `GRAPHICS_SCALING` - Enforces a scaling factor for the graphics. Only used by the
+  displayio graphics driver.
+* `GRAPHICS_FRAMERATE` - If set, the game will run at (or below) the desired framerate.
+  This is currently only used by the displayio graphics driver.
 
 ## License
 

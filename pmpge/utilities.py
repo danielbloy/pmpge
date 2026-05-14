@@ -4,7 +4,6 @@
 ################################################################################
 # G R A P H I C S    U T I L I T I E S
 ################################################################################
-from pmpge.environment import config
 
 
 def calculate_scaling_factor(display_width: int, display_height: int, game_width: int, game_height: int) -> int:
@@ -15,6 +14,8 @@ def calculate_scaling_factor(display_width: int, display_height: int, game_width
     * If the game area is bigger than the display, the value 1 is returned.
     * Otherwise, return the smallest of the horizontal and vertical scaling factors.
     """
+    from pmpge.environment import config
+
     if hasattr(config, 'GRAPHICS_SCALING'):
         return config.GRAPHICS_SCALING
 
@@ -27,18 +28,144 @@ def calculate_scaling_factor(display_width: int, display_height: int, game_width
     return min(sx, sy)
 
 
-# TODO: Implement where is smooths over quarter seconds, always a quarter second behind.
-# TODO: Move to a class
-fps_last_4_quarters: list[int] = [0, 0, 0, 0]
-fps_current_quarter: int
-fps_current_quarter_index: int = 0
-fps_next_quarter_tick: float = 0
+class Borders:
+    """
+    This class is used to calculate borders for a microcontroller screen.
+    There can be up to 4 borders, one per edge of the screen. Each border
+    has a tuple of 4 values to define its size and position:
+        * width
+        * height
+        * x
+        * y
+
+    It also calculates the relative position for the game area as it may
+    need to be shifted if there is a left or top border.
+
+    When determining borders, the first 8 pixels go to the bottom border
+    (this is the most common and where the status line goes by default).
+    The next 8 pixels go to the top border. Each pixel after that is
+    alternated bottom, top, bottom, top. Horizontal pixels are shared
+    evening with the right hand side getting the first pixel, the left
+    hand side the next pixel.
+
+    The common screen resolutions and game areas that we are looking to
+    support are:
+
+    * Game areas: (160 x 128), (160 x 120), (120 x 120), (80 x 60)
+    * Screen resolutions: (160 x 128), (240, 240), (320 x 240)
+
+    @param display_width: The horizontal resolution of the physical display
+    @param display_height: The vertical resolution of the physical display
+    @param game_width: The horizontal resolution of the game area (unscaled)
+    @param game_height: The vertical resolution of the game area (unscaled)
+    @param scaling_factor: The scaling factor to use for the game area. A scaling factor
+                           of 2 means each pixel on the game area is scaled to 4 pixels
+                           (2 x 2) on the physical display.
+
+    FUTURE: Remove the overlap of the borders.
+    """
+    borders: list[tuple[int, int, int, int]]
+    top: tuple[int, int, int, int] | None
+    bottom: tuple[int, int, int, int] | None
+    left: tuple[int, int, int, int] | None
+    right: tuple[int, int, int, int] | None
+
+    game_x: int
+    game_y: int
+
+    def __init__(self, display_width: int, display_height: int, game_width: int, game_height: int, scaling_factor: int):
+        self.borders = []
+        self.top = None
+        self.bottom = None
+        self.left = None
+        self.right = None
+        self.game_x = 0
+        self.game_y = 0
+
+        game_area_width = game_width * scaling_factor
+        game_area_height = game_height * scaling_factor
+        border_width = display_width - game_area_width
+        border_height = display_height - game_area_height
+
+        if border_width < 0 or border_height < 0:
+            raise ValueError("The display is not large enough to support the scaled game area")
+
+        if border_height > 0:
+            top_height, bottom_height = 0, 0
+
+            # First 8 rows got to the bottom.
+            if border_height <= 8:
+                bottom_height = border_height
+            elif border_height >= 16:
+                top_height = border_height // 2
+                bottom_height = border_height - top_height
+            else:
+                bottom_height = 8
+                top_height = border_height - 8
+
+            if top_height > 0:
+                self.top = (display_width, top_height, 0, 0)
+
+            if bottom_height > 0:
+                self.bottom = (display_width, bottom_height, 0, display_height - bottom_height)
+
+        if border_width > 0:
+            left_width = border_width // 2
+            right_width = border_width - left_width
+
+            if left_width > 0:
+                self.left = (left_width, display_height, 0, 0)
+
+            if right_width > 0:
+                self.right = (right_width, display_height, display_width - right_width, 0)
+
+        # Adjust the game area starting position
+        if self.left:
+            self.game_x = self.left[0]
+
+        if self.top:
+            self.game_y = self.top[1]
+
+        # Now add the calculated borders to the list to make it easy to iterate.
+        for border in [self.left, self.top, self.right, self.bottom]:
+            if border:
+                self.borders.append(border)
 
 
-def calculate_fps() -> int:
+class CalculateFps:
     """
-    TODO: Comments
+    Class to calculate the FPS over the last 4 intervals to allow a slight smoothing.
     """
-    global fps_current_quarter
-    fps_current_quarter += 1
-    return sum(fps_last_4_quarters)
+    interval: float
+    quarters: list[int]
+    current: int
+    index: int
+    next_quarter: float
+
+    def __init__(self, interval: float = 0.25):
+        self.interval = interval
+        self.quarters: list[int] = [0, 0, 0, 0]
+        self.current: int = 0
+        self.index: int = 0
+        self.time_left: float = interval
+
+    def update(self, delta_time: float) -> int:
+        """
+        Call to update the FPS counter. The returned value is the FPS over the last 4
+        intervals to allow a slight smoothing.
+        """
+        self.current += 1
+        time_left = self.time_left
+        time_left -= delta_time
+
+        if time_left < 0:
+            index = self.index
+            self.quarters[index] = self.current
+            self.current = 0
+            time_left += self.interval
+            index = (index + 1) % 4
+            self.index = index
+
+        self.time_left = time_left
+
+        return sum(self.quarters)

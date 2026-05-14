@@ -53,8 +53,7 @@ def test_constructor_with_config():
 
         return True
 
-    with_config_file(
-        "SCREEN_WIDTH = 800\nSCREEN_HEIGHT = 300\n", validate)
+    with_config_file("SCREEN_WIDTH = 800\nSCREEN_HEIGHT = 300\n", validate)
 
 
 def test_constructor_with_background_colour():

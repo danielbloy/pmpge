@@ -40,12 +40,12 @@
 # Some GameObjects can have multiple TileGrid instances and some GameObjects will
 # have none. We could in theory place a single Group instance on each GameObject
 # in the hierarchy and attach the TileGrids to those and connect up the Groups in
-# the hierarchy. Whilst a definitie potential improvement, it does come with an
-# extra memory requirement and unfortunately doesn't address all issues. This is
+# the hierarchy. Whilst a definite potential improvement, it does come with an
+# extra memory requirement and unfortunately, doesn't address all issues. This is
 # because under normal operation the draw() function only cycles over enabled
-# objects so if a mix of disabled and enabled objects are added then the draw order
-# won't be correct. therefore, the lower memory cost and faster performance option
-# was taken.
+# objects, so if a mix of disabled and enabled objects are added, then the draw
+# order won't be correct. therefore, the lower memory cost and faster performance
+# option was taken.
 #
 # REFERENCES
 #
@@ -61,6 +61,8 @@
 # * Investigate supporting different bitmap types:
 #   See: https://learn.adafruit.com/creating-your-first-tilemap-game-with-circuitpython/indexed-bmp-graphics
 #
+# * Create a single colour bitmap for the background.
+#   See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/draw-pixels
 
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 import adafruit_imageload
@@ -71,7 +73,7 @@ import board
 from displayio import Group, Palette, Bitmap, TileGrid
 from pmpge.game import Game
 from pmpge.game_object import GameObject, draw_hierarchy, traverse_hierarchy
-from pmpge.utilities import calculate_scaling_factor
+from pmpge.utilities import calculate_scaling_factor, Borders
 
 display = board.DISPLAY
 display.root_group = None
@@ -84,19 +86,19 @@ root = Group()
 background_group: Group = Group()
 object_group: Group = Group()
 border_group: Group = Group()
+
 root.append(background_group)
 root.append(object_group)
 root.append(border_group)
 
-# Create a single colour bitmap for the background.
-# Source: https://learn.adafruit.com/circuitpython-display-support-using-displayio/draw-pixels
-palette = Palette(1)
-palette[0] = 0x000000
-background = TileGrid(Bitmap(display.width, display.height, 1), pixel_shader=palette)
-background_group.append(background)
+background_palette = Palette(1)
+background_palette[0] = 0x000000
 
 border_palette = Palette(1)
 border_palette[0] = 0x000000
+
+manual_refresh = False
+manual_refresh_rate = 0
 
 
 def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
@@ -104,20 +106,8 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     Initialises the display by creating the desired background, building the entire
     hierarchy of TileGrids and turning on the display.
     """
-    # FUTURE: When the game is smaller than the display and we don't scale, we need to add a border.
-    #         The most common is 160 x 120 on a 160 x 128 display.
-
-    global game
+    global game, manual_refresh, manual_refresh_rate
     game = g
-
-    # FUTURE: If the background colour is black we could probably avoid the background object
-    #         entirely to save RAM.
-
-    # Set the single colour in the palette for our background to the desired background colour
-    red = bgc[0] & 255
-    green = bgc[1] & 255
-    blue = bgc[2] & 255
-    palette[0] = red << 16 | green << 8 | blue
 
     # Here we build the entire graphics hierarchy in order to place the tileGrid
     # instances in the correct order.
@@ -126,29 +116,46 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     scaling_factor = calculate_scaling_factor(display.width, display.height, g.width, g.height)
     object_group.scale = scaling_factor
 
-    # Now generate the borders to crop the screen to the desired game area. This currently
-    # just puts the borders at the bottom of the screen and on the right of the screen.
-    # FUTURE: Spread the borders more evenly.
-    # TODO: The code to generate the borders could be extract out returning a list of tuples
-    #       containing: width, height, x, y
-    game_area_width = g.width * scaling_factor
-    game_area_height = g.height * scaling_factor
-    border_width = display.width - game_area_width
-    border_height = display.height - game_area_height
+    borders = Borders(display.width, display.height, g.width, g.height, scaling_factor)
+    for width, height, x, y in borders.borders:
+        border = TileGrid(Bitmap(width, height, 1), pixel_shader=border_palette)
+        border.x = x
+        border.y = y
+        border_group.append(border)
 
-    if border_height > 0:
-        bottom_border = TileGrid(Bitmap(display.width, border_height, 1),
-                                 pixel_shader=border_palette)
-        bottom_border.y = game_area_height
-        border_group.append(bottom_border)
+    # Make the game objects relative to the borders
+    object_group.x = borders.game_x
+    object_group.y = borders.game_y
 
-    if border_width > 0:
-        right_border = TileGrid(Bitmap(border_width, display.height, 1),
-                                pixel_shader=border_palette)
-        right_border.x = game_area_width
-        border_group.append(right_border)
+    # Set the single colour in the palette for our background to the desired background colour
+    red = bgc[0] & 255
+    green = bgc[1] & 255
+    blue = bgc[2] & 255
+    background_palette[0] = red << 16 | green << 8 | blue
+
+    # If the background colour is black we can avoid the background object entirely to save RAM.
+    # and make it a tiny bit faster.
+    if background_palette[0] != 0x000000:
+        background = TileGrid(Bitmap(g.width, g.height, 1), pixel_shader=background_palette)
+        background_group.scale = scaling_factor
+        background_group.append(background)
+
+        # Now adjust the background based on the borders
+        background_group.x = borders.game_x
+        background_group.y = borders.game_y
 
     display.root_group = root
+
+    # Determine if we should manually refresh the display.
+    from pmpge.environment import config
+
+    if hasattr(config, 'GRAPHICS_FRAMERATE'):
+        manual_refresh = True
+        manual_refresh_rate = config.GRAPHICS_FRAMERATE
+
+    display.auto_refresh = not manual_refresh
+
+    # Finally we turn on the display
     display.brightness = 1
 
 
@@ -159,16 +166,15 @@ def deinit():
     global game
     game = None
 
-    # Remove all the items from the object group (most should
-    # have been removed via the GameObject.destroy() method.
     display.root_group = None
-    while len(object_group) > 0:
-        object_group.pop()
+    display.auto_refresh = True  # Always revert back to auto refresh
 
-    # Now remove the borders.
-    while len(border_group) > 0:
-        border = border_group.pop()
-        border.bitmap.deinit()
+    # Remove all the items from the groups (most items from the object group should
+    # have been removed via the GameObject.destroy() method.
+    for group in [background_group, object_group, border_group]:
+        while len(group) > 0:
+            obj = group.pop()
+            obj.bitmap.deinit()
 
     clear_image_cache()
 
@@ -177,8 +183,12 @@ def draw(screen):
     """
     We have to process the entire hierarchy to ensure visbility is set.
     """
+    # noinspection PyUnresolvedReferences
     draw_hierarchy(game.root, screen, draw_only_visible=False)
+    # noinspection PyUnresolvedReferences
     game.draw(screen)
+    if manual_refresh:
+        display.refresh(target_frames_per_second=manual_refresh_rate)
 
 
 # This global setting is used to force all GameObjects to re-add their displayio
@@ -286,7 +296,9 @@ class GraphicsDrawImageTrait:
 
         tile_grid = image.tile_grid
         tile_grid.hidden = not (self._active and self.visible)
+        # noinspection PyUnresolvedReferences
         tile_grid.x = int(self.x - image.offset_x)
+        # noinspection PyUnresolvedReferences
         tile_grid.y = int(self.y - image.offset_y)
 
     def deactivated(self):

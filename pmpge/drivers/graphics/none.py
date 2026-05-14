@@ -5,22 +5,24 @@ def draw(screen):
     pass
 
 
-class ImageLoader:
+def game_object_hierarchy_changed():
     """
-    Mandatory implementation specific class to load and draw an image. Does nothing.
+    Mandatory function, does nothing.
     """
-    width: int
-    height: int
+    pass
 
-    def load(self, image: str):
-        """
-        Loads the named image resource.
-        """
-        self.width = 0
-        self.height = 0
 
-    def draw(self, surface, pos: tuple[int, int]):
-        """
-        Draws the image, with pos representing the top left corner.
-        """
-        pass
+class DriverImageResource:
+    """
+    Mandatory class, does nothing.
+    """
+
+    def load(self, image: str) -> tuple[int, int]:
+        return 0, 0
+
+
+class GraphicsDrawImageTrait:
+    """
+    Mandatory class, does nothing.
+    """
+    pass

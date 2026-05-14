@@ -64,8 +64,6 @@
 # * Create a single colour bitmap for the background.
 #   See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/draw-pixels
 
-# TODO: Add an option to specify a framerate in configuration.
-
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 import adafruit_imageload
 # noinspection PyUnresolvedReferences,PyPackageRequirements
@@ -99,13 +97,16 @@ background_palette[0] = 0x000000
 border_palette = Palette(1)
 border_palette[0] = 0x000000
 
+manual_refresh = False
+manual_refresh_rate = 0
+
 
 def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     """
     Initialises the display by creating the desired background, building the entire
     hierarchy of TileGrids and turning on the display.
     """
-    global game
+    global game, manual_refresh, manual_refresh_rate
     game = g
 
     # Here we build the entire graphics hierarchy in order to place the tileGrid
@@ -140,6 +141,17 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
         background.y = borders.game_y
 
     display.root_group = root
+
+    # Determine if we should manually refresh the display.
+    from pmpge.environment import config
+
+    if hasattr(config, 'GRAPHICS_FRAMERATE'):
+        manual_refresh = True
+        manual_refresh_rate = config.GRAPHICS_FRAMERATE
+
+    display.auto_refresh = not manual_refresh
+
+    # Finally we turn on the display
     display.brightness = 1
 
 
@@ -151,6 +163,7 @@ def deinit():
     game = None
 
     display.root_group = None
+    display.auto_refresh = True  # Always revert back to auto refresh
 
     # Remove all the items from the groups (most items from the object group should
     # have been removed via the GameObject.destroy() method.
@@ -170,6 +183,8 @@ def draw(screen):
     draw_hierarchy(game.root, screen, draw_only_visible=False)
     # noinspection PyUnresolvedReferences
     game.draw(screen)
+    if manual_refresh:
+        display.refresh(target_frames_per_second=manual_refresh_rate)
 
 
 # This global setting is used to force all GameObjects to re-add their displayio

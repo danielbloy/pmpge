@@ -104,6 +104,8 @@ of the framework, including:
 
 * `GRAPHICS_SCALING` - Enforces a scaling factor for the graphics. Only used by the
   displayio graphics driver.
+* `GRAPHICS_FRAMERATE` - If set, the game will run at (or below) the desired framerate.
+  This is currently only used by the displayio graphics driver.
 
 ## License
 

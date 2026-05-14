@@ -123,6 +123,10 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
         border.y = y
         border_group.append(border)
 
+    # Make the game objects relative to the borders
+    object_group.x = borders.game_x
+    object_group.y = borders.game_y
+
     # Set the single colour in the palette for our background to the desired background colour
     red = bgc[0] & 255
     green = bgc[1] & 255
@@ -137,8 +141,8 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
         background_group.append(background)
 
         # Now adjust the background based on the borders
-        background.x = borders.game_x
-        background.y = borders.game_y
+        background_group.x = borders.game_x
+        background_group.y = borders.game_y
 
     display.root_group = root
 

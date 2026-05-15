@@ -73,7 +73,7 @@ import board
 from displayio import Group, Palette, Bitmap, TileGrid
 from pmpge.game import Game
 from pmpge.game_object import GameObject, draw_hierarchy, traverse_hierarchy
-from pmpge.utilities import calculate_scaling_factor, Borders
+from pmpge.utilities import calculate_scaling_factor, Borders, CalculateFps
 
 display = board.DISPLAY
 display.root_group = None
@@ -86,10 +86,12 @@ root = Group()
 background_group: Group = Group()
 object_group: Group = Group()
 border_group: Group = Group()
+overlay_group: Group = Group()
 
 root.append(background_group)
 root.append(object_group)
 root.append(border_group)
+root.append(overlay_group)
 
 background_palette = Palette(1)
 background_palette[0] = 0x000000
@@ -99,6 +101,14 @@ border_palette[0] = 0x000000
 
 manual_refresh = False
 manual_refresh_rate = 0
+
+
+# TODO: Only create this if the setting is enabled.
+def display_fps(fps: int):
+    print(fps)
+
+
+fps: CalculateFps = CalculateFps(callback=display_fps)
 
 
 def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
@@ -155,6 +165,9 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
 
     display.auto_refresh = not manual_refresh
 
+    if fps is not None:
+        fps.reset()
+
     # Finally we turn on the display
     display.brightness = 1
 
@@ -177,6 +190,14 @@ def deinit():
             obj.bitmap.deinit()
 
     clear_image_cache()
+
+
+def update(dt: float):
+    """
+    Calculates the FPS and displays it on the overlay
+    """
+    if fps is not None:
+        fps.update(dt)
 
 
 def draw(screen):

@@ -1,6 +1,13 @@
 # This file contains a range of utility functions used throughout the project.
 # Many are extracted from the various drivers to make it easier to test.
 
+from pmpge.environment import is_running_on_desktop
+
+# These are not available in CircuitPython.
+if is_running_on_desktop():
+    from collections.abc import Callable
+
+
 ################################################################################
 # G R A P H I C S    U T I L I T I E S
 ################################################################################
@@ -135,6 +142,9 @@ class Borders:
 class CalculateFps:
     """
     Class to calculate the FPS over the last 4 intervals to allow a slight smoothing.
+    A callback can be provided that will be called at a pre-determined interval (roughly)
+    with the most recent calculation for FPS. Do not rely on accuracy of the frequency
+    of the callback, it will get called at a maximum of the desired interval.
     """
     interval: float
     quarters: list[int]
@@ -142,12 +152,20 @@ class CalculateFps:
     index: int
     next_quarter: float
 
-    def __init__(self, interval: float = 0.25):
+    callback_interval: float
+    next_callback: float
+    callback: Callable[[int], None] | None
+
+    def __init__(self, interval: float = 0.25, callback_interval: float = 1.0, callback: Callable[[int], None] = None):
         self.interval = interval
         self.quarters: list[int] = [0, 0, 0, 0]
         self.current: int = 0
         self.index: int = 0
         self.time_left: float = interval
+
+        self.callback_interval = callback_interval
+        self.next_callback = callback_interval
+        self.callback = callback
 
     def update(self, delta_time: float) -> int:
         """
@@ -168,4 +186,30 @@ class CalculateFps:
 
         self.time_left = time_left
 
-        return sum(self.quarters)
+        fps = sum(self.quarters)
+
+        # Now check for callback
+        callback = self.callback
+        if callback is not None:
+            next_callback = self.next_callback
+            next_callback -= delta_time
+            if next_callback <= 0:
+                callback(fps)
+                next_callback = self.callback_interval
+
+            self.next_callback = next_callback
+
+        return fps
+
+    def reset(self):
+        """
+        Simple straightforward reset of the FPS counter.
+        """
+        self.next_callback = self.callback_interval
+        self.index = 0
+        self.current = 0
+        quarters = self.quarters
+        quarters[0] = 0
+        quarters[1] = 0
+        quarters[2] = 0
+        quarters[3] = 0

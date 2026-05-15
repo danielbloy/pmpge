@@ -1,6 +1,7 @@
 import pytest
 
 from pmpge.utilities import calculate_scaling_factor, Borders, CalculateFps
+from tests.pmpge.testing_utilities import are_almost_equal
 from tests.pmpge.testing_utilities import with_config_file
 
 
@@ -243,78 +244,224 @@ def test_calculate_fps():
     """
     This runs through a series of tests to ensure the CalculateFps class works as expected.
     """
-    calc = CalculateFps()
+    value: int = 0
+    count: int = 0
+
+    def callback(v: int):
+        nonlocal value, count
+
+        value = v
+        count += 1
+
+    calc = CalculateFps(callback=callback, callback_interval=0.35)
+
     assert calc.update(0) == 0
     assert calc.current == 1
     assert calc.index == 0
     assert calc.quarters == [0, 0, 0, 0]
+    assert calc.callback_interval == 0.35
+    assert are_almost_equal(calc.next_callback, 0.35)
+    assert value == 0
+    assert count == 0
 
     assert calc.update(0.1) == 0
     assert calc.current == 2
     assert calc.index == 0
     assert calc.quarters == [0, 0, 0, 0]
+    assert calc.callback_interval == 0.35
+    assert are_almost_equal(calc.next_callback, 0.25)
+    assert value == 0
+    assert count == 0
 
     assert calc.update(0.1) == 0
     assert calc.current == 3
     assert calc.index == 0
     assert calc.quarters == [0, 0, 0, 0]
+    assert calc.callback_interval == 0.35
+    assert are_almost_equal(calc.next_callback, 0.15)
+    assert value == 0
+    assert count == 0
 
-    # This will now tick over.
+    # This will now tick over but not trigger the callback
     assert calc.update(0.1) == 4
     assert calc.current == 0
     assert calc.index == 1
     assert calc.quarters == [4, 0, 0, 0]
+    assert calc.callback_interval == 0.35
+    assert are_almost_equal(calc.next_callback, 0.05)
+    assert value == 0
+    assert count == 0
 
     assert calc.update(0.1) == 4
     assert calc.current == 1
     assert calc.index == 1
     assert calc.quarters == [4, 0, 0, 0]
+    assert calc.callback_interval == 0.35
+    assert are_almost_equal(calc.next_callback, 0.35)
+    assert value == 4
+    assert count == 1
 
-    # This will now tick over
+    # This will now tick over and trigger the callback
     assert calc.update(0.1) == 6
     assert calc.current == 0
     assert calc.index == 2
     assert calc.quarters == [4, 2, 0, 0]
+    assert calc.callback_interval == 0.35
+    assert are_almost_equal(calc.next_callback, 0.25)
+    assert value == 4
+    assert count == 1
 
     assert calc.update(0.1) == 6
     assert calc.current == 1
     assert calc.index == 2
     assert calc.quarters == [4, 2, 0, 0]
+    assert calc.callback_interval == 0.35
+    assert are_almost_equal(calc.next_callback, 0.15)
+    assert value == 4
+    assert count == 1
 
     assert calc.update(0.1) == 6
     assert calc.current == 2
     assert calc.index == 2
     assert calc.quarters == [4, 2, 0, 0]
+    assert calc.callback_interval == 0.35
+    assert are_almost_equal(calc.next_callback, 0.05)
+    assert value == 4
+    assert count == 1
 
     # This will now tick over
     assert calc.update(0.1) == 9
     assert calc.current == 0
     assert calc.index == 3
     assert calc.quarters == [4, 2, 3, 0]
+    assert calc.callback_interval == 0.35
+    assert are_almost_equal(calc.next_callback, 0.35)
+    assert value == 9
+    assert count == 2
 
     assert calc.update(0.1) == 9
     assert calc.current == 1
     assert calc.index == 3
     assert calc.quarters == [4, 2, 3, 0]
+    assert calc.callback_interval == 0.35
+    assert are_almost_equal(calc.next_callback, 0.25)
+    assert value == 9
+    assert count == 2
 
     # This will now tick over
     assert calc.update(0.1) == 11
     assert calc.current == 0
     assert calc.index == 0
     assert calc.quarters == [4, 2, 3, 2]
+    assert calc.callback_interval == 0.35
+    assert are_almost_equal(calc.next_callback, 0.15)
+    assert value == 9
+    assert count == 2
 
     assert calc.update(0.1) == 11
     assert calc.current == 1
     assert calc.index == 0
     assert calc.quarters == [4, 2, 3, 2]
+    assert calc.callback_interval == 0.35
+    assert are_almost_equal(calc.next_callback, 0.05)
+    assert value == 9
+    assert count == 2
 
     assert calc.update(0.1) == 11
     assert calc.current == 2
     assert calc.index == 0
     assert calc.quarters == [4, 2, 3, 2]
+    assert calc.callback_interval == 0.35
+    assert are_almost_equal(calc.next_callback, 0.35)
+    assert value == 11
+    assert count == 3
 
     # This will now tick over
     assert calc.update(0.1) == 10
     assert calc.current == 0
     assert calc.index == 1
     assert calc.quarters == [3, 2, 3, 2]
+    assert calc.callback_interval == 0.35
+    assert are_almost_equal(calc.next_callback, 0.25)
+    assert value == 11
+    assert count == 3
+
+    # Now validate the reset
+    calc.reset()
+    assert calc.current == 0
+    assert calc.index == 0
+    assert calc.quarters == [0, 0, 0, 0]
+    assert calc.callback_interval == 0.35
+    assert are_almost_equal(calc.next_callback, 0.35)
+
+
+def test_calculate_fps_without_callback():
+    """
+    Repeats some of the tests above but without a callback.
+    """
+    calc = CalculateFps()
+    assert calc.update(0) == 0
+    assert calc.current == 1
+    assert calc.index == 0
+    assert calc.quarters == [0, 0, 0, 0]
+    assert calc.callback_interval == 1.0
+    assert calc.next_callback == 1.0
+
+    assert calc.update(0.1) == 0
+    assert calc.current == 2
+    assert calc.index == 0
+    assert calc.quarters == [0, 0, 0, 0]
+    assert calc.callback_interval == 1.0
+    assert calc.next_callback == 1.0
+
+    assert calc.update(0.1) == 0
+    assert calc.current == 3
+    assert calc.index == 0
+    assert calc.quarters == [0, 0, 0, 0]
+    assert calc.callback_interval == 1.0
+    assert calc.next_callback == 1.0
+
+    # This will now tick over
+    assert calc.update(0.1) == 4
+    assert calc.current == 0
+    assert calc.index == 1
+    assert calc.quarters == [4, 0, 0, 0]
+    assert calc.callback_interval == 1.0
+    assert calc.next_callback == 1.0
+
+    assert calc.update(0.1) == 4
+    assert calc.current == 1
+    assert calc.index == 1
+    assert calc.quarters == [4, 0, 0, 0]
+    assert calc.callback_interval == 1.0
+    assert calc.next_callback == 1.0
+
+    # This will now tick over
+    assert calc.update(0.1) == 6
+    assert calc.current == 0
+    assert calc.index == 2
+    assert calc.quarters == [4, 2, 0, 0]
+    assert calc.callback_interval == 1.0
+    assert calc.next_callback == 1.0
+
+    assert calc.update(0.1) == 6
+    assert calc.current == 1
+    assert calc.index == 2
+    assert calc.quarters == [4, 2, 0, 0]
+    assert calc.callback_interval == 1.0
+    assert calc.next_callback == 1.0
+
+    assert calc.update(0.1) == 6
+    assert calc.current == 2
+    assert calc.index == 2
+    assert calc.quarters == [4, 2, 0, 0]
+    assert calc.callback_interval == 1.0
+    assert calc.next_callback == 1.0
+
+    # Now validate the reset
+    calc.reset()
+    assert calc.current == 0
+    assert calc.index == 0
+    assert calc.quarters == [0, 0, 0, 0]
+    assert calc.callback_interval == 1.0
+    assert calc.next_callback == 1.0

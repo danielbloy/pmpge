@@ -102,8 +102,9 @@ border_palette[0] = 0x000000
 manual_refresh = False
 manual_refresh_rate = 0
 
+graphics_stats = False
 
-# TODO: Only create this if the setting is enabled.
+
 def display_fps(fps: int):
     print(fps)
 
@@ -116,7 +117,7 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
     Initialises the display by creating the desired background, building the entire
     hierarchy of TileGrids and turning on the display.
     """
-    global game, manual_refresh, manual_refresh_rate
+    global game, manual_refresh, manual_refresh_rate, graphics_stats
     game = g
 
     # Here we build the entire graphics hierarchy in order to place the tileGrid
@@ -165,8 +166,10 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
 
     display.auto_refresh = not manual_refresh
 
-    if fps is not None:
-        fps.reset()
+    if hasattr(config, 'GRAPHICS_STATS'):
+        graphics_stats = config.GRAPHICS_STATS
+
+    fps.reset()
 
     # Finally we turn on the display
     display.brightness = 1
@@ -196,7 +199,7 @@ def update(dt: float):
     """
     Calculates the FPS and displays it on the overlay
     """
-    if fps is not None:
+    if graphics_stats:
         fps.update(dt)
 
 

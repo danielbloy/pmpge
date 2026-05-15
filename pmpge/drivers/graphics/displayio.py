@@ -68,6 +68,10 @@
 import adafruit_imageload
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 import board
+# noinspection PyUnresolvedReferences,PyPackageRequirements
+import terminalio
+# noinspection PyUnresolvedReferences,PyPackageRequirements
+from adafruit_display_text import label
 
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 from displayio import Group, Palette, Bitmap, TileGrid
@@ -105,11 +109,20 @@ manual_refresh_rate = 0
 graphics_stats = False
 
 
+# The following updates the FPS counter text. This only gets executed if GRAPHICS_STATS
+# is present in the config file and set to True
 def display_fps(fps: int):
-    print(fps)
+    fps_text.text = str(fps)
 
 
-fps: CalculateFps = CalculateFps(callback=display_fps)
+fps: CalculateFps = CalculateFps(callback_interval=0.5, callback=display_fps)
+# The text label is anchored in the bottom right hand corner of the screen. We only use
+# the default font it is exactly 8 pixels high if you ignore the descender part so we
+# need to drop it down so to avoid it overlapping the game area with an 8 pixel lower
+# border.
+fps_text = label.Label(terminalio.FONT, text="00", color=0xFFFFFF)
+fps_text.anchored_position = (display.width - 1, display.height + 2)
+fps_text.anchor_point = (1.0, 1.0)
 
 
 def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
@@ -168,6 +181,7 @@ def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
 
     if hasattr(config, 'GRAPHICS_STATS'):
         graphics_stats = config.GRAPHICS_STATS
+        overlay_group.append(fps_text)
 
     fps.reset()
 
@@ -191,6 +205,10 @@ def deinit():
         while len(group) > 0:
             obj = group.pop()
             obj.bitmap.deinit()
+
+    # Now treat the overlay group separately.
+    while len(overlay_group) > 0:
+        overlay_group.pop()
 
     clear_image_cache()
 

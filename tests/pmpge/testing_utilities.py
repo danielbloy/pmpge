@@ -12,6 +12,11 @@ import pmpge.environment as environment
 from pmpge.game_object import GameObject
 
 
+def are_almost_equal(a: float, b: float, tolerance: float = 1e-9):
+    """Used to compare float values are within a tolerance."""
+    return abs(a - b) < tolerance
+
+
 def with_config_file(contents: str, test: Callable, expect_error: bool = False) -> None:
     """
     Utility function for testing using a custom config file. It cleans up the file after the test

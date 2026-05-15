@@ -143,7 +143,8 @@ class CalculateFps:
     """
     Class to calculate the FPS over the last 4 intervals to allow a slight smoothing.
     A callback can be provided that will be called at a pre-determined interval (roughly)
-    with the most recent calculation for FPS.
+    with the most recent calculation for FPS. Do not rely on accuracy of the frequency
+    of the callback, it will get called at a maximum of the desired interval.
     """
     interval: float
     quarters: list[int]
@@ -188,12 +189,11 @@ class CalculateFps:
         fps = sum(self.quarters)
 
         # Now check for callback
-        # TODO: Test callback
         callback = self.callback
         if callback is not None:
             next_callback = self.next_callback
             next_callback -= delta_time
-            if next_callback < 0:
+            if next_callback <= 0:
                 callback(fps)
                 next_callback = self.callback_interval
 
@@ -203,6 +203,13 @@ class CalculateFps:
 
     def reset(self):
         """
-        TODO: Test
+        Simple straightforward reset of the FPS counter.
         """
         self.next_callback = self.callback_interval
+        self.index = 0
+        self.current = 0
+        quarters = self.quarters
+        quarters[0] = 0
+        quarters[1] = 0
+        quarters[2] = 0
+        quarters[3] = 0

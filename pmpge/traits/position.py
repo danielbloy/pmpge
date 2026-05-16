@@ -94,7 +94,39 @@ class AngularRelativeToParent:
             self.cy = int(parent.y)
 
 
-# TODO: Follow
+class FollowSprite:
+    """
+    This trait makes a sprite follow another sprite as the desired velocity.
+    TODO: Test
+    """
+    sprite: Position
+    x: float
+    y: float
+    vx: int
+    vy: int
+
+    def __init__(self, sprite: Position, vx, vy: int):
+        self.sprite: Position = sprite
+        self.vx: int = vx
+        self.vy: int = vy
+
+    def update(self, dt: float):
+        sprite = self.sprite
+        sx = sprite.x
+        sy = sprite.y
+        x = self.x
+        y = self.y
+
+        if sx < x:
+            self.x = x - (dt * self.vx)
+        elif sx > x:
+            self.x = x + (dt * self.vx)
+
+        if sy < y:
+            self.y = y - (dt * self.vy)
+        elif sy > y:
+            self.y = y + (dt * self.vy)
+
 
 class StayInBounds:
     """

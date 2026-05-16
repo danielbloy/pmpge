@@ -2,9 +2,9 @@ import math
 
 import pytest
 
-from pmpge.game_object import GameObject
+from pmpge.game_object import GameObject, update_hierarchy
 from pmpge.sprite import Sprite
-from pmpge.traits.position import AngularMotion, Position
+from pmpge.traits.position import AngularMotion, Position, AngularRelativeToParent
 from tests.pmpge.testing_utilities import are_almost_equal
 
 
@@ -126,3 +126,30 @@ def test_angular_motion():
     assert are_almost_equal(trait.x, 100)
     assert are_almost_equal(trait.y, 70)
     assert are_almost_equal(trait.angle, 1.5 * math.pi)
+
+
+# noinspection PyUnresolvedReferences
+def test_relative_to_parent():
+    """
+    Some simple checks on the AngularRelativeToParent class. All it does is update
+    the (cx, cy) position based on the parent. It's designed to be used with a
+    GameObject that has a position
+    """
+    parent = GameObject(Position(100, 100))
+
+    child = GameObject(AngularRelativeToParent, parent=parent)
+    # The dt value makes no different
+    update_hierarchy(child, 0)
+    assert child.cx == 100
+    assert child.cy == 100
+
+    update_hierarchy(child, 1)
+    assert child.cx == 100
+    assert child.cy == 100
+
+    # Move parent and watch us follow
+    parent.x = 50
+    parent.y = 150
+    update_hierarchy(child, 0)
+    assert child.cx == 50
+    assert child.cy == 150

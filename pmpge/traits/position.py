@@ -80,7 +80,6 @@ class AngularRelativeToParent:
     """
     This is a specialisation of Relative to parent that is used with AngularMotion
     to orbit a parent. It simply sets (cx, cy) to the parents (x, y) as it moves.
-    TODO: Test
     """
     parent: Position
     cx: int

@@ -1,3 +1,6 @@
+import math
+
+
 class Position:
     """
     Position is a specific location in 2D space, represented by an x and y co-ordinate.
@@ -34,12 +37,110 @@ class RelativeToParent:
         self.offset_y: int = offset_y
 
     def update(self, dt: int):
-        if self.parent:
-            self.x = self.parent.x + self.offset_x
-            self.y = self.parent.y + self.offset_y
+        parent = self.parent
+        if parent:
+            self.x = parent.x + self.offset_x
+            self.y = parent.y + self.offset_y
         else:
             self.x = self.offset_x
             self.y = self.offset_y
+
+
+class AngularMotion:
+    """
+    This trait will rotate a sprite around a center position (cx, cy) with a given radius
+    and angular_motion (specified in radians). This will blat any (x, y) coordinate pair
+    so will not play nicely with other traits that set position.
+    """
+    x: float
+    y: float
+    cx: int
+    cy: int
+    radius: int
+    angular_velocity: float  # This should be in radians
+    angle: float
+
+    def __init__(self, cx: int, cy: int, radius: int, angular_velocity: float, start_angle: float = 0.0):
+        self.cx: int = cx
+        self.cy: int = cy
+        self.radius: int = radius
+        self.angular_velocity: float = angular_velocity
+        self.angle: float = start_angle
+
+    def update(self, dt: float):
+        angle = self.angle + (dt * self.angular_velocity)
+        self.angle = angle
+
+        radius = self.radius
+        self.x = self.cx + (radius * math.cos(angle))
+        self.y = self.cy + (radius * math.sin(angle))
+
+
+class AngularRelativeToParent:
+    """
+    This is a specialisation of Relative to parent that is used with AngularMotion
+    to orbit a parent. It simply sets (cx, cy) to the parents (x, y) as it moves.
+    """
+    parent: Position
+    cx: int
+    cy: int
+
+    def update(self, dt: int):
+        parent = self.parent
+        if parent:
+            self.cx = int(parent.x)
+            self.cy = int(parent.y)
+
+
+class FollowSprite:
+    """
+    This trait makes a sprite follow another sprite as the desired velocity.
+    """
+    target: Position
+    x: float
+    y: float
+    vx: int
+    vy: int
+
+    def __init__(self, sprite: Position, vx, vy: int):
+        self.target: Position = sprite
+        self.vx: int = vx
+        self.vy: int = vy
+
+    def update(self, dt: float):
+        sprite = self.target
+        sx = sprite.x
+        sy = sprite.y
+        x = self.x
+        y = self.y
+
+        # Calculate delta
+        dx = sx - x
+        dy = sy - y
+
+        # Calculate movement
+        mx = (dt * abs(self.vx))
+        my = (dt * abs(self.vy))
+
+        # If the movement amount is greater than the delta, just move to target
+        if mx > abs(dx):
+            self.x = sx
+        else:
+            # Decide whether to go left or right
+            if dx < 0:
+                self.x = x - mx
+            elif dx > 0:
+                self.x = x + mx
+
+        # If the movement amount is greater than the delta, just move to target
+        if my > abs(dy):
+            self.y = sy
+        else:
+            # Decide whether to go up or down
+            if dy < 0:
+                self.y = y - my
+            elif dy > 0:
+                self.y = y + my
 
 
 class StayInBounds:

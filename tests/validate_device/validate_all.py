@@ -11,9 +11,10 @@ import tests.validate_device.validate_e_graphics_scaling as egs
 import tests.validate_device.validate_e_graphics_single_sprite as ess
 import tests.validate_device.validate_e_graphics_sprite_hierarchy as esv
 import tests.validate_device.validate_e_graphics_sprite_movement as esm
+import tests.validate_device.validate_e_graphics_sprite_orbiting as ego
 import tests.validate_device.validate_e_graphics_sprite_visibility as esh
 
-modules = [a, b, c, ch, ds, d, egb, egs, ess, ems, esm, esv, esh]
+modules = [a, b, c, ch, ds, d, egb, egs, ess, ems, esm, esv, esh, ego]
 
 
 def execute():

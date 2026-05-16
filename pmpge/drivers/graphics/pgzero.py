@@ -1,7 +1,9 @@
 import sys
 
 import pygame
+# noinspection PyUnresolvedReferences
 from pgzero.loaders import images
+# noinspection PyUnresolvedReferences
 from pgzero.screen import Screen
 from pygame import Surface
 
@@ -110,4 +112,5 @@ class GraphicsDrawImageTrait:
         Draws the image at the specified position, offset from the GameObjects position.
         """
         image = self.image
+        # noinspection PyUnresolvedReferences
         surface.blit(image.surface, (self.x - image.offset_x, self.y - image.offset_y))

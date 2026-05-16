@@ -51,7 +51,6 @@ class AngularMotion:
     This trait will rotate a sprite around a center position (cx, cy) with a given radius
     and angular_motion (specified in radians). This will blat any (x, y) coordinate pair
     so will not play nicely with other traits that set position.
-    TODO: Test
     """
     x: float
     y: float

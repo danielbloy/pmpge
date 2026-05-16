@@ -223,6 +223,33 @@ def test_changes_speed():
 
 
 # noinspection PyUnresolvedReferences
+def test_velocity_sign_ignored():
+    """
+    Validates that negative velocity values are treated the same as positive ones.
+    """
+    target = Position(0, 0)
+
+    go = GameObject(Position(100, 100), FollowSprite(target, -10, -10))
+    update_hierarchy(go, 1)
+    assert go.x == 90
+    assert go.y == 90
+
+    update_hierarchy(go, 1)
+    assert go.x == 80
+    assert go.y == 80
+
+    go.vx = -10
+    update_hierarchy(go, 1)
+    assert go.x == 70
+    assert go.y == 70
+
+    go.vy = -5
+    update_hierarchy(go, 1)
+    assert go.x == 60
+    assert go.y == 65
+
+
+# noinspection PyUnresolvedReferences
 def test_stops_when_reaches_target():
     """
     Validates that when the target is reached, the sprite stops.

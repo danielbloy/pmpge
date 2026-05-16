@@ -1,3 +1,6 @@
+import math
+
+
 class Position:
     """
     Position is a specific location in 2D space, represented by an x and y co-ordinate.
@@ -40,6 +43,33 @@ class RelativeToParent:
         else:
             self.x = self.offset_x
             self.y = self.offset_y
+
+
+class AngularMotion:
+    """
+
+    """
+    x: float
+    y: float
+    cx: int
+    cy: int
+    radius: int
+    angular_motion: float  # This should be in radians
+    angle: float
+
+    def __init__(self, cx: int, cy: int, radius: int, angular_motion: float, start_angle: float = 00.0):
+        self.cx: int = cx
+        self.cy: int = cy
+        self.radius: int = radius
+        self.angular_motion: float = angular_motion
+        self.angle: float = start_angle
+
+    def update(self, dt: float):
+        angle = self.angle + (dt * self.angular_motion)
+        self.angle = angle
+
+        self.x = self.cx + (self.radius * math.cos(angle))
+        self.y = self.cy + (self.radius * math.sin(angle))
 
 
 class StayInBounds:

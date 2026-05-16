@@ -37,9 +37,10 @@ class RelativeToParent:
         self.offset_y: int = offset_y
 
     def update(self, dt: int):
-        if self.parent:
-            self.x = self.parent.x + self.offset_x
-            self.y = self.parent.y + self.offset_y
+        parent = self.parent
+        if parent:
+            self.x = parent.x + self.offset_x
+            self.y = parent.y + self.offset_y
         else:
             self.x = self.offset_x
             self.y = self.offset_y
@@ -47,30 +48,53 @@ class RelativeToParent:
 
 class AngularMotion:
     """
-
+    This trait will rotate a sprite around a center position (cx, cy) with a given radius
+    and angular_motion (specified in radians). This will blat any (x, y) coordinate pair
+    so will not play nicely with other traits that set position.
+    TODO: Test
     """
     x: float
     y: float
     cx: int
     cy: int
     radius: int
-    angular_motion: float  # This should be in radians
+    angular_velocity: float  # This should be in radians
     angle: float
 
-    def __init__(self, cx: int, cy: int, radius: int, angular_motion: float, start_angle: float = 00.0):
+    def __init__(self, cx: int, cy: int, radius: int, angular_velocity: float, start_angle: float = 0.0):
         self.cx: int = cx
         self.cy: int = cy
         self.radius: int = radius
-        self.angular_motion: float = angular_motion
+        self.angular_velocity: float = angular_velocity
         self.angle: float = start_angle
 
     def update(self, dt: float):
-        angle = self.angle + (dt * self.angular_motion)
+        angle = self.angle + (dt * self.angular_velocity)
         self.angle = angle
 
-        self.x = self.cx + (self.radius * math.cos(angle))
-        self.y = self.cy + (self.radius * math.sin(angle))
+        radius = self.radius
+        self.x = self.cx + (radius * math.cos(angle))
+        self.y = self.cy + (radius * math.sin(angle))
 
+
+class AngularRelativeToParent:
+    """
+    This is a specialisation of Relative to parent that is used with AngularMotion
+    to orbit a parent. It simply sets (cx, cy) to the parents (x, y) as it moves.
+    TODO: Test
+    """
+    parent: Position
+    cx: int
+    cy: int
+
+    def update(self, dt: int):
+        parent = self.parent
+        if parent:
+            self.cx = int(parent.x)
+            self.cy = int(parent.y)
+
+
+# TODO: Follow
 
 class StayInBounds:
     """

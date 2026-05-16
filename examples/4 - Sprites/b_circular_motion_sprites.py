@@ -1,5 +1,6 @@
 """
-This example demonstrates sprites orbiting each other.
+This example demonstrates one sprite orbiting another sprite which is
+orbiting the centre of the screen.
 """
 import math
 import time
@@ -7,7 +8,7 @@ import time
 from pmpge.game import Game
 from pmpge.sprite import Sprite
 from pmpge.traits.graphics import DrawImage
-from pmpge.traits.position import AngularMotion
+from pmpge.traits.position import AngularMotion, AngularRelativeToParent
 
 GAME_WIDTH = 320
 GAME_HEIGHT = 240
@@ -30,7 +31,8 @@ game.add_child(earth)
 
 moon = Sprite(
     100, 100,
-    AngularMotion(-10, -20, 1, 1, 1),
+    AngularRelativeToParent(),
+    AngularMotion(0, 0, 20, math.pi),
     DrawImage("moon.png"))
 earth.add_child(moon)
 

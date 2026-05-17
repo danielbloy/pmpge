@@ -14,8 +14,6 @@ GAME_HEIGHT = 240
 
 game: Game = Game(GAME_WIDTH, GAME_HEIGHT)
 
-RED = (255, 0, 0)
-
 
 def terminate(dt: float):
     if time.monotonic() > finish:

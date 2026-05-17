@@ -10,9 +10,7 @@ from pmpge.sprite import Sprite
 from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import Velocity
 
-game: Game = Game(320, 240)
-
-RED = (255, 0, 0)
+game: Game = Game(160, 120)
 
 
 def terminate(dt: float):
@@ -21,13 +19,13 @@ def terminate(dt: float):
 
 
 player = Sprite(
-    100, 100,
+    100, 60,
     Velocity(20, 20),
     DrawImage("player.png"))
 game.add_child(player)
 
 alien = Sprite(
-    100, 100,
+    100, 60,
     Velocity(-10, -20),
     DrawImage("alien.png"))
 game.add_child(alien)

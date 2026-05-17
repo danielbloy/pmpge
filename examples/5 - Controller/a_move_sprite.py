@@ -11,7 +11,7 @@ from pmpge.sprite import Sprite
 from pmpge.traits.controller import MoveWithController
 from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import Acceleration, Velocity
-from traits.position import StayInBounds
+from pmpge.traits.position import StayInBounds
 
 game: Game = Game(160, 120, (255, 255, 255))
 

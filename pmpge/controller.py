@@ -68,406 +68,92 @@ Button arrangements for each controller:
 
 import pmpge.environment as environment
 
-# These are not available in CircuitPython.
-if environment.is_running_on_desktop():
-    from abc import ABC, abstractmethod
 
+class Controller:
 
-    # TODO: We need a better way to manage controllers across different device types.
-    class TwoButtonController(ABC):
+    @property
+    def button_count(self):
+        return 12
 
-        @property
-        def button_count(self):
-            return 2
+    @property
+    def start(self) -> bool:
+        pass
 
-        @property
-        @abstractmethod
-        def start(self) -> bool:
-            pass
+    @property
+    def select(self) -> bool:
+        pass
 
-        @property
-        @abstractmethod
-        def select(self) -> bool:
-            pass
+    @property
+    def action(self) -> bool:
+        return self.a
 
-        @property
-        def action(self) -> bool:
-            return self.start
+    @property
+    def cancel(self) -> bool:
+        return self.b
 
-        @property
-        def cancel(self) -> bool:
-            return self.select
+    @property
+    def left(self) -> bool:
+        pass
 
+    @property
+    def l(self) -> bool:
+        return self.left
 
-    class ABController(ABC):
+    @property
+    def right(self) -> bool:
+        pass
 
-        @property
-        def button_count(self):
-            return 4
+    @property
+    def r(self) -> bool:
+        return self.right
 
-        @property
-        @abstractmethod
-        def start(self) -> bool:
-            pass
+    @property
+    def up(self) -> bool:
+        pass
 
-        @property
-        @abstractmethod
-        def select(self) -> bool:
-            pass
+    @property
+    def u(self) -> bool:
+        return self.up
 
-        @property
-        def action(self) -> bool:
-            return self.start
+    @property
+    def down(self) -> bool:
+        pass
 
-        @property
-        def cancel(self) -> bool:
-            return self.select
+    @property
+    def d(self) -> bool:
+        return self.down
 
-        @property
-        def left(self) -> bool:
-            return self.b
+    @property
+    def a(self) -> bool:
+        pass
 
-        @property
-        def l(self) -> bool:
-            return self.b
+    @property
+    def b(self) -> bool:
+        pass
 
-        @property
-        def right(self) -> bool:
-            return self.a
+    @property
+    def x(self) -> bool:
+        pass
 
-        @property
-        def r(self) -> bool:
-            return self.a
+    @property
+    def y(self) -> bool:
+        pass
 
-        @property
-        @abstractmethod
-        def a(self) -> bool:
-            pass
+    @property
+    def left_shoulder(self) -> bool:
+        pass
 
-        @property
-        @abstractmethod
-        def b(self) -> bool:
-            pass
+    @property
+    def ls(self) -> bool:
+        return self.left
 
+    @property
+    def right_shoulder(self) -> bool:
+        pass
 
-    class ABUDController(ABC):
+    @property
+    def rs(self) -> bool:
+        return self.right
 
-        @property
-        def button_count(self):
-            return 4
-
-        @property
-        @abstractmethod
-        def start(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def select(self) -> bool:
-            pass
-
-        @property
-        def action(self) -> bool:
-            return self.start
-
-        @property
-        def cancel(self) -> bool:
-            return self.select
-
-        @property
-        @abstractmethod
-        def up(self) -> bool:
-            pass
-
-        @property
-        def u(self) -> bool:
-            return self.up
-
-        @property
-        @abstractmethod
-        def down(self) -> bool:
-            pass
-
-        @property
-        def d(self) -> bool:
-            return self.down
-
-        @property
-        def left(self) -> bool:
-            return self.b
-
-        @property
-        def l(self) -> bool:
-            return self.b
-
-        @property
-        def right(self) -> bool:
-            return self.a
-
-        @property
-        def r(self) -> bool:
-            return self.a
-
-        @property
-        @abstractmethod
-        def a(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def b(self) -> bool:
-            pass
-
-
-    class NESController(ABC):
-
-        @property
-        def button_count(self):
-            return 8
-
-        @property
-        @abstractmethod
-        def start(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def select(self) -> bool:
-            pass
-
-        @property
-        def action(self) -> bool:
-            return self.a
-
-        @property
-        def cancel(self) -> bool:
-            return self.b
-
-        @property
-        @abstractmethod
-        def left(self) -> bool:
-            pass
-
-        @property
-        def l(self) -> bool:
-            return self.left
-
-        @property
-        @abstractmethod
-        def right(self) -> bool:
-            pass
-
-        @property
-        def r(self) -> bool:
-            return self.right
-
-        @property
-        @abstractmethod
-        def up(self) -> bool:
-            pass
-
-        @property
-        def u(self) -> bool:
-            return self.up
-
-        @property
-        @abstractmethod
-        def down(self) -> bool:
-            pass
-
-        @property
-        def d(self) -> bool:
-            return self.down
-
-        @property
-        @abstractmethod
-        def a(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def b(self) -> bool:
-            pass
-
-
-    class SNESNoShoulderButtonsController(ABC):
-
-        @property
-        def button_count(self):
-            return 10
-
-        @property
-        @abstractmethod
-        def start(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def select(self) -> bool:
-            pass
-
-        @property
-        def action(self) -> bool:
-            return self.a
-
-        @property
-        def cancel(self) -> bool:
-            return self.b
-
-        @property
-        @abstractmethod
-        def left(self) -> bool:
-            pass
-
-        @property
-        def l(self) -> bool:
-            return self.left
-
-        @property
-        @abstractmethod
-        def right(self) -> bool:
-            pass
-
-        @property
-        def r(self) -> bool:
-            return self.right
-
-        @property
-        @abstractmethod
-        def up(self) -> bool:
-            pass
-
-        @property
-        def u(self) -> bool:
-            return self.up
-
-        @property
-        @abstractmethod
-        def down(self) -> bool:
-            pass
-
-        @property
-        def d(self) -> bool:
-            return self.down
-
-        @property
-        @abstractmethod
-        def a(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def b(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def x(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def y(self) -> bool:
-            pass
-
-
-    class SNESController(ABC):
-
-        @property
-        def button_count(self):
-            return 12
-
-        @property
-        @abstractmethod
-        def start(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def select(self) -> bool:
-            pass
-
-        @property
-        def action(self) -> bool:
-            return self.a
-
-        @property
-        def cancel(self) -> bool:
-            return self.b
-
-        @property
-        @abstractmethod
-        def left(self) -> bool:
-            pass
-
-        @property
-        def l(self) -> bool:
-            return self.left
-
-        @property
-        @abstractmethod
-        def right(self) -> bool:
-            pass
-
-        @property
-        def r(self) -> bool:
-            return self.right
-
-        @property
-        @abstractmethod
-        def up(self) -> bool:
-            pass
-
-        @property
-        def u(self) -> bool:
-            return self.up
-
-        @property
-        @abstractmethod
-        def down(self) -> bool:
-            pass
-
-        @property
-        def d(self) -> bool:
-            return self.down
-
-        @property
-        @abstractmethod
-        def a(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def b(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def x(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def y(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def left_shoulder(self) -> bool:
-            pass
-
-        @property
-        def ls(self) -> bool:
-            return self.left
-
-        @property
-        @abstractmethod
-        def right_shoulder(self) -> bool:
-            pass
-
-        @property
-        def rs(self) -> bool:
-            return self.right
 
 __controller = environment.import_driver('controller')
-Controller = __controller.Controller

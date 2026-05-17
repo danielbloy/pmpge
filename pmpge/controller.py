@@ -1,5 +1,8 @@
 """
-There are a several primary controllers, defined by the number of buttons available
+TODO: Review this documentation
+TODO: Consider adding in documentation for the 3 button controller
+
+There are several controller configurations, defined by the number of buttons available
 on the device. Each controller builds on the previous controllers as the number of
 buttons steadily increases. Instantiating a Controller instance will give you a
 controller representing the greatest number of buttons supported on the device.
@@ -7,6 +10,7 @@ Each controller format is defined below (all controllers have a menu and start b
 
   * 0  - No buttons
   * 2  - 2 button controller                               (start and select)
+  * 3  - 3 button controller                               (start, select, A)
   * 4  - AB controller                                     (start, select, A, B)
   * 6 -  AB UD controller                                  (start, select, U, D, A, B)
   * 8  - NES style controller                              (start, select, U, D, L, R, A, B)

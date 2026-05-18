@@ -66,7 +66,8 @@ def report():
     controller = Controller()
 
     print(
-        f'Running on {system()} with {screen_size()} screen and {controller.button_count} button controller.')
+        # TODO: f'Running on {system()} with {screen_size()} screen and {controller.button_count} button controller.')
+        f'Running on {system()} with {screen_size()} screen.')
     del controller
 
 

@@ -5,17 +5,13 @@ Defines the controller by mapping to the Pygame Zero keyboard instance.
 from pgzero.builtins import keyboard
 
 
-class XXXController:
+# FUTURE: Allow the button configuration to be specified in config.
+
+class ControllerButtons:
     """
     This is a simple controller that uses the Pygame Zero keyboard and provides the
     full keyboard mapping for the SNES controller.
     """
-
-    # TODO: Optionally specify the controller buttons in config as an array.
-    #       The number of buttons determines the size of the controller.
-    #       This could be common code across all environments as it just needs
-    #       a property for true or false for pressed/no pressed. Then another
-    #       for a button event.
 
     @property
     def start(self) -> bool:
@@ -26,19 +22,19 @@ class XXXController:
         return keyboard.escape
 
     @property
-    def left(self) -> bool:
+    def l(self) -> bool:
         return keyboard.a or keyboard.left
 
     @property
-    def right(self) -> bool:
+    def r(self) -> bool:
         return keyboard.d or keyboard.right
 
     @property
-    def up(self) -> bool:
+    def u(self) -> bool:
         return keyboard.w or keyboard.up
 
     @property
-    def down(self) -> bool:
+    def d(self) -> bool:
         return keyboard.s or keyboard.down
 
     @property
@@ -58,9 +54,9 @@ class XXXController:
         return keyboard.j
 
     @property
-    def left_shoulder(self) -> bool:
+    def ls(self) -> bool:
         return keyboard.q
 
     @property
-    def right_shoulder(self) -> bool:
+    def rs(self) -> bool:
         return keyboard.p

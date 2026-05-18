@@ -5,10 +5,8 @@ a simple AB controller with 4 buttons.
 
 from pgzero.builtins import keyboard
 
-from pmpge.controller import ABController
 
-
-class Controller(ABController):
+class ControllerButtons:
 
     @property
     def start(self) -> bool:
@@ -19,9 +17,17 @@ class Controller(ABController):
         return keyboard.escape
 
     @property
-    def a(self) -> bool:
+    def l(self) -> bool:
+        return keyboard.k
+
+    @property
+    def r(self) -> bool:
         return keyboard.l
 
     @property
-    def b(self) -> bool:
-        return keyboard.k
+    def u(self) -> bool:
+        return False
+
+    @property
+    def d(self) -> bool:
+        return False

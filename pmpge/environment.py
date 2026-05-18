@@ -61,14 +61,7 @@ def report():
     """
     Produces a simple report of the environment the code is running in.
     """
-
-    from pmpge.controller import Controller
-    controller = Controller()
-
-    print(
-        # TODO: f'Running on {system()} with {screen_size()} screen and {controller.button_count} button controller.')
-        f'Running on {system()} with {screen_size()} screen.')
-    del controller
+    print(f'Running on {system()} with {screen_size()} screen.')
 
 
 def screen_size() -> tuple[int, int]:

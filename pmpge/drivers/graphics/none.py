@@ -1,3 +1,6 @@
+print("No graphics driver.")
+
+
 def draw(screen):
     """
     Mandatory draw method, does nothing.

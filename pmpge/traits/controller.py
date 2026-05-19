@@ -29,14 +29,14 @@ class MoveWithController:
         new_y = self.y
         controller = self.controller
 
-        if controller.l:
+        if controller.left:
             new_x -= (self.mx * dt)
-        elif controller.r:
+        elif controller.right:
             new_x += (self.mx * dt)
 
-        if controller.u:
+        if controller.up:
             new_y -= (self.my * dt)
-        elif controller.d:
+        elif controller.down:
             new_y += (self.my * dt)
 
         self.x = new_x

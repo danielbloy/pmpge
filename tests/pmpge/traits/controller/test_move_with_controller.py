@@ -10,10 +10,10 @@ from pmpge.traits.position import Position
 
 @dataclass
 class ControllerLRUD:
-    l: bool
-    r: bool
-    u: bool
-    d: bool
+    left: bool
+    right: bool
+    up: bool
+    down: bool
 
 
 def test_constructor():
@@ -73,7 +73,8 @@ def test_without_position():
 # noinspection PyUnresolvedReferences
 def test_with_lrud_buttons():
     """
-    Validates horizontal and vertical movement works with a 6 button controller.
+    Validates horizontal and vertical movement works with a controller that supports
+    left, right , up and down buttons.
     """
     controller = ControllerLRUD(False, False, False, False)
     go = GameObject(Position(0, 0), MoveWithController(10, 20, controller))
@@ -83,10 +84,10 @@ def test_with_lrud_buttons():
     assert go.my == 20
 
     # Should change nothing
-    controller.l = True
-    controller.r = True
-    controller.u = True
-    controller.d = True
+    controller.left = True
+    controller.right = True
+    controller.up = True
+    controller.down = True
     update_hierarchy(go, 0)
     assert go.x == 0
     assert go.y == 0
@@ -94,10 +95,10 @@ def test_with_lrud_buttons():
     assert go.my == 20
 
     # Right
-    controller.l = False
-    controller.r = True
-    controller.u = False
-    controller.d = False
+    controller.left = False
+    controller.right = True
+    controller.up = False
+    controller.down = False
     update_hierarchy(go, 1)
     assert go.x == 10
     assert go.y == 0
@@ -105,10 +106,10 @@ def test_with_lrud_buttons():
     assert go.my == 20
 
     # Left
-    controller.l = True
-    controller.r = False
-    controller.u = False
-    controller.d = False
+    controller.left = True
+    controller.right = False
+    controller.up = False
+    controller.down = False
     update_hierarchy(go, 1.5)
     assert go.x == -5
     assert go.y == 0
@@ -116,10 +117,10 @@ def test_with_lrud_buttons():
     assert go.my == 20
 
     # Left and right (left wins)
-    controller.l = True
-    controller.r = True
-    controller.u = False
-    controller.d = False
+    controller.left = True
+    controller.right = True
+    controller.up = False
+    controller.down = False
     update_hierarchy(go, 1)
     assert go.x == -15
     assert go.y == 0
@@ -127,10 +128,10 @@ def test_with_lrud_buttons():
     assert go.my == 20
 
     # Down
-    controller.l = False
-    controller.r = False
-    controller.u = False
-    controller.d = True
+    controller.left = False
+    controller.right = False
+    controller.up = False
+    controller.down = True
     update_hierarchy(go, 1)
     assert go.x == -15
     assert go.y == 20
@@ -138,10 +139,10 @@ def test_with_lrud_buttons():
     assert go.my == 20
 
     # Up
-    controller.l = False
-    controller.r = False
-    controller.u = True
-    controller.d = False
+    controller.left = False
+    controller.right = False
+    controller.up = True
+    controller.down = False
     update_hierarchy(go, 1.5)
     assert go.x == -15
     assert go.y == -10
@@ -149,10 +150,10 @@ def test_with_lrud_buttons():
     assert go.my == 20
 
     # Down again
-    controller.l = False
-    controller.r = False
-    controller.u = False
-    controller.d = True
+    controller.left = False
+    controller.right = False
+    controller.up = False
+    controller.down = True
     update_hierarchy(go, 1)
     assert go.x == -15
     assert go.y == 10
@@ -160,10 +161,10 @@ def test_with_lrud_buttons():
     assert go.my == 20
 
     # Up again
-    controller.l = False
-    controller.r = False
-    controller.u = True
-    controller.d = False
+    controller.left = False
+    controller.right = False
+    controller.up = True
+    controller.down = False
     update_hierarchy(go, 1.5)
     assert go.x == -15
     assert go.y == -20
@@ -171,10 +172,10 @@ def test_with_lrud_buttons():
     assert go.my == 20
 
     # Down and up (up wins)
-    controller.l = False
-    controller.r = False
-    controller.u = True
-    controller.d = True
+    controller.left = False
+    controller.right = False
+    controller.up = True
+    controller.down = True
     update_hierarchy(go, 1)
     assert go.x == -15
     assert go.y == -40
@@ -184,10 +185,10 @@ def test_with_lrud_buttons():
     # Reset and all buttons are set
     go.x = 0
     go.y = 0
-    controller.l = True
-    controller.r = True
-    controller.u = True
-    controller.d = True
+    controller.left = True
+    controller.right = True
+    controller.up = True
+    controller.down = True
     update_hierarchy(go, 1)
     assert go.x == -10
     assert go.y == -20
@@ -199,7 +200,7 @@ def test_with_lrud_buttons():
 def test_velocity_and_move_with_controller():
     """
     This runs a small number of tests when Velocity is combined with MoveWithController.
-    Order matters so, in these tests Velocity is processed first.
+    Order matters so in these tests, Velocity is processed first.
     """
     controller = ControllerLRUD(False, False, False, False)
     go = GameObject(
@@ -215,10 +216,10 @@ def test_velocity_and_move_with_controller():
     assert go.my == 20
 
     # Should change nothing
-    controller.l = True
-    controller.r = True
-    controller.u = True
-    controller.d = True
+    controller.left = True
+    controller.right = True
+    controller.up = True
+    controller.down = True
     update_hierarchy(go, 0)
     assert go.x == 0
     assert go.y == 0
@@ -228,10 +229,10 @@ def test_velocity_and_move_with_controller():
     assert go.my == 20
 
     # Velocity should move the GameObject
-    controller.l = False
-    controller.r = False
-    controller.u = False
-    controller.d = False
+    controller.left = False
+    controller.right = False
+    controller.up = False
+    controller.down = False
     update_hierarchy(go, 1)
     assert go.x == 30
     assert go.y == 40
@@ -241,10 +242,10 @@ def test_velocity_and_move_with_controller():
     assert go.my == 20
 
     # Velocity and right should move the GameObject
-    controller.l = False
-    controller.r = True
-    controller.u = False
-    controller.d = False
+    controller.left = False
+    controller.right = True
+    controller.up = False
+    controller.down = False
     update_hierarchy(go, 1)
     assert go.x == 70
     assert go.y == 80
@@ -254,10 +255,10 @@ def test_velocity_and_move_with_controller():
     assert go.my == 20
 
     # Velocity and left should move the GameObject
-    controller.l = True
-    controller.r = False
-    controller.u = False
-    controller.d = False
+    controller.left = True
+    controller.right = False
+    controller.up = False
+    controller.down = False
     update_hierarchy(go, 1)
     assert go.x == 90
     assert go.y == 120
@@ -267,10 +268,10 @@ def test_velocity_and_move_with_controller():
     assert go.my == 20
 
     # Velocity and down should move the GameObject
-    controller.l = False
-    controller.r = False
-    controller.u = False
-    controller.d = True
+    controller.left = False
+    controller.right = False
+    controller.up = False
+    controller.down = True
     update_hierarchy(go, 1)
     assert go.x == 120
     assert go.y == 180
@@ -280,10 +281,10 @@ def test_velocity_and_move_with_controller():
     assert go.my == 20
 
     # Velocity and up should move the GameObject
-    controller.l = False
-    controller.r = False
-    controller.u = True
-    controller.d = False
+    controller.left = False
+    controller.right = False
+    controller.up = True
+    controller.down = False
     update_hierarchy(go, 1)
     assert go.x == 150
     assert go.y == 200

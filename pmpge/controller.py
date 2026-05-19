@@ -1,6 +1,8 @@
 """
 The controller configuration is based on 12 button SNES controller as follows:
 
+ L Shoulder   R Shoulder
+
       U           X
     L   R       Y   A
       D           B
@@ -32,6 +34,10 @@ There are lots of other configurations possible too depending on the device.
 import pmpge.environment as environment
 
 
+# FUTURE: Add support for a second players controller
+# FUTURE: Add support for a on_repeat event
+
+
 class Controller:
     """
     The controller has static values that the underlying driver sets.
@@ -39,131 +45,109 @@ class Controller:
     There are instance properties that are read only that expose the
     underlying values.
     """
-    _start: bool = False
-    _select: bool = False
+    current: list[bool] = [False for _ in range(12)]  # Current button values
+    changed: list[bool] = [False for _ in range(12)]  # Have buttons changed?
 
-    _l: bool = False
-    _r: bool = False
-    _u: bool = False
-    _d: bool = False
+    __previous: list[bool] = [False for _ in range(12)]
 
-    _ls: bool = False
-    _rs: bool = False
+    BUTTON_START: int = 0
+    BUTTON_SELECT: int = 1
+    BUTTON_LEFT: int = 2
+    BUTTON_RIGHT: int = 3
+    BUTTON_UP: int = 4
+    BUTTON_DOWN: int = 5
+    BUTTON_A: int = 6
+    BUTTON_B: int = 7
+    BUTTON_X: int = 8
+    BUTTON_Y: int = 9
+    BUTTON_LS: int = 10
+    BUTTON_RS: int = 11
 
-    _a: bool = False
-    _b: bool = False
-    _x: bool = False
-    _y: bool = False
+    @staticmethod
+    def update():
+        current = Controller.current
+        previous = Controller.__previous
+        changed = Controller.changed
+
+        # Determine if changed
+        for i in range(12):
+            changed[i] = current[i] != previous[i]
+
+        # Copy new values
+        for i in range(12):
+            previous[i] = current[i]
 
     @property
     def start(self) -> bool:
-        return Controller._start
+        return Controller.current[0]
 
     @property
     def select(self) -> bool:
-        return Controller._select
+        return Controller.current[1]
 
     @property
     def left(self) -> bool:
-        return Controller._l
+        return Controller.current[2]
 
     @property
     def l(self) -> bool:
-        return Controller._l
+        return Controller.current[2]
 
     @property
     def right(self) -> bool:
-        return Controller._r
+        return Controller.current[3]
 
     @property
     def r(self) -> bool:
-        return Controller._r
+        return Controller.current[3]
 
     @property
     def up(self) -> bool:
-        return Controller._u
+        return Controller.current[4]
 
     @property
     def u(self) -> bool:
-        return Controller._u
+        return Controller.current[4]
 
     @property
     def down(self) -> bool:
-        return Controller._d
+        return Controller.current[5]
 
     @property
     def d(self) -> bool:
-        return Controller._d
+        return Controller.current[5]
 
     @property
     def a(self) -> bool:
-        return Controller._a
+        return Controller.current[6]
 
     @property
     def b(self) -> bool:
-        return Controller._b
+        return Controller.current[7]
 
     @property
     def x(self) -> bool:
-        return Controller._x
+        return Controller.current[8]
 
     @property
     def y(self) -> bool:
-        return Controller._y
+        return Controller.current[9]
 
     @property
     def left_shoulder(self) -> bool:
-        return Controller._ls
+        return Controller.current[10]
 
     @property
     def ls(self) -> bool:
-        return Controller._ls
+        return Controller.current[10]
 
     @property
     def right_shoulder(self) -> bool:
-        return Controller._rs
+        return Controller.current[11]
 
     @property
     def rs(self) -> bool:
-        return Controller._rs
+        return Controller.current[11]
 
 
 __controller = environment.import_driver('controller')
-
-
-# TODO: Call the driver to get the button statuses which returns a tuple of
-#       values (which it can update in the driver update() function).
-
-# TODO: The Controller needs to be regularly polled so that it can generate events.
-#       Should we do this as a GameObject?
-#       We do however want to avoid a use having to run boiler plate.
-
-# Actually, we could create the events as a GameObject and hook into the game. This
-# then allows for events to make use of activated etc. This will make it easy to have
-# different event handlers at different parts of the game.
-
-# TODO: Actually, this could even be done as a Trait and simply attached to a GameObject.
-
-class ControllerEvents:
-    pass
-
-# controller.on_start_pressed = <event>
-# controller.on_start_released = <event>
-#
-
-# TODO: Controller can provide a class to return which buttons changed since the
-#       last update with rise and fall a bit like Adafruits debouncer.
-
-
-# TODO: Combine ControllerEvents with GameObject much like with Sprites.
-
-#
-# TODO: The Controller needs to contain the buttons.
-
-
-# Support the following events:
-#   button_pressed
-#   button_released
-# FUTURE: Repeat
-
-# TODO: Need a way to get information about the buttons supported by the device.

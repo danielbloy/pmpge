@@ -11,18 +11,21 @@ from pmpge.controller import Controller
 
 
 def update(dt: float):
-    Controller._start = keyboard.RETURN or keyboard.space
-    Controller._select = keyboard.escape
+    current = Controller.current
+    current[0] = keyboard.RETURN or keyboard.space
+    current[1] = keyboard.escape
 
-    Controller._l = keyboard.a or keyboard.left
-    Controller._r = keyboard.d or keyboard.right
-    Controller._u = keyboard.w or keyboard.up
-    Controller._d = keyboard.s or keyboard.down
+    current[2] = keyboard.a or keyboard.left
+    current[3] = keyboard.d or keyboard.right
+    current[4] = keyboard.w or keyboard.up
+    current[5] = keyboard.s or keyboard.down
 
-    Controller._a = keyboard.l
-    Controller._b = keyboard.k
-    Controller._x = keyboard.i
-    Controller._y = keyboard.j
+    current[6] = keyboard.l
+    current[7] = keyboard.k
+    current[8] = keyboard.i
+    current[9] = keyboard.j
 
-    Controller._ls = keyboard.q
-    Controller._rs = keyboard.p
+    current[10] = keyboard.q
+    current[11] = keyboard.p
+
+    Controller.update()

@@ -41,3 +41,16 @@ class MoveWithController:
 
         self.x = new_x
         self.y = new_y
+
+
+class ControllerEvents:
+    """
+    TODO: Comments
+    # controller.on_start_pressed = <event>
+# controller.on_start_released = <event>
+
+    """
+    controller: Controller
+
+    def __init__(self, controller: Controller):
+        self.controller = controller

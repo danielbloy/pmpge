@@ -154,6 +154,9 @@ def get_graphics_driver() -> str:
     if is_running_on_desktop():
         return "pmpge.drivers.graphics.pgzero"
 
+    # TODO: We need something smarter here to load the displayio graphics driver in
+    #       scenarios where we have an attached display.
+
     return "pmpge.drivers.graphics.none"
 
 

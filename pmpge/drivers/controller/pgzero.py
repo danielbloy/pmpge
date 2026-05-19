@@ -4,59 +4,33 @@ Defines the controller by mapping to the Pygame Zero keyboard instance.
 
 from pgzero.builtins import keyboard
 
+from pmpge.controller import Controller
+
 
 # FUTURE: Allow the button configuration to be specified in config.
 
-class XXXXControllerButtons:
-    """
-    This is a simple controller that uses the Pygame Zero keyboard and provides the
-    full keyboard mapping for the SNES controller.
-    """
 
-    @property
-    def start(self) -> bool:
-        return keyboard.enter or keyboard.space
+def update(dt: float):
+    # TODO: Do something about having to set left and l etc.
+    
+    Controller.start = keyboard.RETURN or keyboard.space
+    Controller.select = keyboard.escape
 
-    @property
-    def select(self) -> bool:
-        return keyboard.escape
+    Controller.l = keyboard.a or keyboard.left
+    Controller.r = keyboard.d or keyboard.right
+    Controller.u = keyboard.w or keyboard.up
+    Controller.d = keyboard.s or keyboard.down
+    Controller.left = Controller.l
+    Controller.right = Controller.r
+    Controller.up = Controller.u
+    Controller.down = Controller.d
 
-    @property
-    def l(self) -> bool:
-        return keyboard.a or keyboard.left
+    Controller.a = keyboard.l
+    Controller.b = keyboard.k
+    Controller.x = keyboard.i
+    Controller.y = keyboard.j
 
-    @property
-    def r(self) -> bool:
-        return keyboard.d or keyboard.right
-
-    @property
-    def u(self) -> bool:
-        return keyboard.w or keyboard.up
-
-    @property
-    def d(self) -> bool:
-        return keyboard.s or keyboard.down
-
-    @property
-    def a(self) -> bool:
-        return keyboard.l
-
-    @property
-    def b(self) -> bool:
-        return keyboard.k
-
-    @property
-    def x(self) -> bool:
-        return keyboard.i
-
-    @property
-    def y(self) -> bool:
-        return keyboard.j
-
-    @property
-    def ls(self) -> bool:
-        return keyboard.q
-
-    @property
-    def rs(self) -> bool:
-        return keyboard.p
+    Controller.ls = keyboard.q
+    Controller.rs = keyboard.p
+    Controller.left_shoulder = Controller.ls
+    Controller.right_shoulder = Controller.rs

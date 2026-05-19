@@ -34,35 +34,98 @@ import pmpge.environment as environment
 
 class Controller:
     """
-    The controller only has static values. This allows multiple instances of
-    controller to share the values.
-
-    # TODO: The only danger here is that these should be read-only so maybe replace
-    #       with _l etc. and use read-only properties for the named entries.
+    The controller has static values that the underlying driver sets.
+    This allows multiple instances of controller to share the values.
+    There are instance properties that are read only that expose the
+    underlying values.
     """
-    start: bool = False
-    select: bool = False
+    _start: bool = False
+    _select: bool = False
 
-    left: bool = False
-    right: bool = False
-    up: bool = False
-    down: bool = False
+    _l: bool = False
+    _r: bool = False
+    _u: bool = False
+    _d: bool = False
 
-    l: bool = False
-    r: bool = False
-    u: bool = False
-    d: bool = False
+    _ls: bool = False
+    _rs: bool = False
 
-    left_shoulder: bool = False
-    right_shoulder: bool = False
+    _a: bool = False
+    _b: bool = False
+    _x: bool = False
+    _y: bool = False
 
-    ls: bool = False
-    rs: bool = False
+    @property
+    def start(self) -> bool:
+        return Controller._start
 
-    a: bool = False
-    b: bool = False
-    x: bool = False
-    y: bool = False
+    @property
+    def select(self) -> bool:
+        return Controller._select
+
+    @property
+    def left(self) -> bool:
+        return Controller._l
+
+    @property
+    def l(self) -> bool:
+        return Controller._l
+
+    @property
+    def right(self) -> bool:
+        return Controller._r
+
+    @property
+    def r(self) -> bool:
+        return Controller._r
+
+    @property
+    def up(self) -> bool:
+        return Controller._u
+
+    @property
+    def u(self) -> bool:
+        return Controller._u
+
+    @property
+    def down(self) -> bool:
+        return Controller._d
+
+    @property
+    def d(self) -> bool:
+        return Controller._d
+
+    @property
+    def a(self) -> bool:
+        return Controller._a
+
+    @property
+    def b(self) -> bool:
+        return Controller._b
+
+    @property
+    def x(self) -> bool:
+        return Controller._x
+
+    @property
+    def y(self) -> bool:
+        return Controller._y
+
+    @property
+    def left_shoulder(self) -> bool:
+        return Controller._ls
+
+    @property
+    def ls(self) -> bool:
+        return Controller._ls
+
+    @property
+    def right_shoulder(self) -> bool:
+        return Controller._rs
+
+    @property
+    def rs(self) -> bool:
+        return Controller._rs
 
 
 __controller = environment.import_driver('controller')

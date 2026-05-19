@@ -1,7 +1,7 @@
 # See https://learn.adafruit.com/debouncer-library-python-circuitpython-buttons-sensors/basic-debouncing
 
 
-class Controller:
+class XXXXController:
 
     @property
     def button_count(self):

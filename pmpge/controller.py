@@ -32,7 +32,6 @@ There are lots of other configurations possible too depending on the device.
 import pmpge.environment as environment
 
 __controller = environment.import_driver('controller')
-ControllerButtons = __controller.ControllerButtons
 
 
 # Support the following events:
@@ -42,28 +41,30 @@ ControllerButtons = __controller.ControllerButtons
 
 # TODO: Need a way to get information about the buttons supported by the device.
 
-class Controller(ControllerButtons):
+class Controller:
+    """
+    The controller only has static values.
+    """
+    start: bool = False
+    select: bool = False
 
-    @property
-    def left(self) -> bool:
-        return self.l
+    left: bool = False
+    right: bool = False
+    up: bool = False
+    down: bool = False
 
-    @property
-    def right(self) -> bool:
-        return self.r
+    l: bool = False
+    r: bool = False
+    u: bool = False
+    d: bool = False
 
-    @property
-    def up(self) -> bool:
-        return self.u
+    left_shoulder: bool = False
+    right_shoulder: bool = False
 
-    @property
-    def down(self) -> bool:
-        return self.d
+    ls: bool = False
+    rs: bool = False
 
-    @property
-    def left_shoulder(self) -> bool:
-        return self.ls
-
-    @property
-    def right_shoulder(self) -> bool:
-        return self.rs
+    a: bool = False
+    b: bool = False
+    x: bool = False
+    y: bool = False

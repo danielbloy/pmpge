@@ -7,7 +7,7 @@ from pgzero.builtins import keyboard
 
 # FUTURE: Allow the button configuration to be specified in config.
 
-class ControllerButtons:
+class XXXXControllerButtons:
     """
     This is a simple controller that uses the Pygame Zero keyboard and provides the
     full keyboard mapping for the SNES controller.

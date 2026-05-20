@@ -45,10 +45,10 @@ class Controller:
     There are instance properties that are read only that expose the
     underlying values.
     """
-    current: list[bool] = [False for _ in range(12)]  # Current button values
+    values: list[bool] = [False for _ in range(12)]  # Current button values
     changed: list[bool] = [False for _ in range(12)]  # Have buttons changed?
 
-    __previous: list[bool] = [False for _ in range(12)]
+    _previous: list[bool] = [False for _ in range(12)]
 
     BUTTON_START: int = 0
     BUTTON_SELECT: int = 1
@@ -64,90 +64,123 @@ class Controller:
     BUTTON_RS: int = 11
 
     @staticmethod
-    def update():
-        current = Controller.current
-        previous = Controller.__previous
+    def reset():
+        """
+        Reset the controller to its initial state.
+        """
+        current = Controller.values
+        previous = Controller._previous
+        changed = Controller.changed
+        for i in range(len(Controller.values)):
+            current[i] = False
+            previous[i] = False
+            changed[i] = False
+
+    @staticmethod
+    def update(values: list[bool]):
+        """
+        This updates the button values with a new set. The set of values must be
+        exactly 12 booleans long, with each representing a specific button.
+        This will set the changed status also.
+        """
+        current = Controller.values
+        previous = Controller._previous
         changed = Controller.changed
 
-        # Determine if changed
         for i in range(12):
-            changed[i] = current[i] != previous[i]
+            previous[i] = current[i]  # Save old value
+            current[i] = values[i]  # Set new value
+            changed[i] = current[i] != previous[i]  # Determine if changed
 
-        # Copy new values
+    @staticmethod
+    def events() -> list[tuple[int, bool]]:
+        """
+        Returns a list of the buttons that have changed since the last update.
+        and what their status is.
+        """
+        result: list[tuple[int, bool]] = []
+        current = Controller.values
+        changed = Controller.changed
         for i in range(12):
-            previous[i] = current[i]
+            if changed[i]:
+                result.append((i, current[i]))
+
+        return result
+
+    # TODO: query is_on_released
+    # TODO: query is_on_pressed
 
     @property
     def start(self) -> bool:
-        return Controller.current[0]
+        return Controller.values[0]
 
     @property
     def select(self) -> bool:
-        return Controller.current[1]
+        return Controller.values[1]
 
     @property
     def left(self) -> bool:
-        return Controller.current[2]
+        return Controller.values[2]
 
     @property
     def l(self) -> bool:
-        return Controller.current[2]
+        return Controller.values[2]
 
     @property
     def right(self) -> bool:
-        return Controller.current[3]
+        return Controller.values[3]
 
     @property
     def r(self) -> bool:
-        return Controller.current[3]
+        return Controller.values[3]
 
     @property
     def up(self) -> bool:
-        return Controller.current[4]
+        return Controller.values[4]
 
     @property
     def u(self) -> bool:
-        return Controller.current[4]
+        return Controller.values[4]
 
     @property
     def down(self) -> bool:
-        return Controller.current[5]
+        return Controller.values[5]
 
     @property
     def d(self) -> bool:
-        return Controller.current[5]
+        return Controller.values[5]
 
     @property
     def a(self) -> bool:
-        return Controller.current[6]
+        return Controller.values[6]
 
     @property
     def b(self) -> bool:
-        return Controller.current[7]
+        return Controller.values[7]
 
     @property
     def x(self) -> bool:
-        return Controller.current[8]
+        return Controller.values[8]
 
     @property
     def y(self) -> bool:
-        return Controller.current[9]
+        return Controller.values[9]
 
     @property
     def left_shoulder(self) -> bool:
-        return Controller.current[10]
+        return Controller.values[10]
 
     @property
     def ls(self) -> bool:
-        return Controller.current[10]
+        return Controller.values[10]
 
     @property
     def right_shoulder(self) -> bool:
-        return Controller.current[11]
+        return Controller.values[11]
 
     @property
     def rs(self) -> bool:
-        return Controller.current[11]
+        return Controller.values[11]
 
 
 __controller = environment.import_driver('controller')

@@ -6,26 +6,26 @@ from pgzero.builtins import keyboard
 
 from pmpge.controller import Controller
 
-
 # FUTURE: Allow the button configuration to be specified in config.
+
+values: list[bool] = [False for _ in range(12)]
 
 
 def update(dt: float):
-    current = Controller.current
-    current[0] = keyboard.RETURN or keyboard.space
-    current[1] = keyboard.escape
+    values[0] = keyboard.RETURN or keyboard.space
+    values[1] = keyboard.escape
 
-    current[2] = keyboard.a or keyboard.left
-    current[3] = keyboard.d or keyboard.right
-    current[4] = keyboard.w or keyboard.up
-    current[5] = keyboard.s or keyboard.down
+    values[2] = keyboard.a or keyboard.left
+    values[3] = keyboard.d or keyboard.right
+    values[4] = keyboard.w or keyboard.up
+    values[5] = keyboard.s or keyboard.down
 
-    current[6] = keyboard.l
-    current[7] = keyboard.k
-    current[8] = keyboard.i
-    current[9] = keyboard.j
+    values[6] = keyboard.l
+    values[7] = keyboard.k
+    values[8] = keyboard.i
+    values[9] = keyboard.j
 
-    current[10] = keyboard.q
-    current[11] = keyboard.p
+    values[10] = keyboard.q
+    values[11] = keyboard.p
 
-    Controller.update()
+    Controller.update(values)

@@ -6,12 +6,22 @@ from pgzero.builtins import keyboard
 
 from pmpge.controller import Controller
 
-# FUTURE: Allow the button configuration to be specified in config.
-
 values: list[bool] = [False for _ in range(12)]
 
 
+def init(_):
+    """
+    Simply clear the controller settings.
+    """
+    Controller.reset()
+
+
 def update(dt: float):
+    """
+    Update the controller based on the mapped keyboard keys.
+
+    # FUTURE: Allow the button configuration to be specified in config.
+    """
     values[0] = keyboard.RETURN or keyboard.space
     values[1] = keyboard.escape
 
@@ -29,3 +39,10 @@ def update(dt: float):
     values[11] = keyboard.p
 
     Controller.update(values)
+
+
+def deinit():
+    """
+    Simply clear the controller settings.
+    """
+    Controller.reset()

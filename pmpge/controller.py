@@ -109,8 +109,40 @@ class Controller:
 
         return result
 
-    # TODO: query is_on_released
-    # TODO: query is_on_pressed
+    @staticmethod
+    def is_pressed(button: int) -> bool:
+        """
+        Returns True if the button is pressed, False otherwise.
+        """
+        return Controller.values[button]
+
+    @staticmethod
+    def is_released(button: int):
+        """
+        Returns True if the button is released, False otherwise.
+        """
+        return not Controller.values[button]
+
+    @staticmethod
+    def has_changed(button: int):
+        """
+        Returns True if the button has changed state since the last update.
+        """
+        return Controller.changed[button]
+
+    @staticmethod
+    def has_pressed(button: int):
+        """
+        Returns True if the button has been pressed since the last update.
+        """
+        return Controller.values[button] and Controller.changed[button]
+
+    @staticmethod
+    def has_released(button: int):
+        """
+        Returns True if the button has been released since the last update.
+        """
+        return not Controller.values[button] and Controller.changed[button]
 
     @property
     def start(self) -> bool:

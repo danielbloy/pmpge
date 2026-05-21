@@ -504,3 +504,9 @@ def test_button_events():
     Controller.update(values)
     events = Controller.events()
     assert events == [(Controller.BUTTON_DOWN, False), (Controller.BUTTON_X, False), (Controller.BUTTON_RS, False)]
+
+# TODO: Test is_pressed
+# TODO: Test is_released
+# TODO: Test has_changed
+# TODO: Test has_pressed
+# TODO: Test has_released

@@ -318,5 +318,131 @@ def test_buttons():
     assert controller.right_shoulder == True
     assert controller.rs == True
 
-# TODO: Add tests for the changed and current values.
+
+def test_update_pressed_and_released():
+    """
+    Validates pressed and released works. Only tests a subset of buttons.
+    """
+    values = [False for _ in range(12)]
+    expected_previous = [False for _ in range(12)]
+    expected_changed = [False for _ in range(12)]
+
+    current = Controller.values
+    previous = Controller._previous
+    changed = Controller.changed
+    Controller.reset()
+
+    # Set everything to false should result in no changes.
+    Controller.update(values)
+    assert current == values
+    assert previous == expected_previous
+    assert changed == expected_changed
+
+    # Now try the first button.
+    values[0] = True
+    expected_changed[0] = True
+    Controller.update(values)
+    assert current == values
+    assert previous == expected_previous
+    assert changed == expected_changed
+
+    # Now the second button, the first stays on but is no longer flagged as pressed.
+    values[1] = True
+    expected_changed[0] = False
+    expected_changed[1] = True
+    expected_previous[0] = True
+    Controller.update(values)
+    assert current == values
+    assert previous == expected_previous
+    assert changed == expected_changed
+
+    # Now release the first button, this will mark it changed.
+    values[0] = False
+    expected_changed[0] = True
+    expected_changed[1] = False
+    expected_previous[1] = True
+    Controller.update(values)
+    assert current == values
+    assert previous == expected_previous
+    assert changed == expected_changed
+
+    # Now change several buttons at once.
+    Controller.reset()
+    values = [False for _ in range(12)]
+    expected_previous = [False for _ in range(12)]
+    expected_changed = [False for _ in range(12)]
+    values[3], values[7], values[8], values[11] = True, True, True, True
+    expected_changed[3], expected_changed[7], expected_changed[8], expected_changed[11] = True, True, True, True
+    expected_previous[3], expected_previous[7], expected_previous[8], expected_previous[11] = False, False, False, False
+    Controller.update(values)
+    assert current == values
+    assert previous == expected_previous
+    assert changed == expected_changed
+
+    # Run again which should reset the changed flags and previous values
+    Controller.update(values)
+    expected_changed[3], expected_changed[7], expected_changed[8], expected_changed[11] = False, False, False, False
+    expected_previous[3], expected_previous[7], expected_previous[8], expected_previous[11] = True, True, True, True
+    assert current == values
+    assert previous == expected_previous
+    assert changed == expected_changed
+
+    # Now release all buttons.
+    values[3], values[7], values[8], values[11] = False, False, False, False
+    Controller.update(values)
+    expected_changed[3], expected_changed[7], expected_changed[8], expected_changed[11] = True, True, True, True
+    expected_previous[3], expected_previous[7], expected_previous[8], expected_previous[11] = True, True, True, True
+    assert current == values
+    assert previous == expected_previous
+    assert changed == expected_changed
+
+
+def test_validate_all_buttons():
+    """
+    Validates that update works with each of the buttons. This ensures that
+    the controller state is correctly updated based on button presses.
+    """
+
+    current = Controller.values
+    previous = Controller._previous
+    changed = Controller.changed
+
+    for i in range(len(current)):
+        Controller.reset()
+        values = [False for _ in range(12)]
+        expected_previous = [False for _ in range(12)]
+        expected_changed = [False for _ in range(12)]
+
+        # Enable the button
+        values[i] = True
+        expected_changed[i] = True
+        Controller.update(values)
+        assert current == values
+        assert previous == expected_previous
+        assert changed == expected_changed
+
+        # Update again which set the previous value and resets changed
+        expected_changed[i] = False
+        expected_previous[i] = True
+        Controller.update(values)
+        assert current == values
+        assert previous == expected_previous
+        assert changed == expected_changed
+
+        # Disable the button which triggers another change
+        values[i] = False
+        expected_changed[i] = True
+        Controller.update(values)
+        assert current == values
+        assert previous == expected_previous
+        assert changed == expected_changed
+
+        # Update again which set the previous value and resets changed
+        expected_changed[i] = False
+        expected_previous[i] = False
+        Controller.update(values)
+        assert current == values
+        assert previous == expected_previous
+        assert changed == expected_changed
+
 # TODO: Test events

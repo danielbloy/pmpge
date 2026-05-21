@@ -21,6 +21,8 @@ def terminate(dt: float):
         game.terminate()
 
 
+game.add_update_func(terminate)
+
 pos = (100, 200)
 velocity = (50, 50)
 
@@ -30,12 +32,13 @@ def update_image(dt: float):
     pos = (pos[0] + (velocity[0] * dt), pos[1] + (velocity[1] * dt))
 
 
+game.add_update_func(update_image)
+
+
 def draw_image(surface):
     surface.blit('player', pos)
 
 
-game.add_update_func(terminate)
-game.add_update_func(update_image)
 game.add_draw_func(draw_image)
 
 finish = time.monotonic() + 1

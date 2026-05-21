@@ -23,6 +23,9 @@ def terminate(dt: float):
         game.terminate()
 
 
+game.add_update_func(terminate)
+
+
 class BlinkOneUp(GameObject):
     def __init__(self):
         super().__init__()
@@ -46,8 +49,6 @@ class BlinkOneUp(GameObject):
 
 game_object = BlinkOneUp()
 game.add_child(game_object)
-
-game.add_update_func(terminate)
 
 finish = time.monotonic() + 1
 game.run()

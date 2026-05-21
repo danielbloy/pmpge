@@ -35,11 +35,16 @@ def setup(game: Game):
     game.background_colour = (250, 120, 0)  # Orange
     utils.create_sprites(game, sprite_data)
 
-    # TODO: Add events to change sprite image based on button presses
-    # TODO: Turn this into an example also
     controller = Controller()
     player = sprite_data[len(sprite_data) - 1].sprite
     player.apply_trait(MoveWithController(60, 60, controller))
+
+    # Update the visibility of the buttons based on the controller values.
+    def update_buttons(dt: float):
+        for i in range(12):
+            sprite_data[i].sprite.visible = Controller.values[i]
+
+    game.add_update_func(update_buttons)
 
 
 if utils.should_execute(__name__):

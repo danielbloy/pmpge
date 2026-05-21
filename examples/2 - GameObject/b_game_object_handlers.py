@@ -24,6 +24,9 @@ def terminate(dt: float):
         game.terminate()
 
 
+game.add_update_func(terminate)
+
+
 class BlinkOneUp:
     draw_one_up: bool
     one_up_transition: float
@@ -50,8 +53,6 @@ game_object = GameObject(
     update_handler=BlinkOneUp.update)
 
 game.add_child(game_object)
-
-game.add_update_func(terminate)
 
 finish = time.monotonic() + 1
 game.run()

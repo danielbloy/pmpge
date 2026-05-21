@@ -4,65 +4,28 @@ Defines the controller by mapping to the Pygame Zero keyboard instance.
 
 from pgzero.builtins import keyboard
 
-from pmpge.controller import SNESController
+from pmpge.controller import Controller
+
+# FUTURE: Allow the button configuration to be specified in config.
+
+values: list[bool] = [False for _ in range(12)]
 
 
-class Controller(SNESController):
-    """
-    This is a simple controller that uses the Pygame Zero keyboard and provides the
-    full keyboard mapping for the SNES controller.
-    """
+def update(dt: float):
+    values[0] = keyboard.RETURN or keyboard.space
+    values[1] = keyboard.escape
 
-    # TODO: Optionally specify the controller buttons in config as an array.
-    #       The number of buttons determines the size of the controller.
-    #       This could be common code across all environments as it just needs
-    #       a property for true or false for pressed/no pressed. Then another
-    #       for a button event.
+    values[2] = keyboard.a or keyboard.left
+    values[3] = keyboard.d or keyboard.right
+    values[4] = keyboard.w or keyboard.up
+    values[5] = keyboard.s or keyboard.down
 
-    @property
-    def start(self) -> bool:
-        return keyboard.enter or keyboard.space
+    values[6] = keyboard.l
+    values[7] = keyboard.k
+    values[8] = keyboard.i
+    values[9] = keyboard.j
 
-    @property
-    def select(self) -> bool:
-        return keyboard.escape
+    values[10] = keyboard.q
+    values[11] = keyboard.p
 
-    @property
-    def left(self) -> bool:
-        return keyboard.a or keyboard.left
-
-    @property
-    def right(self) -> bool:
-        return keyboard.d or keyboard.right
-
-    @property
-    def up(self) -> bool:
-        return keyboard.w or keyboard.up
-
-    @property
-    def down(self) -> bool:
-        return keyboard.s or keyboard.down
-
-    @property
-    def a(self) -> bool:
-        return keyboard.l
-
-    @property
-    def b(self) -> bool:
-        return keyboard.k
-
-    @property
-    def x(self) -> bool:
-        return keyboard.i
-
-    @property
-    def y(self) -> bool:
-        return keyboard.j
-
-    @property
-    def left_shoulder(self) -> bool:
-        return keyboard.q
-
-    @property
-    def right_shoulder(self) -> bool:
-        return keyboard.p
+    Controller.update(values)

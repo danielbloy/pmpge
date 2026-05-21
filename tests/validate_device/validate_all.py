@@ -13,8 +13,9 @@ import tests.validate_device.validate_e_graphics_sprite_hierarchy as esv
 import tests.validate_device.validate_e_graphics_sprite_movement as esm
 import tests.validate_device.validate_e_graphics_sprite_orbiting as ego
 import tests.validate_device.validate_e_graphics_sprite_visibility as esh
+import tests.validate_device.validate_f_controller_move_sprite as fms
 
-modules = [a, b, c, ch, ds, d, egb, egs, ess, ems, esm, esv, esh, ego]
+modules = [a, b, c, ch, ds, d, egb, egs, ess, ems, esm, esv, esh, ego, fms]
 
 
 def execute():

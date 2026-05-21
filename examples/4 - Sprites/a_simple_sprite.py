@@ -18,6 +18,8 @@ def terminate(dt: float):
         game.terminate()
 
 
+game.add_update_func(terminate)
+
 player = Sprite(
     100, 60,
     Velocity(20, 20),
@@ -29,8 +31,6 @@ alien = Sprite(
     Velocity(-10, -20),
     DrawImage("alien.png"))
 game.add_child(alien)
-
-game.add_update_func(terminate)
 
 finish = time.monotonic() + 1
 game.run()

@@ -61,13 +61,7 @@ def report():
     """
     Produces a simple report of the environment the code is running in.
     """
-
-    from pmpge.controller import Controller
-    controller = Controller()
-
-    print(
-        f'Running on {system()} with {screen_size()} screen and {controller.button_count} button controller.')
-    del controller
+    print(f'Running on {system()} with {screen_size()} screen.')
 
 
 def screen_size() -> tuple[int, int]:
@@ -159,6 +153,9 @@ def get_graphics_driver() -> str:
 
     if is_running_on_desktop():
         return "pmpge.drivers.graphics.pgzero"
+
+    # TODO: We need something smarter here to load the displayio graphics driver in
+    #       scenarios where we have an attached display.
 
     return "pmpge.drivers.graphics.none"
 

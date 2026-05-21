@@ -28,13 +28,14 @@ def terminate(dt: float):
         game.terminate()
 
 
+game.add_update_func(terminate)
+
 game_object = GameObject(
     Position(100, 100),
     Velocity(20, 20),
     DrawImage("player.png"))
-game.add_child(game_object)
 
-game.add_update_func(terminate)
+game.add_child(game_object)
 
 finish = time.monotonic() + 1
 game.run()

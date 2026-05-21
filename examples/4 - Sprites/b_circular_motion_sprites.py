@@ -20,6 +20,8 @@ def terminate(dt: float):
         game.terminate()
 
 
+game.add_update_func(terminate)
+
 # Add the earth sprite which orbits the centre
 earth = Sprite(
     0, 0,
@@ -49,8 +51,6 @@ moon3 = Sprite(
     AngularMotion(0, 0, 10, -math.pi),
     DrawImage("moon.png"))
 moon2.add_child(moon3)
-
-game.add_update_func(terminate)
 
 finish = time.monotonic() + 5
 game.run()

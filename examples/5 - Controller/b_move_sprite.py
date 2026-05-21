@@ -21,6 +21,8 @@ def terminate(dt: float):
         game.terminate()
 
 
+game.add_update_func(terminate)
+
 controller = Controller()
 player = Sprite(
     100, 60,
@@ -33,7 +35,6 @@ game.add_child(player)
 
 # TODO: Add jump when the controller action button is pressed.
 
-game.add_update_func(terminate)
 
 finish = time.monotonic() + 5
 game.run()

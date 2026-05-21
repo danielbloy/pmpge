@@ -20,6 +20,8 @@ def terminate(dt: float):
         game.terminate()
 
 
+game.add_update_func(terminate)
+
 # Add the earth sprite which orbits the centre
 earth = Sprite(
     0, 0,
@@ -33,8 +35,6 @@ moon = Sprite(
     FollowSprite(earth, 20, 30),
     DrawImage("moon.png"))
 game.add_child(moon)
-
-game.add_update_func(terminate)
 
 finish = time.monotonic() + 5
 game.run()

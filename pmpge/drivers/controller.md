@@ -1,5 +1,9 @@
 # Controller Driver
 
+The controller driver is relatively simple in terms of expectations. It's primary
+objective is to set the class variables on the `Controller` class in the `controller`
+module and to call `Controller.update()`.
+
 ## Optional methods
 
 ### `init(game)`

@@ -1,473 +1,221 @@
 """
-There are a several primary controllers, defined by the number of buttons available
-on the device. Each controller builds on the previous controllers as the number of
-buttons steadily increases. Instantiating a Controller instance will give you a
-controller representing the greatest number of buttons supported on the device.
-Each controller format is defined below (all controllers have a menu and start button):
-
-  * 0  - No buttons
-  * 2  - 2 button controller                               (start and select)
-  * 4  - AB controller                                     (start, select, A, B)
-  * 6 -  AB UD controller                                  (start, select, U, D, A, B)
-  * 8  - NES style controller                              (start, select, U, D, L, R, A, B)
-  * 10 - SNES style controller without shoulder buttons    (start, select, U, D, L, R, A, B, X, Y)
-  * 12 - SNES style controller with shoulder buttons       (start, select, U, D, L, R, A, B, X, Y, LS, RS)
-
-There are also some named actions that are mapped to buttons:
-
-  * Action
-  * Cancel
-
-Button arrangements for each controller:
-
-2 - 2 button controller
-
-    Start       Select  (start is mapped as action, select as cancel)
-
-4 - AB
-
-      B            A    (B and A are also mapped as Left and right respectively)
-      
-    Start       Select  (start is mapped as action, select as cancel)
-
-
-6 - AB UD
-
-            U
-      B            A    (B and A are also mapped as Left and right respectively)
-            D
-
-    Start       Select  (start is mapped as action, select as cancel)
-
-8 - NES
-
-      U        
-    L   R           A    (A is mapped as action, B as cancel)
-      D           B
-
-    Start       Select
-
-10 - SNES without shoulder buttons
-
-      U           X
-    L   R       Y   A    (A is mapped as action, B as cancel)
-      D           B
-
-    Start       Select
-
-12 - SNES with shoulder buttons
+The controller configuration is based on 12 button SNES controller as follows:
 
  L Shoulder   R Shoulder
 
       U           X
-    L   R       Y   A    (A is mapped as action, B as cancel)
+    L   R       Y   A
       D           B
 
     Start       Select
+
+Because the range of devices varies, so does the number of buttons available so all
+devices may not support the 12 set of 12 buttons. Common other configurations include:
+
+10 button SNES controller without shoulder buttons:
+
+      U           X
+    L   R       Y   A
+      D           B
+
+    Start       Select
+
+8 button NES:
+
+      U
+    L   R           A
+      D           B
+
+    Start       Select
+
+There are lots of other configurations possible too depending on the device.
 """
 
 import pmpge.environment as environment
 
-# These are not available in CircuitPython.
-if environment.is_running_on_desktop():
-    from abc import ABC, abstractmethod
 
+# FUTURE: Add support for a second players controller
+# FUTURE: Add support for a on_repeat event
+
+
+class Controller:
+    """
+    The controller has static values that the underlying driver sets.
+    This allows multiple instances of controller to share the values.
+    There are instance properties that are read only that expose the
+    underlying values.
+    """
+    values: list[bool] = [False for _ in range(12)]  # Current button values
+    changed: list[bool] = [False for _ in range(12)]  # Have buttons changed?
+
+    _previous: list[bool] = [False for _ in range(12)]
+
+    # Constants to help access the button values.
+    BUTTON_START: int = 0
+    BUTTON_SELECT: int = 1
+    BUTTON_LEFT: int = 2
+    BUTTON_RIGHT: int = 3
+    BUTTON_UP: int = 4
+    BUTTON_DOWN: int = 5
+    BUTTON_A: int = 6
+    BUTTON_B: int = 7
+    BUTTON_X: int = 8
+    BUTTON_Y: int = 9
+    BUTTON_LS: int = 10
+    BUTTON_RS: int = 11
+
+    @staticmethod
+    def reset():
+        """
+        Reset the controller to its initial state.
+        """
+        current = Controller.values
+        previous = Controller._previous
+        changed = Controller.changed
+        for i in range(len(Controller.values)):
+            current[i] = False
+            previous[i] = False
+            changed[i] = False
+
+    @staticmethod
+    def update(values: list[bool]):
+        """
+        This updates the button values with a new set. The set of values must be
+        exactly 12 booleans long, with each representing a specific button.
+        This will set the changed status also.
+        """
+        current = Controller.values
+        previous = Controller._previous
+        changed = Controller.changed
+
+        for i in range(12):
+            previous[i] = current[i]  # Save old value
+            current[i] = values[i]  # Set new value
+            changed[i] = current[i] != previous[i]  # Determine if changed
+
+    @staticmethod
+    def events() -> list[tuple[int, bool]]:
+        """
+        Returns a list of the buttons that have changed since the last update.
+        and what their status is. The returned list is a list of tuples where
+        the first element is the button number and the second element is the
+        button status (True for pressed, False for released).
+        """
+        result: list[tuple[int, bool]] = []
+        current = Controller.values
+        changed = Controller.changed
+        for i in range(12):
+            if changed[i]:
+                result.append((i, current[i]))
+
+        return result
+
+    @staticmethod
+    def is_pressed(button: int) -> bool:
+        """
+        Returns True if the button is pressed, False otherwise.
+        """
+        return Controller.values[button]
+
+    @staticmethod
+    def is_released(button: int):
+        """
+        Returns True if the button is released, False otherwise.
+        """
+        return not Controller.values[button]
+
+    @staticmethod
+    def has_changed(button: int):
+        """
+        Returns True if the button has changed state since the last update.
+        """
+        return Controller.changed[button]
+
+    @staticmethod
+    def has_pressed(button: int):
+        """
+        Returns True if the button has been pressed since the last update.
+        """
+        return Controller.values[button] and Controller.changed[button]
+
+    @staticmethod
+    def has_released(button: int):
+        """
+        Returns True if the button has been released since the last update.
+        """
+        return not Controller.values[button] and Controller.changed[button]
+
+    @property
+    def start(self) -> bool:
+        return Controller.values[0]
+
+    @property
+    def select(self) -> bool:
+        return Controller.values[1]
+
+    @property
+    def left(self) -> bool:
+        return Controller.values[2]
+
+    @property
+    def l(self) -> bool:
+        return Controller.values[2]
+
+    @property
+    def right(self) -> bool:
+        return Controller.values[3]
+
+    @property
+    def r(self) -> bool:
+        return Controller.values[3]
+
+    @property
+    def up(self) -> bool:
+        return Controller.values[4]
+
+    @property
+    def u(self) -> bool:
+        return Controller.values[4]
+
+    @property
+    def down(self) -> bool:
+        return Controller.values[5]
+
+    @property
+    def d(self) -> bool:
+        return Controller.values[5]
+
+    @property
+    def a(self) -> bool:
+        return Controller.values[6]
+
+    @property
+    def b(self) -> bool:
+        return Controller.values[7]
+
+    @property
+    def x(self) -> bool:
+        return Controller.values[8]
+
+    @property
+    def y(self) -> bool:
+        return Controller.values[9]
+
+    @property
+    def left_shoulder(self) -> bool:
+        return Controller.values[10]
+
+    @property
+    def ls(self) -> bool:
+        return Controller.values[10]
+
+    @property
+    def right_shoulder(self) -> bool:
+        return Controller.values[11]
+
+    @property
+    def rs(self) -> bool:
+        return Controller.values[11]
 
-    # TODO: We need a better way to manage controllers across different device types.
-    class TwoButtonController(ABC):
-
-        @property
-        def button_count(self):
-            return 2
-
-        @property
-        @abstractmethod
-        def start(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def select(self) -> bool:
-            pass
-
-        @property
-        def action(self) -> bool:
-            return self.start
-
-        @property
-        def cancel(self) -> bool:
-            return self.select
-
-
-    class ABController(ABC):
-
-        @property
-        def button_count(self):
-            return 4
-
-        @property
-        @abstractmethod
-        def start(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def select(self) -> bool:
-            pass
-
-        @property
-        def action(self) -> bool:
-            return self.start
-
-        @property
-        def cancel(self) -> bool:
-            return self.select
-
-        @property
-        def left(self) -> bool:
-            return self.b
-
-        @property
-        def l(self) -> bool:
-            return self.b
-
-        @property
-        def right(self) -> bool:
-            return self.a
-
-        @property
-        def r(self) -> bool:
-            return self.a
-
-        @property
-        @abstractmethod
-        def a(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def b(self) -> bool:
-            pass
-
-
-    class ABUDController(ABC):
-
-        @property
-        def button_count(self):
-            return 4
-
-        @property
-        @abstractmethod
-        def start(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def select(self) -> bool:
-            pass
-
-        @property
-        def action(self) -> bool:
-            return self.start
-
-        @property
-        def cancel(self) -> bool:
-            return self.select
-
-        @property
-        @abstractmethod
-        def up(self) -> bool:
-            pass
-
-        @property
-        def u(self) -> bool:
-            return self.up
-
-        @property
-        @abstractmethod
-        def down(self) -> bool:
-            pass
-
-        @property
-        def d(self) -> bool:
-            return self.down
-
-        @property
-        def left(self) -> bool:
-            return self.b
-
-        @property
-        def l(self) -> bool:
-            return self.b
-
-        @property
-        def right(self) -> bool:
-            return self.a
-
-        @property
-        def r(self) -> bool:
-            return self.a
-
-        @property
-        @abstractmethod
-        def a(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def b(self) -> bool:
-            pass
-
-
-    class NESController(ABC):
-
-        @property
-        def button_count(self):
-            return 8
-
-        @property
-        @abstractmethod
-        def start(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def select(self) -> bool:
-            pass
-
-        @property
-        def action(self) -> bool:
-            return self.a
-
-        @property
-        def cancel(self) -> bool:
-            return self.b
-
-        @property
-        @abstractmethod
-        def left(self) -> bool:
-            pass
-
-        @property
-        def l(self) -> bool:
-            return self.left
-
-        @property
-        @abstractmethod
-        def right(self) -> bool:
-            pass
-
-        @property
-        def r(self) -> bool:
-            return self.right
-
-        @property
-        @abstractmethod
-        def up(self) -> bool:
-            pass
-
-        @property
-        def u(self) -> bool:
-            return self.up
-
-        @property
-        @abstractmethod
-        def down(self) -> bool:
-            pass
-
-        @property
-        def d(self) -> bool:
-            return self.down
-
-        @property
-        @abstractmethod
-        def a(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def b(self) -> bool:
-            pass
-
-
-    class SNESNoShoulderButtonsController(ABC):
-
-        @property
-        def button_count(self):
-            return 10
-
-        @property
-        @abstractmethod
-        def start(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def select(self) -> bool:
-            pass
-
-        @property
-        def action(self) -> bool:
-            return self.a
-
-        @property
-        def cancel(self) -> bool:
-            return self.b
-
-        @property
-        @abstractmethod
-        def left(self) -> bool:
-            pass
-
-        @property
-        def l(self) -> bool:
-            return self.left
-
-        @property
-        @abstractmethod
-        def right(self) -> bool:
-            pass
-
-        @property
-        def r(self) -> bool:
-            return self.right
-
-        @property
-        @abstractmethod
-        def up(self) -> bool:
-            pass
-
-        @property
-        def u(self) -> bool:
-            return self.up
-
-        @property
-        @abstractmethod
-        def down(self) -> bool:
-            pass
-
-        @property
-        def d(self) -> bool:
-            return self.down
-
-        @property
-        @abstractmethod
-        def a(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def b(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def x(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def y(self) -> bool:
-            pass
-
-
-    class SNESController(ABC):
-
-        @property
-        def button_count(self):
-            return 12
-
-        @property
-        @abstractmethod
-        def start(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def select(self) -> bool:
-            pass
-
-        @property
-        def action(self) -> bool:
-            return self.a
-
-        @property
-        def cancel(self) -> bool:
-            return self.b
-
-        @property
-        @abstractmethod
-        def left(self) -> bool:
-            pass
-
-        @property
-        def l(self) -> bool:
-            return self.left
-
-        @property
-        @abstractmethod
-        def right(self) -> bool:
-            pass
-
-        @property
-        def r(self) -> bool:
-            return self.right
-
-        @property
-        @abstractmethod
-        def up(self) -> bool:
-            pass
-
-        @property
-        def u(self) -> bool:
-            return self.up
-
-        @property
-        @abstractmethod
-        def down(self) -> bool:
-            pass
-
-        @property
-        def d(self) -> bool:
-            return self.down
-
-        @property
-        @abstractmethod
-        def a(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def b(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def x(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def y(self) -> bool:
-            pass
-
-        @property
-        @abstractmethod
-        def left_shoulder(self) -> bool:
-            pass
-
-        @property
-        def ls(self) -> bool:
-            return self.left
-
-        @property
-        @abstractmethod
-        def right_shoulder(self) -> bool:
-            pass
-
-        @property
-        def rs(self) -> bool:
-            return self.right
 
 __controller = environment.import_driver('controller')
-Controller = __controller.Controller

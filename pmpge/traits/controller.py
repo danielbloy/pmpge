@@ -34,11 +34,19 @@ class MoveWithController:
         elif controller.right:
             new_x += (self.mx * dt)
 
-        if controller.button_count >= 6:
-            if controller.up:
-                new_y -= (self.my * dt)
-            elif controller.down:
-                new_y += (self.my * dt)
+        if controller.up:
+            new_y -= (self.my * dt)
+        elif controller.down:
+            new_y += (self.my * dt)
 
         self.x = new_x
         self.y = new_y
+
+# FUTURE: Add a trait that responds to controller events
+# controller.on_start_pressed = <event>
+# controller.on_start_released = <event>
+
+# TODO: A trait that handles just a single on_pressed or on_released event
+# TODO: A trait that handles multiple on_pressed events
+# TODO: A trait that handles multiple on_released events
+# TDOO: A trait that handles both on_pressed and on_released events

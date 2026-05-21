@@ -445,4 +445,62 @@ def test_validate_all_buttons():
         assert previous == expected_previous
         assert changed == expected_changed
 
-# TODO: Test events
+
+def test_button_events():
+    """
+    Validates that events() correctly returns the events that have occurred since
+    the last update(). This wil lonly return the events that have fired.
+    """
+    values = [False for _ in range(12)]
+
+    # No events
+    Controller.reset()
+    events = Controller.events()
+    assert events == []
+
+    # Still no events
+    Controller.update(values)
+    events = Controller.events()
+    assert events == []
+
+    # Single event by pressing Y button
+    values[Controller.BUTTON_Y] = True
+    Controller.update(values)
+    events = Controller.events()
+    assert events == [(Controller.BUTTON_Y, True)]
+
+    # The next update will result in no events
+    Controller.update(values)
+    events = Controller.events()
+    assert events == []
+
+    # Release Y button
+    values[Controller.BUTTON_Y] = False
+    Controller.update(values)
+    events = Controller.events()
+    assert events == [(Controller.BUTTON_Y, False)]
+
+    # Now try a series of button presses and releases.
+    values[Controller.BUTTON_UP] = True
+    values[Controller.BUTTON_X] = True
+    values[Controller.BUTTON_RS] = True
+    Controller.update(values)
+    events = Controller.events()
+    assert events == [(Controller.BUTTON_UP, True), (Controller.BUTTON_X, True), (Controller.BUTTON_RS, True)]
+
+    Controller.update(values)
+    events = Controller.events()
+    assert events == []
+
+    # Release one button and press another
+    values[Controller.BUTTON_UP] = False
+    values[Controller.BUTTON_DOWN] = True
+    Controller.update(values)
+    events = Controller.events()
+    assert events == [(Controller.BUTTON_UP, False), (Controller.BUTTON_DOWN, True)]
+
+    # Release all buttons
+    values = [False for _ in range(12)]
+    Controller.update(values)
+    events = Controller.events()
+    assert events == [(Controller.BUTTON_DOWN, False), (Controller.BUTTON_X, False), (Controller.BUTTON_RS, False)]

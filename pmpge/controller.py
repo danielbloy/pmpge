@@ -96,7 +96,9 @@ class Controller:
     def events() -> list[tuple[int, bool]]:
         """
         Returns a list of the buttons that have changed since the last update.
-        and what their status is.
+        and what their status is. The returned list is a list of tuples where
+        the first element is the button number and the second element is the
+        button status (True for pressed, False for released).
         """
         result: list[tuple[int, bool]] = []
         current = Controller.values

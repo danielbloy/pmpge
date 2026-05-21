@@ -50,6 +50,7 @@ class Controller:
 
     _previous: list[bool] = [False for _ in range(12)]
 
+    # Constants to help access the button values.
     BUTTON_START: int = 0
     BUTTON_SELECT: int = 1
     BUTTON_LEFT: int = 2

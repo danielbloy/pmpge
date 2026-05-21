@@ -14,17 +14,17 @@ from pmpge.traits.controller import MoveWithController
 sprite_data: list[utils.SpriteData] = [
     utils.SpriteData(10, 110, 0, 0, "start.png"),
     utils.SpriteData(20, 110, 0, 0, "select.png"),
-    utils.SpriteData(30, 110, 0, 0, "left.png"),
-    utils.SpriteData(40, 110, 0, 0, "right.png"),
-    utils.SpriteData(50, 110, 0, 0, "up.png"),
-    utils.SpriteData(60, 110, 0, 0, "down.png"),
+    utils.SpriteData(30, 110, 0, 0, "l.png"),
+    utils.SpriteData(40, 110, 0, 0, "r.png"),
+    utils.SpriteData(50, 110, 0, 0, "u.png"),
+    utils.SpriteData(60, 110, 0, 0, "d.png"),
     utils.SpriteData(70, 110, 0, 0, "a.png"),
     utils.SpriteData(80, 110, 0, 0, "b.png"),
     utils.SpriteData(90, 110, 0, 0, "x.png"),
     utils.SpriteData(100, 110, 0, 0, "y.png"),
     utils.SpriteData(110, 110, 0, 0, "ls.png"),
     utils.SpriteData(120, 110, 0, 0, "rs.png"),
-    utils.SpriteData(80, 60, 0, 0, "hero.png"),
+    utils.SpriteData(80, 60, 0, 0, "hero_front.png"),
 ]
 
 index = 0
@@ -35,8 +35,6 @@ def setup(game: Game):
     game.background_colour = (250, 120, 0)  # Orange
     utils.create_sprites(game, sprite_data)
 
-    # TODO: Create sprites for buttons
-    # TODO: Create sprite for player
     # TODO: Add events to change sprite image based on button presses
     # TODO: Turn this into an example also
     controller = Controller()

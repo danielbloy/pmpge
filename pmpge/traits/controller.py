@@ -45,3 +45,8 @@ class MoveWithController:
 # FUTURE: Add a trait that responds to controller events
 # controller.on_start_pressed = <event>
 # controller.on_start_released = <event>
+
+# TODO: A trait that handles just a single on_pressed or on_released event
+# TODO: A trait that handles multiple on_pressed events
+# TODO: A trait that handles multiple on_released events
+# TDOO: A trait that handles both on_pressed and on_released events

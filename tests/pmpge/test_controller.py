@@ -317,5 +317,6 @@ def test_buttons():
     assert controller.ls == False
     assert controller.right_shoulder == True
     assert controller.rs == True
+
 # TODO: Add tests for the changed and current values.
 # TODO: Test events

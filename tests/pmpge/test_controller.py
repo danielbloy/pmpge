@@ -505,8 +505,81 @@ def test_button_events():
     events = Controller.events()
     assert events == [(Controller.BUTTON_DOWN, False), (Controller.BUTTON_X, False), (Controller.BUTTON_RS, False)]
 
-# TODO: Test is_pressed
-# TODO: Test is_released
-# TODO: Test has_changed
-# TODO: Test has_pressed
-# TODO: Test has_released
+
+def test_is_and_has_methods():
+    """
+    Validates that the is_ and has_ methods work correctly. These methods are convenience
+    methods around accessing the Controller.values and Controller.changed arrays directly.
+    """
+    values = [False for _ in range(12)]
+
+    # No events, nothing pressed
+    Controller.reset()
+    assert Controller.is_pressed(Controller.BUTTON_UP) == False
+    assert Controller.is_released(Controller.BUTTON_UP) == True
+    assert Controller.has_changed(Controller.BUTTON_UP) == False
+    assert Controller.has_pressed(Controller.BUTTON_UP) == False
+    assert Controller.has_released(Controller.BUTTON_UP) == False
+
+    assert Controller.is_pressed(Controller.BUTTON_A) == False
+    assert Controller.is_released(Controller.BUTTON_A) == True
+    assert Controller.has_changed(Controller.BUTTON_A) == False
+    assert Controller.has_pressed(Controller.BUTTON_A) == False
+    assert Controller.has_released(Controller.BUTTON_A) == False
+
+    assert Controller.is_pressed(Controller.BUTTON_RS) == False
+    assert Controller.is_released(Controller.BUTTON_RS) == True
+    assert Controller.has_changed(Controller.BUTTON_RS) == False
+    assert Controller.has_pressed(Controller.BUTTON_RS) == False
+    assert Controller.has_released(Controller.BUTTON_RS) == False
+
+    # Press a single button
+    values[Controller.BUTTON_RS] = True
+    Controller.update(values)
+    assert Controller.is_pressed(Controller.BUTTON_RS) == True
+    assert Controller.is_released(Controller.BUTTON_RS) == False
+    assert Controller.has_changed(Controller.BUTTON_RS) == True
+    assert Controller.has_pressed(Controller.BUTTON_RS) == True
+    assert Controller.has_released(Controller.BUTTON_RS) == False
+
+    # Update clears the changed flags
+    Controller.update(values)
+    assert Controller.is_pressed(Controller.BUTTON_RS) == True
+    assert Controller.is_released(Controller.BUTTON_RS) == False
+    assert Controller.has_changed(Controller.BUTTON_RS) == False
+    assert Controller.has_pressed(Controller.BUTTON_RS) == False
+    assert Controller.has_released(Controller.BUTTON_RS) == False
+
+    # Now release the button
+    values[Controller.BUTTON_RS] = False
+    Controller.update(values)
+    assert Controller.is_pressed(Controller.BUTTON_RS) == False
+    assert Controller.is_released(Controller.BUTTON_RS) == True
+    assert Controller.has_changed(Controller.BUTTON_RS) == True
+    assert Controller.has_pressed(Controller.BUTTON_RS) == False
+    assert Controller.has_released(Controller.BUTTON_RS) == True
+
+    # Update clears the changed flags
+    Controller.update(values)
+    assert Controller.is_pressed(Controller.BUTTON_RS) == False
+    assert Controller.is_released(Controller.BUTTON_RS) == True
+    assert Controller.has_changed(Controller.BUTTON_RS) == False
+    assert Controller.has_pressed(Controller.BUTTON_RS) == False
+    assert Controller.has_released(Controller.BUTTON_RS) == False
+
+    # Now we try with two
+    values[Controller.BUTTON_UP] = True
+    values[Controller.BUTTON_A] = True
+    Controller.update(values)
+
+    assert Controller.is_pressed(Controller.BUTTON_UP) == True
+    assert Controller.is_released(Controller.BUTTON_UP) == False
+    assert Controller.has_changed(Controller.BUTTON_UP) == True
+    assert Controller.has_pressed(Controller.BUTTON_UP) == True
+    assert Controller.has_released(Controller.BUTTON_UP) == False
+
+    assert Controller.is_pressed(Controller.BUTTON_A) == True
+    assert Controller.is_released(Controller.BUTTON_A) == False
+    assert Controller.has_changed(Controller.BUTTON_A) == True
+    assert Controller.has_pressed(Controller.BUTTON_A) == True
+    assert Controller.has_released(Controller.BUTTON_A) == False

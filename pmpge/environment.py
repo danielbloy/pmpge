@@ -120,15 +120,16 @@ def get_controller_driver() -> str:
     Returns the controller driver to use. This can be specified in `config.py` to provide
     an override, otherwise a default will be provided depending on the system we are executing
     within.
+
+    NOTE: There is some bootstrap code at the module level which provides an override
+          value for CONTROLLER_DRIVER in a CircuitPython environment with no driver
+          specified.
     """
     if hasattr(config, 'CONTROLLER_DRIVER'):
         return config.CONTROLLER_DRIVER
 
     if is_running_on_desktop():
         return "pmpge.drivers.controller.pgzero"
-
-    if is_running_on_circuitpython():
-        return "pmpge.drivers.controller.circuitpython"
 
     return "pmpge.drivers.controller.none"
 
@@ -150,23 +151,16 @@ def get_graphics_driver() -> str:
     Returns the graphics driver to use. This can be specified in `config.py` to provide
     an override, otherwise a default will be provided depending on the system we are
     executing within.
+
+    NOTE: There is some bootstrap code at the module level which provides an override
+          value for GRAPHICS_DRIVER in a CircuitPython environment with no driver
+          specified.
     """
     if hasattr(config, 'GRAPHICS_DRIVER'):
         return config.GRAPHICS_DRIVER
 
     if is_running_on_desktop():
         return "pmpge.drivers.graphics.pgzero"
-
-    if is_running_on_circuitpython():
-        # If displayio has a DISPLAY variable then we assume it has an attached display.
-        # and we load that.
-        # noinspection PyUnresolvedReferences,PyPackageRequirements
-        try:
-            import board
-            if hasattr(board, 'DISPLAY'):
-                return "pmpge.drivers.graphics.displayio"
-        except ModuleNotFoundError:
-            pass
 
     return "pmpge.drivers.graphics.none"
 
@@ -419,6 +413,16 @@ if is_running_on_circuitpython():
             if not hasattr(config, 'GRAPHICS_DRIVER'):
                 config.GRAPHICS_DRIVER = "pmpge.drivers.graphics.displayio"
                 print(f"Setting GRAPHICS_DRIVER = {config.GRAPHICS_DRIVER}")
+
+        if not hasattr(config, 'CONTROLLER_DRIVER'):
+            if hasattr(board, 'BUTTON_CLOCK') and hasattr(board, 'BUTTON_OUT') and hasattr(board, 'BUTTON_LATCH'):
+                print("Device buttons connected by keypad")
+                config.CONTROLLER_DRIVER = "pmpge.drivers.controller.circuitpython_keypad"
+            else:
+                print("Device buttons not connected directly")
+                config.CONTROLLER_DRIVER = "pmpge.drivers.controller.circuitpython_pins"
+
+            print(f"Setting CONTROLLER_DRIVER = {config.CONTROLLER_DRIVER}")
 
     except ImportError:
         pass

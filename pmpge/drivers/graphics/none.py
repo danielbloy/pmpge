@@ -1,4 +1,4 @@
-print("No graphics driver.")
+print("No graphics driver")
 
 
 def draw(screen):

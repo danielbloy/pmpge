@@ -1,7 +1,7 @@
 # Validating on a device
 
 The following steps are required to be followed to run the validation
-on a device.
+on a CircuitPython device.
 
 1. Copy the entire `pmpge` directory to the root of the device.
 2. Create a `tests/validate_device` directory in the root of the device.

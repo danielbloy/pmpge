@@ -127,6 +127,9 @@ def get_controller_driver() -> str:
     if is_running_on_desktop():
         return "pmpge.drivers.controller.pgzero"
 
+    if is_running_on_circuitpython():
+        return "pmpge.drivers.controller.circuitpython"
+
     return "pmpge.drivers.controller.none"
 
 

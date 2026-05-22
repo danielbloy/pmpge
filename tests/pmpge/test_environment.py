@@ -140,7 +140,7 @@ def test_get_controller_driver():
         'd', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.pgzero")
 
     with_forced_system(
-        'c', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.none")
+        'c', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.circuitpython")
 
     with_forced_system(
         'm', lambda: environment.get_controller_driver() == "pmpge.drivers.controller.none")

@@ -157,8 +157,16 @@ def get_graphics_driver() -> str:
     if is_running_on_desktop():
         return "pmpge.drivers.graphics.pgzero"
 
-    # TODO: We need something smarter here to load the displayio graphics driver in
-    #       scenarios where we have an attached display.
+    if is_running_on_circuitpython():
+        # If displayio has a DISPLAY variable then we assume it has an attached display.
+        # and we load that.
+        # noinspection PyUnresolvedReferences,PyPackageRequirements
+        try:
+            import board
+            if hasattr(board, 'DISPLAY'):
+                return "pmpge.drivers.graphics.displayio"
+        except ModuleNotFoundError:
+            pass
 
     return "pmpge.drivers.graphics.none"
 

@@ -416,10 +416,10 @@ if is_running_on_circuitpython():
 
         if not hasattr(config, 'CONTROLLER_DRIVER'):
             if hasattr(board, 'BUTTON_CLOCK') and hasattr(board, 'BUTTON_OUT') and hasattr(board, 'BUTTON_LATCH'):
-                print("Device buttons connected by keypad")
-                config.CONTROLLER_DRIVER = "pmpge.drivers.controller.circuitpython_keypad"
+                print("Device buttons connected by shift register")
+                config.CONTROLLER_DRIVER = "pmpge.drivers.controller.circuitpython_shift_register"
             else:
-                print("Device buttons not connected directly")
+                print("Device buttons connected directly to pins")
                 config.CONTROLLER_DRIVER = "pmpge.drivers.controller.circuitpython_pins"
 
             print(f"Setting CONTROLLER_DRIVER = {config.CONTROLLER_DRIVER}")

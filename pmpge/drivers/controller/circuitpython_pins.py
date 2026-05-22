@@ -9,6 +9,8 @@ pins = [None for _ in range(12)]
 buttons = [None for _ in range(12)]
 
 
+# TODO: This needs testing on a device with pins.
+
 def create_pin(pin, pullup: bool = True):
     """
     Simple Pin using a boolean value for input logic level on a Pin.

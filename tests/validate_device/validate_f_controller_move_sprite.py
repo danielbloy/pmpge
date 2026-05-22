@@ -7,6 +7,7 @@ import tests.validate_device.utils as utils
 from pmpge.controller import Controller
 from pmpge.game import Game
 from pmpge.traits.controller import MoveWithController
+from pmpge.traits.position import StayInBounds
 
 # The first 12 sprites represent the buttons which have their visibility
 # switched as the buttons are preseed. The 13th sprite is the one moved
@@ -34,10 +35,10 @@ count = len(sprite_data)
 def setup(game: Game):
     game.background_colour = (250, 120, 0)  # Orange
     utils.create_sprites(game, sprite_data)
-
     controller = Controller()
     player = sprite_data[len(sprite_data) - 1].sprite
     player.apply_trait(MoveWithController(60, 60, controller))
+    player.apply_trait(StayInBounds(8, 8, game.width - 8, game.height - 8))
 
     # Update the visibility of the buttons based on the controller values.
     def update_buttons(dt: float):

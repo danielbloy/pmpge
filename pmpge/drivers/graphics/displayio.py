@@ -1,6 +1,6 @@
 #
 # This graphics driver is functional and has reasonable performance on modest
-# hardware such as a Pybadge. Presently it provides enough functionality to
+# hardware such as a PyBadge. Presently it provides enough functionality to
 # support the desired background colour and the DrawImage trait.
 #
 # LIMITATION: DISPLAY
@@ -37,6 +37,7 @@
 # hidden.
 #
 # Why don't we mimic the hierarchy structure?
+#
 # Some GameObjects can have multiple TileGrid instances and some GameObjects will
 # have none. We could in theory place a single Group instance on each GameObject
 # in the hierarchy and attach the TileGrids to those and connect up the Groups in

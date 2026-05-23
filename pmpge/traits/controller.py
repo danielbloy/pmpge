@@ -1,6 +1,6 @@
-from game_object import GameObject
 from pmpge.controller import Controller
 from pmpge.environment import is_running_on_desktop
+from pmpge.game_object import GameObject
 
 # These are not available in CircuitPython.
 if is_running_on_desktop():

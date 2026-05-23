@@ -67,7 +67,28 @@ def test_callback_works():
     """
     setup_pgzero(__file__)
 
-    image = ImageResource("earth")
+    count: int = 0
+
+    def callback():
+        nonlocal count
+        count += 1
+
+    image = ImageResource("earth", callback)
     assert image._name == "earth"
     assert image.width == 16
     assert image.height == 16
+    assert count == 1
+
+    # Change it
+    image.name = "moon"
+    assert image._name == "moon"
+    assert image.width == 8
+    assert image.height == 8
+    assert count == 2
+
+    # and change it again
+    image.name = "7x3"
+    assert image._name == "7x3"
+    assert image.width == 7
+    assert image.height == 3
+    assert count == 3

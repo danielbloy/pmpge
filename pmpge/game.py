@@ -21,8 +21,8 @@ class Game:
     __update_funcs: list[Callable[[float], None]]
     __root: GameObject
 
-    def __init__(self, width: int = None, height: int = None,
-                 background_colour: tuple[int, int, int] = None):
+    def __init__(self, width: int | None = None, height: int | None = None,
+                 background_colour: tuple[int, int, int] | None = None):
 
         self.background_colour = background_colour if background_colour else (0, 0, 0)
         self.__draw_funcs = []

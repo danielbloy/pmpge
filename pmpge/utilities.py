@@ -156,7 +156,8 @@ class CalculateFps:
     next_callback: float
     callback: Callable[[int], None] | None
 
-    def __init__(self, interval: float = 0.25, callback_interval: float = 1.0, callback: Callable[[int], None] = None):
+    def __init__(self, interval: float = 0.25, callback_interval: float = 1.0,
+                 callback: Callable[[int], None] | None = None):
         self.interval = interval
         self.quarters: list[int] = [0, 0, 0, 0]
         self.current: int = 0

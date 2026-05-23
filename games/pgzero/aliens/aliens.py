@@ -248,7 +248,7 @@ player = Sprite(
     DrawImage('player'))
 
 controller = Controller()
-player.apply_trait(MoveWithController(200, 0, controller))
+player.apply_trait(MoveWithController(controller, 200, 0))
 player.apply_trait(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, game.height))
 game_hud.add_child(player)
 

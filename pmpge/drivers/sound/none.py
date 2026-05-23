@@ -1,1 +1,1 @@
-print("No sound driver.")
+print("No sound driver")

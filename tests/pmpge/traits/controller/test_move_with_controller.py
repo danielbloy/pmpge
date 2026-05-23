@@ -21,7 +21,7 @@ def test_constructor():
     Simple test to ensure that constructor works.
     """
     controller = ControllerLRUD(False, False, False, False)
-    trait = MoveWithController(0, 0, controller)
+    trait = MoveWithController(controller, 0, 0)
     assert trait.mx == 0
     assert trait.my == 0
     assert trait.controller == controller
@@ -34,7 +34,7 @@ def test_constructor():
         assert trait.y == 0
 
     controller = ControllerLRUD(False, False, False, False)
-    trait = MoveWithController(10, 20, controller)
+    trait = MoveWithController(controller, 10, 20)
     assert trait.mx == 10
     assert trait.my == 20
     assert trait.controller == controller
@@ -47,7 +47,7 @@ def test_constructor():
         assert trait.y == 0
 
     controller = ControllerLRUD(False, False, False, False)
-    trait = MoveWithController(-1, -2, controller)
+    trait = MoveWithController(controller, -1, -2)
     assert trait.mx == -1
     assert trait.my == -2
     assert trait.controller == controller
@@ -65,7 +65,7 @@ def test_without_position():
     Validates a Position trait with required.
     """
     controller = ControllerLRUD(False, False, False, False)
-    go = GameObject(MoveWithController(10, 20, controller))
+    go = GameObject(MoveWithController(controller, 10, 20))
     with pytest.raises(AttributeError):
         update_hierarchy(go, 0)
 
@@ -77,7 +77,7 @@ def test_with_lrud_buttons():
     left, right , up and down buttons.
     """
     controller = ControllerLRUD(False, False, False, False)
-    go = GameObject(Position(0, 0), MoveWithController(10, 20, controller))
+    go = GameObject(Position(0, 0), MoveWithController(controller, 10, 20))
     assert go.x == 0
     assert go.y == 0
     assert go.mx == 10
@@ -206,7 +206,7 @@ def test_velocity_and_move_with_controller():
     go = GameObject(
         Position(0, 0),
         Velocity(30, 40),
-        MoveWithController(10, 20, controller)
+        MoveWithController(controller, 10, 20)
     )
     assert go.x == 0
     assert go.y == 0

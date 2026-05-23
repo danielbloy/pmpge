@@ -69,6 +69,7 @@ class OnPressed:
 
     def __init__(self, controller: Controller, *events: tuple[int, Callable[[GameObject], None]]):
         self.controller = controller
+        # noinspection PyTypeChecker
         self.on_pressed = events
 
     def update(self, dt: float):
@@ -90,6 +91,7 @@ class OnReleased:
 
     def __init__(self, controller: Controller, *events: tuple[int, Callable[[GameObject], None]]):
         self.controller = controller
+        # noinspection PyTypeChecker
         self.on_released = events
 
     def update(self, dt: float):

@@ -1,5 +1,4 @@
 """
-
 """
 
 from pmpge.game import Game

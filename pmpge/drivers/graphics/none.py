@@ -1,7 +1,7 @@
 print("No graphics driver")
 
 
-def draw(screen):
+def draw(_):
     """
     Mandatory draw method, does nothing.
     """
@@ -20,7 +20,8 @@ class DriverImageResource:
     Mandatory class, does nothing.
     """
 
-    def load(self, image: str) -> tuple[int, int]:
+    # noinspection PyMethodMayBeStatic
+    def load(self, _: str) -> tuple[int, int]:
         return 0, 0
 
 

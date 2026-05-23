@@ -98,17 +98,17 @@ class GameObject:
                  enabled: bool = True,
                  visible: bool = True,
                  parent: Self | None = None,
-                 children: list[Self] = None,
-                 draw_handler: Callable[[Self, Any], None] = None,
-                 update_handler: Callable[[Self, float], None] = None,
-                 activate_handler: Callable[[Self], None] = None,
-                 deactivate_handler: Callable[[Self], None] = None,
-                 destroy_handler: Callable[[Self], None] = None,
-                 draw_handlers: list[Callable[[Self, Any], None]] = None,
-                 update_handlers: list[Callable[[Self, float], None]] = None,
-                 activate_handlers: list[Callable[[Self], None]] = None,
-                 deactivate_handlers: list[Callable[[Self], None]] = None,
-                 destroy_handlers: list[Callable[[Self], None]] = None):
+                 children: list[Self] | None = None,
+                 draw_handler: Callable[[Self, Any], None] | None = None,
+                 update_handler: Callable[[Self, float], None] | None = None,
+                 activate_handler: Callable[[Self], None] | None = None,
+                 deactivate_handler: Callable[[Self], None] | None = None,
+                 destroy_handler: Callable[[Self], None] | None = None,
+                 draw_handlers: list[Callable[[Self, Any], None]] | None = None,
+                 update_handlers: list[Callable[[Self, float], None]] | None = None,
+                 activate_handlers: list[Callable[[Self], None]] | None = None,
+                 deactivate_handlers: list[Callable[[Self], None]] | None = None,
+                 destroy_handlers: list[Callable[[Self], None]] | None = None):
         """
         Initialises a GameObjects properties with the provided arguments. All arguments are optional
         and have a corresponding property. The only point of note is that the active property is set
@@ -525,6 +525,7 @@ def update_hierarchy(root: GameObject, dt: float):
     Also removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
     """
 
+    # noinspection PyProtectedMember
     def process(go: GameObject):
         # Remove any destroyed children.
         children = go._children
@@ -595,6 +596,7 @@ def traverse_hierarchy(
     def process(go: GameObject, state: Any):
         process_children, new_state = func(go, state)
         if process_children:
+            # noinspection PyProtectedMember
             for child in go._children:
                 process(child, new_state)
 

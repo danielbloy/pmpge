@@ -73,7 +73,7 @@ def init(_):
     shift_register.reset()
 
 
-def update(df: float):
+def update(_: float):
     while True:
         # noinspection PyUnresolvedReferences
         event = shift_register.events.get()

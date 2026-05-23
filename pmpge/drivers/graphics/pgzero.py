@@ -65,7 +65,9 @@ def draw(screen: Screen):
     """
     screen.fill(background_colour)
 
+    # noinspection PyUnresolvedReferences
     draw_hierarchy(game.root, screen)
+    # noinspection PyUnresolvedReferences
     game.draw(screen)
 
     if scale_surface:

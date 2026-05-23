@@ -126,7 +126,7 @@ fps_text.anchored_position = (display.width - 1, display.height + 2)
 fps_text.anchor_point = (1.0, 1.0)
 
 
-def init(g: Game, sw: int, sh: int, bgc: tuple[int, int, int]):
+def init(g: Game, _: int, __: int, bgc: tuple[int, int, int]):
     """
     Initialises the display by creating the desired background, building the entire
     hierarchy of TileGrids and turning on the display.
@@ -253,10 +253,12 @@ def game_object_hierarchy_changed():
     while len(object_group) > 0:
         object_group.pop()
 
-    def forced_draw(go: GameObject, state):
+    def forced_draw(go: GameObject, _):
+        # noinspection PyProtectedMember
         go._draw(None)
         return True, None
 
+    # noinspection PyUnresolvedReferences
     traverse_hierarchy(game.root, forced_draw)
     force_add_tile_grids = False
 
@@ -328,7 +330,7 @@ class GraphicsDrawImageTrait:
 
     image: DriverImageResource
 
-    def draw(self, surface):
+    def draw(self, _):
         """
         Draws the image at the specified position, offset from the GameObjects position.
         """

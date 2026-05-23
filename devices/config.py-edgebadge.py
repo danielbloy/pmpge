@@ -2,9 +2,7 @@
 # GRAPHICS_FRAMERATE = None
 GRAPHICS_STATS = True
 
+# Settings for the shift register controller
 from board import BUTTON_CLOCK, BUTTON_OUT, BUTTON_LATCH
 
-BUTTON_CLOCK = BUTTON_CLOCK
-BUTTON_OUT = BUTTON_OUT
-BUTTON_LATCH = BUTTON_LATCH
 BUTTON_MAPPING = [7, 6, 0, 1, 3, 5, 4, 2]

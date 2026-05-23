@@ -25,10 +25,7 @@
 # The following configuration values are required to use this driver (with
 # example values for an EdgeBadge):
 #
-# import board
-# BUTTON_CLOCK = board.BUTTON_CLOCK
-# BUTTON_OUT = board.BUTTON_OUT
-# BUTTON_LATCH = board.BUTTON_LATCH
+# from board import BUTTON_CLOCK, BUTTON_OUT, BUTTON_LATCH
 # BUTTON_MAPPING = [7, 6, 0, 1, 3, 5, 4, 2]
 #
 # REFERENCES

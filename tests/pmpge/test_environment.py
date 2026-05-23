@@ -351,5 +351,3 @@ def test_config_is_loaded() -> None:
         'TEST_VALUE = 123.456\nTEST_STRING = "Hello world!"\n',
         lambda: environment.config.TEST_VALUE == 123.456 and
                 environment.config.TEST_STRING == "Hello world!")
-
-# TODO: Test (as much as reasonably possible) the added code to environment.py for CircuitPython.

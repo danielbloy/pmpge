@@ -247,7 +247,7 @@ def terminate():
         pygame.event.post(pygame.event.Event(pygame.QUIT))
 
 
-def execute(game, background_colour: tuple[int, int, int] = None):
+def execute(game, background_colour: tuple[int, int, int] | None = None):
     """
     Executes the game at the desired resolution. If the screen display is larger than
     the specified width and height, the application will scale if it is able to do so.
@@ -315,6 +315,7 @@ def execute(game, background_colour: tuple[int, int, int] = None):
 
         else:
             # On a microcontroller, we implement our own game loop.
+            import time
             time_func = time.monotonic
             last = time_func()
             while __execute:
@@ -386,12 +387,7 @@ if is_running_on_desktop():
     import pgzrun
     import pygame
 
-if is_running_on_microcontroller():
-    # This is required on microcontrollers as we implement the game loop
-    # ourselves.
-    import time
-
-# Now we will do some device specific initialisation providing defaults
+# Now we will do some CircuitPython device specific initialisation providing defaults
 if is_running_on_circuitpython():
     try:
         # noinspection PyUnusedImports,PyPackageRequirements

@@ -57,44 +57,43 @@ class MoveWithController:
         self.y = new_y
 
 
-class SingleOnPressed:
+class OnPressed:
     """
-    Responds to a single OnPressed event for the specified button. The button is one
-    of the constants on Controller. This trait can only be used for a single button and
-    cannot be combined with other OnPressed events.
-    """
-    controller: Controller
-    on_pressed: tuple[int, Callable[[GameObject], None]]
-
-    def __init__(self, controller: Controller, button: int, callback: Callable[[GameObject], None]):
-        self.controller = controller
-        self.on_pressed = (button, callback)
-
-    def update(self, dt: float):
-        on_pressed = self.on_pressed
-        if self.controller.has_pressed(on_pressed[0]):
-            # noinspection PyTypeChecker
-            on_pressed[1](self)
-
-
-class SingleOnReleased:
-    """
-    Responds to a single OnReleased event for the specified button. The button is one
-    of the constants on Controller. This trait can only be used for a single button and
-    cannot be combined with other OnReleased events.
+    Responds to multiple OnPressed events for the specified buttons. Each event pass in
+    should be a tuple contains two items:
+      * The button as one of the constants on Controller
+      * A callable to invoke when the button was pressed
     """
     controller: Controller
-    on_released: tuple[int, Callable[[GameObject], None]]
+    on_pressed: tuple[tuple[int, Callable[[GameObject], None]]]
 
-    def __init__(self, controller: Controller, button: int, callback: Callable[[GameObject], None]):
+    def __init__(self, controller: Controller, *events: tuple[int, Callable[[GameObject], None]]):
         self.controller = controller
-        self.on_released = (button, callback)
+        self.on_pressed = events
 
     def update(self, dt: float):
-        on_pressed = self.on_released
-        if self.controller.has_released(on_pressed[0]):
-            # noinspection PyTypeChecker
-            on_pressed[1](self)
+        for on_pressed in self.on_pressed:
+            if self.controller.has_pressed(on_pressed[0]):
+                # noinspection PyTypeChecker
+                on_pressed[1](self)
 
-# TODO: A trait that handles multiple on_pressed events
-# TODO: A trait that handles multiple on_released events
+
+class OnReleased:
+    """
+    Responds to multiple OnReleased events for the specified buttons. Each event pass in
+    should be a tuple contains two items:
+      * The button as one of the constants on Controller
+      * A callable to invoke when the button was released
+    """
+    controller: Controller
+    on_released: tuple[tuple[int, Callable[[GameObject], None]]]
+
+    def __init__(self, controller: Controller, *events: tuple[int, Callable[[GameObject], None]]):
+        self.controller = controller
+        self.on_released = events
+
+    def update(self, dt: float):
+        for on_released in self.on_released:
+            if self.controller.has_released(on_released[0]):
+                # noinspection PyTypeChecker
+                on_released[1](self)

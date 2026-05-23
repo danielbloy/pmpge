@@ -10,7 +10,7 @@ from pmpge.controller import Controller
 from pmpge.game import Game
 from pmpge.game_object import GameObject
 from pmpge.sprite import Sprite
-from pmpge.traits.controller import MoveWithController, SingleOnPressed
+from pmpge.traits.controller import MoveWithController, OnPressed
 from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import Acceleration, Velocity
 from pmpge.traits.position import StayInBounds
@@ -42,7 +42,7 @@ def jump(go: GameObject):
         go.vy = -60
 
 
-player.apply_trait(SingleOnPressed(controller, controller.BUTTON_A, jump)),
+player.apply_trait(OnPressed(controller, (Controller.BUTTON_A, jump), (Controller.BUTTON_B, jump)))
 
 finish = time.monotonic() + 5
 game.run()

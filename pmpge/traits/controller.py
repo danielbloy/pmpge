@@ -25,8 +25,7 @@ class MoveWithController:
     my: int
     controller: Controller
 
-    # TODO: Make controller the first argument
-    def __init__(self, mx, my: int, controller: Controller):
+    def __init__(self, controller: Controller, mx, my: int):
         self.mx = mx
         self.my = my
         self.controller = controller

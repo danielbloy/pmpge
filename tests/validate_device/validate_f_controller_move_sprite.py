@@ -37,7 +37,7 @@ def setup(game: Game):
     utils.create_sprites(game, sprite_data)
     controller = Controller()
     player = sprite_data[len(sprite_data) - 1].sprite
-    player.apply_trait(MoveWithController(60, 60, controller))
+    player.apply_trait(MoveWithController(controller, 60, 60))
     player.apply_trait(StayInBounds(8, 8, game.width - 8, game.height - 8))
 
     # Update the visibility of the buttons based on the controller values.

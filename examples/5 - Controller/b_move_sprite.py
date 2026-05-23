@@ -25,22 +25,24 @@ def terminate(dt: float):
 
 game.add_update_func(terminate)
 
-
-def jump(go: GameObject):
-    if go.vy >= 0:
-        go.vy = -60
-
-
 controller = Controller()
 player = Sprite(
     100, 60,
     Velocity(0, 0),
     Acceleration(0, 120),
     DrawImage("player.png"),
-    MoveWithController(60, 0, controller),
-    OnPressed(controller, controller.BUTTON_A, jump),
+    MoveWithController(controller, 60, 0),
     StayInBounds(8, 8, game.width - 8, game.height - 8))
+
 game.add_child(player)
+
+
+def jump(go: GameObject):
+    if go.vy >= 0:
+        go.vy = -60
+
+
+player.apply_trait(OnPressed(controller, controller.BUTTON_A, jump)),
 
 finish = time.monotonic() + 5
 game.run()

@@ -1,4 +1,10 @@
+from game_object import GameObject
 from pmpge.controller import Controller
+from pmpge.environment import is_running_on_desktop
+
+# These are not available in CircuitPython.
+if is_running_on_desktop():
+    from collections.abc import Callable
 
 
 class MoveWithController:
@@ -19,6 +25,7 @@ class MoveWithController:
     my: int
     controller: Controller
 
+    # TODO: Make controller the first argument
     def __init__(self, mx, my: int, controller: Controller):
         self.mx = mx
         self.my = my
@@ -42,11 +49,47 @@ class MoveWithController:
         self.x = new_x
         self.y = new_y
 
-# FUTURE: Add a trait that responds to controller events
-# controller.on_start_pressed = <event>
-# controller.on_start_released = <event>
 
-# TODO: A trait that handles just a single on_pressed or on_released event
+class OnPressed:
+    """
+    Responds to a single OnPressed event for the specified button. The button is one
+    of the constants on Controller. This trait can only be used for a single button and
+    cannot be combined with other OnPressed events.
+
+    TODO: Test
+    """
+    controller: Controller
+    on_pressed: tuple[int, Callable[[GameObject], None]]
+
+    def __init__(self, controller: Controller, button: int, callback: Callable[[GameObject], None]):
+        self.controller = controller
+        self.on_pressed = (button, callback)
+
+    def update(self, dt: float):
+        on_pressed = self.on_pressed
+        if self.controller.has_pressed(on_pressed[0]):
+            on_pressed[1](self)
+
+
+class OnReleased:
+    """
+    Responds to a single OnReleased event for the specified button. The button is one
+    of the constants on Controller. This trait can only be used for a single button and
+    cannot be combined with other OnReleased events.
+
+    TODO: Test
+    """
+    controller: Controller
+    on_released: tuple[int, Callable[[GameObject], None]]
+
+    def __init__(self, controller: Controller, button: int, callback: Callable[[GameObject], None]):
+        self.controller = controller
+        self.on_released = (button, callback)
+
+    def update(self, dt: float):
+        on_pressed = self.on_released
+        if self.controller.has_released(on_pressed[0]):
+            on_pressed[1](self)
+
 # TODO: A trait that handles multiple on_pressed events
 # TODO: A trait that handles multiple on_released events
-# TDOO: A trait that handles both on_pressed and on_released events

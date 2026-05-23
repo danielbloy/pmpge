@@ -1,5 +1,7 @@
 # See https://docs.circuitpython.org/en/latest/shared-bindings/keypad/
+# noinspection PyUnresolvedReferences
 import board
+# noinspection PyUnresolvedReferences
 import keypad
 
 from pmpge.controller import Controller

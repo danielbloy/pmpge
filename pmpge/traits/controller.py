@@ -1,3 +1,11 @@
+#
+# All of the controller traits take a controller instance as their first
+# parameter. When these traits are applied to a GameObject, only one of
+# the controller instance variables is copied across. This is by design
+# but does mean that only a single Controller instance can be used (again
+# this isn't much of a practical limitation).
+#
+
 from pmpge.controller import Controller
 from pmpge.environment import is_running_on_desktop
 from pmpge.game_object import GameObject
@@ -49,13 +57,11 @@ class MoveWithController:
         self.y = new_y
 
 
-class OnPressed:
+class SingleOnPressed:
     """
     Responds to a single OnPressed event for the specified button. The button is one
     of the constants on Controller. This trait can only be used for a single button and
     cannot be combined with other OnPressed events.
-
-    TODO: Test
     """
     controller: Controller
     on_pressed: tuple[int, Callable[[GameObject], None]]
@@ -67,16 +73,15 @@ class OnPressed:
     def update(self, dt: float):
         on_pressed = self.on_pressed
         if self.controller.has_pressed(on_pressed[0]):
+            # noinspection PyTypeChecker
             on_pressed[1](self)
 
 
-class OnReleased:
+class SingleOnReleased:
     """
     Responds to a single OnReleased event for the specified button. The button is one
     of the constants on Controller. This trait can only be used for a single button and
     cannot be combined with other OnReleased events.
-
-    TODO: Test
     """
     controller: Controller
     on_released: tuple[int, Callable[[GameObject], None]]
@@ -88,6 +93,7 @@ class OnReleased:
     def update(self, dt: float):
         on_pressed = self.on_released
         if self.controller.has_released(on_pressed[0]):
+            # noinspection PyTypeChecker
             on_pressed[1](self)
 
 # TODO: A trait that handles multiple on_pressed events

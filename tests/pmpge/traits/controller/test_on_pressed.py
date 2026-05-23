@@ -1,6 +1,6 @@
 from pmpge.controller import Controller
 from pmpge.game_object import GameObject
-from traits.controller import OnPressed
+from pmpge.traits.controller import OnPressed
 
 
 def test_constructor():

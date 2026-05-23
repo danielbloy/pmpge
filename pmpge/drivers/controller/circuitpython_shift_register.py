@@ -42,7 +42,7 @@ from pmpge.controller import Controller
 
 values: list[bool] = [False for _ in range(12)]
 button_map: list[int] = [0 for _ in range(12)]
-shift_register: ShiftRegisterKeys
+shift_register: ShiftRegisterKeys = None
 
 
 # noinspection PyUnresolvedReferences
@@ -80,7 +80,7 @@ def update(df: float):
         event = shift_register.events.get()
         if event is None:
             break
-            
+
         # noinspection PyTypeChecker
         values[button_map[event.key_number]] = event.pressed
 

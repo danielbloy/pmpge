@@ -69,11 +69,13 @@ def init(_):
     Simply clear the controller settings and the shift register.
     """
     Controller.reset()
+    # noinspection PyUnresolvedReferences
     shift_register.reset()
 
 
 def update(df: float):
     while True:
+        # noinspection PyUnresolvedReferences
         event = shift_register.events.get()
         if event is None:
             break
@@ -89,4 +91,5 @@ def deinit():
     Simply clear the controller settings and the shift register.
     """
     Controller.reset()
+    # noinspection PyUnresolvedReferences
     shift_register.reset()

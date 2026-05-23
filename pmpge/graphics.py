@@ -11,7 +11,8 @@ game_object_hierarchy_changed = __graphics.game_object_hierarchy_changed
 
 
 # FUTURE: Add support for specifying sprites in the same way as they are in MakeCode Arcade
-#         so we do not need to ship image assets (and can use the MakeCode Arcade paint tools).
+#         so we do not need to ship image assets (and can also make use of the MakeCode
+#         Arcade paint tools).
 
 class ImageResource(DriverImageResource):
     """
@@ -31,7 +32,7 @@ class ImageResource(DriverImageResource):
     _name: str
     notify: Callable[[], None] | None
 
-    def __init__(self, name: str, notify: Callable[[], None] = None):
+    def __init__(self, name: str, notify: Callable[[], None] | None = None):
         self.width = 0
         self.height = 0
         self.notify = notify

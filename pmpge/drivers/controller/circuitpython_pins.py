@@ -1,5 +1,33 @@
+#
+# This controller driver is designed to work on devices where the buttons are
+# connected directly to pins. It is about as lightweight a driver as can be.
+# It does require that each button to be used is specified in configuration.
+# The configuration properties are the same as the Controller constants.
+#
+#   BUTTON_START = <pin>
+#   BUTTON_SELECT = <pin>
+#   BUTTON_LEFT = <pin>
+#   BUTTON_RIGHT = <pin>
+#   BUTTON_UP = <pin>
+#   BUTTON_DOWN = <pin>
+#   BUTTON_A = <pin>
+#   BUTTON_B = <pin>
+#   BUTTON_X = <pin>
+#   BUTTON_Y = <pin>
+#   BUTTON_LS = <pin>
+#   BUTTON_RS = <pin>
+#
+# LIMITATION
+#
+# This driver has not yet been tested on a device.
+#
+# REFERENCES
+#
 # See https://learn.adafruit.com/debouncer-library-python-circuitpython-buttons-sensors/basic-debouncing
+#
+# noinspection PyUnresolvedReferences
 import digitalio
+# noinspection PyUnresolvedReferences
 from adafruit_debouncer import Debouncer
 
 from pmpge.controller import Controller
@@ -8,8 +36,6 @@ values: list[bool] = [False for _ in range(12)]
 pins = [None for _ in range(12)]
 buttons = [None for _ in range(12)]
 
-
-# TODO: This needs testing on a device with pins.
 
 def create_pin(pin, pullup: bool = True):
     """
@@ -89,8 +115,6 @@ def init(_):
 
 
 def update(df: float):
-    # See https://learn.adafruit.com/debouncer-library-python-circuitpython-buttons-sensors/basic-debouncing
-
     for i, button in enumerate(buttons):
         if button is not None:
             button.update()

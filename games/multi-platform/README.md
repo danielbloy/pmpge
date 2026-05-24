@@ -7,7 +7,8 @@ framework provides equivalent functionality to MakeCode Arcade and a
 relatively simple route to transfer across. The Python code is not
 intended to mimic that MakeCode Arcade, just provide an equivalent set
 of functionality. Where this framework has gaps, they are detailed
-below and will be priority items to implement.
+below and will be priority items to implement as the development of
+these games continues.
 
 ## Functionality Gaps
 

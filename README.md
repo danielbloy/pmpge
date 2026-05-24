@@ -65,7 +65,8 @@ importance):
 * `traits`         - Directory containing a range of traits that can be added to a `GameObject`.
 
 Some sample games written using the `pmpge` framework can be found in `games` and examples
-demonstrating how to use the framework can be found in `examples`.
+demonstrating how to use the framework can be found in `examples`. There is also the `assets`
+directory that contains an inventory of all the assets used in the projects.
 
 ## Setting up a Development Environment
 

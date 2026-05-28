@@ -14,10 +14,14 @@ these games continues.
 
 * Sound - this is a priority but has been deferred in preference
   to the game functionality.
-* Lives
-* Scores
-* Timer
-* Game over
+* Lives - Info Trait
+* Scores - Info Trait
+* Countdown - Info Trait
+* Game over - Game Trait
+* On Game Update every 500ms - Game Trait
+* On Game Update - Game Trait
+* Reset game - Game Trait
+* Time since start (ms) - Game Trait
 * Embedded image assets
 * Palette
 * Backgrounds

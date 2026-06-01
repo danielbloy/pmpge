@@ -1,5 +1,9 @@
 # Validating on a device
 
+The validation scripts are designed to be run on a CircuitPython device to
+validate both the performance of PMPGE but also the correct behaviour of
+the drivers as these are impossible to test on a PC with automated testing.
+
 The following steps are required to be followed to run the validation
 on a CircuitPython device.
 
@@ -13,4 +17,4 @@ on a CircuitPython device.
 6. Create a `lib` directory in the root of the device.
 7. Copy across the contents of `tests/validate_device/lib` into the `lib`
    directory on the device.
-8. Use Thonny to run `validate_all.py`.
+8. Use Thonny to run one of the validate scripts such as`validate_performance.py`.

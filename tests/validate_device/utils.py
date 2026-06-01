@@ -93,7 +93,7 @@ def add_update_method(game: Game, callable: Callable[[Game], None], fps: int = 5
 
 def should_execute(name: str):
     """
-    Used to determine is we are running as a main module or not.
+    Used to determine ifs we are running as a main module or not.
     """
     if name == '__main__':
         return True
@@ -102,6 +102,34 @@ def should_execute(name: str):
         return name == "pgzero.builtins"
 
     return False
+
+
+def execute_modules(modules: list[object]):
+    """
+    Executes each of the modules in turn. This is expected to be used only by the
+    top level validate scripts.
+    """
+    for module in modules:
+        try:
+            if is_running_on_desktop():
+                from types import ModuleType
+                from pgzero.game import PGZeroGame
+                PGZeroGame(module).reinit_screen()
+
+            print("Executing module {}".format(module))
+
+            # This allows the validate script to override the default screen size.
+            screen_width, screen_height = 160, 120
+            if hasattr(module, "SCREEN_WIDTH"):
+                screen_width = module.SCREEN_WIDTH
+            if hasattr(module, "SCREEN_HEIGHT"):
+                screen_height = module.SCREEN_HEIGHT
+
+            execute(module.setup, screen_width=screen_width, screen_height=screen_height)
+            del module
+
+        except MemoryError:
+            print("Memory Error")
 
 
 def execute(

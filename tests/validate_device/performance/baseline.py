@@ -16,9 +16,13 @@ from pmpge.traits.position import AngularMotion, AngularRelativeToParent, Follow
 def create_test_data(game: Game, include_graphics: bool):
     """
     The following set of game_objects are created:
-        - Two Earth sprites orbiting the centre of the screen (earth_1, earth_2).
+        - Two Earth sprites orbiting the centre of the screen (earth_1, earth_2)
         - Two Moon sprites orbiting their respective Earth sprites
-        - Eight Alien sprites following their respective Earth and Moon sprites
+        - Eight Alien sprites following their respective Earth and Moon sprites (2 each)
+        - 2 sprites moving horizontrally at the top of the screen
+        - 2 sprites moving horizontrally at the bottom of the screen
+        - 2 sprites moving vertically at the left of the screen
+        - 2 sprites moving vertically at the right of the screen
     """
     game.background_colour = (250, 120, 0)  # Orange
 
@@ -65,24 +69,33 @@ def create_test_data(game: Game, include_graphics: bool):
     # We create the sprites manually here as we don't want velocity
     for data in follow_sprites:
         sprite = Sprite(data.x, data.y)
+        data.sprite = sprite
 
         if include_graphics:
             sprite.apply_trait(DrawImage(data.image))
 
-        data.sprite = sprite
-        game.add_child(sprite)
+    for item in enumerate([earth_1, earth_1, earth_1_moon, earth_1_moon, earth_2, earth_2, earth_2_moon, earth_2_moon]):
+        index = item[0]
+        parent = item[1]
+        vx = 30 if index % 2 == 0 else 10
+        vy = 10 if index % 2 == 0 else 30
+        follow_sprites[index].sprite.apply_trait(FollowSprite(parent, vx, vy))
+        parent.add_child(follow_sprites[index].sprite)
 
-    follow_sprites[0].sprite.apply_trait(FollowSprite(earth_1, 30, 10))
-    follow_sprites[1].sprite.apply_trait(FollowSprite(earth_1, 10, 30))
+    move_sprites: list[utils.SpriteData] = [
+        utils.SpriteData(20, 20, 30, 0, "alien.png"),
+        utils.SpriteData(game.width - 20, 20, -30, 0, "alien_b.png"),
+        utils.SpriteData(20, game.height - 20, 30, 0, "alien_c.png"),
+        utils.SpriteData(game.width - 20, game.height - 20, -30, 0, "alien_d.png"),
+        utils.SpriteData(20, 20, 0, 30, "alien_e.png"),
+        utils.SpriteData(game.width - 20, 20, 0, 30, "alien_f.png"),
+        utils.SpriteData(20, game.height - 20, 0, -30, "alien_g.png"),
+        utils.SpriteData(game.width - 20, game.height - 20, 0, -30, "alien_h.png"),
+    ]
 
-    follow_sprites[2].sprite.apply_trait(FollowSprite(earth_1_moon, 30, 10))
-    follow_sprites[3].sprite.apply_trait(FollowSprite(earth_1_moon, 10, 30))
+    utils.create_sprites(game, move_sprites)
 
-    follow_sprites[4].sprite.apply_trait(FollowSprite(earth_2, 30, 10))
-    follow_sprites[5].sprite.apply_trait(FollowSprite(earth_2, 10, 30))
-
-    follow_sprites[6].sprite.apply_trait(FollowSprite(earth_2_moon, 30, 10))
-    follow_sprites[7].sprite.apply_trait(FollowSprite(earth_2_moon, 10, 30))
+    # TODO: Add horizontal and vertical traits to switch direction.
 
 
 def setup(game: Game):

@@ -10,5 +10,7 @@ import tests.validate_device.utils as utils
 
 modules = [egb, egs, ess, ems, esm, esv, esh, ego]
 
+# TODO: Small screen, add a graphic in each corner.
+
 if utils.should_execute(__name__):
     utils.execute_modules(modules)

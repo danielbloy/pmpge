@@ -7,16 +7,54 @@ from pmpge.traits.graphics import DrawImage
 from pmpge.traits.position import AngularMotion, AngularRelativeToParent, FollowSprite
 
 
+class HorizontalOscillatorTrait:
+    x: int
+    vx: int
+
+    def __init__(self, x_min, x_max: int):
+        self.x_min: int = x_min
+        self.x_max: int = x_max
+
+    def update(self, dt: float):
+        x = self.x
+        vx = self.vx
+
+        if x < self.x_min and vx < 0:
+            self.vx = -vx
+
+        if x > self.x_max and vx > 0:
+            self.vx = -vx
+
+
+class VerticalOscillatorTrait:
+    y: int
+    vy: int
+
+    def __init__(self, y_min, y_max: int):
+        self.y_min: int = y_min
+        self.y_max: int = y_max
+
+    def update(self, dt: float):
+        y = self.y
+        vy = self.vy
+
+        if y < self.y_min and vy < 0:
+            self.vy = -vy
+
+        if y > self.y_max and vy > 0:
+            self.vy = -vy
+
+
 def create_test_data(game: Game, include_graphics: bool):
     """
     The following set of game_objects are created:
         - Two Earth sprites orbiting the centre of the screen (earth_1, earth_2)
         - Two Moon sprites orbiting their respective Earth sprites
         - Eight Alien sprites following their respective Earth and Moon sprites (2 each)
-        - 2 sprites moving horizontrally at the top of the screen
-        - 2 sprites moving horizontrally at the bottom of the screen
-        - 2 sprites moving vertically at the left of the screen
-        - 2 sprites moving vertically at the right of the screen
+        - 2 sprites oscillating horizontrally at the top of the screen
+        - 2 sprites oscillating horizontrally at the bottom of the screen
+        - 2 sprites oscillating vertically at the left of the screen
+        - 2 sprites oscillating vertically at the right of the screen
     """
     game.background_colour = (250, 120, 0)  # Orange
 
@@ -49,6 +87,7 @@ def create_test_data(game: Game, include_graphics: bool):
     earth_1.add_child(earth_1_moon)
     earth_2.add_child(earth_2_moon)
 
+    # We create the follow sprites manually as we don't want the velocity trait.
     follow_sprites: list[utils.SpriteData] = [
         utils.SpriteData(game.width // 2, game.height // 2, 0, 0, "7x3.png"),
         utils.SpriteData(game.width // 2, game.height // 2, 0, 0, "john.png"),
@@ -60,7 +99,6 @@ def create_test_data(game: Game, include_graphics: bool):
         utils.SpriteData(game.width // 2, game.height // 2, 0, 0, "7x7.png"),
     ]
 
-    # We create the sprites manually here as we don't want velocity
     for data in follow_sprites:
         sprite = Sprite(data.x, data.y)
         data.sprite = sprite
@@ -88,5 +126,9 @@ def create_test_data(game: Game, include_graphics: bool):
     ]
 
     utils.create_sprites(game, move_sprites)
+    horizontal_trait = HorizontalOscillatorTrait(10, game.width - 10)
+    vertical_trait = VerticalOscillatorTrait(10, game.height - 10)
 
-    # TODO: Add horizontal and vertical traits to switch direction.
+    for sprite in move_sprites:
+        sprite.sprite.apply_trait(horizontal_trait)
+        sprite.sprite.apply_trait(vertical_trait)

@@ -1,10 +1,10 @@
-import tests.validate_device.performance.baseline as baseline
 import tests.validate_device.utils as utils
 from pmpge.game import Game
+from tests.validate_device.performance.test_data import create_test_data
 
 
 def setup(game: Game):
-    baseline.create_test_data(game, include_graphics=True)
+    create_test_data(game, include_graphics=True)
 
 
 if utils.should_execute(__name__):

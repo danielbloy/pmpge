@@ -15,6 +15,52 @@ class Position:
         self.y: float = y
 
 
+class HorizontalOscillator:
+    """
+    Simple trait that oscillates vertically between two points.
+    TODO: Test
+    """
+    x: int
+    vx: int
+
+    def __init__(self, x_min, x_max: int):
+        self.x_min: int = x_min
+        self.x_max: int = x_max
+
+    def update(self, dt: float):
+        x = self.x
+        vx = self.vx
+
+        if x < self.x_min and vx < 0:
+            self.vx = -vx
+
+        if x > self.x_max and vx > 0:
+            self.vx = -vx
+
+
+class VerticalOscillator:
+    """
+    Simple trait that oscillates horizontally between two points.
+    TODO: Test
+    """
+    y: int
+    vy: int
+
+    def __init__(self, y_min, y_max: int):
+        self.y_min: int = y_min
+        self.y_max: int = y_max
+
+    def update(self, dt: float):
+        y = self.y
+        vy = self.vy
+
+        if y < self.y_min and vy < 0:
+            self.vy = -vy
+
+        if y > self.y_max and vy > 0:
+            self.vy = -vy
+
+
 class RelativeToParent:
     """
     RelativeToParent keeps the position of a GameObject a specified number of pixels

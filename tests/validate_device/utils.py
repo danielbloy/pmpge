@@ -54,7 +54,7 @@ class SpriteData:
         self.image = image
 
 
-def create_sprites(game: Game, sprite_data: list[SpriteData], add_to_root: bool = True):
+def create_sprites(game: Game, sprite_data: list[SpriteData], add_to_root: bool = True, include_graphics: bool = True):
     """
     Simple utility method to create a range of sprites at the root of the
     Game instance
@@ -62,9 +62,13 @@ def create_sprites(game: Game, sprite_data: list[SpriteData], add_to_root: bool 
     for data in sprite_data:
         sprite = Sprite(
             data.x, data.y,
-            Velocity(data.vx, data.vy),
-            DrawImage(data.image))
+            Velocity(data.vx, data.vy))
+
+        if include_graphics:
+            sprite.apply_trait(DrawImage(data.image))
+
         data.sprite = sprite
+
         if add_to_root:
             game.add_child(sprite)
 

@@ -5,44 +5,7 @@ from pmpge.game import Game
 from pmpge.sprite import Sprite
 from pmpge.traits.graphics import DrawImage
 from pmpge.traits.position import AngularMotion, AngularRelativeToParent, FollowSprite
-
-
-class HorizontalOscillatorTrait:
-    x: int
-    vx: int
-
-    def __init__(self, x_min, x_max: int):
-        self.x_min: int = x_min
-        self.x_max: int = x_max
-
-    def update(self, dt: float):
-        x = self.x
-        vx = self.vx
-
-        if x < self.x_min and vx < 0:
-            self.vx = -vx
-
-        if x > self.x_max and vx > 0:
-            self.vx = -vx
-
-
-class VerticalOscillatorTrait:
-    y: int
-    vy: int
-
-    def __init__(self, y_min, y_max: int):
-        self.y_min: int = y_min
-        self.y_max: int = y_max
-
-    def update(self, dt: float):
-        y = self.y
-        vy = self.vy
-
-        if y < self.y_min and vy < 0:
-            self.vy = -vy
-
-        if y > self.y_max and vy > 0:
-            self.vy = -vy
+from pmpge.traits.position import HorizontalOscillator, VerticalOscillator
 
 
 def create_test_data(game: Game, include_graphics: bool):
@@ -114,6 +77,7 @@ def create_test_data(game: Game, include_graphics: bool):
         follow_sprites[index].sprite.apply_trait(FollowSprite(parent, vx, vy))
         parent.add_child(follow_sprites[index].sprite)
 
+    # Add in the horizontally and vertically oscillating sprites.
     move_sprites: list[utils.SpriteData] = [
         utils.SpriteData(5, 5, 30, 0, "x.png"),
         utils.SpriteData(game.width - 5, 5, -30, 0, "y.png"),
@@ -125,9 +89,9 @@ def create_test_data(game: Game, include_graphics: bool):
         utils.SpriteData(game.width - 5, game.height - 5, 0, -30, "d.png"),
     ]
 
-    utils.create_sprites(game, move_sprites)
-    horizontal_trait = HorizontalOscillatorTrait(10, game.width - 10)
-    vertical_trait = VerticalOscillatorTrait(10, game.height - 10)
+    utils.create_sprites(game, move_sprites, include_graphics=include_graphics)
+    horizontal_trait = HorizontalOscillator(10, game.width - 10)
+    vertical_trait = VerticalOscillator(10, game.height - 10)
 
     for sprite in move_sprites:
         sprite.sprite.apply_trait(horizontal_trait)

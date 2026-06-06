@@ -13,19 +13,19 @@ from pmpge.traits.position import StayInBounds
 # switched as the buttons are preseed. The 13th sprite is the one moved
 # around by the controller.
 sprite_data: list[utils.SpriteData] = [
-    utils.SpriteData(10, 110, 0, 0, "start.png"),
-    utils.SpriteData(20, 110, 0, 0, "select.png"),
-    utils.SpriteData(30, 110, 0, 0, "l.png"),
-    utils.SpriteData(40, 110, 0, 0, "r.png"),
-    utils.SpriteData(50, 110, 0, 0, "u.png"),
-    utils.SpriteData(60, 110, 0, 0, "d.png"),
-    utils.SpriteData(70, 110, 0, 0, "a.png"),
-    utils.SpriteData(80, 110, 0, 0, "b.png"),
-    utils.SpriteData(90, 110, 0, 0, "x.png"),
-    utils.SpriteData(100, 110, 0, 0, "y.png"),
-    utils.SpriteData(110, 110, 0, 0, "ls.png"),
-    utils.SpriteData(120, 110, 0, 0, "rs.png"),
-    utils.SpriteData(80, 60, 0, 0, "hero_front.png"),
+    utils.SpriteData(10, 110, "start.png"),
+    utils.SpriteData(20, 110, "select.png"),
+    utils.SpriteData(30, 110, "l.png"),
+    utils.SpriteData(40, 110, "r.png"),
+    utils.SpriteData(50, 110, "u.png"),
+    utils.SpriteData(60, 110, "d.png"),
+    utils.SpriteData(70, 110, "a.png"),
+    utils.SpriteData(80, 110, "b.png"),
+    utils.SpriteData(90, 110, "x.png"),
+    utils.SpriteData(100, 110, "y.png"),
+    utils.SpriteData(110, 110, "ls.png"),
+    utils.SpriteData(120, 110, "rs.png"),
+    utils.SpriteData(80, 60, "hero_front.png", vx=0, vy=0),
 ]
 
 index = 0

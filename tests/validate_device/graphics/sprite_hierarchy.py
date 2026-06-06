@@ -18,34 +18,34 @@ from pmpge.game import Game
 from pmpge.graphics import game_object_hierarchy_changed
 
 sprite_data_row_1: list[utils.SpriteData] = [
-    utils.SpriteData(65, 15, 0, 0, "alien_c.png"),
-    utils.SpriteData(50, 15, 0, 0, "alien.png"),
-    utils.SpriteData(35, 15, 0, 0, "alien_c.png"),
-    utils.SpriteData(20, 15, 0, 0, "alien.png"),
+    utils.SpriteData(65, 15, "alien_c.png"),
+    utils.SpriteData(50, 15, "alien.png"),
+    utils.SpriteData(35, 15, "alien_c.png"),
+    utils.SpriteData(20, 15, "alien.png"),
 ]
 
 sprite_data_row_2: list[utils.SpriteData] = [
-    utils.SpriteData(140, 45, 0, 0, "alien_e.png"),
-    utils.SpriteData(110, 45, 0, 0, "alien_d.png"),
-    utils.SpriteData(80, 45, 0, 0, "alien_c.png"),
-    utils.SpriteData(50, 45, 0, 0, "alien_b.png"),
-    utils.SpriteData(20, 45, 0, 0, "alien.png"),
+    utils.SpriteData(140, 45, "alien_e.png"),
+    utils.SpriteData(110, 45, "alien_d.png"),
+    utils.SpriteData(80, 45, "alien_c.png"),
+    utils.SpriteData(50, 45, "alien_b.png"),
+    utils.SpriteData(20, 45, "alien.png"),
 ]
 
 sprite_data_row_3: list[utils.SpriteData] = [
-    utils.SpriteData(20, 75, 0, 0, "alien_e.png"),
-    utils.SpriteData(50, 75, 0, 0, "alien_d.png"),
-    utils.SpriteData(80, 75, 0, 0, "alien_c.png"),
-    utils.SpriteData(110, 75, 0, 0, "alien_b.png"),
-    utils.SpriteData(140, 75, 0, 0, "alien.png"),
+    utils.SpriteData(20, 75, "alien_e.png"),
+    utils.SpriteData(50, 75, "alien_d.png"),
+    utils.SpriteData(80, 75, "alien_c.png"),
+    utils.SpriteData(110, 75, "alien_b.png"),
+    utils.SpriteData(140, 75, "alien.png"),
 ]
 
 sprite_data_row_4: list[utils.SpriteData] = [
-    utils.SpriteData(20, 105, 0, 0, "alien_e.png"),
-    utils.SpriteData(50, 105, 0, 0, "alien_d.png"),
-    utils.SpriteData(80, 105, 0, 0, "alien_c.png"),
-    utils.SpriteData(110, 105, 0, 0, "alien_b.png"),
-    utils.SpriteData(140, 105, 0, 0, "alien.png"),
+    utils.SpriteData(20, 105, "alien_e.png"),
+    utils.SpriteData(50, 105, "alien_d.png"),
+    utils.SpriteData(80, 105, "alien_c.png"),
+    utils.SpriteData(110, 105, "alien_b.png"),
+    utils.SpriteData(140, 105, "alien.png"),
 ]
 
 

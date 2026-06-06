@@ -11,6 +11,7 @@ from pmpge.game import Game
 from pmpge.sprite import Sprite
 from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import Velocity
+from traits.physics import Acceleration
 
 # These are not available in CircuitPython.
 if is_running_on_desktop():
@@ -41,17 +42,21 @@ if hasattr(config, 'PROFILE_TOP'):
 class SpriteData:
     x: int
     y: int
-    vx: int
-    vy: int
+    vx: int | None
+    vy: int | None
+    ax: int | None
+    ay: int | None
     image: str
     sprite: Sprite
 
-    def __init__(self, x: int, y: int, vx: int, vy: int, image: str):
+    def __init__(self, x: int, y: int, image: str, vx=None, vy=None, ax=None, ay=None):
         self.x = x
         self.y = y
         self.vx = vx
         self.vy = vy
         self.image = image
+        self.ax = ax
+        self.ay = ay
 
 
 def create_sprites(game: Game, sprite_data: list[SpriteData], add_to_root: bool = True, include_graphics: bool = True):
@@ -60,9 +65,13 @@ def create_sprites(game: Game, sprite_data: list[SpriteData], add_to_root: bool 
     Game instance
     """
     for data in sprite_data:
-        sprite = Sprite(
-            data.x, data.y,
-            Velocity(data.vx, data.vy))
+        sprite = Sprite(data.x, data.y)
+
+        if data.vx is not None and data.vy is not None:
+            sprite.apply_trait(Velocity(data.vx, data.vy))
+
+        if data.ax is not None and data.ay is not None:
+            sprite.apply_trait(Acceleration(data.ax, data.ay))
 
         if include_graphics:
             sprite.apply_trait(DrawImage(data.image))
@@ -73,6 +82,7 @@ def create_sprites(game: Game, sprite_data: list[SpriteData], add_to_root: bool 
             game.add_child(sprite)
 
 
+# TODO: Add the capability to specify fps on a game update method to the engine.
 def add_update_method(game: Game, callable: Callable[[Game], None], fps: int = 5):
     """
     Adds an update method to a Game instance that gets called at the desired fps (roughly).

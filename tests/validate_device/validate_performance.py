@@ -5,7 +5,6 @@ import tests.validate_device.performance.huge_hierarchy as hh
 import tests.validate_device.utils as utils
 
 modules = [baseline, with_graphics, small_display, hh]
-modules = [small_display]
 
 if utils.should_execute(__name__):
     utils.execute_modules(modules)

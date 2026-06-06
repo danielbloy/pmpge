@@ -12,27 +12,21 @@ from pmpge.traits.graphics import DrawImage
 from pmpge.traits.position import AngularMotion, AngularRelativeToParent, FollowSprite
 
 sprite_data: list[utils.SpriteData] = [
-    utils.SpriteData(80, 60, 0, 0, "alien.png"),
-    utils.SpriteData(80, 60, 0, 0, "alien_b.png"),
-    utils.SpriteData(80, 60, 0, 0, "alien_c.png"),
-    utils.SpriteData(80, 60, 0, 0, "alien_d.png"),
-    utils.SpriteData(80, 60, 0, 0, "alien_e.png"),
-    utils.SpriteData(80, 60, 0, 0, "alien_f.png"),
-    utils.SpriteData(80, 60, 0, 0, "alien_g.png"),
-    utils.SpriteData(80, 60, 0, 0, "alien_h.png"),
+    utils.SpriteData(80, 60, "alien.png"),
+    utils.SpriteData(80, 60, "alien_b.png"),
+    utils.SpriteData(80, 60, "alien_c.png"),
+    utils.SpriteData(80, 60, "alien_d.png"),
+    utils.SpriteData(80, 60, "alien_e.png"),
+    utils.SpriteData(80, 60, "alien_f.png"),
+    utils.SpriteData(80, 60, "alien_g.png"),
+    utils.SpriteData(80, 60, "alien_h.png"),
 ]
 
 
 def setup(game: Game):
     game.background_colour = (0, 0, 0)  # Black
 
-    # We create the sprites manually here as we don't want velocity
-    for data in sprite_data:
-        sprite = Sprite(
-            data.x, data.y,
-            DrawImage(data.image))
-        data.sprite = sprite
-        game.add_child(sprite)
+    utils.create_sprites(game, sprite_data)
 
     # Add two earth and moon sprites that orbit the centre of the screen.
     earth = Sprite(

@@ -154,3 +154,6 @@ def test_using_with_game_object_negative():
     assert go.y == -12
     assert go.vx == -1
     assert go.vy == -2
+
+# TODO: Test MaxVelocity
+# TODO: Test MinVelocity

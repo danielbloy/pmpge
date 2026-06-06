@@ -6,14 +6,14 @@ import tests.validate_device.utils as utils
 from pmpge.game import Game
 
 sprite_data: list[utils.SpriteData] = [
-    utils.SpriteData(80, 60, 15, 0, "alien.png"),
-    utils.SpriteData(80, 60, -15, 0, "alien_b.png"),
-    utils.SpriteData(80, 60, 0, 15, "alien_c.png"),
-    utils.SpriteData(80, 60, 0, -15, "alien_d.png"),
-    utils.SpriteData(80, 60, 15, 15, "alien_e.png"),
-    utils.SpriteData(80, 60, -15, -15, "alien_f.png"),
-    utils.SpriteData(80, 60, 15, -15, "alien_g.png"),
-    utils.SpriteData(80, 60, -15, 15, "alien_h.png"),
+    utils.SpriteData(80, 60, "alien.png", 15, 0),
+    utils.SpriteData(80, 60, "alien_b.png", -15, 0),
+    utils.SpriteData(80, 60, "alien_c.png", 0, 15),
+    utils.SpriteData(80, 60, "alien_d.png", 0, -15),
+    utils.SpriteData(80, 60, "alien_e.png", 15, 15),
+    utils.SpriteData(80, 60, "alien_f.png", -15, -15),
+    utils.SpriteData(80, 60, "alien_g.png", 15, -15),
+    utils.SpriteData(80, 60, "alien_h.png", -15, 15),
 ]
 
 index = 0

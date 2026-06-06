@@ -22,6 +22,54 @@ class Velocity:
         self.y += (dt * self.vy)
 
 
+class MaxVelocity:
+    """
+    Limits velocity to a maximum value for each of horizontal and vertical velocities.
+    """
+    vx: int
+    vy: int
+    max_vx: int | None
+    max_vy: int | None
+
+    def __init__(self, max_vx: int | None = None, max_vy: int | None = None):
+        self.max_vx = max_vx
+        self.max_vy = max_vy
+
+    def update(self, dt: float):
+        max_vx = self.max_vx
+        max_vy = self.max_vy
+
+        if max_vx is not None:
+            self.vx = min(self.vx, max_vx)
+
+        if max_vy is not None:
+            self.vy = min(self.vy, max_vy)
+
+
+class MinVelocity:
+    """
+    Limits velocity to a minimum value for each of horizontal and vertical velocities.
+    """
+    vx: int
+    vy: int
+    min_vx: int | None
+    min_vy: int | None
+
+    def __init__(self, min_vx: int | None = None, min_vy: int | None = None):
+        self.min_vx = min_vx
+        self.min_vy = min_vy
+
+    def update(self, dt: float):
+        min_vx = self.min_vx
+        min_vy = self.min_vy
+
+        if min_vx is not None:
+            self.vx = max(self.vx, min_vx)
+
+        if min_vy is not None:
+            self.vy = max(self.vy, min_vy)
+
+
 class Acceleration:
     """
     Acceleration is the rate at which a sprite changes its velocity. It is measured in pixels

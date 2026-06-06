@@ -7,10 +7,10 @@ import tests.validate_device.utils as utils
 from pmpge.game import Game
 
 sprite_data: list[utils.SpriteData] = [
-    utils.SpriteData(25, 30, 0, 0, "alien.png"),
-    utils.SpriteData(75, 30, 0, 0, "alien_b.png"),
-    utils.SpriteData(25, 80, 0, 0, "alien_c.png"),
-    utils.SpriteData(75, 80, 0, 0, "alien_d.png"),
+    utils.SpriteData(25, 30, "alien.png"),
+    utils.SpriteData(75, 30, "alien_b.png"),
+    utils.SpriteData(25, 80, "alien_c.png"),
+    utils.SpriteData(75, 80, "alien_d.png"),
 ]
 
 index = 0

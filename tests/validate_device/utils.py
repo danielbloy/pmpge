@@ -10,8 +10,7 @@ from pmpge.environment import is_running_on_desktop, config
 from pmpge.game import Game
 from pmpge.sprite import Sprite
 from pmpge.traits.graphics import DrawImage
-from pmpge.traits.physics import Velocity
-from traits.physics import Acceleration
+from pmpge.traits.physics import Velocity, Acceleration
 
 # These are not available in CircuitPython.
 if is_running_on_desktop():

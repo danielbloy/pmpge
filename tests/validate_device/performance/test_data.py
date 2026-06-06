@@ -4,10 +4,10 @@ import tests.validate_device.utils as utils
 from pmpge.game import Game
 from pmpge.sprite import Sprite
 from pmpge.traits.graphics import DrawImage
+from pmpge.traits.physics import MaxVelocity, MinVelocity
 from pmpge.traits.position import AngularMotion, AngularRelativeToParent, FollowSprite
 from pmpge.traits.position import HorizontalBounce, VerticalBounce
 from pmpge.traits.position import HorizontalOscillator, VerticalOscillator
-from traits.physics import MaxVelocity, MinVelocity
 
 
 def create_test_data(game: Game, include_graphics: bool):

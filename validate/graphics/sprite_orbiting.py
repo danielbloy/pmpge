@@ -5,21 +5,22 @@ as a test of framerate where the sprites all stay in the screen.
 """
 import math
 
-import tests.validate_device.utils as utils
+import validate_device.utils as utils
 from pmpge.game import Game
 from pmpge.sprite import Sprite
 from pmpge.traits.graphics import DrawImage
 from pmpge.traits.position import AngularMotion, AngularRelativeToParent, FollowSprite
+from tests.validate_device import test_data
 
-sprite_data: list[utils.SpriteData] = [
-    utils.SpriteData(80, 60, "alien.png"),
-    utils.SpriteData(80, 60, "alien_b.png"),
-    utils.SpriteData(80, 60, "alien_c.png"),
-    utils.SpriteData(80, 60, "alien_d.png"),
-    utils.SpriteData(80, 60, "alien_e.png"),
-    utils.SpriteData(80, 60, "alien_f.png"),
-    utils.SpriteData(80, 60, "alien_g.png"),
-    utils.SpriteData(80, 60, "alien_h.png"),
+sprite_data: list[test_data.SpriteData] = [
+    test_data.SpriteData(80, 60, "alien.png"),
+    test_data.SpriteData(80, 60, "alien_b.png"),
+    test_data.SpriteData(80, 60, "alien_c.png"),
+    test_data.SpriteData(80, 60, "alien_d.png"),
+    test_data.SpriteData(80, 60, "alien_e.png"),
+    test_data.SpriteData(80, 60, "alien_f.png"),
+    test_data.SpriteData(80, 60, "alien_g.png"),
+    test_data.SpriteData(80, 60, "alien_h.png"),
 ]
 
 

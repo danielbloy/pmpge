@@ -5,14 +5,15 @@ optimisations on image resource sharing. This is useful for visually checking
 that visibility works.
 """
 
-import tests.validate_device.utils as utils
+import validate_device.utils as utils
 from pmpge.game import Game
+from tests.validate_device import test_data
 
-sprite_data: list[utils.SpriteData] = [
-    utils.SpriteData(15, 15, "alien.png"),
-    utils.SpriteData(65, 15, "alien_b.png"),
-    utils.SpriteData(15, 50, "alien_c.png"),
-    utils.SpriteData(65, 50, "alien_d.png"),
+sprite_data: list[test_data.SpriteData] = [
+    test_data.SpriteData(15, 15, "alien.png"),
+    test_data.SpriteData(65, 15, "alien_b.png"),
+    test_data.SpriteData(15, 50, "alien_c.png"),
+    test_data.SpriteData(65, 50, "alien_d.png"),
 ]
 
 index = 0

@@ -6,7 +6,7 @@ if it does have enough RAM, it takes ages to construct the
 40,000 GameObjects
 """
 
-import tests.validate_device.utils as utils
+import validate_device.utils as utils
 from pmpge.environment import is_running_on_microcontroller
 from pmpge.game import Game
 from pmpge.game_object import GameObject

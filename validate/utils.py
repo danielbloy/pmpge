@@ -6,6 +6,8 @@ is execute() as it bootstraps everything else.
 import gc
 import time
 
+from validate_device.test_data.test_data import SpriteData
+
 from pmpge.environment import is_running_on_desktop, config
 from pmpge.game import Game
 from pmpge.sprite import Sprite
@@ -16,7 +18,7 @@ from pmpge.traits.physics import Velocity, Acceleration
 if is_running_on_desktop():
     from collections.abc import Callable
 
-RUNTIME = 8
+RUNTIME = 1
 SAMPLE_FREQUENCY = 10
 REPORT_FREQUENCY = 1
 PROFILE = False
@@ -36,29 +38,6 @@ if hasattr(config, 'PROFILE'):
 
 if hasattr(config, 'PROFILE_TOP'):
     PROFILE_TOP = config.PROFILE_TOP
-
-
-class SpriteData:
-    """
-    Used to create Sprites for test data
-    """
-    x: int
-    y: int
-    vx: int | None
-    vy: int | None
-    ax: int | None
-    ay: int | None
-    image: str
-    sprite: Sprite
-
-    def __init__(self, x: int, y: int, image: str, vx=None, vy=None, ax=None, ay=None):
-        self.x = x
-        self.y = y
-        self.vx = vx
-        self.vy = vy
-        self.image = image
-        self.ax = ax
-        self.ay = ay
 
 
 def create_sprites(game: Game, sprite_data: list[SpriteData], add_to_root: bool = True, include_graphics: bool = True):

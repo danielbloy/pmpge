@@ -3,14 +3,15 @@ Creates a non-scalable game area that is small enough to require borders
 at both the top and bottom of the screen.
 """
 
-import tests.validate_device.utils as utils
+import validate_device.utils as utils
 from pmpge.game import Game
+from tests.validate_device import test_data
 
-sprite_data: list[utils.SpriteData] = [
-    utils.SpriteData(25, 30, "alien.png"),
-    utils.SpriteData(75, 30, "alien_b.png"),
-    utils.SpriteData(25, 80, "alien_c.png"),
-    utils.SpriteData(75, 80, "alien_d.png"),
+sprite_data: list[test_data.SpriteData] = [
+    test_data.SpriteData(25, 30, "alien.png"),
+    test_data.SpriteData(75, 30, "alien_b.png"),
+    test_data.SpriteData(25, 80, "alien_c.png"),
+    test_data.SpriteData(75, 80, "alien_d.png"),
 ]
 
 index = 0

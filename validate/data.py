@@ -1,6 +1,6 @@
 import math
 
-import tests.validate_device.utils as utils
+import validate_device.utils as utils
 from pmpge.game import Game
 from pmpge.sprite import Sprite
 from pmpge.traits.graphics import DrawImage
@@ -52,15 +52,15 @@ def create_test_data(game: Game, include_graphics: bool):
     earth_1.add_child(earth_1_moon)
     earth_2.add_child(earth_2_moon)
 
-    follow_sprites: list[utils.SpriteData] = [
-        utils.SpriteData(game.width // 2, game.height // 2, "7x3.png"),
-        utils.SpriteData(game.width // 2, game.height // 2, "john.png"),
-        utils.SpriteData(game.width // 2, game.height // 2, "8x8.png"),
-        utils.SpriteData(game.width // 2, game.height // 2, "7x7.png"),
-        utils.SpriteData(game.width // 2, game.height // 2, "7x3.png"),
-        utils.SpriteData(game.width // 2, game.height // 2, "8x8.png"),
-        utils.SpriteData(game.width // 2, game.height // 2, "hero_front.png"),
-        utils.SpriteData(game.width // 2, game.height // 2, "7x7.png"),
+    follow_sprites: list[SpriteData] = [
+        SpriteData(game.width // 2, game.height // 2, "7x3.png"),
+        SpriteData(game.width // 2, game.height // 2, "john.png"),
+        SpriteData(game.width // 2, game.height // 2, "8x8.png"),
+        SpriteData(game.width // 2, game.height // 2, "7x7.png"),
+        SpriteData(game.width // 2, game.height // 2, "7x3.png"),
+        SpriteData(game.width // 2, game.height // 2, "8x8.png"),
+        SpriteData(game.width // 2, game.height // 2, "hero_front.png"),
+        SpriteData(game.width // 2, game.height // 2, "7x7.png"),
     ]
 
     utils.create_sprites(game, follow_sprites, include_graphics=include_graphics, add_to_root=False)
@@ -74,15 +74,15 @@ def create_test_data(game: Game, include_graphics: bool):
         parent.add_child(follow_sprites[index].sprite)
 
     # Add in the horizontally and vertically oscillating sprites.
-    move_sprites: list[utils.SpriteData] = [
-        utils.SpriteData(5, 5, "x.png", vx=30, vy=0, ax=30, ay=0),
-        utils.SpriteData(game.width - 5, 5, "y.png", vx=30, vy=0),
-        utils.SpriteData(game.width - 5, game.height - 5, "a.png", vx=-30, vy=0, ax=30, ay=0),
-        utils.SpriteData(5, game.height - 5, "b.png", vx=-30, vy=0),
-        utils.SpriteData(5, 5, "l.png", vx=0, vy=30, ax=0, ay=30),
-        utils.SpriteData(game.width - 5, 5, "r.png", vx=0, vy=30),
-        utils.SpriteData(game.width - 5, game.height - 5, "u.png", vx=0, vy=-30, ax=0, ay=30),
-        utils.SpriteData(5, game.height - 5, "d.png", vx=0, vy=-30),
+    move_sprites: list[SpriteData] = [
+        SpriteData(5, 5, "x.png", vx=30, vy=0, ax=30, ay=0),
+        SpriteData(game.width - 5, 5, "y.png", vx=30, vy=0),
+        SpriteData(game.width - 5, game.height - 5, "a.png", vx=-30, vy=0, ax=30, ay=0),
+        SpriteData(5, game.height - 5, "b.png", vx=-30, vy=0),
+        SpriteData(5, 5, "l.png", vx=0, vy=30, ax=0, ay=30),
+        SpriteData(game.width - 5, 5, "r.png", vx=0, vy=30),
+        SpriteData(game.width - 5, game.height - 5, "u.png", vx=0, vy=-30, ax=0, ay=30),
+        SpriteData(5, game.height - 5, "d.png", vx=0, vy=-30),
     ]
 
     utils.create_sprites(game, move_sprites, include_graphics=include_graphics)
@@ -105,3 +105,26 @@ def create_test_data(game: Game, include_graphics: bool):
 
         sprite.sprite.apply_trait(max_velocity)
         sprite.sprite.apply_trait(min_velocity)
+
+
+class SpriteData:
+    """
+    Used to create Sprites for test data
+    """
+    x: int
+    y: int
+    vx: int | None
+    vy: int | None
+    ax: int | None
+    ay: int | None
+    image: str
+    sprite: Sprite
+
+    def __init__(self, x: int, y: int, image: str, vx=None, vy=None, ax=None, ay=None):
+        self.x = x
+        self.y = y
+        self.vx = vx
+        self.vy = vy
+        self.image = image
+        self.ax = ax
+        self.ay = ay

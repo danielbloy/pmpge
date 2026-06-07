@@ -2,7 +2,7 @@
 Creates a moderate number of root GameObjects all as children to the
 root object. There are no traits or anything here.
 """
-import tests.validate_device.utils as utils
+import validate_device.utils as utils
 from pmpge.game import Game
 from pmpge.game_object import GameObject
 

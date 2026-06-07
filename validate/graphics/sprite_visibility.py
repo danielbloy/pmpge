@@ -5,22 +5,23 @@ optimisations on image resource sharing. This is useful for visually checking
 that visibility works.
 """
 
-import tests.validate_device.utils as utils
+import validate_device.utils as utils
 from pmpge.game import Game
+from tests.validate_device import test_data
 
-sprite_data: list[utils.SpriteData] = [
-    utils.SpriteData(20, 20, "alien.png"),
-    utils.SpriteData(60, 20, "alien.png"),
-    utils.SpriteData(100, 20, "alien.png"),
-    utils.SpriteData(140, 20, "alien.png"),
-    utils.SpriteData(20, 60, "alien.png"),
-    utils.SpriteData(60, 60, "alien.png"),
-    utils.SpriteData(100, 60, "alien.png"),
-    utils.SpriteData(140, 60, "alien.png"),
-    utils.SpriteData(20, 100, "alien.png"),
-    utils.SpriteData(60, 100, "alien.png"),
-    utils.SpriteData(100, 100, "alien.png"),
-    utils.SpriteData(140, 100, "alien.png"),
+sprite_data: list[test_data.SpriteData] = [
+    test_data.SpriteData(20, 20, "alien.png"),
+    test_data.SpriteData(60, 20, "alien.png"),
+    test_data.SpriteData(100, 20, "alien.png"),
+    test_data.SpriteData(140, 20, "alien.png"),
+    test_data.SpriteData(20, 60, "alien.png"),
+    test_data.SpriteData(60, 60, "alien.png"),
+    test_data.SpriteData(100, 60, "alien.png"),
+    test_data.SpriteData(140, 60, "alien.png"),
+    test_data.SpriteData(20, 100, "alien.png"),
+    test_data.SpriteData(60, 100, "alien.png"),
+    test_data.SpriteData(100, 100, "alien.png"),
+    test_data.SpriteData(140, 100, "alien.png"),
 ]
 
 index = 0

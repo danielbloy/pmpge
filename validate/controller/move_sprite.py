@@ -3,29 +3,30 @@ Creates sprite in the center of the screen and allows the controller
 to move it around. The other buttons toggle the visibility of sprites.
 """
 
-import tests.validate_device.utils as utils
+import validate_device.utils as utils
 from pmpge.controller import Controller
 from pmpge.game import Game
 from pmpge.traits.controller import MoveWithController
 from pmpge.traits.position import StayInBounds
+from tests.validate_device import test_data
 
 # The first 12 sprites represent the buttons which have their visibility
 # switched as the buttons are preseed. The 13th sprite is the one moved
 # around by the controller.
-sprite_data: list[utils.SpriteData] = [
-    utils.SpriteData(10, 110, "start.png"),
-    utils.SpriteData(20, 110, "select.png"),
-    utils.SpriteData(30, 110, "l.png"),
-    utils.SpriteData(40, 110, "r.png"),
-    utils.SpriteData(50, 110, "u.png"),
-    utils.SpriteData(60, 110, "d.png"),
-    utils.SpriteData(70, 110, "a.png"),
-    utils.SpriteData(80, 110, "b.png"),
-    utils.SpriteData(90, 110, "x.png"),
-    utils.SpriteData(100, 110, "y.png"),
-    utils.SpriteData(110, 110, "ls.png"),
-    utils.SpriteData(120, 110, "rs.png"),
-    utils.SpriteData(80, 60, "hero_front.png", vx=0, vy=0),
+sprite_data: list[test_data.SpriteData] = [
+    test_data.SpriteData(10, 110, "start.png"),
+    test_data.SpriteData(20, 110, "select.png"),
+    test_data.SpriteData(30, 110, "l.png"),
+    test_data.SpriteData(40, 110, "r.png"),
+    test_data.SpriteData(50, 110, "u.png"),
+    test_data.SpriteData(60, 110, "d.png"),
+    test_data.SpriteData(70, 110, "a.png"),
+    test_data.SpriteData(80, 110, "b.png"),
+    test_data.SpriteData(90, 110, "x.png"),
+    test_data.SpriteData(100, 110, "y.png"),
+    test_data.SpriteData(110, 110, "ls.png"),
+    test_data.SpriteData(120, 110, "rs.png"),
+    test_data.SpriteData(80, 60, "hero_front.png", vx=0, vy=0),
 ]
 
 index = 0

@@ -2,7 +2,7 @@
 Creates a single sprite and moves it on the screen.
 This is useful for judging how smoothly the sprite moves.
 """
-import tests.validate_device.utils as utils
+import validate_device.utils as utils
 from pmpge.game import Game
 from pmpge.sprite import Sprite
 from pmpge.traits.graphics import DrawImage

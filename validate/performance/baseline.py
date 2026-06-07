@@ -1,6 +1,7 @@
-import tests.validate_device.utils as utils
+from tests.validate_device.test_data.test_data import create_test_data
+
+import validate_device.utils as utils
 from pmpge.game import Game
-from tests.validate_device.test_data import create_test_data
 
 
 def setup(game: Game):

@@ -2,7 +2,7 @@
 Creates a set of GameObjects with various Traits in the normal forms
 to validate it works.
 """
-import tests.validate_device.utils as utils
+import validate_device.utils as utils
 from pmpge.game import Game
 from pmpge.game_object import GameObject
 from pmpge.traits.lifetime import Lifetime

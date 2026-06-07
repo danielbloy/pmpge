@@ -2,7 +2,7 @@
 Creates a small hierarchy of GameObjects with various Traits to ensure
 the basic game engine works without errors.
 """
-import tests.validate_device.utils as utils
+import validate_device.utils as utils
 from pmpge.game import Game
 from pmpge.game_object import GameObject
 from pmpge.traits.lifetime import Lifetime

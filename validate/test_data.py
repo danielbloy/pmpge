@@ -1,18 +1,20 @@
 import math
 
+from pmpge.controller import Controller
 from pmpge.game import Game
 from pmpge.sprite import Sprite
+from pmpge.traits.controller import MoveWithController
 from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import MaxVelocity, MinVelocity
 from pmpge.traits.physics import Velocity, Acceleration
-from pmpge.traits.position import AngularMotion, AngularRelativeToParent, FollowSprite
+from pmpge.traits.position import AngularMotion, AngularRelativeToParent, FollowSprite, StayInBounds
 from pmpge.traits.position import HorizontalBounce, VerticalBounce
 from pmpge.traits.position import HorizontalOscillator, VerticalOscillator
 
 
 class SpriteData:
     """
-    Used to create Sprites for test data
+    Used to hold data for creating Sprites with create_sprites().
     """
     x: int
     y: int
@@ -57,7 +59,9 @@ def create_sprites(game: Game, sprite_data: list[SpriteData], add_to_root: bool 
 
 def create_test_data(game: Game, include_graphics: bool):
     """
-    The following set of game_objects are created:
+    The following set of game_objects are created (33 sprites):
+        - 12 sprites showing the status of each controller button
+        - 1 hero sprite that can be moved around with the controller
         - Two Earth sprites orbiting the centre of the screen (earth_1, earth_2)
         - Two Moon sprites orbiting their respective Earth sprites
         - Eight Alien sprites following their respective Earth and Moon sprites (2 each)
@@ -67,6 +71,40 @@ def create_test_data(game: Game, include_graphics: bool):
         - 2 sprites oscillating/bouncing vertically at the right of the screen
     """
     game.background_colour = (250, 120, 0)  # Orange
+
+    # Now add a button for each controller button.
+    row_1 = game.height - 4
+    row_0 = row_1 - 8
+    controller_sprites: list[SpriteData] = [
+        SpriteData(4, row_0, "start.png"),
+        SpriteData(12, row_0, "select.png"),
+        SpriteData(20, row_0, "l.png"),
+        SpriteData(28, row_0, "r.png"),
+        SpriteData(36, row_0, "u.png"),
+        SpriteData(44, row_0, "d.png"),
+        SpriteData(4, row_1, "a.png"),
+        SpriteData(12, row_1, "b.png"),
+        SpriteData(20, row_1, "x.png"),
+        SpriteData(28, row_1, "y.png"),
+        SpriteData(36, row_1, "ls.png"),
+        SpriteData(44, row_1, "rs.png"),
+    ]
+    create_sprites(game, controller_sprites, include_graphics=include_graphics)
+
+    # Update the visibility of the buttons based on the controller values.
+    def update_buttons(dt: float):
+        for item in enumerate(controller_sprites):
+            index = item[0]
+            data = item[1]
+            data.sprite.visible = Controller.values[index]
+
+    game.add_update_func(update_buttons)
+
+    hero_data = SpriteData(game.width // 2, game.height // 2, "hero_front.png", vx=0, vy=0)
+    create_sprites(game, [hero_data], include_graphics=include_graphics)
+    controller = Controller()
+    hero_data.sprite.apply_trait(MoveWithController(controller, 60, 60))
+    hero_data.sprite.apply_trait(StayInBounds(8, 8, game.width - 8, game.height - 8))
 
     earth_1 = Sprite(0, 0, AngularMotion(game.width // 2, game.height // 2, 25, math.pi / 4))
     if include_graphics:
@@ -140,13 +178,13 @@ def create_test_data(game: Game, include_graphics: bool):
 
     for item in enumerate(move_sprites):
         index = item[0]
-        sprite = item[1]
+        data = item[1]
         if index % 2 == 0:
-            sprite.sprite.apply_trait(horizontal_oscillator)
-            sprite.sprite.apply_trait(vertical_oscillator)
+            data.sprite.apply_trait(horizontal_oscillator)
+            data.sprite.apply_trait(vertical_oscillator)
         else:
-            sprite.sprite.apply_trait(horizontal_bounce)
-            sprite.sprite.apply_trait(vertical_bounce)
+            data.sprite.apply_trait(horizontal_bounce)
+            data.sprite.apply_trait(vertical_bounce)
 
-        sprite.sprite.apply_trait(max_velocity)
-        sprite.sprite.apply_trait(min_velocity)
+        data.sprite.apply_trait(max_velocity)
+        data.sprite.apply_trait(min_velocity)

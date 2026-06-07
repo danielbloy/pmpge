@@ -16,7 +16,7 @@ from pmpge.traits.physics import Velocity, Acceleration
 if is_running_on_desktop():
     from collections.abc import Callable
 
-RUNTIME = 1
+RUNTIME = 8
 SAMPLE_FREQUENCY = 10
 REPORT_FREQUENCY = 1
 PROFILE = False
@@ -39,6 +39,9 @@ if hasattr(config, 'PROFILE_TOP'):
 
 
 class SpriteData:
+    """
+    Used to create Sprites for test data
+    """
     x: int
     y: int
     vx: int | None

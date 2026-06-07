@@ -57,21 +57,12 @@ def create_sprites(game: Game, sprite_data: list[SpriteData], add_to_root: bool 
             game.add_child(sprite)
 
 
-def create_test_data(game: Game, include_graphics: bool):
+def create_controller_test_data(game: Game, include_graphics: bool):
     """
-    The following set of game_objects are created (33 sprites):
+    The following set of game_objects are created (13 sprites):
         - 12 sprites showing the status of each controller button
         - 1 hero sprite that can be moved around with the controller
-        - Two Earth sprites orbiting the centre of the screen (earth_1, earth_2)
-        - Two Moon sprites orbiting their respective Earth sprites
-        - Eight Alien sprites following their respective Earth and Moon sprites (2 each)
-        - 2 sprites oscillating/bouncing horizontally at the top of the screen
-        - 2 sprites oscillating/bouncing horizontally at the bottom of the screen
-        - 2 sprites oscillating/bouncing vertically at the left of the screen
-        - 2 sprites oscillating/bouncing vertically at the right of the screen
     """
-    game.background_colour = (250, 120, 0)  # Orange
-
     # Now add a button for each controller button.
     row_1 = game.height - 4
     row_0 = row_1 - 8
@@ -106,6 +97,14 @@ def create_test_data(game: Game, include_graphics: bool):
     hero_data.sprite.apply_trait(MoveWithController(controller, 60, 60))
     hero_data.sprite.apply_trait(StayInBounds(8, 8, game.width - 8, game.height - 8))
 
+
+def create_orbiting_planets_test_data(game: Game, include_graphics: bool):
+    """
+    The following set of game_objects are created (12 sprites):
+        - Two Earth sprites orbiting the centre of the screen (earth_1, earth_2)
+        - Two Moon sprites orbiting their respective Earth sprites
+        - Eight sprites following their respective Earth and Moon sprites (2 each)
+    """
     earth_1 = Sprite(0, 0, AngularMotion(game.width // 2, game.height // 2, 25, math.pi / 4))
     if include_graphics:
         earth_1.apply_trait(DrawImage("earth.png"))
@@ -156,6 +155,15 @@ def create_test_data(game: Game, include_graphics: bool):
         follow_sprites[index].sprite.apply_trait(FollowSprite(parent, vx, vy))
         parent.add_child(follow_sprites[index].sprite)
 
+
+def create_oscillating_letters_test_data(game: Game, include_graphics: bool):
+    """
+    The following set of game_objects are created (8 sprites):
+        - 2 sprites oscillating/bouncing horizontally at the top of the screen
+        - 2 sprites oscillating/bouncing horizontally at the bottom of the screen
+        - 2 sprites oscillating/bouncing vertically at the left of the screen
+        - 2 sprites oscillating/bouncing vertically at the right of the screen
+    """
     # Add in the horizontally and vertically oscillating sprites.
     move_sprites: list[SpriteData] = [
         SpriteData(5, 5, "x.png", vx=30, vy=0, ax=30, ay=0),
@@ -188,3 +196,22 @@ def create_test_data(game: Game, include_graphics: bool):
 
         data.sprite.apply_trait(max_velocity)
         data.sprite.apply_trait(min_velocity)
+
+
+def create_test_data(game: Game, include_graphics: bool):
+    """
+    The following set of game_objects are created (33 sprites):
+        - 12 sprites showing the status of each controller button
+        - 1 hero sprite that can be moved around with the controller
+        - Two Earth sprites orbiting the centre of the screen (earth_1, earth_2)
+        - Two Moon sprites orbiting their respective Earth sprites
+        - Eight sprites following their respective Earth and Moon sprites (2 each)
+        - 2 sprites oscillating/bouncing horizontally at the top of the screen
+        - 2 sprites oscillating/bouncing horizontally at the bottom of the screen
+        - 2 sprites oscillating/bouncing vertically at the left of the screen
+        - 2 sprites oscillating/bouncing vertically at the right of the screen
+    """
+    game.background_colour = (250, 120, 0)  # Orange
+    create_controller_test_data(game, include_graphics)
+    create_orbiting_planets_test_data(game, include_graphics)
+    create_oscillating_letters_test_data(game, include_graphics)

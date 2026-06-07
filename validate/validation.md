@@ -20,4 +20,11 @@ on a CircuitPython device.
    directory on the device.
 7. Use Thonny to run one of the validate scripts such as`validate_performance.py`.
 
-# TODO: How to setup the config.py files.
+## Create a `config.py` file
+
+In the root of your device, you will need to create a `config.py` file to
+setup the device for validation. If you have a device with a supported
+configuration in the `/devices` directory, use that as a starter as it will
+contain the display, sound and controller configuration for your device. then
+add the contents of `/validate/config.py` to the same file which specifies
+the desired runtime, sampling and reporting frequency. 

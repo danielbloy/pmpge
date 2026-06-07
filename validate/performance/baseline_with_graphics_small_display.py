@@ -11,4 +11,4 @@ def setup(game: Game):
 
 
 if utils.should_execute(__name__):
-    utils.execute(setup)
+    utils.execute(setup, screen_width=SCREEN_WIDTH, screen_height=SCREEN_HEIGHT)

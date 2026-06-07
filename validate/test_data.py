@@ -1,13 +1,13 @@
 import math
 
 from pmpge.game import Game
+from pmpge.sprite import Sprite
+from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import MaxVelocity, MinVelocity
+from pmpge.traits.physics import Velocity, Acceleration
 from pmpge.traits.position import AngularMotion, AngularRelativeToParent, FollowSprite
 from pmpge.traits.position import HorizontalBounce, VerticalBounce
 from pmpge.traits.position import HorizontalOscillator, VerticalOscillator
-from sprite import Sprite
-from traits.graphics import DrawImage
-from traits.physics import Velocity, Acceleration
 
 
 class SpriteData:

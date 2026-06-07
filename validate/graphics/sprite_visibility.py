@@ -5,9 +5,9 @@ optimisations on image resource sharing. This is useful for visually checking
 that visibility works.
 """
 
-import validate_device.utils as utils
+import validate.utils as utils
 from pmpge.game import Game
-from tests.validate_device import test_data
+from validate import test_data
 
 sprite_data: list[test_data.SpriteData] = [
     test_data.SpriteData(20, 20, "alien.png"),

@@ -1,6 +1,5 @@
-import validate_device.controller.move_sprite as fms
-
-import validate_device.utils as utils
+import validate.controller.move_sprite as fms
+import validate.utils as utils
 
 modules = [fms]
 

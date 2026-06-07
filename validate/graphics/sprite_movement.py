@@ -2,9 +2,9 @@
 Creates sprites and moves them around on the screen, alternating visibility.
 """
 
-import validate_device.utils as utils
+import validate.utils as utils
 from pmpge.game import Game
-from tests.validate_device import test_data
+from validate import test_data
 
 sprite_data: list[test_data.SpriteData] = [
     test_data.SpriteData(80, 60, "alien.png", 15, 0),

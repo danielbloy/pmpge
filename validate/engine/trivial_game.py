@@ -2,7 +2,7 @@
 This is the most basic test that bootstraps the application and
 runs it (via utils.execute()). We do nothing else.
 """
-import validate_device.utils as utils
+import validate.utils as utils
 from pmpge.game import Game
 
 

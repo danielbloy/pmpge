@@ -3,12 +3,12 @@ Creates sprite in the center of the screen and allows the controller
 to move it around. The other buttons toggle the visibility of sprites.
 """
 
-import validate_device.utils as utils
+import validate.utils as utils
 from pmpge.controller import Controller
 from pmpge.game import Game
 from pmpge.traits.controller import MoveWithController
 from pmpge.traits.position import StayInBounds
-from tests.validate_device import test_data
+from validate import test_data
 
 # The first 12 sprites represent the buttons which have their visibility
 # switched as the buttons are preseed. The 13th sprite is the one moved

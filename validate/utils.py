@@ -6,13 +6,12 @@ is execute() as it bootstraps everything else.
 import gc
 import time
 
-from validate_device.test_data.test_data import SpriteData
-
 from pmpge.environment import is_running_on_desktop, config
 from pmpge.game import Game
 from pmpge.sprite import Sprite
 from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import Velocity, Acceleration
+from validate.test_data import SpriteData
 
 # These are not available in CircuitPython.
 if is_running_on_desktop():

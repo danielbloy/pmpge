@@ -3,9 +3,9 @@ Creates a non-scalable game area that is small enough to require borders
 at both the top and bottom of the screen.
 """
 
-import validate_device.utils as utils
+import validate.utils as utils
 from pmpge.game import Game
-from tests.validate_device import test_data
+from validate import test_data
 
 sprite_data: list[test_data.SpriteData] = [
     test_data.SpriteData(25, 30, "alien.png"),

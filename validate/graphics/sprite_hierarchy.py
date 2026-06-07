@@ -13,10 +13,10 @@ to check the hierarchy works:
 This also tests the game_object_hierarchy_changed() function.
 """
 
-import validate_device.utils as utils
+import validate.utils as utils
 from pmpge.game import Game
 from pmpge.graphics import game_object_hierarchy_changed
-from tests.validate_device import test_data
+from validate import test_data
 
 sprite_data_row_1: list[test_data.SpriteData] = [
     test_data.SpriteData(65, 15, "alien_c.png"),

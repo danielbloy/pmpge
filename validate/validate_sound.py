@@ -1,4 +1,4 @@
-import validate_device.utils as utils
+import validate.utils as utils
 
 modules = []
 

@@ -1,6 +1,6 @@
 import math
 
-import validate_device.utils as utils
+import validate.utils as utils
 from pmpge.game import Game
 from pmpge.sprite import Sprite
 from pmpge.traits.graphics import DrawImage

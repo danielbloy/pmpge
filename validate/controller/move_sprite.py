@@ -2,7 +2,6 @@
 Creates sprite in the center of the screen and allows the controller
 to move it around. The other buttons toggle the visibility of sprites.
 """
-
 import validate.utils as utils
 from pmpge.controller import Controller
 from pmpge.game import Game
@@ -35,7 +34,7 @@ count = len(sprite_data)
 
 def setup(game: Game):
     game.background_colour = (250, 120, 0)  # Orange
-    utils.create_sprites(game, sprite_data)
+    test_data.create_sprites(game, sprite_data)
     controller = Controller()
     player = sprite_data[len(sprite_data) - 1].sprite
     player.apply_trait(MoveWithController(controller, 60, 60))

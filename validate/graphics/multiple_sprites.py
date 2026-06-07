@@ -33,7 +33,7 @@ sprite_data: list[test_data.SpriteData] = [
 
 def setup(game: Game):
     game.background_colour = (250, 120, 0)  # Orange
-    utils.create_sprites(game, sprite_data)
+    test_data.create_sprites(game, sprite_data)
 
 
 if utils.should_execute(__name__):

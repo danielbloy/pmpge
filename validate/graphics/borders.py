@@ -2,7 +2,6 @@
 Creates a non-scalable game area that is small enough to require borders
 at both the top and bottom of the screen.
 """
-
 import validate.utils as utils
 from pmpge.game import Game
 from validate import test_data
@@ -30,7 +29,7 @@ def switch_visibility(game: Game):
 
 def setup(game: Game):
     game.background_colour = (250, 120, 0)  # Orange
-    utils.create_sprites(game, sprite_data)
+    test_data.create_sprites(game, sprite_data)
     utils.add_update_method(game, switch_visibility, fps=4)
 
 

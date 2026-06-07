@@ -8,10 +8,6 @@ import time
 
 from pmpge.environment import is_running_on_desktop, config
 from pmpge.game import Game
-from pmpge.sprite import Sprite
-from pmpge.traits.graphics import DrawImage
-from pmpge.traits.physics import Velocity, Acceleration
-from validate.test_data import SpriteData
 
 # These are not available in CircuitPython.
 if is_running_on_desktop():
@@ -37,29 +33,6 @@ if hasattr(config, 'PROFILE'):
 
 if hasattr(config, 'PROFILE_TOP'):
     PROFILE_TOP = config.PROFILE_TOP
-
-
-def create_sprites(game: Game, sprite_data: list[SpriteData], add_to_root: bool = True, include_graphics: bool = True):
-    """
-    Simple utility method to create a range of sprites at the root of the
-    Game instance
-    """
-    for data in sprite_data:
-        sprite = Sprite(data.x, data.y)
-
-        if data.vx is not None and data.vy is not None:
-            sprite.apply_trait(Velocity(data.vx, data.vy))
-
-        if data.ax is not None and data.ay is not None:
-            sprite.apply_trait(Acceleration(data.ax, data.ay))
-
-        if include_graphics:
-            sprite.apply_trait(DrawImage(data.image))
-
-        data.sprite = sprite
-
-        if add_to_root:
-            game.add_child(sprite)
 
 
 # TODO: Add the capability to specify fps on a game update method to the engine.

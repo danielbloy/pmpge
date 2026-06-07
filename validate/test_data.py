@@ -1,13 +1,58 @@
 import math
 
-import validate.utils as utils
 from pmpge.game import Game
-from pmpge.sprite import Sprite
-from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import MaxVelocity, MinVelocity
 from pmpge.traits.position import AngularMotion, AngularRelativeToParent, FollowSprite
 from pmpge.traits.position import HorizontalBounce, VerticalBounce
 from pmpge.traits.position import HorizontalOscillator, VerticalOscillator
+from sprite import Sprite
+from traits.graphics import DrawImage
+from traits.physics import Velocity, Acceleration
+
+
+class SpriteData:
+    """
+    Used to create Sprites for test data
+    """
+    x: int
+    y: int
+    vx: int | None
+    vy: int | None
+    ax: int | None
+    ay: int | None
+    image: str
+    sprite: Sprite
+
+    def __init__(self, x: int, y: int, image: str, vx=None, vy=None, ax=None, ay=None):
+        self.x = x
+        self.y = y
+        self.vx = vx
+        self.vy = vy
+        self.image = image
+        self.ax = ax
+        self.ay = ay
+
+
+def create_sprites(game: Game, sprite_data: list[SpriteData], add_to_root: bool = True, include_graphics: bool = True):
+    """
+    utility method to create sprites and optionally add them to the root of the Game instance
+    """
+    for data in sprite_data:
+        sprite = Sprite(data.x, data.y)
+
+        if data.vx is not None and data.vy is not None:
+            sprite.apply_trait(Velocity(data.vx, data.vy))
+
+        if data.ax is not None and data.ay is not None:
+            sprite.apply_trait(Acceleration(data.ax, data.ay))
+
+        if include_graphics:
+            sprite.apply_trait(DrawImage(data.image))
+
+        data.sprite = sprite
+
+        if add_to_root:
+            game.add_child(sprite)
 
 
 def create_test_data(game: Game, include_graphics: bool):
@@ -63,7 +108,7 @@ def create_test_data(game: Game, include_graphics: bool):
         SpriteData(game.width // 2, game.height // 2, "7x7.png"),
     ]
 
-    utils.create_sprites(game, follow_sprites, include_graphics=include_graphics, add_to_root=False)
+    create_sprites(game, follow_sprites, include_graphics=include_graphics, add_to_root=False)
 
     for item in enumerate([earth_1, earth_1, earth_1_moon, earth_1_moon, earth_2, earth_2, earth_2_moon, earth_2_moon]):
         index = item[0]
@@ -85,7 +130,7 @@ def create_test_data(game: Game, include_graphics: bool):
         SpriteData(5, game.height - 5, "d.png", vx=0, vy=-30),
     ]
 
-    utils.create_sprites(game, move_sprites, include_graphics=include_graphics)
+    create_sprites(game, move_sprites, include_graphics=include_graphics)
     horizontal_oscillator = HorizontalOscillator(20, game.width - 20)
     vertical_oscillator = VerticalOscillator(20, game.height - 20)
     horizontal_bounce = HorizontalBounce(5, game.width - 5)
@@ -105,26 +150,3 @@ def create_test_data(game: Game, include_graphics: bool):
 
         sprite.sprite.apply_trait(max_velocity)
         sprite.sprite.apply_trait(min_velocity)
-
-
-class SpriteData:
-    """
-    Used to create Sprites for test data
-    """
-    x: int
-    y: int
-    vx: int | None
-    vy: int | None
-    ax: int | None
-    ay: int | None
-    image: str
-    sprite: Sprite
-
-    def __init__(self, x: int, y: int, image: str, vx=None, vy=None, ax=None, ay=None):
-        self.x = x
-        self.y = y
-        self.vx = vx
-        self.vy = vy
-        self.image = image
-        self.ax = ax
-        self.ay = ay

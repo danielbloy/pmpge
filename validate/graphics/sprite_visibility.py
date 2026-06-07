@@ -4,7 +4,6 @@ uses the same resource for each sprite which can be used to validate
 optimisations on image resource sharing. This is useful for visually checking
 that visibility works.
 """
-
 import validate.utils as utils
 from pmpge.game import Game
 from validate import test_data
@@ -37,7 +36,7 @@ def switch_visibility(game: Game):
 
 def setup(game: Game):
     game.background_colour = (250, 120, 0)  # Orange
-    utils.create_sprites(game, sprite_data)
+    test_data.create_sprites(game, sprite_data)
     utils.add_update_method(game, switch_visibility, fps=12)
 
 

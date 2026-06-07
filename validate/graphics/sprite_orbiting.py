@@ -27,7 +27,7 @@ sprite_data: list[test_data.SpriteData] = [
 def setup(game: Game):
     game.background_colour = (0, 0, 0)  # Black
 
-    utils.create_sprites(game, sprite_data)
+    test_data.create_sprites(game, sprite_data)
 
     # Add two earth and moon sprites that orbit the centre of the screen.
     earth = Sprite(

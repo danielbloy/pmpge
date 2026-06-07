@@ -12,7 +12,6 @@ to check the hierarchy works:
 
 This also tests the game_object_hierarchy_changed() function.
 """
-
 import validate.utils as utils
 from pmpge.game import Game
 from pmpge.graphics import game_object_hierarchy_changed
@@ -88,13 +87,13 @@ def setup(game: Game):
     game.background_colour = (250, 120, 0)  # Orange
     utils.add_update_method(game, rebuild_graphics_hierarchy, fps=1)
 
-    utils.create_sprites(game, sprite_data_row_1, add_to_root=False)
+    test_data.create_sprites(game, sprite_data_row_1, add_to_root=False)
     game.root.add_child(sprite_data_row_1[3].sprite)
     sprite_data_row_1[3].sprite.add_child(sprite_data_row_1[2].sprite)
     sprite_data_row_1[2].sprite.add_child(sprite_data_row_1[1].sprite)
     sprite_data_row_1[1].sprite.add_child(sprite_data_row_1[0].sprite)
 
-    utils.create_sprites(game, sprite_data_row_2, add_to_root=False)
+    test_data.create_sprites(game, sprite_data_row_2, add_to_root=False)
     game.root.add_child(sprite_data_row_2[4].sprite)
     sprite_data_row_2[4].sprite.add_child(sprite_data_row_2[3].sprite)
     sprite_data_row_2[3].sprite.add_child(sprite_data_row_2[2].sprite)
@@ -102,11 +101,11 @@ def setup(game: Game):
     sprite_data_row_2[1].sprite.add_child(sprite_data_row_2[0].sprite)
     utils.add_update_method(game, alternate_activated, fps=3)
 
-    utils.create_sprites(game, sprite_data_row_3, add_to_root=False)
+    test_data.create_sprites(game, sprite_data_row_3, add_to_root=False)
     game.root.add_child(sprite_data_row_3[0].sprite)
     utils.add_update_method(game, add_children, fps=3)
 
-    utils.create_sprites(game, sprite_data_row_4, add_to_root=False)
+    test_data.create_sprites(game, sprite_data_row_4, add_to_root=False)
     game.root.add_child(sprite_data_row_4[0].sprite)
     sprite_data_row_4[0].sprite.add_child(sprite_data_row_4[1].sprite)
     sprite_data_row_4[1].sprite.add_child(sprite_data_row_4[2].sprite)

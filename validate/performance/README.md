@@ -7,18 +7,8 @@ investigated and what has already been done.
 
 All performance testing has been done on the following devices using a mix
 of microcontrollers to compare performance. All testing was done using
-CircuitPython 10.1.4 using the following `config.py` except where a specific
-`config.py` file is provided:
-
-```
-SCREEN_WIDTH = 160
-SCREEN_HEIGHT = 128
-RUNTIME = 2
-SAMPLE_FREQUENCY = 50
-REPORT_FREQUENCY = 4
-PROFILE = True
-PROFILE_TOP = 10
-```
+the `config.py` in `/validate` combined with device specific settings. The
+settings are output as part of the
 
 ### Plain boards: No screens, buttons or buzzers
 
@@ -62,16 +52,6 @@ Vanilla results:
 * Use mpy-cross to convert .py -> .mpy
 
 ### References
-
-Use the following tool to program the Waveshare ESP-S3 Zero:
-
-* https://learn.adafruit.com/circuitpython-with-esp32-quick-start/web-serial-esptool
-
-Use the following method to flash the Pico system:
-
-1. Turn your PicoSystem off.
-2. Hold down the X button.
-3. While holding X, turn on the device or connect it to your computer via USB.
 
 The following references have been used:
 

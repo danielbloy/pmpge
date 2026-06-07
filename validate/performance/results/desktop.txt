@@ -1,7 +1,7 @@
 C:\Workspace\repos\pmpge\.venv\Scripts\python.exe C:\Workspace\repos\pmpge\validate\validate_performance.py
 Config file C:\Workspace\repos\pmpge\validate\config.py loaded.
-RUNTIME = 4
-SAMPLE_FREQUENCY = 25
+RUNTIME = 8
+SAMPLE_FREQUENCY = 10
 REPORT_FREQUENCY = 1
 PROFILE = True
 PROFILE_TOP = 10
@@ -11,13 +11,16 @@ Hello from the pygame community. https://www.pygame.org/contribute.html
 No device driver
 Running on pgzero with (640, 480) screen.
 Executing module <module 'validate.performance.baseline' from 'C:\\Workspace\\repos\\pmpge\\validate\\performance\\baseline.py'>
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18511.86 MB, Total: 14174.31 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18504.25 MB, Total: 14181.92 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18506.87 MB, Total: 14179.30 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18508.74 MB, Total: 14177.43 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18508.70 MB, Total: 14177.47 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18425.02 MB, Total: 14261.14 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18424.53 MB, Total: 14261.64 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18418.16 MB, Total: 14268.00 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18420.18 MB, Total: 14265.99 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18420.14 MB, Total: 14266.02 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18417.32 MB, Total: 14268.85 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18468.51 MB, Total: 14217.66 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18468.57 MB, Total: 14217.60 MB
 [ Top 10 ]
-<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2265, average=111 B
+<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2266, average=111 B
 C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
 C:\Program Files\Python313\Lib\collections\__init__.py:444: size=20.8 KiB, count=232, average=92 B
 C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=34, average=417 B
@@ -27,36 +30,43 @@ C:\Program Files\Python313\Lib\collections\__init__.py:451: size=6944 B, count=6
 C:\Program Files\Python313\Lib\collections\__init__.py:510: size=6864 B, count=143, average=48 B
 C:\Program Files\Python313\Lib\collections\__init__.py:473: size=6696 B, count=62, average=108 B
 C:\Program Files\Python313\Lib\collections\__init__.py:460: size=6696 B, count=62, average=108 B
+Achieved 61.38 updates/s
+Achieved 61.38 draws/s
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18469.71 MB, Total: 14216.45 MB
+Executing module <module 'validate.performance.baseline_with_graphics' from 'C:\\Workspace\\repos\\pmpge\\validate\\performance\\baseline_with_graphics.py'>
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18467.53 MB, Total: 14218.64 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18466.89 MB, Total: 14219.27 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18468.01 MB, Total: 14218.16 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18469.12 MB, Total: 14217.04 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18469.03 MB, Total: 14217.14 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18468.74 MB, Total: 14217.43 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18468.62 MB, Total: 14217.55 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18466.58 MB, Total: 14219.59 MB
+[ Top 10 ]
+<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2266, average=111 B
+C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
+C:\Workspace\repos\pmpge\pmpge\game_object.py:474: size=26.8 KiB, count=66, average=416 B
+C:\Program Files\Python313\Lib\collections\__init__.py:444: size=20.8 KiB, count=232, average=92 B
+C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=34, average=417 B
+<frozen importlib._bootstrap>:488: size=11.5 KiB, count=100, average=118 B
+C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.4 KiB, count=186, average=57 B
+C:\Program Files\Python313\Lib\collections\__init__.py:451: size=6944 B, count=62, average=112 B
+C:\Program Files\Python313\Lib\collections\__init__.py:510: size=6864 B, count=143, average=48 B
+C:\Workspace\repos\pmpge\pmpge\traits\graphics.py:56: size=6864 B, count=66, average=104 B
 Achieved 61.25 updates/s
 Achieved 61.25 draws/s
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18509.82 MB, Total: 14176.34 MB
-Executing module <module 'validate.performance.baseline_with_graphics' from 'C:\\Workspace\\repos\\pmpge\\validate\\performance\\baseline_with_graphics.py'>
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18508.06 MB, Total: 14178.11 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18508.95 MB, Total: 14177.22 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18506.64 MB, Total: 14179.53 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18506.35 MB, Total: 14179.82 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18506.24 MB, Total: 14179.93 MB
-[ Top 10 ]
-<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2265, average=111 B
-C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
-C:\Workspace\repos\pmpge\pmpge\game_object.py:474: size=26.8 KiB, count=66, average=416 B
-C:\Program Files\Python313\Lib\collections\__init__.py:444: size=20.8 KiB, count=232, average=92 B
-C:\Program Files\Python313\Lib\enum.py:568: size=13.9 KiB, count=34, average=417 B
-<frozen importlib._bootstrap>:488: size=11.5 KiB, count=100, average=118 B
-C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.4 KiB, count=186, average=57 B
-C:\Program Files\Python313\Lib\collections\__init__.py:451: size=6944 B, count=62, average=112 B
-C:\Program Files\Python313\Lib\collections\__init__.py:510: size=6864 B, count=143, average=48 B
-C:\Workspace\repos\pmpge\pmpge\traits\graphics.py:56: size=6864 B, count=66, average=104 B
-Achieved 61.75 updates/s
-Achieved 61.75 draws/s
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18506.84 MB, Total: 14179.32 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18458.52 MB, Total: 14227.64 MB
 Executing module <module 'validate.performance.baseline_with_graphics_small_display' from 'C:\\Workspace\\repos\\pmpge\\validate\\performance\\baseline_with_graphics_small_display.py'>
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18506.25 MB, Total: 14179.91 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18505.57 MB, Total: 14180.60 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18506.29 MB, Total: 14179.88 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18506.18 MB, Total: 14179.98 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18457.75 MB, Total: 14228.41 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18459.66 MB, Total: 14226.50 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18459.80 MB, Total: 14226.36 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18462.66 MB, Total: 14223.51 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18462.70 MB, Total: 14223.47 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18462.68 MB, Total: 14223.49 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18462.72 MB, Total: 14223.45 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18462.80 MB, Total: 14223.37 MB
 [ Top 10 ]
-<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2265, average=111 B
+<frozen importlib._bootstrap_external>:784: size=246 KiB, count=2266, average=111 B
 C:\Program Files\Python313\Lib\collections\__init__.py:512: size=58.8 KiB, count=280, average=215 B
 C:\Workspace\repos\pmpge\pmpge\game_object.py:474: size=26.8 KiB, count=66, average=416 B
 C:\Program Files\Python313\Lib\collections\__init__.py:444: size=20.8 KiB, count=232, average=92 B
@@ -66,14 +76,18 @@ C:\Program Files\Python313\Lib\collections\__init__.py:490: size=10.4 KiB, count
 C:\Program Files\Python313\Lib\collections\__init__.py:451: size=6944 B, count=62, average=112 B
 C:\Program Files\Python313\Lib\collections\__init__.py:510: size=6864 B, count=143, average=48 B
 C:\Workspace\repos\pmpge\pmpge\traits\graphics.py:56: size=6864 B, count=66, average=104 B
-Achieved 61.75 updates/s
-Achieved 61.75 draws/s
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18506.39 MB, Total: 14179.78 MB
+Achieved 61.62 updates/s
+Achieved 61.62 draws/s
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18463.55 MB, Total: 14222.62 MB
 Executing module <module 'validate.performance.huge_hierarchy' from 'C:\\Workspace\\repos\\pmpge\\validate\\performance\\huge_hierarchy.py'>
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18444.62 MB, Total: 14241.55 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18443.75 MB, Total: 14242.42 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18445.14 MB, Total: 14241.02 MB
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18445.12 MB, Total: 14241.05 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18398.60 MB, Total: 14287.57 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18406.71 MB, Total: 14279.45 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18404.48 MB, Total: 14281.68 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18404.41 MB, Total: 14281.75 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18404.98 MB, Total: 14281.18 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18404.68 MB, Total: 14281.49 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18405.42 MB, Total: 14280.75 MB
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18404.04 MB, Total: 14282.12 MB
 [ Top 10 ]
 C:\Workspace\repos\pmpge\validate\performance\huge_hierarchy.py:28: size=6876 KiB, count=40000, average=176 B
 C:\Workspace\repos\pmpge\pmpge\game_object.py:131: size=2855 KiB, count=52211, average=56 B
@@ -85,8 +99,8 @@ C:\Workspace\repos\pmpge\pmpge\game_object.py:122: size=2855 KiB, count=52211, a
 C:\Workspace\repos\pmpge\validate\performance\huge_hierarchy.py:26: size=1719 KiB, count=10000, average=176 B
 C:\Workspace\repos\pmpge\pmpge\game_object.py:343: size=464 KiB, count=12211, average=39 B
 C:\Workspace\repos\pmpge\validate\performance\huge_hierarchy.py:25: size=344 KiB, count=2000, average=176 B
-Achieved 5.75 updates/s
-Achieved 5.75 draws/s
-Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18464.01 MB, Total: 14222.16 MB
+Achieved 4.88 updates/s
+Achieved 4.88 draws/s
+Peak: 32686.17 MB, Used: 32686.17 MB, Free: 18392.02 MB, Total: 14294.15 MB
 
 Process finished with exit code 0

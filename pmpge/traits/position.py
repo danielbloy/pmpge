@@ -21,7 +21,7 @@ class HorizontalBounce:
     This trait simply flips velocity when it hits the relevant limit
     which changes direction immediately.
     """
-    x: int
+    x: float
     vx: int
     x_min: int
     x_max: int
@@ -47,7 +47,7 @@ class VerticalBounce:
     This trait simply flips velocity when it hits the relevant limit
     which changes direction immediately.
     """
-    y: int
+    y: float
     vy: int
     y_min: int
     y_max: int
@@ -74,7 +74,7 @@ class HorizontalOscillator:
     Therefore, velocity does not instantly change so the GameObject
     will take time to "reverse" direction.
     """
-    x: int
+    x: float
     ax: int
     x_min: int
     x_max: int
@@ -101,7 +101,7 @@ class VerticalOscillator:
     Therefore, velocity does not instantly change so the GameObject
     will take time to "reverse" direction.
     """
-    y: int
+    y: float
     ay: int
     y_min: int
     y_max: int

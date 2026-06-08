@@ -5,7 +5,7 @@ from pmpge.game import Game
 from pmpge.sprite import Sprite
 from pmpge.traits.controller import MoveWithController
 from pmpge.traits.graphics import DrawImage
-from pmpge.traits.physics import MaxVelocity, MinVelocity
+from pmpge.traits.physics import BoundVelocity
 from pmpge.traits.physics import Velocity, Acceleration
 from pmpge.traits.position import AngularMotion, AngularRelativeToParent, FollowSprite, StayInBounds
 from pmpge.traits.position import HorizontalBounce, VerticalBounce
@@ -181,8 +181,7 @@ def create_oscillating_letters_test_data(game: Game, include_graphics: bool):
     vertical_oscillator = VerticalOscillator(20, game.height - 20)
     horizontal_bounce = HorizontalBounce(5, game.width - 5)
     vertical_bounce = VerticalBounce(5, game.height - 5)
-    max_velocity = MaxVelocity(30, 30)
-    min_velocity = MinVelocity(-30, -30)
+    bound_velocity = BoundVelocity(-30, 30, -30, 30)
 
     for item in enumerate(move_sprites):
         index = item[0]
@@ -194,8 +193,7 @@ def create_oscillating_letters_test_data(game: Game, include_graphics: bool):
             data.sprite.apply_trait(horizontal_bounce)
             data.sprite.apply_trait(vertical_bounce)
 
-        data.sprite.apply_trait(max_velocity)
-        data.sprite.apply_trait(min_velocity)
+        data.sprite.apply_trait(bound_velocity)
 
 
 def create_test_data(game: Game, include_graphics: bool):

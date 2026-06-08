@@ -1,13 +1,13 @@
 import pytest
 
 from pmpge.game_object import GameObject, update_hierarchy
-from pmpge.traits.physics import Velocity
+from pmpge.traits.physics import Velocity, BoundVelocity
 from pmpge.traits.position import Position
 
 
-def test_constructor():
+def test_velocity_constructor():
     """
-    Simple test to ensure that constructor works.
+    Simple test to ensure the constructor works.
     """
     trait = Velocity(0, 0)
     assert trait.vx == 0
@@ -155,5 +155,45 @@ def test_using_with_game_object_negative():
     assert go.vx == -1
     assert go.vy == -2
 
-# TODO: Test MaxVelocity
-# TODO: Test MinVelocity
+
+def test_bound_velocity_constructor():
+    """
+    Simple test to ensure the constructor works.
+    """
+    trait = BoundVelocity()
+    assert trait.min_vx is None
+    assert trait.max_vx is None
+    assert trait.min_vy is None
+    assert trait.max_vy is None
+
+    trait = BoundVelocity(10)
+    assert trait.min_vx == 10
+    assert trait.max_vx is None
+    assert trait.min_vy is None
+    assert trait.max_vy is None
+
+    trait = BoundVelocity(11, 21)
+    assert trait.min_vx == 11
+    assert trait.max_vx == 21
+    assert trait.min_vy is None
+    assert trait.max_vy is None
+
+    # Can't have a min_vx that is lexx than a max_vx
+    with pytest.raises(ValueError):
+        BoundVelocity(min_vx=32, max_vx=22)
+
+    trait = BoundVelocity(min_vy=10)
+    assert trait.min_vx is None
+    assert trait.max_vx is None
+    assert trait.min_vy == 10
+    assert trait.max_vy is None
+
+    trait = BoundVelocity(min_vy=11, max_vy=21)
+    assert trait.min_vx is None
+    assert trait.max_vx is None
+    assert trait.min_vy == 11
+    assert trait.max_vy == 21
+
+    # Can't have a min_vy that is lexx than a max_vy
+    with pytest.raises(ValueError):
+        BoundVelocity(min_vy=32, max_vy=22)

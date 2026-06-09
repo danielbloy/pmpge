@@ -52,22 +52,22 @@ class BoundVelocity:
         self.max_vy = max_vy
 
     def update(self, dt: float):
-        max_vx = self.max_vx
-        max_vy = self.max_vy
         min_vx = self.min_vx
+        max_vx = self.max_vx
         min_vy = self.min_vy
-
-        if max_vx is not None:
-            self.vx = min(self.vx, max_vx)
-
-        if max_vy is not None:
-            self.vy = min(self.vy, max_vy)
+        max_vy = self.max_vy
 
         if min_vx is not None:
             self.vx = max(self.vx, min_vx)
 
+        if max_vx is not None:
+            self.vx = min(self.vx, max_vx)
+
         if min_vy is not None:
             self.vy = max(self.vy, min_vy)
+
+        if max_vy is not None:
+            self.vy = min(self.vy, max_vy)
 
 
 class Acceleration:

@@ -165,12 +165,12 @@ class StayInBounds:
         self.max_y: int = max_y
 
     def update(self, dt: float):
-        if self.x < self.min_x:
-            self.x = self.min_x
-        elif self.x > self.max_x:
-            self.x = self.max_x
+        min_x = self.min_x
+        max_x = self.max_x
+        min_y = self.min_y
+        max_y = self.max_y
 
-        if self.y < self.min_y:
-            self.y = self.min_y
-        elif self.y > self.max_y:
-            self.y = self.max_y
+        self.x = max(self.x, min_x)
+        self.x = min(self.x, max_x)
+        self.y = max(self.y, min_y)
+        self.y = min(self.y, max_y)

@@ -6,9 +6,9 @@ from pmpge.sprite import Sprite
 from pmpge.traits.controller import MoveWithController
 from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import BoundVelocity
+from pmpge.traits.physics import HorizontalBounce, VerticalBounce
 from pmpge.traits.physics import Velocity, Acceleration
 from pmpge.traits.position import AngularMotion, AngularRelativeToParent, FollowSprite, StayInBounds
-from pmpge.traits.position import HorizontalBounce, VerticalBounce
 from pmpge.traits.position import HorizontalOscillator, VerticalOscillator
 
 

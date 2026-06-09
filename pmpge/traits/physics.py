@@ -118,3 +118,55 @@ class Friction:
 
         if self.vy > 0:
             self.vy -= dt * self.fy
+
+
+class HorizontalBounce:
+    """
+    Simple trait that bounces vertically between two points.
+    This trait simply flips velocity when it hits the relevant limit
+    which changes direction immediately.
+    """
+    x: float
+    vx: int
+    x_min: int
+    x_max: int
+
+    def __init__(self, x_min, x_max: int):
+        self.x_min: int = x_min
+        self.x_max: int = x_max
+
+    def update(self, dt: float):
+        x = self.x
+        vx = self.vx
+
+        if x < self.x_min and vx < 0:
+            self.vx = -vx
+
+        if x > self.x_max and vx > 0:
+            self.vx = -vx
+
+
+class VerticalBounce:
+    """
+    Simple trait that bounces horizontally between two points.
+    This trait simply flips velocity when it hits the relevant limit
+    which changes direction immediately.
+    """
+    y: float
+    vy: int
+    y_min: int
+    y_max: int
+
+    def __init__(self, y_min, y_max: int):
+        self.y_min: int = y_min
+        self.y_max: int = y_max
+
+    def update(self, dt: float):
+        y = self.y
+        vy = self.vy
+
+        if y < self.y_min and vy < 0:
+            self.vy = -vy
+
+        if y > self.y_max and vy > 0:
+            self.vy = -vy

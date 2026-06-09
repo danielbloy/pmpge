@@ -140,7 +140,7 @@ def test_using_with_game_object_negative():
     assert go.vx == -10
     assert go.vy == -20
 
-    # Run a half second
+    # Run a half-second
     update_hierarchy(go, 0.5)
     assert go.x == 45
     assert go.y == -10
@@ -170,7 +170,7 @@ def test_bound_velocity_constructor():
     trait = BoundVelocity(11, 21)
     assert trait.bounds_velocity == (11, None, 21, None)
 
-    # Can't have a min_vx that is lexx than a max_vx
+    # Can't have a min_vx that is less than a max_vx
     with pytest.raises(ValueError):
         BoundVelocity(min_vx=32, max_vx=22)
 
@@ -193,7 +193,7 @@ def test_bound_velocity_constructor():
 
 def test_bound_velocity_without_position():
     """
-    Validates a Velocity trait with required.
+    Validates a Velocity trait is required.
     """
     go = GameObject(BoundVelocity(10, 20, 10, 20))
     with pytest.raises(AttributeError):

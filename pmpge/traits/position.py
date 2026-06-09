@@ -28,11 +28,7 @@ class BoundPosition:
         self.bounds = min_x, min_y, max_x, max_y
 
     def update(self, dt: float):
-        bounds = self.bounds
-        min_x = bounds[0]
-        max_x = bounds[2]
-        min_y = bounds[1]
-        max_y = bounds[3]
+        min_x, min_y, max_x, max_y = self.bounds
 
         self.x = max(self.x, min_x)
         self.x = min(self.x, max_x)

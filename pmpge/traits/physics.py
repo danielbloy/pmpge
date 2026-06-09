@@ -33,6 +33,7 @@ class BoundVelocity:
     """
     vx: int
     vy: int
+    # TODO:  bounds_velocity
     min_vx: int | None
     max_vx: int | None
     min_vy: int | None
@@ -162,21 +163,20 @@ class HorizontalBounce:
     """
     x: float
     vx: int
-    x_min: int
-    x_max: int
+    limits_x: tuple[int, int]
 
     def __init__(self, x_min, x_max: int):
-        self.x_min: int = x_min
-        self.x_max: int = x_max
+        self.limits_x = (x_min, x_max)
 
     def update(self, dt: float):
         x = self.x
         vx = self.vx
+        x_min, x_max = self.limits_x
 
-        if x < self.x_min and vx < 0:
+        if x < x_min and vx < 0:
             self.vx = -vx
 
-        if x > self.x_max and vx > 0:
+        elif x > x_max and vx > 0:
             self.vx = -vx
 
 
@@ -188,21 +188,20 @@ class VerticalBounce:
     """
     y: float
     vy: int
-    y_min: int
-    y_max: int
+    limits_y: tuple[int, int]
 
     def __init__(self, y_min, y_max: int):
-        self.y_min: int = y_min
-        self.y_max: int = y_max
+        self.limits_y = (y_min, y_max)
 
     def update(self, dt: float):
         y = self.y
         vy = self.vy
+        y_min, y_max = self.limits_y
 
-        if y < self.y_min and vy < 0:
+        if y < y_min and vy < 0:
             self.vy = -vy
 
-        if y > self.y_max and vy > 0:
+        elif y > y_max and vy > 0:
             self.vy = -vy
 
 
@@ -215,21 +214,20 @@ class HorizontalOscillator:
     """
     x: float
     ax: int
-    x_min: int
-    x_max: int
+    limits_x: tuple[int, int]
 
     def __init__(self, x_min, x_max: int):
-        self.x_min: int = x_min
-        self.x_max: int = x_max
+        self.limits_x = (x_min, x_max)
 
     def update(self, dt: float):
         x = self.x
         ax = self.ax
+        x_min, x_max = self.limits_x
 
-        if x < self.x_min and ax < 0:
+        if x < x_min and ax < 0:
             self.ax = -ax
 
-        if x > self.x_max and ax > 0:
+        elif x > x_max and ax > 0:
             self.ax = -ax
 
 
@@ -242,19 +240,18 @@ class VerticalOscillator:
     """
     y: float
     ay: int
-    y_min: int
-    y_max: int
+    limits_y: tuple[int, int]
 
     def __init__(self, y_min, y_max: int):
-        self.y_min: int = y_min
-        self.y_max: int = y_max
+        self.limits_y = (y_min, y_max)
 
     def update(self, dt: float):
         y = self.y
         ay = self.ay
+        y_min, y_max = self.limits_y
 
-        if y < self.y_min and ay < 0:
+        if y < y_min and ay < 0:
             self.ay = -ay
 
-        if y > self.y_max and ay > 0:
+        elif y > y_max and ay > 0:
             self.ay = -ay

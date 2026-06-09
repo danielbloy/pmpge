@@ -157,7 +157,7 @@ class HorizontalBounce:
 
     def __init__(self, x_min, x_max: int):
         if x_max < x_min:
-            raise ValueError("x_max must be larger than x_min")
+            raise ValueError("x_max cannot be smaller than x_min")
 
         self.limits_x = (x_min, x_max)
 
@@ -185,7 +185,7 @@ class VerticalBounce:
 
     def __init__(self, y_min, y_max: int):
         if y_max < y_min:
-            raise ValueError("y_max must be larger than y_min")
+            raise ValueError("y_max cannot be smaller than y_min")
 
         self.limits_y = (y_min, y_max)
 
@@ -213,6 +213,9 @@ class HorizontalOscillator:
     limits_x: tuple[int, int]
 
     def __init__(self, x_min, x_max: int):
+        if x_max < x_min:
+            raise ValueError("x_max cannot be smaller than x_min")
+
         self.limits_x = (x_min, x_max)
 
     def update(self, dt: float):
@@ -239,6 +242,9 @@ class VerticalOscillator:
     limits_y: tuple[int, int]
 
     def __init__(self, y_min, y_max: int):
+        if y_max < y_min:
+            raise ValueError("y_max cannot be smaller than y_min")
+
         self.limits_y = (y_min, y_max)
 
     def update(self, dt: float):

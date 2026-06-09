@@ -47,6 +47,7 @@ def test_vertical_bounce_without_velocity():
         update_hierarchy(go, 0)
 
 
+# noinspection PyUnresolvedReferences
 def test_horizontal_bounce():
     """
     Some simple tests to ensure it bounces at the limit.
@@ -80,6 +81,7 @@ def test_horizontal_bounce():
     assert go.vy == 20
 
 
+# noinspection PyUnresolvedReferences
 def test_vertical_bounce():
     """
     Some simple tests to ensure it bounces at the limit.

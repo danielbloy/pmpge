@@ -170,3 +170,57 @@ class VerticalBounce:
 
         if y > self.y_max and vy > 0:
             self.vy = -vy
+
+
+class HorizontalOscillator:
+    """
+    Simple trait that oscillates vertically between two points.
+    This trait flips acceleration when it hits the relevant limit.
+    Therefore, velocity does not instantly change so the GameObject
+    will take time to "reverse" direction.
+    """
+    x: float
+    ax: int
+    x_min: int
+    x_max: int
+
+    def __init__(self, x_min, x_max: int):
+        self.x_min: int = x_min
+        self.x_max: int = x_max
+
+    def update(self, dt: float):
+        x = self.x
+        ax = self.ax
+
+        if x < self.x_min and ax < 0:
+            self.ax = -ax
+
+        if x > self.x_max and ax > 0:
+            self.ax = -ax
+
+
+class VerticalOscillator:
+    """
+    Simple trait that oscillates horizontally between two points.
+    This trait flips acceleration when it hits the relevant limit.
+    Therefore, velocity does not instantly change so the GameObject
+    will take time to "reverse" direction.
+    """
+    y: float
+    ay: int
+    y_min: int
+    y_max: int
+
+    def __init__(self, y_min, y_max: int):
+        self.y_min: int = y_min
+        self.y_max: int = y_max
+
+    def update(self, dt: float):
+        y = self.y
+        ay = self.ay
+
+        if y < self.y_min and ay < 0:
+            self.ay = -ay
+
+        if y > self.y_max and ay > 0:
+            self.ay = -ay

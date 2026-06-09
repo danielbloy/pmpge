@@ -9,7 +9,7 @@ from pmpge.traits.physics import BoundVelocity
 from pmpge.traits.physics import HorizontalBounce, VerticalBounce
 from pmpge.traits.physics import HorizontalOscillator, VerticalOscillator
 from pmpge.traits.physics import Velocity, Acceleration
-from pmpge.traits.position import AngularMotion, AngularRelativeToParent, FollowSprite, StayInBounds
+from pmpge.traits.position import AngularMotion, AngularRelativeToParent, FollowSprite, BoundPosition
 
 
 class SpriteData:
@@ -95,7 +95,7 @@ def create_controller_test_data(game: Game, include_graphics: bool):
     create_sprites(game, [hero_data], include_graphics=include_graphics)
     controller = Controller()
     hero_data.sprite.apply_trait(MoveWithController(controller, 60, 60))
-    hero_data.sprite.apply_trait(StayInBounds(8, 8, game.width - 8, game.height - 8))
+    hero_data.sprite.apply_trait(BoundPosition(8, 8, game.width - 8, game.height - 8))
 
 
 def create_orbiting_planets_test_data(game: Game, include_graphics: bool):

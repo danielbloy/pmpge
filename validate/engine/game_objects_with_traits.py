@@ -7,7 +7,7 @@ from pmpge.game import Game
 from pmpge.game_object import GameObject
 from pmpge.traits.lifetime import Lifetime
 from pmpge.traits.physics import Velocity
-from pmpge.traits.position import Position, StayInBounds
+from pmpge.traits.position import Position, BoundPosition
 
 
 def setup(game: Game):
@@ -26,7 +26,7 @@ def setup(game: Game):
     four_traits = GameObject(
         Position(100, 50),
         Velocity(20, 10),
-        StayInBounds(0, 0, 160, 120),
+        BoundPosition(0, 0, 160, 120),
         Lifetime(10)
     )
     game.add_child(four_traits)

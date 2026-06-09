@@ -13,7 +13,7 @@ from pmpge.sprite import Sprite
 from pmpge.traits.controller import MoveWithController, OnPressed
 from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import Acceleration, Velocity
-from pmpge.traits.position import StayInBounds
+from pmpge.traits.position import BoundPosition
 
 game: Game = Game(160, 120, (255, 255, 255))
 
@@ -32,7 +32,7 @@ player = Sprite(
     Acceleration(0, 120),
     DrawImage("player.png"),
     MoveWithController(controller, 60, 0),
-    StayInBounds(8, 8, game.width - 8, game.height - 8))
+    BoundPosition(8, 8, game.width - 8, game.height - 8))
 
 game.add_child(player)
 

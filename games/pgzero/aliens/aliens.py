@@ -14,7 +14,7 @@ from pmpge.sprite import Sprite
 from pmpge.traits.controller import MoveWithController
 from pmpge.traits.graphics import DrawImage
 from pmpge.traits.physics import Velocity
-from pmpge.traits.position import StayInBounds, RelativeToParent, Position
+from pmpge.traits.position import BoundPosition, RelativeToParent, Position
 from typing import Any, Callable
 
 clock: Clock
@@ -249,7 +249,7 @@ player = Sprite(
 
 controller = Controller()
 player.apply_trait(MoveWithController(controller, 200, 0))
-player.apply_trait(StayInBounds(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, game.height))
+player.apply_trait(BoundPosition(PLAYER_SHIP_MAX_LEFT, 0, PLAYER_SHIP_MAX_RIGHT, game.height))
 game_hud.add_child(player)
 
 

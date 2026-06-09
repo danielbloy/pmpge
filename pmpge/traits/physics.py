@@ -25,7 +25,8 @@ class Velocity:
 class BoundVelocity:
     """
     Limits velocity to a range for each of horizontal and vertical velocities.
-    Must be combined with a Velocity trait.
+
+    The BoundVelocity trait must be combined with a Velocity trait.
     """
     vx: int
     vy: int

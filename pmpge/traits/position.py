@@ -143,12 +143,12 @@ class FollowSprite:
                 self.y = y + my
 
 
-class StayInBounds:
+class BoundPosition:
     """
-    StayInBounds keeps a GameObjects position within a specified range of x and y co-ordinates.
+    BoundPosition keeps a GameObjects position within a specified range of x and y co-ordinates.
     The co-ordinates do not need to be entirely within the visible bounds of the screen.
 
-    The StayInBounds trait requires a Position trait to be present on the GameObject.
+    The BoundPosition trait requires a Position trait to be present on the GameObject.
     """
 
     x: float

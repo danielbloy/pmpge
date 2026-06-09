@@ -162,54 +162,33 @@ def test_bound_velocity_constructor():
     Simple test to ensure the constructor works.
     """
     trait = BoundVelocity()
-    assert trait.min_vx is None
-    assert trait.max_vx is None
-    assert trait.min_vy is None
-    assert trait.max_vy is None
+    assert trait.bounds_velocity == (None, None, None, None)
 
     trait = BoundVelocity(10)
-    assert trait.min_vx == 10
-    assert trait.max_vx is None
-    assert trait.min_vy is None
-    assert trait.max_vy is None
+    assert trait.bounds_velocity == (10, None, None, None)
 
     trait = BoundVelocity(11, 21)
-    assert trait.min_vx == 11
-    assert trait.max_vx == 21
-    assert trait.min_vy is None
-    assert trait.max_vy is None
+    assert trait.bounds_velocity == (11, None, 21, None)
 
     # Can't have a min_vx that is lexx than a max_vx
     with pytest.raises(ValueError):
         BoundVelocity(min_vx=32, max_vx=22)
 
     trait = BoundVelocity(min_vy=10)
-    assert trait.min_vx is None
-    assert trait.max_vx is None
-    assert trait.min_vy == 10
-    assert trait.max_vy is None
+    assert trait.bounds_velocity == (None, 10, None, None)
 
     trait = BoundVelocity(min_vy=11, max_vy=21)
-    assert trait.min_vx is None
-    assert trait.max_vx is None
-    assert trait.min_vy == 11
-    assert trait.max_vy == 21
+    assert trait.bounds_velocity == (None, 11, None, 21)
 
     # Can't have a min_vy that is lexx than a max_vy
     with pytest.raises(ValueError):
         BoundVelocity(min_vy=32, max_vy=22)
 
     trait = BoundVelocity(10, 20, 30, 40)
-    assert trait.min_vx == 10
-    assert trait.max_vx == 20
-    assert trait.min_vy == 30
-    assert trait.max_vy == 40
+    assert trait.bounds_velocity == (10, 30, 20, 40)
 
     trait = BoundVelocity(min_vx=41, max_vy=21)
-    assert trait.min_vx == 41
-    assert trait.max_vx is None
-    assert trait.min_vy is None
-    assert trait.max_vy == 21
+    assert trait.bounds_velocity == (41, None, None, 21)
 
 
 def test_bound_velocity_without_position():

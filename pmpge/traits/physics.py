@@ -33,11 +33,7 @@ class BoundVelocity:
     """
     vx: int
     vy: int
-    # TODO:  bounds_velocity
-    min_vx: int | None
-    max_vx: int | None
-    min_vy: int | None
-    max_vy: int | None
+    bounds_velocity: tuple[int | None, int | None, int | None, int | None]
 
     def __init__(self,
                  min_vx: int | None = None, max_vx: int | None = None,
@@ -51,16 +47,10 @@ class BoundVelocity:
             if min_vy > max_vy:
                 raise ValueError("min_vy cannot be larger than max_vy")
 
-        self.min_vx = min_vx
-        self.max_vx = max_vx
-        self.min_vy = min_vy
-        self.max_vy = max_vy
+        self.bounds_velocity = min_vx, min_vy, max_vx, max_vy
 
     def update(self, dt: float):
-        min_vx = self.min_vx
-        max_vx = self.max_vx
-        min_vy = self.min_vy
-        max_vy = self.max_vy
+        min_vx, min_vy, max_vx, max_vy = self.bounds_velocity
 
         if min_vx is not None:
             self.vx = max(self.vx, min_vx)

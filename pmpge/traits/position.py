@@ -22,22 +22,17 @@ class BoundPosition:
 
     x: float
     y: float
-    min_x: int
-    min_y: int
-    max_x: int
-    max_y: int
+    bounds: tuple[int, int, int, int]
 
     def __init__(self, min_x, min_y, max_x, max_y: int):
-        self.min_x: int = min_x
-        self.max_x: int = max_x
-        self.min_y: int = min_y
-        self.max_y: int = max_y
+        self.bounds = min_x, min_y, max_x, max_y
 
     def update(self, dt: float):
-        min_x = self.min_x
-        max_x = self.max_x
-        min_y = self.min_y
-        max_y = self.max_y
+        bounds = self.bounds
+        min_x = bounds[0]
+        max_x = bounds[2]
+        min_y = bounds[1]
+        max_y = bounds[3]
 
         self.x = max(self.x, min_x)
         self.x = min(self.x, max_x)

@@ -1,3 +1,6 @@
+import math
+
+
 class Velocity:
     """
     Velocity is the rate at which a sprite moves either horizontally, vertically or
@@ -119,6 +122,36 @@ class Friction:
 
         if self.vy > 0:
             self.vy -= dt * self.fy
+
+
+class AngularMotion:
+    """
+    This trait will rotate a sprite around a centre position (cx, cy) with a given radius
+    and angular_motion (specified in radians). This will blat any (x, y) coordinate pair
+    so will not play nicely with other traits that set position.
+    """
+    x: float
+    y: float
+    cx: int
+    cy: int
+    radius: int
+    angular_velocity: float  # This should be in radians
+    angle: float
+
+    def __init__(self, cx: int, cy: int, radius: int, angular_velocity: float, start_angle: float = 0.0):
+        self.cx: int = cx
+        self.cy: int = cy
+        self.radius: int = radius
+        self.angular_velocity: float = angular_velocity
+        self.angle: float = start_angle
+
+    def update(self, dt: float):
+        angle = self.angle + (dt * self.angular_velocity)
+        self.angle = angle
+
+        radius = self.radius
+        self.x = self.cx + (radius * math.cos(angle))
+        self.y = self.cy + (radius * math.sin(angle))
 
 
 class HorizontalBounce:

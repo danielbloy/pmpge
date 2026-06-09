@@ -5,11 +5,12 @@ from pmpge.game import Game
 from pmpge.sprite import Sprite
 from pmpge.traits.controller import MoveWithController
 from pmpge.traits.graphics import DrawImage
+from pmpge.traits.physics import AngularMotion
 from pmpge.traits.physics import BoundVelocity
 from pmpge.traits.physics import HorizontalBounce, VerticalBounce
 from pmpge.traits.physics import HorizontalOscillator, VerticalOscillator
 from pmpge.traits.physics import Velocity, Acceleration
-from pmpge.traits.position import AngularMotion, AngularRelativeToParent, FollowSprite, BoundPosition
+from pmpge.traits.position import AngularRelativeToParent, FollowSprite, BoundPosition
 
 
 class SpriteData:

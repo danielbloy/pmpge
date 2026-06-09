@@ -4,7 +4,8 @@ import pytest
 
 from pmpge.game_object import GameObject, update_hierarchy
 from pmpge.sprite import Sprite
-from pmpge.traits.position import AngularMotion, Position, AngularRelativeToParent
+from pmpge.traits.physics import AngularMotion
+from pmpge.traits.position import Position, AngularRelativeToParent
 from tests.pmpge.testing_utilities import are_almost_equal
 
 

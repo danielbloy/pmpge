@@ -9,7 +9,8 @@ import validate.utils as utils
 from pmpge.game import Game
 from pmpge.sprite import Sprite
 from pmpge.traits.graphics import DrawImage
-from pmpge.traits.position import AngularMotion, AngularRelativeToParent, FollowSprite
+from pmpge.traits.physics import AngularMotion
+from pmpge.traits.position import AngularRelativeToParent, FollowSprite
 from validate import test_data
 
 sprite_data: list[test_data.SpriteData] = [

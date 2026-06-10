@@ -134,3 +134,91 @@ def test_horizontal_oscillator_hit_min():
     assert go.vy == 0
     assert go.ax == 10
     assert go.ay == 0
+
+
+def test_vertical_oscillator_hit_max():
+    """
+    Some simple tests to ensure it oscillates at the limit.
+    """
+    go = Sprite(0, 0, Velocity(0, 0), Acceleration(0, 10), VerticalOscillator(10, 20))
+    update_hierarchy(go, 1)
+    assert go.x == 0
+    assert go.y == 0
+    assert go.vx == 0
+    assert go.vy == 10
+    assert go.ax == 0
+    assert go.ay == 10
+
+    update_hierarchy(go, 2)
+    assert go.x == 0
+    assert go.y == 20
+    assert go.vx == 0
+    assert go.vy == 30
+    assert go.ax == 0
+    assert go.ay == 10
+
+    # The next update should result in a bounce
+    update_hierarchy(go, 0.1)
+    assert go.x == 0
+    assert go.y == 23
+    assert go.vx == 0
+    assert go.vy == 31
+    assert go.ax == 0
+    assert go.ay == -10
+
+    # Now go backwards
+    update_hierarchy(go, 2)
+    assert go.x == 0
+    assert go.y == 85
+    assert go.vx == 0
+    assert go.vy == 11
+    assert go.ax == 0
+    assert go.ay == -10
+
+    update_hierarchy(go, 0.2)
+    assert go.x == 0
+    assert go.y == 87.2
+    assert go.vx == 0
+    assert go.vy == 9
+    assert go.ax == 0
+    assert go.ay == -10
+
+
+def test_vertical_oscillator_hit_min():
+    """
+    Some simple tests to ensure it oscillates at the limit.
+    """
+    go = Sprite(0, 30, Velocity(0, 0), Acceleration(0, -10), VerticalOscillator(10, 20))
+    update_hierarchy(go, 1)
+    assert go.x == 0
+    assert go.y == 30
+    assert go.vx == 0
+    assert go.vy == -10
+    assert go.ax == 0
+    assert go.ay == -10
+
+    update_hierarchy(go, 2)
+    assert go.x == 0
+    assert go.y == 10
+    assert go.vx == 0
+    assert go.vy == -30
+    assert go.ax == 0
+    assert go.ay == -10
+
+    # The next update should result in a bounce
+    update_hierarchy(go, 0.1)
+    assert go.x == 0
+    assert go.y == 7
+    assert go.vx == 0
+    assert go.vy == -31
+    assert go.ax == 0
+    assert go.ay == 10
+
+    # Now go backwards
+    update_hierarchy(go, 0.1)
+    assert go.x == 0
+    assert go.y == 3.9
+    assert go.vx == 0
+    assert go.vy == -30
+    assert go.ax == 0
+    assert go.ay == 10

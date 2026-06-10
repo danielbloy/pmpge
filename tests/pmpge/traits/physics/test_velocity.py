@@ -1,13 +1,14 @@
 import pytest
 
 from pmpge.game_object import GameObject, update_hierarchy
-from pmpge.traits.physics import Velocity
+from pmpge.sprite import Sprite
+from pmpge.traits.physics import Velocity, BoundVelocity
 from pmpge.traits.position import Position
 
 
-def test_constructor():
+def test_velocity_constructor():
     """
-    Simple test to ensure that constructor works.
+    Simple test to ensure the constructor works.
     """
     trait = Velocity(0, 0)
     assert trait.vx == 0
@@ -29,7 +30,7 @@ def test_constructor():
         assert trait.y == 0
 
 
-def test_without_position():
+def test_velocity_without_position():
     """
     Validates a Position trait with required.
     """
@@ -139,7 +140,7 @@ def test_using_with_game_object_negative():
     assert go.vx == -10
     assert go.vy == -20
 
-    # Run a half second
+    # Run a half-second
     update_hierarchy(go, 0.5)
     assert go.x == 45
     assert go.y == -10
@@ -154,3 +155,172 @@ def test_using_with_game_object_negative():
     assert go.y == -12
     assert go.vx == -1
     assert go.vy == -2
+
+
+def test_bound_velocity_constructor():
+    """
+    Simple test to ensure the constructor works.
+    """
+    trait = BoundVelocity()
+    assert trait.bounds_velocity == (None, None, None, None)
+
+    trait = BoundVelocity(10)
+    assert trait.bounds_velocity == (10, None, None, None)
+
+    trait = BoundVelocity(11, 21)
+    assert trait.bounds_velocity == (11, None, 21, None)
+
+    # Can't have a min_vx that is less than a max_vx
+    with pytest.raises(ValueError):
+        BoundVelocity(min_vx=32, max_vx=22)
+
+    trait = BoundVelocity(min_vy=10)
+    assert trait.bounds_velocity == (None, 10, None, None)
+
+    trait = BoundVelocity(min_vy=11, max_vy=21)
+    assert trait.bounds_velocity == (None, 11, None, 21)
+
+    # Can't have a min_vy that is lexx than a max_vy
+    with pytest.raises(ValueError):
+        BoundVelocity(min_vy=32, max_vy=22)
+
+    trait = BoundVelocity(10, 20, 30, 40)
+    assert trait.bounds_velocity == (10, 30, 20, 40)
+
+    trait = BoundVelocity(min_vx=41, max_vy=21)
+    assert trait.bounds_velocity == (41, None, None, 21)
+
+
+def test_bound_velocity_without_position():
+    """
+    Validates a Velocity trait is required.
+    """
+    go = GameObject(BoundVelocity(10, 20, 10, 20))
+    with pytest.raises(AttributeError):
+        update_hierarchy(go, 0)
+
+
+def test_bound_vx():
+    """
+    Some simple tests to ensure that vx is bound to the limits.
+    """
+
+    # Just bound min
+    go = Sprite(100, 100, Velocity(0, 0), BoundVelocity(min_vx=10))
+    update_hierarchy(go, 0)
+    assert go.vx == 10
+
+    go.vx = 5
+    update_hierarchy(go, 0)
+    assert go.vx == 10
+
+    go.vx = 15
+    update_hierarchy(go, 0)
+    assert go.vx == 15
+
+    # Just max
+    go = Sprite(100, 100, Velocity(0, 0), BoundVelocity(max_vx=20))
+    update_hierarchy(go, 0)
+    assert go.vx == 0
+
+    go.vx = 5
+    update_hierarchy(go, 0)
+    assert go.vx == 5
+
+    go.vx = 25
+    update_hierarchy(go, 0)
+    assert go.vx == 20
+
+    # Both min and max
+    go = Sprite(100, 100, Velocity(0, 0), BoundVelocity(min_vx=10, max_vx=20))
+    update_hierarchy(go, 0)
+    assert go.vx == 10
+
+    go.vx = 5
+    update_hierarchy(go, 0)
+    assert go.vx == 10
+
+    go.vx = 15
+    update_hierarchy(go, 0)
+    assert go.vx == 15
+
+    go.vx = 25
+    update_hierarchy(go, 0)
+    assert go.vx == 20
+
+
+def test_bound_vy():
+    """
+    Some simple tests to ensure that vx is bound to the limits.
+    """
+
+    # Just bound min
+    go = Sprite(100, 100, Velocity(0, 0), BoundVelocity(min_vy=10))
+    update_hierarchy(go, 0)
+    assert go.vy == 10
+
+    go.vy = 5
+    update_hierarchy(go, 0)
+    assert go.vy == 10
+
+    go.vy = 15
+    update_hierarchy(go, 0)
+    assert go.vy == 15
+
+    # Just max
+    go = Sprite(100, 100, Velocity(0, 0), BoundVelocity(max_vy=20))
+    update_hierarchy(go, 0)
+    assert go.vy == 0
+
+    go.vy = 5
+    update_hierarchy(go, 0)
+    assert go.vy == 5
+
+    go.vy = 25
+    update_hierarchy(go, 0)
+    assert go.vy == 20
+
+    # Both min and max
+    go = Sprite(100, 100, Velocity(0, 0), BoundVelocity(min_vy=10, max_vy=20))
+    update_hierarchy(go, 0)
+    assert go.vy == 10
+
+    go.vy = 5
+    update_hierarchy(go, 0)
+    assert go.vy == 10
+
+    go.vy = 15
+    update_hierarchy(go, 0)
+    assert go.vy == 15
+
+    go.vy = 25
+    update_hierarchy(go, 0)
+    assert go.vy == 20
+
+
+def test_bound_vx_and_vy():
+    """
+    Some simple tests to ensure that vx and vy are bound to the limits.
+    """
+    go = Sprite(100, 100, Velocity(0, 0), BoundVelocity(-30, 30, -20, 20))
+    update_hierarchy(go, 0)
+    assert go.vx == 0
+    assert go.vy == 0
+
+    go.vx = -30
+    go.vy = 50
+    update_hierarchy(go, 0)
+    assert go.vx == -30
+    assert go.vy == 20
+
+    go.vx = 60
+    go.vy = -57.3
+    update_hierarchy(go, 0)
+    assert go.vx == 30
+    assert go.vy == -20
+
+    go.vx = -10
+    go.vy = -10
+    update_hierarchy(go, 0)
+    assert go.vx == -10
+    assert go.vy == -10

@@ -1,0 +1,17 @@
+>>> %Run -c $EDITOR_CONTENT
+Config file config.py loaded.
+RUNTIME = 2
+SAMPLE_FREQUENCY = 50
+REPORT_FREQUENCY = 4
+PROFILE = True
+PROFILE_TOP = 10
+
+Device has built-in display
+Setting SCREEN_WIDTH = 240
+Setting SCREEN_HEIGHT = 240
+Setting GRAPHICS_DRIVER = pmpge.drivers.graphics.displayio
+No device driver.
+No controller driver.
+Running on circuit with (240, 240) screen and 0 button controller.
+Executing module <module 'tests.validate_device.validate_a_game' from 'tests/validate_device/validate_a_game.py'>
+No sound driver.

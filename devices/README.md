@@ -35,8 +35,6 @@ _**NOTE:** Please be aware that the initial releases of PMPGE are validated
 for functionality and ease of use rather than optimisation for performance on
 small devices. Optimisation will always come after working functionality._
 
-For information on optimisations, see the files [optimisation.md](./optimisation.md).
-
 ## Supporting CircuitPython and MicroPython
 
 The project aims to support both CircuitPython and MicoPython, though doing so by

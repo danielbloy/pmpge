@@ -7,7 +7,8 @@ import time
 from pmpge.game import Game
 from pmpge.sprite import Sprite
 from pmpge.traits.graphics import DrawImage
-from pmpge.traits.position import AngularMotion, AngularRelativeToParent
+from pmpge.traits.physics import AngularMotion
+from pmpge.traits.position import AngularRelativeToParent
 
 GAME_WIDTH = 320
 GAME_HEIGHT = 240

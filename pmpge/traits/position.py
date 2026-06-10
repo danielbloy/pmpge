@@ -1,6 +1,3 @@
-import math
-
-
 class Position:
     """
     Position is a specific location in 2D space, represented by an x and y co-ordinate.
@@ -13,6 +10,30 @@ class Position:
     def __init__(self, x, y: float):
         self.x: float = x
         self.y: float = y
+
+
+class BoundPosition:
+    """
+    BoundPosition keeps a GameObjects position within a specified range of x and y co-ordinates.
+    The co-ordinates do not need to be entirely within the visible bounds of the screen.
+
+    The BoundPosition trait requires a Position trait to be present on the GameObject.
+    """
+
+    x: float
+    y: float
+    bounds_position: tuple[int, int, int, int]
+
+    def __init__(self, min_x, min_y, max_x, max_y: int):
+        self.bounds_position = min_x, min_y, max_x, max_y
+
+    def update(self, dt: float):
+        min_x, min_y, max_x, max_y = self.bounds_position
+
+        self.x = max(self.x, min_x)
+        self.x = min(self.x, max_x)
+        self.y = max(self.y, min_y)
+        self.y = min(self.y, max_y)
 
 
 class RelativeToParent:
@@ -44,36 +65,6 @@ class RelativeToParent:
         else:
             self.x = self.offset_x
             self.y = self.offset_y
-
-
-class AngularMotion:
-    """
-    This trait will rotate a sprite around a center position (cx, cy) with a given radius
-    and angular_motion (specified in radians). This will blat any (x, y) coordinate pair
-    so will not play nicely with other traits that set position.
-    """
-    x: float
-    y: float
-    cx: int
-    cy: int
-    radius: int
-    angular_velocity: float  # This should be in radians
-    angle: float
-
-    def __init__(self, cx: int, cy: int, radius: int, angular_velocity: float, start_angle: float = 0.0):
-        self.cx: int = cx
-        self.cy: int = cy
-        self.radius: int = radius
-        self.angular_velocity: float = angular_velocity
-        self.angle: float = start_angle
-
-    def update(self, dt: float):
-        angle = self.angle + (dt * self.angular_velocity)
-        self.angle = angle
-
-        radius = self.radius
-        self.x = self.cx + (radius * math.cos(angle))
-        self.y = self.cy + (radius * math.sin(angle))
 
 
 class AngularRelativeToParent:
@@ -141,36 +132,3 @@ class FollowSprite:
                 self.y = y - my
             elif dy > 0:
                 self.y = y + my
-
-
-class StayInBounds:
-    """
-    StayInBounds keeps a GameObjects position within a specified range of x and y co-ordinates.
-    The co-ordinates do not need to be entirely within the visible bounds of the screen.
-
-    The StayInBounds trait requires a Position trait to be present on the GameObject.
-    """
-
-    x: float
-    y: float
-    min_x: int
-    min_y: int
-    max_x: int
-    max_y: int
-
-    def __init__(self, min_x, min_y, max_x, max_y: int):
-        self.min_x: int = min_x
-        self.max_x: int = max_x
-        self.min_y: int = min_y
-        self.max_y: int = max_y
-
-    def update(self, dt: float):
-        if self.x < self.min_x:
-            self.x = self.min_x
-        elif self.x > self.max_x:
-            self.x = self.max_x
-
-        if self.y < self.min_y:
-            self.y = self.min_y
-        elif self.y > self.max_y:
-            self.y = self.max_y

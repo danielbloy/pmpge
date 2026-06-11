@@ -15,6 +15,7 @@ This also tests the game_object_hierarchy_changed() function.
 import validate.utils as utils
 from pmpge.game import Game
 from pmpge.graphics import game_object_hierarchy_changed
+from pmpge.utilities import add_rate_limited_func
 from validate import test_data
 
 sprite_data_row_1: list[test_data.SpriteData] = [
@@ -85,7 +86,7 @@ def destroy_children():
 
 def setup(game: Game):
     game.background_colour = (250, 120, 0)  # Orange
-    game.add_fps_update_func(rebuild_graphics_hierarchy, fps=1)
+    add_rate_limited_func(game, rebuild_graphics_hierarchy, rate=1)
 
     test_data.create_sprites(game, sprite_data_row_1, add_to_root=False)
     game.root.add_child(sprite_data_row_1[3].sprite)
@@ -99,11 +100,11 @@ def setup(game: Game):
     sprite_data_row_2[3].sprite.add_child(sprite_data_row_2[2].sprite)
     sprite_data_row_2[2].sprite.add_child(sprite_data_row_2[1].sprite)
     sprite_data_row_2[1].sprite.add_child(sprite_data_row_2[0].sprite)
-    game.add_fps_update_func(alternate_activated, fps=3)
+    add_rate_limited_func(game, alternate_activated, rate=3)
 
     test_data.create_sprites(game, sprite_data_row_3, add_to_root=False)
     game.root.add_child(sprite_data_row_3[0].sprite)
-    game.add_fps_update_func(add_children, fps=3)
+    add_rate_limited_func(game, add_children, rate=3)
 
     test_data.create_sprites(game, sprite_data_row_4, add_to_root=False)
     game.root.add_child(sprite_data_row_4[0].sprite)
@@ -111,7 +112,7 @@ def setup(game: Game):
     sprite_data_row_4[1].sprite.add_child(sprite_data_row_4[2].sprite)
     sprite_data_row_4[2].sprite.add_child(sprite_data_row_4[3].sprite)
     sprite_data_row_4[3].sprite.add_child(sprite_data_row_4[4].sprite)
-    game.add_fps_update_func(destroy_children, fps=3)
+    add_rate_limited_func(game, destroy_children, rate=3)
 
 
 if utils.should_execute(__name__):

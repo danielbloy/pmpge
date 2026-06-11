@@ -6,6 +6,7 @@ that visibility works.
 """
 import validate.utils as utils
 from pmpge.game import Game
+from pmpge.utilities import add_rate_limited_func
 from validate import test_data
 
 sprite_data: list[test_data.SpriteData] = [
@@ -32,7 +33,7 @@ def switch_visibility():
 def setup(game: Game):
     game.background_colour = (250, 120, 0)  # Orange
     test_data.create_sprites(game, sprite_data)
-    game.add_fps_update_func(switch_visibility, fps=4)
+    add_rate_limited_func(game, switch_visibility, rate=4)
 
 
 if utils.should_execute(__name__):

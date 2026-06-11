@@ -1,11 +1,61 @@
 # This file contains a range of utility functions used throughout the project.
 # Many are extracted from the various drivers to make it easier to test.
-
 from pmpge.environment import is_running_on_desktop
+from pmpge.game import Game
+from pmpge.game_object import GameObject
 
 # These are not available in CircuitPython.
 if is_running_on_desktop():
     from collections.abc import Callable
+
+
+################################################################################
+# G E N E R A L    U T I L I T I E S
+################################################################################
+
+
+class RateLimit:
+    """
+    Rate limits calling the desired function to a maximum number of calls per second.
+    # TODO: Test
+    """
+    func: Callable[[], None]
+    rate: int
+    next_call: float
+    call_delta: float
+
+    def __init__(self, func: Callable[[], None], rate: int = 5):
+        self.func = func
+        self.rate = rate
+        self.next_call = 0
+        self.call_delta = 1 / rate
+
+    def update(self, dt: float):
+        next_call = self.next_call
+        next_call -= dt
+
+        if next_call <= 0:
+            next_call += self.call_delta
+            if next_call <= 0:
+                next_call = 0
+            self.func()
+
+        self.next_call = next_call
+
+    def game_object_adapter(self, _: GameObject, dt: float):
+        self.update(dt)
+
+
+def add_rate_limited_func(thing: Game | GameObject, func: Callable[[], None], rate: int = 5):
+    """
+    Adds a rate-limited function to either a Game or GameObject.
+    TODO: Test
+    """
+    rate_limit = RateLimit(func, rate)
+    if type(thing) is Game:
+        thing.add_update_func(rate_limit.update)
+    else:
+        thing.add_update_handler(rate_limit.game_object_adapter)
 
 
 ################################################################################

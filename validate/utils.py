@@ -35,29 +35,6 @@ if hasattr(config, 'PROFILE_TOP'):
     PROFILE_TOP = config.PROFILE_TOP
 
 
-# TODO: Add the capability to specify fps on a game update method to the engine.
-def add_update_method(game: Game, callable: Callable[[Game], None], fps: int = 5):
-    """
-    Adds an update method to a Game instance that gets called at the desired fps (roughly).
-    """
-    next_call = None
-    call_delta = 1 / fps
-    time_func = time.monotonic
-
-    def inner(dt):
-        nonlocal next_call
-        if next_call is None:
-            next_call = time_func()
-
-        now = time_func()
-
-        if now >= next_call:
-            next_call += call_delta
-            callable(game)
-
-    game.add_update_func(inner)
-
-
 def should_execute(name: str):
     """
     Used to determine ifs we are running as a main module or not.

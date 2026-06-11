@@ -1,3 +1,5 @@
+import time
+
 from pmpge.environment import is_running_on_desktop, screen_size, execute, terminate
 from pmpge.game_object import GameObject, update_hierarchy
 
@@ -89,6 +91,32 @@ class Game:
         Adds a custom update function that is called before the root GameObject is updated.
         """
         self.__update_funcs.append(func)
+
+    def add_fps_update_func(self, func: Callable[[], None], fps: int = 5):
+        """
+        Adds a custom function that gets called at the desired fps (roughly).
+
+        # TODO: Test this
+        """
+        # TODO: Extract the rate limiting code
+        next_call = None
+        call_delta = 1 / fps
+        time_func = time.monotonic
+
+        def inner(dt):
+            nonlocal next_call
+            if next_call is None:
+                next_call = time_func()
+
+            now = time_func()
+
+            if now >= next_call:
+                next_call += call_delta
+                if next_call <= now:
+                    next_call = now
+                func()
+
+        self.add_update_func(inner)
 
     def update(self, dt: float):
         """

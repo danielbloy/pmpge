@@ -49,18 +49,18 @@ sprite_data_row_4: list[test_data.SpriteData] = [
 ]
 
 
-def rebuild_graphics_hierarchy(game: Game):
+def rebuild_graphics_hierarchy():
     game_object_hierarchy_changed()
 
 
-def alternate_activated(game: Game):
+def alternate_activated():
     sprite_data_row_2[2].sprite.active = not sprite_data_row_2[2].sprite.active
 
 
 add_index = 0
 
 
-def add_children(game: Game):
+def add_children():
     global add_index
 
     if add_index >= len(sprite_data_row_3) - 1:
@@ -73,7 +73,7 @@ def add_children(game: Game):
 destroy_index = len(sprite_data_row_4) - 1
 
 
-def destroy_children(game: Game):
+def destroy_children():
     global destroy_index
 
     if destroy_index < 0:
@@ -85,7 +85,7 @@ def destroy_children(game: Game):
 
 def setup(game: Game):
     game.background_colour = (250, 120, 0)  # Orange
-    utils.add_update_method(game, rebuild_graphics_hierarchy, fps=1)
+    game.add_fps_update_func(rebuild_graphics_hierarchy, fps=1)
 
     test_data.create_sprites(game, sprite_data_row_1, add_to_root=False)
     game.root.add_child(sprite_data_row_1[3].sprite)
@@ -99,11 +99,11 @@ def setup(game: Game):
     sprite_data_row_2[3].sprite.add_child(sprite_data_row_2[2].sprite)
     sprite_data_row_2[2].sprite.add_child(sprite_data_row_2[1].sprite)
     sprite_data_row_2[1].sprite.add_child(sprite_data_row_2[0].sprite)
-    utils.add_update_method(game, alternate_activated, fps=3)
+    game.add_fps_update_func(alternate_activated, fps=3)
 
     test_data.create_sprites(game, sprite_data_row_3, add_to_root=False)
     game.root.add_child(sprite_data_row_3[0].sprite)
-    utils.add_update_method(game, add_children, fps=3)
+    game.add_fps_update_func(add_children, fps=3)
 
     test_data.create_sprites(game, sprite_data_row_4, add_to_root=False)
     game.root.add_child(sprite_data_row_4[0].sprite)
@@ -111,7 +111,7 @@ def setup(game: Game):
     sprite_data_row_4[1].sprite.add_child(sprite_data_row_4[2].sprite)
     sprite_data_row_4[2].sprite.add_child(sprite_data_row_4[3].sprite)
     sprite_data_row_4[3].sprite.add_child(sprite_data_row_4[4].sprite)
-    utils.add_update_method(game, destroy_children, fps=3)
+    game.add_fps_update_func(destroy_children, fps=3)
 
 
 if utils.should_execute(__name__):

@@ -17,7 +17,6 @@ if is_running_on_desktop():
 class RateLimit:
     """
     Rate limits calling the desired function to a maximum number of calls per second.
-    # TODO: Test
     """
     func: Callable[[], None]
     rate: int
@@ -30,7 +29,7 @@ class RateLimit:
         self.next_call = 0
         self.call_delta = 1 / rate
 
-    def update(self, dt: float):
+    def __call__(self, dt: float):
         next_call = self.next_call
         next_call -= dt
 
@@ -42,20 +41,16 @@ class RateLimit:
 
         self.next_call = next_call
 
-    def game_object_adapter(self, _: GameObject, dt: float):
-        self.update(dt)
-
 
 def add_rate_limited_func(thing: Game | GameObject, func: Callable[[], None], rate: int = 5):
     """
     Adds a rate-limited function to either a Game or GameObject.
-    TODO: Test
     """
     rate_limit = RateLimit(func, rate)
     if type(thing) is Game:
-        thing.add_update_func(rate_limit.update)
+        thing.add_update_func(rate_limit)
     else:
-        thing.add_update_handler(rate_limit.game_object_adapter)
+        thing.add_update_handler(lambda _, dt: rate_limit(dt))
 
 
 ################################################################################

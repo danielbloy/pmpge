@@ -5,6 +5,9 @@ from tests.pmpge.testing_utilities import are_almost_equal
 from tests.pmpge.testing_utilities import with_config_file
 
 
+# TODO: Test RateLimit
+# TODO: Test add_rate_limited_func
+
 def test_scaling_factor_when_display_too_small():
     """
     Straight forward validate when the display is too small either horizontally or vertically.

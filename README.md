@@ -100,16 +100,6 @@ non-default driver requires setting of the following configuration properties:
 For more information on how to implement a driver, see the documentation in
 [drivers](./pmpge/drivers/README.md).
 
-There are other configuration properties that can be set to control the behaviour
-of the framework, including:
-
-* `GRAPHICS_SCALING` - Enforces a scaling factor for the graphics. Only used by the
-  displayio graphics driver.
-* `GRAPHICS_FRAMERATE` - If set, the game will run at (or below) the desired framerate.
-  Only used by the displayio graphics driver.
-* `GRAPHICS_STATS` - If set to True, the game will display graphics stats along the
-  bottom of the screen. Only used by the displayio graphics driver.
-
 ## License
 
 All materials provided in this project is licensed under the Creative Commons

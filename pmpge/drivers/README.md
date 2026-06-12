@@ -11,6 +11,24 @@ of driver and their configuration properties are:
 * `SOUND_DRIVER`
 * `GRAPHICS_DRIVER`
 
+There are other configuration properties that can be set to control the behaviour
+of the framework:
+
+* `UPDATE_FRAMERATE` - Only applies to microcontrollers, not Pygame Zero. Sets the
+  rate limit for the `update()` calls. If not set, the default will be 60 fps.
+* `GRAPHICS_FRAMERATE` - Only applies to microcontrollers, not Pygame Zero. Sets the
+  rate limit for the `draw()` calls. If not set, the default will be 30 fps.
+* `GRAPHICS_STATS` - Only applies to microcontrollers, not Pygame Zero. If set to True
+  the game will display graphics stats along the bottom of the screen. If not set, the
+  default will be False.
+* `GRAPHICS_SCALING` - Only applies to microcontrollers, not Pygame Zero. Enforces a
+  scaling factor for the graphics. Typically used to stop small displays such as
+  160 x 120 from being upscaled on larger screens.
+* `GRAPHICS_MANUAL_REFRESH` - Only applies to microcontrollers, not Pygame Zero. If set,
+  the game will use .
+
+## Implementing a driver
+
 Implementing a driver is pretty simple for the most part. There are
 optional common hook methods for all drivers and mandatory methods
 or classes that must be implemented for specific drivers. The optional

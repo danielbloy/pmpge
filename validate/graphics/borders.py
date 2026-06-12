@@ -21,7 +21,7 @@ SCREEN_WIDTH = 100  # Results in a border of 30 pixels left and right
 SCREEN_HEIGHT = 116  # Results in a border of 8 pixels along the bottom and 4 along the top
 
 
-def switch_visibility():
+def switch_visibility(_: float):
     global index
     sprite_data[index].sprite.visible = True
     index = (index + 1) % count

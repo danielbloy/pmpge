@@ -21,7 +21,7 @@ index = 0
 count = len(sprite_data)
 
 
-def switch_visibility():
+def switch_visibility(_: float):
     global index
     sprite_data[index].sprite.visible = True
     index = (index + 1) % count

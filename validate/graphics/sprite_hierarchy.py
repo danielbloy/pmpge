@@ -50,18 +50,18 @@ sprite_data_row_4: list[test_data.SpriteData] = [
 ]
 
 
-def rebuild_graphics_hierarchy():
+def rebuild_graphics_hierarchy(_: float):
     game_object_hierarchy_changed()
 
 
-def alternate_activated():
+def alternate_activated(_: float):
     sprite_data_row_2[2].sprite.active = not sprite_data_row_2[2].sprite.active
 
 
 add_index = 0
 
 
-def add_children():
+def add_children(_: float):
     global add_index
 
     if add_index >= len(sprite_data_row_3) - 1:
@@ -74,7 +74,7 @@ def add_children():
 destroy_index = len(sprite_data_row_4) - 1
 
 
-def destroy_children():
+def destroy_children(_: float):
     global destroy_index
 
     if destroy_index < 0:

@@ -23,7 +23,7 @@ SCREEN_WIDTH = 80  # Required for validate_all.py
 SCREEN_HEIGHT = 64  # Required for validate_all.py
 
 
-def switch_visibility():
+def switch_visibility(_: float):
     global index
     sprite_data[index].sprite.visible = True
     index = (index + 1) % count

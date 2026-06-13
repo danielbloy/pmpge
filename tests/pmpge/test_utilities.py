@@ -1,8 +1,11 @@
 import pytest
 
+from pmpge.game import Game
+from pmpge.game_object import GameObject, update_hierarchy
 from pmpge.utilities import calculate_scaling_factor, Borders, CalculateFps
 from tests.pmpge.testing_utilities import are_almost_equal
 from tests.pmpge.testing_utilities import with_config_file
+from utilities import add_rate_limited_func
 
 
 def test_scaling_factor_when_display_too_small():
@@ -466,4 +469,74 @@ def test_calculate_fps_without_callback():
     assert calc.callback_interval == 1.0
     assert calc.next_callback == 1.0
 
-# TODO: Test add_rate_limited_func
+
+def test_rate_limited_function_on_game():
+    """
+    Tests the RateLimiter when combined with Game.
+    """
+    game: Game = Game()
+
+    elapsed_time: float = 0.0
+    callback_count: int = 0
+
+    def callback(dt: float):
+        nonlocal elapsed_time, callback_count
+        elapsed_time = dt
+        callback_count += 1
+
+    add_rate_limited_func(game, callback)
+
+    assert elapsed_time == 0.0
+    assert callback_count == 0
+
+    # This will cause the first event to get called.
+    game.update(0.0)
+    assert elapsed_time == 0.0
+    assert callback_count == 1
+
+    # But this wont
+    game.update(0.0)
+    game.update(0.1)
+    assert elapsed_time == 0.0
+    assert callback_count == 1
+
+    # But this will now trigger the second event.
+    game.update(0.1)
+    assert elapsed_time == 0.2
+    assert callback_count == 2
+
+
+def test_rate_limited_function_on_game_object():
+    """
+    Tests the RateLimiter when combined with GameObject.
+    """
+    go: GameObject = GameObject()
+
+    elapsed_time: float = 0.0
+    callback_count: int = 0
+
+    def callback(dt: float):
+        nonlocal elapsed_time, callback_count
+        elapsed_time = dt
+        callback_count += 1
+
+    add_rate_limited_func(go, callback)
+
+    assert elapsed_time == 0.0
+    assert callback_count == 0
+
+    # This will cause the first event to get called.
+    update_hierarchy(go, 0.0)
+    assert elapsed_time == 0.0
+    assert callback_count == 1
+
+    # But this wont
+    update_hierarchy(go, 0.0)
+    update_hierarchy(go, 0.1)
+    assert elapsed_time == 0.0
+    assert callback_count == 1
+
+    # But this will now trigger the second event.
+    update_hierarchy(go, 0.1)
+    assert elapsed_time == 0.2
+    assert callback_count == 2

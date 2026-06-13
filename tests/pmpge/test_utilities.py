@@ -466,5 +466,4 @@ def test_calculate_fps_without_callback():
     assert calc.callback_interval == 1.0
     assert calc.next_callback == 1.0
 
-# TODO: Test RateLimit
 # TODO: Test add_rate_limited_func

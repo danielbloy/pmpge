@@ -242,26 +242,32 @@ if is_running_on_desktop():
 class RateLimit:
     """
     Rate limits calling the desired function to a maximum number of calls per second.
-    If the rate cannot be sustained, calls are dropped.
+    If the rate cannot be sustained, callbacks are dropped. This class does not
+    guarantee the rate of callbacks is consistent, just that the number of calls is
+    equal too or below the desired rate.
+
+    This class is in here as we use it to control the rate of `update()` and `draw()`
+    calls on microcontrollers and this file should not have any dependencies on
+    other files in the project.
     """
     func: Callable[[float], None]
-    rate: int
-    elapsed_time: float  # The duration of this time period
-    next_call: float  # Counts down to the next call
-    call_delta: float
+    _rate: int
+    _elapsed_time: float  # The duration of this time period
+    _next_call: float  # Counts down to the next call
+    _call_delta: float
 
     def __init__(self, func: Callable[[float], None], rate: int):
         self.func = func
-        self.rate = rate
-        self.elapsed_time = 0
-        self.next_call = 0
-        self.call_delta = 1 / rate
+        self._rate = rate
+        self._elapsed_time = 0
+        self._next_call = 0
+        self._call_delta = 1 / rate
 
     def __call__(self, dt: float):
-        elapsed_time = self.elapsed_time
+        elapsed_time = self._elapsed_time
         elapsed_time += dt
 
-        next_call = self.next_call
+        next_call = self._next_call
         next_call -= dt
 
         if next_call <= 0:
@@ -271,12 +277,12 @@ class RateLimit:
 
             # Set the next time to call the function. However, if that has already passed
             # then drop frame(s) to catch up.
-            next_call += self.call_delta
+            next_call += self._call_delta
             if next_call <= 0:
                 next_call = 0
 
-        self.elapsed_time = elapsed_time
-        self.next_call = next_call
+        self._elapsed_time = elapsed_time
+        self._next_call = next_call
 
 
 __execute: bool = False
@@ -374,7 +380,6 @@ def execute(game, background_colour: tuple[int, int, int] | None = None):
 
                 update_rate_limited(delta_time)
                 graphics_rate_limited(delta_time)
-
 
 
     finally:

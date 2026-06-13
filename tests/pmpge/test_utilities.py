@@ -2,10 +2,10 @@ import pytest
 
 from pmpge.game import Game
 from pmpge.game_object import GameObject, update_hierarchy
+from pmpge.utilities import add_rate_limited_func
 from pmpge.utilities import calculate_scaling_factor, Borders, CalculateFps
 from tests.pmpge.testing_utilities import are_almost_equal
 from tests.pmpge.testing_utilities import with_config_file
-from utilities import add_rate_limited_func
 
 
 def test_scaling_factor_when_display_too_small():

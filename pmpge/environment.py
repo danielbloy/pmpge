@@ -239,7 +239,7 @@ if is_running_on_desktop():
     from collections.abc import Callable
 
 
-class RateLimit:
+class RateLimiter:
     """
     Rate limits calling the desired function to a maximum number of calls per second.
     If the rate cannot be sustained, callbacks are dropped. This class does not
@@ -257,6 +257,9 @@ class RateLimit:
     _call_delta: float
 
     def __init__(self, func: Callable[[float], None], rate: int):
+        if rate <= 0:
+            raise ValueError("rate must be positive")
+        
         self.func = func
         self._rate = rate
         self._elapsed_time = 0
@@ -368,8 +371,8 @@ def execute(game, background_colour: tuple[int, int, int] | None = None):
         else:
             # On a microcontroller, we implement our own game loop. We implement our own
             # rate limiting for both the update logic and the draw logic.
-            update_rate_limited = RateLimit(lambda dt: update(dt), config.UPDATE_FRAMERATE)
-            graphics_rate_limited = RateLimit(lambda _: graphics_draw(None), config.GRAPHICS_FRAMERATE)
+            update_limiter = RateLimiter(lambda dt: update(dt), config.UPDATE_FRAMERATE)
+            draw_limiter = RateLimiter(lambda _: graphics_draw(None), config.GRAPHICS_FRAMERATE)
             import time
             time_func = time.monotonic
             last = time_func()
@@ -378,8 +381,8 @@ def execute(game, background_colour: tuple[int, int, int] | None = None):
                 delta_time = now - last
                 last = now
 
-                update_rate_limited(delta_time)
-                graphics_rate_limited(delta_time)
+                update_limiter(delta_time)
+                draw_limiter(delta_time)
 
 
     finally:

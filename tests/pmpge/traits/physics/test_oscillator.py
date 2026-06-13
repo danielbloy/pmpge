@@ -48,6 +48,7 @@ def test_vertical_oscillator_without_velocity():
         update_hierarchy(go, 0)
 
 
+# noinspection PyUnresolvedReferences
 def test_horizontal_oscillator_hit_max():
     """
     Some simple tests to ensure it oscillates at the limit.
@@ -96,6 +97,7 @@ def test_horizontal_oscillator_hit_max():
     assert go.ay == 0
 
 
+# noinspection PyUnresolvedReferences
 def test_horizontal_oscillator_hit_min():
     """
     Some simple tests to ensure it oscillates at the limit.
@@ -136,6 +138,7 @@ def test_horizontal_oscillator_hit_min():
     assert go.ay == 0
 
 
+# noinspection PyUnresolvedReferences
 def test_vertical_oscillator_hit_max():
     """
     Some simple tests to ensure it oscillates at the limit.
@@ -184,6 +187,7 @@ def test_vertical_oscillator_hit_max():
     assert go.ay == -10
 
 
+# noinspection PyUnresolvedReferences
 def test_vertical_oscillator_hit_min():
     """
     Some simple tests to ensure it oscillates at the limit.

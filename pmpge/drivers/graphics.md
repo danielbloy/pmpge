@@ -42,8 +42,8 @@ Called once per frame. Called before any other display operations.
 ### `draw(surface)`
 
 Called once per frame and passed a surface object that is implementation-dependent.
-Called after the game is drawn to the screen to allow for any final operations such
-as scaling or flipping.
+This function is responsible for drawing the hierarchy of GameObjects (from
+`game.root`) and then calling `game.draw` followed by any scaling or other effects.
 
 #### Parameters
 

@@ -57,7 +57,7 @@ class RelativeToParent:
         self.offset_x: int = offset_x
         self.offset_y: int = offset_y
 
-    def update(self, dt: int):
+    def update(self, dt: float):
         parent = self.parent
         if parent:
             self.x = parent.x + self.offset_x
@@ -76,7 +76,7 @@ class AngularRelativeToParent:
     cx: int
     cy: int
 
-    def update(self, dt: int):
+    def update(self, dt: float):
         parent = self.parent
         if parent:
             self.cx = int(parent.x)

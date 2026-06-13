@@ -1,11 +1,28 @@
 # This file contains a range of utility functions used throughout the project.
 # Many are extracted from the various drivers to make it easier to test.
-
-from pmpge.environment import is_running_on_desktop
+from pmpge.environment import is_running_on_desktop, RateLimiter
+from pmpge.game import Game
+from pmpge.game_object import GameObject
 
 # These are not available in CircuitPython.
 if is_running_on_desktop():
     from collections.abc import Callable
+
+
+################################################################################
+# G E N E R A L    U T I L I T I E S
+################################################################################
+
+
+def add_rate_limited_func(thing: Game | GameObject, func: Callable[[float], None], rate: int = 5):
+    """
+    Adds a rate-limited function to either a Game or GameObject.
+    """
+    limiter = RateLimiter(func, rate)
+    if type(thing) is Game:
+        thing.add_update_func(limiter)
+    else:
+        thing.add_update_handler(lambda _, dt: limiter(dt))
 
 
 ################################################################################

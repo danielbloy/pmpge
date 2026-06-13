@@ -86,7 +86,7 @@ class Game:
 
     def add_update_func(self, func: Callable[[float], None]):
         """
-        Adds a custom update function that is called before the root GameObject is updated.
+        Adds a custom update function which is called before the root GameObject is updated.
         """
         self.__update_funcs.append(func)
 

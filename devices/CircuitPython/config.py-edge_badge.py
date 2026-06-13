@@ -1,7 +1,3 @@
-# GRAPHICS_FRAMERATE = 60
-# GRAPHICS_FRAMERATE = None
-GRAPHICS_STATS = True
-
 # Settings for the shift register controller
 from board import BUTTON_CLOCK, BUTTON_OUT, BUTTON_LATCH
 

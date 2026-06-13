@@ -8,6 +8,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+# TODO: Add in examples for all of the traits.
+
 # Folder to start the search. Presently, any folder inside the directory containing this script.
 root_folder = Path(__file__).parent
 

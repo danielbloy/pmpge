@@ -65,6 +65,8 @@
 # * Create a single colour bitmap for the background.
 #   See: https://learn.adafruit.com/circuitpython-display-support-using-displayio/draw-pixels
 
+import time
+
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 import adafruit_imageload
 # noinspection PyUnresolvedReferences,PyPackageRequirements
@@ -112,18 +114,32 @@ graphics_stats = False
 
 # The following updates the FPS counter text. This only gets executed if GRAPHICS_STATS
 # is present in the config file and set to True
-def display_fps(fps: int):
-    fps_text.text = str(fps)
+def display_update_fps(fps: int):
+    update_fps_text.text = str(fps)
 
 
-fps: CalculateFps = CalculateFps(callback_interval=0.5, callback=display_fps)
-# The text label is anchored in the bottom right hand corner of the screen. We only use
-# the default font it is exactly 8 pixels high if you ignore the descender part so we
-# need to drop it down so to avoid it overlapping the game area with an 8 pixel lower
-# border.
-fps_text = label.Label(terminalio.FONT, text="00", color=0xFFFFFF)
-fps_text.anchored_position = (display.width - 1, display.height + 2)
-fps_text.anchor_point = (1.0, 1.0)
+# We manually track the time between each display call so we can show the
+# game update fps and the screen draw fps separately.
+time_func = time.monotonic
+last_draw: float = 0.0
+
+
+def display_draw_fps(fps: int):
+    draw_fps_text.text = str(fps)
+
+
+update_fps: CalculateFps = CalculateFps(callback_interval=0.5, callback=display_update_fps)
+draw_fps: CalculateFps = CalculateFps(callback_interval=0.5, callback=display_draw_fps)
+# The text labels are anchored in the bottom left and bottom right hand corners of the screen.
+# We only use the default font it is exactly 8 pixels high if you ignore the descender part so
+# we need to drop it down so to avoid it overlapping the game area with an 8 pixel lower border.
+update_fps_text = label.Label(terminalio.FONT, text="00", color=0xFFFFFF)
+update_fps_text.anchored_position = (0, display.height + 2)
+update_fps_text.anchor_point = (0.0, 1.0)
+
+draw_fps_text = label.Label(terminalio.FONT, text="00", color=0xFFFFFF)
+draw_fps_text.anchored_position = (display.width - 1, display.height + 2)
+draw_fps_text.anchor_point = (1.0, 1.0)
 
 
 def init(g: Game, _: int, __: int, bgc: tuple[int, int, int]):
@@ -131,7 +147,7 @@ def init(g: Game, _: int, __: int, bgc: tuple[int, int, int]):
     Initialises the display by creating the desired background, building the entire
     hierarchy of TileGrids and turning on the display.
     """
-    global game, manual_refresh, manual_refresh_rate, graphics_stats
+    global game, last_draw, manual_refresh, manual_refresh_rate, graphics_stats
     game = g
 
     # Here we build the entire graphics hierarchy in order to place the tileGrid
@@ -174,17 +190,21 @@ def init(g: Game, _: int, __: int, bgc: tuple[int, int, int]):
     # Determine if we should manually refresh the display.
     from pmpge.environment import config
 
-    if hasattr(config, 'GRAPHICS_FRAMERATE'):
-        manual_refresh = True
-        manual_refresh_rate = config.GRAPHICS_FRAMERATE
+    if hasattr(config, 'GRAPHICS_MANUAL_REFRESH'):
+        manual_refresh = config.GRAPHICS_MANUAL_REFRESH
+        # noinspection PyUnresolvedReferences
+        manual_refresh_rate = config.GRAPHICS_FRAMERATE  # This property is guaranteed to be set on a microcontroller
 
     display.auto_refresh = not manual_refresh
 
     if hasattr(config, 'GRAPHICS_STATS'):
         graphics_stats = config.GRAPHICS_STATS
-        overlay_group.append(fps_text)
+        overlay_group.append(update_fps_text)
+        overlay_group.append(draw_fps_text)
 
-    fps.reset()
+    update_fps.reset()
+    draw_fps.reset()
+    last_draw = time_func()
 
     # Finally we turn on the display
     display.brightness = 1
@@ -219,13 +239,21 @@ def update(dt: float):
     Calculates the FPS and displays it on the overlay
     """
     if graphics_stats:
-        fps.update(dt)
+        update_fps.update(dt)
 
 
 def draw(screen):
     """
-    We have to process the entire hierarchy to ensure visbility is set.
+    We have to process the entire hierarchy to ensure visbility is set. We also do a
+    little bit of maths if we are displaying the graphics stats to calculate the
+    framerate (because draw does not get the time delta).
     """
+    if graphics_stats:
+        global last_draw
+        now = time_func()
+        draw_fps.update(now - last_draw)
+        last_draw = now
+
     # noinspection PyUnresolvedReferences
     draw_hierarchy(game.root, screen, draw_only_visible=False)
     # noinspection PyUnresolvedReferences

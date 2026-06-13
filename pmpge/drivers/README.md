@@ -25,7 +25,8 @@ of the framework:
   scaling factor for the graphics. Typically used to stop small displays such as
   160 x 120 from being upscaled on larger screens.
 * `GRAPHICS_MANUAL_REFRESH` - Only applies to microcontrollers, not Pygame Zero. If set,
-  the game will use .
+  the game will manually control the refresh rate (as opposed to automatically) to the
+  desired rate set by the `GRAPHICS_FRAMERATE` configuration property.
 
 ## Implementing a driver
 

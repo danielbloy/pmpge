@@ -174,10 +174,10 @@ def init(g: Game, _: int, __: int, bgc: tuple[int, int, int]):
     # Determine if we should manually refresh the display.
     from pmpge.environment import config
 
-    # TODO: Rework this so it is GRAPHICS_AUTO_REFRESH/GRAPHICS_MANUAL_REFRESH
-    if hasattr(config, 'GRAPHICS_FRAMERATE'):
-        manual_refresh = True
-        manual_refresh_rate = config.GRAPHICS_FRAMERATE
+    if hasattr(config, 'GRAPHICS_MANUAL_REFRESH'):
+        manual_refresh = config.GRAPHICS_MANUAL_REFRESH
+        # noinspection PyUnresolvedReferences
+        manual_refresh_rate = config.GRAPHICS_FRAMERATE  # This property is guaranteed to be set on a microcontroller
 
     display.auto_refresh = not manual_refresh
 

@@ -234,6 +234,51 @@ def import_driver(module: str):
 # E X E C U T I O N
 ################################################################################
 
+# These are not available in CircuitPython.
+if is_running_on_desktop():
+    from collections.abc import Callable
+
+
+class RateLimit:
+    """
+    Rate limits calling the desired function to a maximum number of calls per second.
+    If the rate cannot be sustained, calls are dropped.
+    """
+    func: Callable[[float], None]
+    rate: int
+    elapsed_time: float  # The duration of this time period
+    next_call: float  # Counts down to the next call
+    call_delta: float
+
+    def __init__(self, func: Callable[[float], None], rate: int):
+        self.func = func
+        self.rate = rate
+        self.elapsed_time = 0
+        self.next_call = 0
+        self.call_delta = 1 / rate
+
+    def __call__(self, dt: float):
+        elapsed_time = self.elapsed_time
+        elapsed_time += dt
+
+        next_call = self.next_call
+        next_call -= dt
+
+        if next_call <= 0:
+            # Call the function, passing in the elapsed time.
+            self.func(elapsed_time)
+            elapsed_time = 0
+
+            # Set the next time to call the function. However, if that has already passed
+            # then drop frame(s) to catch up.
+            next_call += self.call_delta
+            if next_call <= 0:
+                next_call = 0
+
+        self.elapsed_time = elapsed_time
+        self.next_call = next_call
+
+
 __execute: bool = False
 
 
@@ -297,7 +342,8 @@ def execute(game, background_colour: tuple[int, int, int] | None = None):
 
         if is_running_on_desktop():
             # On a desktop environment, we need to inject our own draw() and update()
-            # methods to interact with pygame zero.
+            # methods to interact with pygame zero. Pygame Zero automatically rate
+            # limits the updates to approximately 60 fps.
             mod = sys.modules['__main__']
             screen = None
 
@@ -314,7 +360,10 @@ def execute(game, background_colour: tuple[int, int, int] | None = None):
             pgzrun.go()
 
         else:
-            # On a microcontroller, we implement our own game loop.
+            # On a microcontroller, we implement our own game loop. We implement our own
+            # rate limiting for both the update logic and the draw logic.
+            update_rate_limited = RateLimit(lambda dt: update(dt), config.UPDATE_FRAMERATE)
+            graphics_rate_limited = RateLimit(lambda _: graphics_draw(None), config.GRAPHICS_FRAMERATE)
             import time
             time_func = time.monotonic
             last = time_func()
@@ -323,8 +372,10 @@ def execute(game, background_colour: tuple[int, int, int] | None = None):
                 delta_time = now - last
                 last = now
 
-                update(delta_time)
-                graphics_draw(None)
+                update_rate_limited(delta_time)
+                graphics_rate_limited(delta_time)
+
+
 
     finally:
         __execute = False
@@ -381,11 +432,25 @@ def import_config():
 
 import_config()
 
+################################################################################
+# P L A T F O R M    S P E C I F I C    S E T U P
+################################################################################
+
 if is_running_on_desktop():
     # This is required to bootstrap the pygame display to allow some of the
     # game setup code to work.
     import pgzrun
     import pygame
+
+# Setup the default values for frame rates if they are not specified in the config.
+if is_running_on_microcontroller():
+    if not hasattr(config, 'UPDATE_FRAMERATE'):
+        config.UPDATE_FRAMERATE = 60
+        print(f"Setting UPDATE_FRAMERATE = {config.UPDATE_FRAMERATE}")
+
+    if not hasattr(config, 'GRAPHICS_FRAMERATE'):
+        config.GRAPHICS_FRAMERATE = 30
+        print(f"Setting GRAPHICS_FRAMERATE = {config.GRAPHICS_FRAMERATE}")
 
 # Now we will do some CircuitPython device specific initialisation providing defaults
 if is_running_on_circuitpython():
@@ -423,5 +488,10 @@ if is_running_on_circuitpython():
     except ImportError:
         pass
 
-# Initialise the device next to allow it to perform any setup.
+################################################################################
+# D E V I C E    S P E C I F I C    S E T U P
+################################################################################
+
+# Initialise the device next to allow it to perform any setup. This also gives the
+# device driver the opportunity to override any default configuration should it need to.
 import_driver('device')

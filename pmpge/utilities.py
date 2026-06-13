@@ -1,6 +1,6 @@
 # This file contains a range of utility functions used throughout the project.
 # Many are extracted from the various drivers to make it easier to test.
-from pmpge.environment import is_running_on_desktop
+from pmpge.environment import is_running_on_desktop, RateLimit
 from pmpge.game import Game
 from pmpge.game_object import GameObject
 
@@ -12,45 +12,6 @@ if is_running_on_desktop():
 ################################################################################
 # G E N E R A L    U T I L I T I E S
 ################################################################################
-
-class RateLimit:
-    """
-    Rate limits calling the desired function to a maximum number of calls per second.
-    If the rate cannot be sustained, calls are dropped.
-    """
-    func: Callable[[float], None]
-    rate: int
-    elapsed_time: float  # The duration of this time period
-    next_call: float  # Counts down to the next call
-    call_delta: float
-
-    def __init__(self, func: Callable[[float], None], rate: int):
-        self.func = func
-        self.rate = rate
-        self.elapsed_time = 0
-        self.next_call = 0
-        self.call_delta = 1 / rate
-
-    def __call__(self, dt: float):
-        elapsed_time = self.elapsed_time
-        elapsed_time += dt
-
-        next_call = self.next_call
-        next_call -= dt
-
-        if next_call <= 0:
-            # Call the function, passing in the elapsed time.
-            self.func(elapsed_time)
-            elapsed_time = 0
-
-            # Set the next time to call the function. However, if that has already passed
-            # then drop frame(s) to catch up.
-            next_call += self.call_delta
-            if next_call <= 0:
-                next_call = 0
-
-        self.elapsed_time = elapsed_time
-        self.next_call = next_call
 
 
 def add_rate_limited_func(thing: Game | GameObject, func: Callable[[float], None], rate: int = 5):

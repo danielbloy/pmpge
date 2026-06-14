@@ -25,8 +25,8 @@
 # The following configuration values are required to use this driver (with
 # example values for an EdgeBadge):
 #
-# from board import BUTTON_CLOCK, BUTTON_OUT, BUTTON_LATCH
-# BUTTON_MAPPING = [7, 6, 0, 1, 3, 5, 4, 2]
+# from board import CONTROLLER_CLOCK, CONTROLLER_OUT, CONTROLLER_LATCH
+# CONTROLLER_MAPPING = [7, 6, 0, 1, 3, 5, 4, 2]
 #
 # REFERENCES
 #
@@ -50,14 +50,14 @@ def setup():
     global shift_register
     from pmpge.environment import config
 
-    for i, key in enumerate(config.BUTTON_MAPPING):
+    for i, key in enumerate(config.CONTROLLER_MAPPING):
         button_map[i] = key
 
     shift_register = ShiftRegisterKeys(
-        clock=config.BUTTON_CLOCK,
-        data=config.BUTTON_OUT,
-        latch=config.BUTTON_LATCH,
-        key_count=len(config.BUTTON_MAPPING),
+        clock=config.CONTROLLER_CLOCK,
+        data=config.CONTROLLER_OUT,
+        latch=config.CONTROLLER_LATCH,
+        key_count=len(config.CONTROLLER_MAPPING),
         value_when_pressed=True)
 
 

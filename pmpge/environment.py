@@ -225,7 +225,7 @@ def import_driver(module: str):
     else:
         # FUTURE: This could benefit from further investigation to see if we can
         #         do something better.
-        mod = __import__(driver)
+        __import__(driver)
         mod = sys.modules[driver]
         return mod
 
@@ -259,7 +259,7 @@ class RateLimiter:
     def __init__(self, func: Callable[[float], None], rate: int):
         if rate <= 0:
             raise ValueError("rate must be positive")
-        
+
         self.func = func
         self._rate = rate
         self._elapsed_time = 0
@@ -483,8 +483,23 @@ if is_running_on_circuitpython():
                 config.GRAPHICS_DRIVER = "pmpge.drivers.graphics.displayio"
                 print(f"Setting GRAPHICS_DRIVER = {config.GRAPHICS_DRIVER}")
 
+        # If a controller is not specified, then pick one based on the presence of other
+        # configuration values.
         if not hasattr(config, 'CONTROLLER_DRIVER'):
-            if hasattr(board, 'BUTTON_CLOCK') and hasattr(board, 'BUTTON_OUT') and hasattr(board, 'BUTTON_LATCH'):
+            board_shift_register = (hasattr(board, 'BUTTON_CLOCK') and
+                                    hasattr(board, 'BUTTON_OUT') and
+                                    hasattr(board, 'BUTTON_LATCH'))
+            controller_shift_register = (hasattr(config, 'CONTROLLER_CLOCK') and
+                                         hasattr(config, 'CONTROLLER_OUT') and
+                                         hasattr(config, 'CONTROLLER_LATCH'))
+            if board_shift_register or controller_shift_register:
+                # If we pulled the values from the board but they are not specified
+                # on config then copy them across.
+                if not controller_shift_register:
+                    setattr(config, 'CONTROLLER_CLOCK', board.BUTTON_CLOCK)
+                    setattr(config, 'CONTROLLER_OUT', board.BUTTON_OUT)
+                    setattr(config, 'CONTROLLER_LATCH', board.BUTTON_LATCH)
+
                 print("Device buttons connected by shift register")
                 config.CONTROLLER_DRIVER = "pmpge.drivers.controller.circuitpython_shift_register"
             else:

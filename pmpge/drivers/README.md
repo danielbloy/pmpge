@@ -27,6 +27,18 @@ of the framework:
 * `GRAPHICS_MANUAL_REFRESH` - Only applies to microcontrollers, not Pygame Zero. If set,
   the game will manually control the refresh rate (as opposed to automatically) to the
   desired rate set by the `GRAPHICS_FRAMERATE` configuration property.
+* `CONTROLLER_CLOCK`, `CONTROLLER_OUT`, `CONTROLLER_LATCH`, `CONTROLLER_MAPPING` - Only
+  applies to microcontrollers, not Pygame Zero. Used to configure a controller that
+  uses a shift register to read button states. See the shift register controller device
+  driver for more details.
+* `CONTROLLER_PULLUP` - Only applies to microcontrollers, not Pygame Zero. Used when the
+  controller buttons are directly connected to microcontroller pins. Used to specify if
+  the buttons use pullup resistors or not. If not set, the default value will be True.
+* `CONTROLLER_START`, `CONTROLLER_A` etc. - Only applies to microcontrollers, not Pygame
+  Zero. Used to specif which pin each controller button is connected to. There is a
+  configuration value for each of the buttons. Buttons that are not provided values are
+  assumed to not be present on the controller. See the pins controller device driver for
+  more details.
 
 ## Implementing a driver
 

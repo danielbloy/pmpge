@@ -1,8 +1,7 @@
 """
-Creates sprites and on the screen, alternating visibility. This test also
-uses the same resource for each sprite which can be used to validate
-optimisations on image resource sharing. This is useful for visually checking
-that visibility works.
+Creates sprites on the screen, alternating visibility of each item in a
+column. This test also uses the same resource for each sprite which can
+be used to validate optimisations on image resource sharing.
 """
 import validate.utils as utils
 from pmpge.game import Game
@@ -24,21 +23,26 @@ sprite_data: list[test_data.SpriteData] = [
     test_data.SpriteData(140, 100, "alien.png"),
 ]
 
+row_count = 4
 index = 0
-count = len(sprite_data)
 
 
 def switch_visibility(_: float):
     global index
-    sprite_data[index].sprite.visible = True
-    index = (index + 1) % count
-    sprite_data[index].sprite.visible = False
+
+    on = index
+    index = (index + 1) % row_count
+    off = index
+
+    for modifier in (0, 4, 8):
+        sprite_data[on + modifier].sprite.visible = True
+        sprite_data[off + modifier].sprite.visible = False
 
 
 def setup(game: Game):
     game.background_colour = (250, 120, 0)  # Orange
     test_data.create_sprites(game, sprite_data)
-    add_rate_limited_func(game, switch_visibility, rate=12)
+    add_rate_limited_func(game, switch_visibility, rate=4)
 
 
 if utils.should_execute(__name__):

@@ -18,11 +18,16 @@ from pmpge.graphics import game_object_hierarchy_changed
 from pmpge.utilities import add_rate_limited_func
 from validate import test_data
 
+SCREEN_WIDTH = 160
+SCREEN_HEIGHT = 120
+
 sprite_data_row_1: list[test_data.SpriteData] = [
-    test_data.SpriteData(65, 15, "alien_c.png"),
-    test_data.SpriteData(50, 15, "alien.png"),
-    test_data.SpriteData(35, 15, "alien_c.png"),
-    test_data.SpriteData(20, 15, "alien.png"),
+    test_data.SpriteData(6, 6, "red-8x8.png"),
+    test_data.SpriteData(8, 7, "orange-8x8.png"),
+    test_data.SpriteData(10, 8, "yellow-8x8.png"),
+    test_data.SpriteData(12, 9, "green-8x8.png"),
+    test_data.SpriteData(14, 10, "blue-8x8.png"),
+    test_data.SpriteData(16, 11, "violet-8x8.png"),
 ]
 
 sprite_data_row_2: list[test_data.SpriteData] = [
@@ -85,14 +90,14 @@ def destroy_children(_: float):
 
 
 def setup(game: Game):
-    game.background_colour = (250, 120, 0)  # Orange
+    game.background_colour = (0, 0, 0)  # Black
     add_rate_limited_func(game, rebuild_graphics_hierarchy, rate=1)
 
     test_data.create_sprites(game, sprite_data_row_1, add_to_root=False)
-    game.root.add_child(sprite_data_row_1[3].sprite)
-    sprite_data_row_1[3].sprite.add_child(sprite_data_row_1[2].sprite)
-    sprite_data_row_1[2].sprite.add_child(sprite_data_row_1[1].sprite)
-    sprite_data_row_1[1].sprite.add_child(sprite_data_row_1[0].sprite)
+    last = len(sprite_data_row_1) - 1
+    game.root.add_child(sprite_data_row_1[last].sprite)
+    for i in range(last, 0, -1):
+        sprite_data_row_1[i].sprite.add_child(sprite_data_row_1[i - 1].sprite)
 
     test_data.create_sprites(game, sprite_data_row_2, add_to_root=False)
     game.root.add_child(sprite_data_row_2[4].sprite)
@@ -100,11 +105,11 @@ def setup(game: Game):
     sprite_data_row_2[3].sprite.add_child(sprite_data_row_2[2].sprite)
     sprite_data_row_2[2].sprite.add_child(sprite_data_row_2[1].sprite)
     sprite_data_row_2[1].sprite.add_child(sprite_data_row_2[0].sprite)
-    add_rate_limited_func(game, alternate_activated, rate=3)
+    add_rate_limited_func(game, alternate_activated, rate=1)
 
     test_data.create_sprites(game, sprite_data_row_3, add_to_root=False)
     game.root.add_child(sprite_data_row_3[0].sprite)
-    add_rate_limited_func(game, add_children, rate=3)
+    add_rate_limited_func(game, add_children, rate=1)
 
     test_data.create_sprites(game, sprite_data_row_4, add_to_root=False)
     game.root.add_child(sprite_data_row_4[0].sprite)
@@ -112,8 +117,8 @@ def setup(game: Game):
     sprite_data_row_4[1].sprite.add_child(sprite_data_row_4[2].sprite)
     sprite_data_row_4[2].sprite.add_child(sprite_data_row_4[3].sprite)
     sprite_data_row_4[3].sprite.add_child(sprite_data_row_4[4].sprite)
-    add_rate_limited_func(game, destroy_children, rate=3)
+    add_rate_limited_func(game, destroy_children, rate=1)
 
 
 if utils.should_execute(__name__):
-    utils.execute(setup)
+    utils.execute(setup, screen_width=SCREEN_WIDTH, screen_height=SCREEN_HEIGHT)

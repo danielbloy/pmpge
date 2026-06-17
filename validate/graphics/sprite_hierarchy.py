@@ -1,10 +1,12 @@
 """
 Creates three rows of sprites (parents to the left, children to the right)
 to check the hierarchy works:
-* The Top row are created child first but added parent first. If the
-  parents are displayed on top of the children then the z-order does not work
-* The second row alternates active mid-way through the hierarchy which should
-  hide and show half the row.
+* The first row of sprites are created parent first and added to the hierarchy parent first.
+  If the parents are displayed on top of the children then the z-order does not work.
+  Red (left most) should be on the bottom, purple (right most) should be on the top.
+* The second row of sprites are created child first and added to the hierarchy parent first.
+  If the parents are displayed on top of the children then the z-order does not work.
+  Red (left most) should be on the bottom, purple (right most) should be on the top.
 * The third row is partially created at start-up and then later extra children
   are added.
 * The fourth row is completely created at start-up and then later the children
@@ -21,46 +23,43 @@ from validate import test_data
 SCREEN_WIDTH = 160
 SCREEN_HEIGHT = 120
 
-sprite_data_row_1: list[test_data.SpriteData] = [
-    test_data.SpriteData(6, 6, "red-8x8.png"),
-    test_data.SpriteData(8, 7, "orange-8x8.png"),
-    test_data.SpriteData(10, 8, "yellow-8x8.png"),
-    test_data.SpriteData(12, 9, "green-8x8.png"),
-    test_data.SpriteData(14, 10, "blue-8x8.png"),
-    test_data.SpriteData(16, 11, "violet-8x8.png"),
+create_parent_first_add_parent_first: list[test_data.SpriteData] = [
+    test_data.SpriteData(6, 6, "red-8x8.png"),  # Root most - drawn first (on bottom)
+    test_data.SpriteData(11, 8, "orange-8x8.png"),
+    test_data.SpriteData(16, 6, "yellow-8x8.png"),
+    test_data.SpriteData(21, 8, "green-8x8.png"),
+    test_data.SpriteData(26, 6, "blue-8x8.png"),
+    test_data.SpriteData(31, 8, "violet-8x8.png"),  # Leaf most - drawn last (on top)
 ]
 
-sprite_data_row_2: list[test_data.SpriteData] = [
-    test_data.SpriteData(140, 45, "alien_e.png"),
-    test_data.SpriteData(110, 45, "alien_d.png"),
-    test_data.SpriteData(80, 45, "alien_c.png"),
-    test_data.SpriteData(50, 45, "alien_b.png"),
-    test_data.SpriteData(20, 45, "alien.png"),
+create_child_first_add_parent_first: list[test_data.SpriteData] = [
+    test_data.SpriteData(31, 32, "violet-8x8.png"),  # Leaf most - drawn last (on top)
+    test_data.SpriteData(26, 30, "blue-8x8.png"),
+    test_data.SpriteData(21, 32, "green-8x8.png"),
+    test_data.SpriteData(16, 30, "yellow-8x8.png"),
+    test_data.SpriteData(11, 32, "orange-8x8.png"),
+    test_data.SpriteData(6, 30, "red-8x8.png"),  # Root most - drawn first (on bottom)
 ]
 
-sprite_data_row_3: list[test_data.SpriteData] = [
-    test_data.SpriteData(20, 75, "alien_e.png"),
-    test_data.SpriteData(50, 75, "alien_d.png"),
-    test_data.SpriteData(80, 75, "alien_c.png"),
-    test_data.SpriteData(110, 75, "alien_b.png"),
-    test_data.SpriteData(140, 75, "alien.png"),
+add_children_over_time: list[test_data.SpriteData] = [
+    test_data.SpriteData(20, 55, "alien_e.png"),
+    test_data.SpriteData(50, 55, "alien_d.png"),
+    test_data.SpriteData(80, 55, "alien_c.png"),
+    test_data.SpriteData(110, 55, "alien_b.png"),
+    test_data.SpriteData(140, 55, "alien.png"),
 ]
 
-sprite_data_row_4: list[test_data.SpriteData] = [
-    test_data.SpriteData(20, 105, "alien_e.png"),
-    test_data.SpriteData(50, 105, "alien_d.png"),
-    test_data.SpriteData(80, 105, "alien_c.png"),
-    test_data.SpriteData(110, 105, "alien_b.png"),
-    test_data.SpriteData(140, 105, "alien.png"),
+remove_children_over_time: list[test_data.SpriteData] = [
+    test_data.SpriteData(20, 85, "alien_e.png"),
+    test_data.SpriteData(50, 85, "alien_d.png"),
+    test_data.SpriteData(80, 85, "alien_c.png"),
+    test_data.SpriteData(110, 85, "alien_b.png"),
+    test_data.SpriteData(140, 85, "alien.png"),
 ]
 
 
 def rebuild_graphics_hierarchy(_: float):
     game_object_hierarchy_changed()
-
-
-def alternate_activated(_: float):
-    sprite_data_row_2[2].sprite.active = not sprite_data_row_2[2].sprite.active
 
 
 add_index = 0
@@ -69,14 +68,14 @@ add_index = 0
 def add_children(_: float):
     global add_index
 
-    if add_index >= len(sprite_data_row_3) - 1:
+    if add_index >= len(add_children_over_time) - 1:
         return
 
-    sprite_data_row_3[add_index].sprite.add_child(sprite_data_row_3[add_index + 1].sprite)
+    add_children_over_time[add_index].sprite.add_child(add_children_over_time[add_index + 1].sprite)
     add_index += 1
 
 
-destroy_index = len(sprite_data_row_4) - 1
+destroy_index = len(remove_children_over_time) - 1
 
 
 def destroy_children(_: float):
@@ -85,7 +84,7 @@ def destroy_children(_: float):
     if destroy_index < 0:
         return
 
-    sprite_data_row_4[destroy_index].sprite.destroy()
+    remove_children_over_time[destroy_index].sprite.destroy()
     destroy_index -= 1
 
 
@@ -93,30 +92,30 @@ def setup(game: Game):
     game.background_colour = (0, 0, 0)  # Black
     add_rate_limited_func(game, rebuild_graphics_hierarchy, rate=1)
 
-    test_data.create_sprites(game, sprite_data_row_1, add_to_root=False)
-    last = len(sprite_data_row_1) - 1
-    game.root.add_child(sprite_data_row_1[last].sprite)
+    # The list contains the parent first, leaf most last. We add them tin parent order (forward).
+    test_data.create_sprites(game, create_parent_first_add_parent_first, add_to_root=False)
+    last = len(create_parent_first_add_parent_first) - 1
+    game.root.add_child(create_parent_first_add_parent_first[0].sprite)
+    for i in range(last):
+        create_parent_first_add_parent_first[i].sprite.add_child(create_parent_first_add_parent_first[i + 1].sprite)
+
+    # The list contains the leaf most first, parent last. We add them in parent order (reverse).
+    test_data.create_sprites(game, create_child_first_add_parent_first, add_to_root=False)
+    last = len(create_child_first_add_parent_first) - 1
+    game.root.add_child(create_child_first_add_parent_first[last].sprite)
     for i in range(last, 0, -1):
-        sprite_data_row_1[i].sprite.add_child(sprite_data_row_1[i - 1].sprite)
+        create_child_first_add_parent_first[i].sprite.add_child(create_child_first_add_parent_first[i - 1].sprite)
 
-    test_data.create_sprites(game, sprite_data_row_2, add_to_root=False)
-    game.root.add_child(sprite_data_row_2[4].sprite)
-    sprite_data_row_2[4].sprite.add_child(sprite_data_row_2[3].sprite)
-    sprite_data_row_2[3].sprite.add_child(sprite_data_row_2[2].sprite)
-    sprite_data_row_2[2].sprite.add_child(sprite_data_row_2[1].sprite)
-    sprite_data_row_2[1].sprite.add_child(sprite_data_row_2[0].sprite)
-    add_rate_limited_func(game, alternate_activated, rate=1)
-
-    test_data.create_sprites(game, sprite_data_row_3, add_to_root=False)
-    game.root.add_child(sprite_data_row_3[0].sprite)
+    test_data.create_sprites(game, add_children_over_time, add_to_root=False)
+    game.root.add_child(add_children_over_time[0].sprite)
     add_rate_limited_func(game, add_children, rate=1)
 
-    test_data.create_sprites(game, sprite_data_row_4, add_to_root=False)
-    game.root.add_child(sprite_data_row_4[0].sprite)
-    sprite_data_row_4[0].sprite.add_child(sprite_data_row_4[1].sprite)
-    sprite_data_row_4[1].sprite.add_child(sprite_data_row_4[2].sprite)
-    sprite_data_row_4[2].sprite.add_child(sprite_data_row_4[3].sprite)
-    sprite_data_row_4[3].sprite.add_child(sprite_data_row_4[4].sprite)
+    test_data.create_sprites(game, remove_children_over_time, add_to_root=False)
+    game.root.add_child(remove_children_over_time[0].sprite)
+    remove_children_over_time[0].sprite.add_child(remove_children_over_time[1].sprite)
+    remove_children_over_time[1].sprite.add_child(remove_children_over_time[2].sprite)
+    remove_children_over_time[2].sprite.add_child(remove_children_over_time[3].sprite)
+    remove_children_over_time[3].sprite.add_child(remove_children_over_time[4].sprite)
     add_rate_limited_func(game, destroy_children, rate=1)
 
 

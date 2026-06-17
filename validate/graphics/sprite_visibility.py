@@ -59,7 +59,7 @@ def setup(game: Game):
 
     # Create the objects that we will cycle through
     test_data.create_sprites(game, cycle_visibility_data)
-    add_rate_limited_func(game, cycle_visibility, rate=4)
+    add_rate_limited_func(game, cycle_visibility, rate=2)
 
     # Create the object hierarchy and switch the third object.
     test_data.create_sprites(game, hierarchy, add_to_root=False)

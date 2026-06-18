@@ -6,8 +6,6 @@ import validate.graphics.sprites as sprites
 import validate.utils as utils
 
 modules = [borders, scaling, sprites, visibility, hierarchy]
-modules = [hierarchy]
-# TODO: Rework the hierarchy drawing example.
 
 if utils.should_execute(__name__):
     utils.execute_modules(modules)

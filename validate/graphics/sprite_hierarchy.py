@@ -41,7 +41,7 @@ create_child_first_add_parent_first: list[test_data.SpriteData] = [
     test_data.SpriteData(6, 30, "red-8x8.png"),  # Root most - drawn first (on bottom)
 ]
 
-add_children_over_time: list[test_data.SpriteData] = [  # TODO: replace with colours and add more.
+add_children_over_time: list[test_data.SpriteData] = [
     test_data.SpriteData(6, 55, "red-8x8.png"),  # Root most - drawn first (on bottom)
     test_data.SpriteData(11, 57, "orange-8x8.png"),
     test_data.SpriteData(16, 55, "yellow-8x8.png"),

@@ -53,4 +53,4 @@ jobs:
 
       - name: Run validation
         run: |
-          python validate/validate_all.py
+          python -m validate validate/validate_all.py

@@ -53,4 +53,4 @@ jobs:
 
       - name: Run validation
         run: |
-          python -m validate validate/validate_all.py
+          PYTHONPATH=. python validate/validate_all.py

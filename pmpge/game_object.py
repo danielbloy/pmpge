@@ -323,7 +323,7 @@ class GameObject:
         Returns all the children of this GameObject. If there are no children, an empty list
         is returned.
         """
-        return self._children.copy()
+        return self._children
 
     def add_child(self, child: Self) -> Self:
         """
@@ -529,10 +529,9 @@ def update_hierarchy(root: GameObject, dt: float):
     def process(go: GameObject):
         # Remove any destroyed children.
         children = go._children
-        for child in children:
-            if not child._alive:
-                go._parent = None
-                children.remove(child)
+        for child in [child for child in children if not child._alive]:
+            child._parent = None
+            children.remove(child)
 
         if not go.active:
             return

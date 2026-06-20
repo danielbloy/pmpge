@@ -528,10 +528,11 @@ def update_hierarchy(root: GameObject, dt: float):
     # noinspection PyProtectedMember
     def process(go: GameObject):
         # Remove any destroyed children.
-        children = go._children
-        for child in [child for child in children if not child._alive]:
-            child._parent = None
-            children.remove(child)
+        if GameObject.something_destroyed:
+            children = go._children
+            for child in [child for child in children if not child._alive]:
+                child._parent = None
+                children.remove(child)
 
         if not go.active:
             return

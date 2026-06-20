@@ -450,7 +450,7 @@ class GameObject:
             self._destroy_handlers.remove(handler)
         return self
 
-    not_allowed_attributes = ['draw', 'update', 'activated', 'deactivated', 'destroyed', 'merged']
+    not_allowed_attributes = frozenset(['draw', 'update', 'activated', 'deactivated', 'destroyed', 'merged'])
 
     def apply_trait(self, trait: Any) -> Self:
         """

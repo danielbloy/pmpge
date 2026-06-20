@@ -323,7 +323,7 @@ class GameObject:
         Returns all the children of this GameObject. If there are no children, an empty list
         is returned.
         """
-        return self._children.copy()
+        return self._children
 
     def add_child(self, child: Self) -> Self:
         """
@@ -450,7 +450,7 @@ class GameObject:
             self._destroy_handlers.remove(handler)
         return self
 
-    not_allowed_attributes = ['draw', 'update', 'activated', 'deactivated', 'destroyed', 'merged']
+    not_allowed_attributes = frozenset(['draw', 'update', 'activated', 'deactivated', 'destroyed', 'merged'])
 
     def apply_trait(self, trait: Any) -> Self:
         """
@@ -525,13 +525,15 @@ def update_hierarchy(root: GameObject, dt: float):
     Also removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
     """
 
+    something_destroyed = GameObject.something_destroyed
+
     # noinspection PyProtectedMember
     def process(go: GameObject):
         # Remove any destroyed children.
-        children = go._children
-        for child in children:
-            if not child._alive:
-                go._parent = None
+        if something_destroyed:
+            children = go._children
+            for child in [child for child in children if not child._alive]:
+                child._parent = None
                 children.remove(child)
 
         if not go.active:

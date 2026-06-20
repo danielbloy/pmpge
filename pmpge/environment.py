@@ -371,8 +371,11 @@ def execute(game, background_colour: tuple[int, int, int] | None = None):
         else:
             # On a microcontroller, we implement our own game loop. We implement our own
             # rate limiting for both the update logic and the draw logic.
-            update_limiter = RateLimiter(lambda dt: update(dt), config.UPDATE_FRAMERATE)
-            draw_limiter = RateLimiter(lambda _: graphics_draw(None), config.GRAPHICS_FRAMERATE)
+            def _draw_frame(_):
+                graphics_draw(None)
+
+            update_limiter = RateLimiter(update, config.UPDATE_FRAMERATE)
+            draw_limiter = RateLimiter(_draw_frame, config.GRAPHICS_FRAMERATE)
             import time
             time_func = time.monotonic
             last = time_func()

@@ -100,6 +100,30 @@ non-default driver requires setting of the following configuration properties:
 For more information on how to implement a driver, see the documentation in
 [drivers](./pmpge/drivers/README.md).
 
+## Alternative projects
+
+This project has specific goals of making it easier to write games in Python
+both with Pygame Zero and on microcontroller execution environments.
+The main audience for this project is Code Clubs. If this does not meet your
+needs, there are other projects that may do so. Other projects which I recommend
+are listed below.
+
+[MakeCode Arcade](https://arcade.makecode.com/) is a wonderful project that I
+use extensively in my Code Clubs. It is developed by Microsoft, runs in a
+browser for ease of use and supports downloading to microcontrollers. It is
+both blocks based as well as supporting TypeScript and Python. This is a great
+platform to move to after Scratch. I also provide some materials for it
+on my website [here](https://codeclubadventures.co.uk/progressing/#makecode-arcade).
+
+[Pyxel](https://kitao.github.io/pyxel/web/user-guide/) is a retro game engine for
+Python in the style of PICO-8. It is suitable for more advanced users. You can
+see more on the [GitHub](https://github.com/kitao/pyxel/tree/main) site.
+
+There is also [TIC-80](https://tic80.com/) and [PICO-8](https://www.lexaloffle.com/pico-8.php)
+which are virtual consoles that are similar to Pyxel. Pico-8 is programmed in Lua
+and TIC-80 supports a range of programming languages including Lua, JavaScript and
+Python (see [here](https://github.com/nesbox/TIC-80/wiki)).
+
 ## License
 
 All materials provided in this project is licensed under the Creative Commons

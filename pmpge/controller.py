@@ -101,9 +101,11 @@ class Controller:
         the first element is the button number and the second element is the
         button status (True for pressed, False for released).
         """
-        result: list[tuple[int, bool]] = []
-        current = Controller.values
         changed = Controller.changed
+        if not any(changed):
+            return []
+        result = []
+        current = Controller.values
         for i in range(12):
             if changed[i]:
                 result.append((i, current[i]))

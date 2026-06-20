@@ -119,6 +119,11 @@ on my website [here](https://codeclubadventures.co.uk/progressing/#makecode-arca
 Python in the style of PICO-8. It is suitable for more advanced users. You can
 see more on the [GitHub](https://github.com/kitao/pyxel/tree/main) site.
 
+There is also [TIC-80](https://tic80.com/) and [PICO-8](https://www.lexaloffle.com/pico-8.php)
+which are virtual consoles that are similar to Pyxel. Pico-8 is programmed in Lua
+and TIC-80 supports a range of programming languages including Lua, JavaScript and
+Python (see [here](https://github.com/nesbox/TIC-80/wiki)).
+
 ## License
 
 All materials provided in this project is licensed under the Creative Commons

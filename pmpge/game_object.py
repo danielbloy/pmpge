@@ -525,10 +525,12 @@ def update_hierarchy(root: GameObject, dt: float):
     Also removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
     """
 
+    something_destroyed = GameObject.something_destroyed
+
     # noinspection PyProtectedMember
     def process(go: GameObject):
         # Remove any destroyed children.
-        if GameObject.something_destroyed:
+        if something_destroyed:
             children = go._children
             for child in [child for child in children if not child._alive]:
                 child._parent = None

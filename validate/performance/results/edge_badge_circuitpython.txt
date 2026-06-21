@@ -27,61 +27,60 @@ No device driver
 Running on circuit with (160, 128) screen.
 Executing module <module 'validate.performance.baseline' from 'validate/performance/baseline.py'>
 No sound driver
-Peak: 74880 bytes, Used: 74880 bytes, Free: 71552 bytes, Total: 146432 bytes
-Peak: 105856 bytes, Used: 105856 bytes, Free: 40576 bytes, Total: 146432 bytes
-Peak: 126432 bytes, Used: 88064 bytes, Free: 58368 bytes, Total: 146432 bytes
-Peak: 126432 bytes, Used: 115232 bytes, Free: 31200 bytes, Total: 146432 bytes
-Peak: 126432 bytes, Used: 96576 bytes, Free: 49856 bytes, Total: 146432 bytes
-Peak: 126432 bytes, Used: 123744 bytes, Free: 22688 bytes, Total: 146432 bytes
-Peak: 126432 bytes, Used: 105536 bytes, Free: 40896 bytes, Total: 146432 bytes
-Peak: 126432 bytes, Used: 84048 bytes, Free: 62384 bytes, Total: 146432 bytes
-Peak: 126432 bytes, Used: 115760 bytes, Free: 30672 bytes, Total: 146432 bytes
-Peak: 126432 bytes, Used: 93824 bytes, Free: 52608 bytes, Total: 146432 bytes
-Achieved 59.70 updates/s
-Achieved 29.90 draws/s
-Peak: 126432 bytes, Used: 73120 bytes, Free: 73312 bytes, Total: 146432 bytes
+Peak: 75168 bytes, Used: 75168 bytes, Free: 71264 bytes, Total: 146432 bytes
+Peak: 102080 bytes, Used: 102080 bytes, Free: 44352 bytes, Total: 146432 bytes
+Peak: 126400 bytes, Used: 126400 bytes, Free: 20032 bytes, Total: 146432 bytes
+Peak: 126400 bytes, Used: 97616 bytes, Free: 48816 bytes, Total: 146432 bytes
+Peak: 126400 bytes, Used: 121552 bytes, Free: 24880 bytes, Total: 146432 bytes
+Peak: 126400 bytes, Used: 92848 bytes, Free: 53584 bytes, Total: 146432 bytes
+Peak: 126400 bytes, Used: 116784 bytes, Free: 29648 bytes, Total: 146432 bytes
+Peak: 126400 bytes, Used: 88016 bytes, Free: 58416 bytes, Total: 146432 bytes
+Peak: 126400 bytes, Used: 111952 bytes, Free: 34480 bytes, Total: 146432 bytes
+Peak: 126960 bytes, Used: 83216 bytes, Free: 63216 bytes, Total: 146432 bytes
+Achieved 59.80 updates/s
+Achieved 30.00 draws/s
+Peak: 126960 bytes, Used: 72976 bytes, Free: 73456 bytes, Total: 146432 bytes
 Executing module <module 'validate.performance.baseline_with_graphics' from 'validate/performance/baseline_with_graphics.py'>
-Peak: 95936 bytes, Used: 95936 bytes, Free: 50496 bytes, Total: 146432 bytes
-Peak: 112736 bytes, Used: 112736 bytes, Free: 33696 bytes, Total: 146432 bytes
-Peak: 126272 bytes, Used: 98720 bytes, Free: 47712 bytes, Total: 146432 bytes
-Peak: 126272 bytes, Used: 119776 bytes, Free: 26656 bytes, Total: 146432 bytes
-Peak: 126272 bytes, Used: 107072 bytes, Free: 39360 bytes, Total: 146432 bytes
-Peak: 126272 bytes, Used: 95440 bytes, Free: 50992 bytes, Total: 146432 bytes
-Peak: 126272 bytes, Used: 112176 bytes, Free: 34256 bytes, Total: 146432 bytes
-Peak: 126272 bytes, Used: 98112 bytes, Free: 48320 bytes, Total: 146432 bytes
-Peak: 126272 bytes, Used: 119424 bytes, Free: 27008 bytes, Total: 146432 bytes
-Peak: 126272 bytes, Used: 106256 bytes, Free: 40176 bytes, Total: 146432 bytes
-Achieved 35.50 updates/s
+Peak: 96016 bytes, Used: 96016 bytes, Free: 50416 bytes, Total: 146432 bytes
+Peak: 113104 bytes, Used: 113104 bytes, Free: 33328 bytes, Total: 146432 bytes
+Peak: 125552 bytes, Used: 95504 bytes, Free: 50928 bytes, Total: 146432 bytes
+Peak: 125552 bytes, Used: 114896 bytes, Free: 31536 bytes, Total: 146432 bytes
+Peak: 125552 bytes, Used: 99376 bytes, Free: 47056 bytes, Total: 146432 bytes
+Peak: 125552 bytes, Used: 114800 bytes, Free: 31632 bytes, Total: 146432 bytes
+Peak: 125552 bytes, Used: 101616 bytes, Free: 44816 bytes, Total: 146432 bytes
+Peak: 125552 bytes, Used: 117296 bytes, Free: 29136 bytes, Total: 146432 bytes
+Peak: 126672 bytes, Used: 103008 bytes, Free: 43424 bytes, Total: 146432 bytes
+Peak: 126672 bytes, Used: 121504 bytes, Free: 24928 bytes, Total: 146432 bytes
+Achieved 39.80 updates/s
 Achieved 30.00 draws/s
-Peak: 126272 bytes, Used: 86272 bytes, Free: 60160 bytes, Total: 146432 bytes
+Peak: 126672 bytes, Used: 86128 bytes, Free: 60304 bytes, Total: 146432 bytes
 Executing module <module 'validate.performance.baseline_with_graphics_small_display' from 'validate/performance/baseline_with_graphics_small_display.py'>
-Peak: 107696 bytes, Used: 107696 bytes, Free: 38736 bytes, Total: 146432 bytes
-Peak: 123424 bytes, Used: 123424 bytes, Free: 23008 bytes, Total: 146432 bytes
-Peak: 126592 bytes, Used: 113568 bytes, Free: 32864 bytes, Total: 146432 bytes
-Peak: 126592 bytes, Used: 99904 bytes, Free: 46528 bytes, Total: 146432 bytes
-Peak: 126592 bytes, Used: 120832 bytes, Free: 25600 bytes, Total: 146432 bytes
-Peak: 126592 bytes, Used: 107248 bytes, Free: 39184 bytes, Total: 146432 bytes
-Peak: 126608 bytes, Used: 99120 bytes, Free: 47312 bytes, Total: 146432 bytes
-Peak: 126608 bytes, Used: 118160 bytes, Free: 28272 bytes, Total: 146432 bytes
-Peak: 126640 bytes, Used: 106144 bytes, Free: 40288 bytes, Total: 146432 bytes
-Peak: 126640 bytes, Used: 124768 bytes, Free: 21664 bytes, Total: 146432 bytes
-Achieved 34.50 updates/s
+Peak: 107840 bytes, Used: 107840 bytes, Free: 38592 bytes, Total: 146432 bytes
+Peak: 123488 bytes, Used: 123488 bytes, Free: 22944 bytes, Total: 146432 bytes
+Peak: 125952 bytes, Used: 108352 bytes, Free: 38080 bytes, Total: 146432 bytes
+Peak: 125952 bytes, Used: 124672 bytes, Free: 21760 bytes, Total: 146432 bytes
+Peak: 125952 bytes, Used: 110448 bytes, Free: 35984 bytes, Total: 146432 bytes
+Peak: 125952 bytes, Used: 97072 bytes, Free: 49360 bytes, Total: 146432 bytes
+Peak: 125952 bytes, Used: 112208 bytes, Free: 34224 bytes, Total: 146432 bytes
+Peak: 126224 bytes, Used: 97600 bytes, Free: 48832 bytes, Total: 146432 bytes
+Peak: 126224 bytes, Used: 116448 bytes, Free: 29984 bytes, Total: 146432 bytes
+Peak: 126656 bytes, Used: 102576 bytes, Free: 43856 bytes, Total: 146432 bytes
+Achieved 38.70 updates/s
 Achieved 30.00 draws/s
-Peak: 126640 bytes, Used: 86272 bytes, Free: 60160 bytes, Total: 146432 bytes
+Peak: 126656 bytes, Used: 86128 bytes, Free: 60304 bytes, Total: 146432 bytes
 Executing module <module 'validate.performance.huge_hierarchy' from 'validate/performance/huge_hierarchy.py'>
 Skipping creating huge hierarchy of GameObjects on microcontroller
-Peak: 88656 bytes, Used: 88656 bytes, Free: 57776 bytes, Total: 146432 bytes
-Peak: 103312 bytes, Used: 103312 bytes, Free: 43120 bytes, Total: 146432 bytes
-Peak: 120720 bytes, Used: 120720 bytes, Free: 25712 bytes, Total: 146432 bytes
-Peak: 126736 bytes, Used: 71648 bytes, Free: 74784 bytes, Total: 146432 bytes
-Peak: 126736 bytes, Used: 87392 bytes, Free: 59040 bytes, Total: 146432 bytes
-Peak: 126736 bytes, Used: 101152 bytes, Free: 45280 bytes, Total: 146432 bytes
-Peak: 126736 bytes, Used: 116896 bytes, Free: 29536 bytes, Total: 146432 bytes
-Peak: 126816 bytes, Used: 67808 bytes, Free: 78624 bytes, Total: 146432 bytes
-Peak: 126816 bytes, Used: 83552 bytes, Free: 62880 bytes, Total: 146432 bytes
-Peak: 126816 bytes, Used: 97312 bytes, Free: 49120 bytes, Total: 146432 bytes
-Peak: 126816 bytes, Used: 113056 bytes, Free: 33376 bytes, Total: 146432 bytes
-Achieved 60.40 updates/s
-Achieved 30.20 draws/s
-Peak: 126816 bytes, Used: 63392 bytes, Free: 83040 bytes, Total: 146432 bytes
+Peak: 88416 bytes, Used: 88416 bytes, Free: 58016 bytes, Total: 146432 bytes
+Peak: 97600 bytes, Used: 97600 bytes, Free: 48832 bytes, Total: 146432 bytes
+Peak: 108832 bytes, Used: 108832 bytes, Free: 37600 bytes, Total: 146432 bytes
+Peak: 117248 bytes, Used: 117248 bytes, Free: 29184 bytes, Total: 146432 bytes
+Peak: 126496 bytes, Used: 64624 bytes, Free: 81808 bytes, Total: 146432 bytes
+Peak: 126496 bytes, Used: 73872 bytes, Free: 72560 bytes, Total: 146432 bytes
+Peak: 126496 bytes, Used: 84272 bytes, Free: 62160 bytes, Total: 146432 bytes
+Peak: 126496 bytes, Used: 93520 bytes, Free: 52912 bytes, Total: 146432 bytes
+Peak: 126496 bytes, Used: 103088 bytes, Free: 43344 bytes, Total: 146432 bytes
+Peak: 126496 bytes, Used: 111472 bytes, Free: 34960 bytes, Total: 146432 bytes
+Achieved 60.20 updates/s
+Achieved 30.10 draws/s
+Peak: 126496 bytes, Used: 63248 bytes, Free: 83184 bytes, Total: 146432 bytes
 >>>

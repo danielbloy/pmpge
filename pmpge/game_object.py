@@ -546,7 +546,8 @@ def update_hierarchy(root: GameObject, dt: float):
             for handler in go._update_handlers:
                 handler(go, dt)
 
-        stack.extend(go._children)
+        # TODO: Removing reversed() significantly improves performance
+        stack.extend(reversed(go._children))
 
     GameObject.something_destroyed = False
 
@@ -576,7 +577,8 @@ def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = Tru
         if draw_everything or go.visible:
             go._draw(surface)
 
-        stack.extend(go._children)
+        # TODO: Removing reversed() significantly improves performance
+        stack.extend(reversed(go._children))
 
 
 # noinspection PyProtectedMember
@@ -600,5 +602,6 @@ def traverse_hierarchy(
         go, state = stack.pop()
         process_children, new_state = func(go, state)
         if process_children:
-            for child in go._children:
+            # TODO: Removing reversed() significantly improves performance
+            for child in reversed(go._children):
                 stack.append((child, new_state))

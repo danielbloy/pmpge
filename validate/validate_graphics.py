@@ -8,7 +8,6 @@ import validate.utils as utils
 # TODO: Add a test on transparency
 
 modules = [borders, scaling, sprites, visibility, z_order]
-modules = [z_order]
 
 if utils.should_execute(__name__):
     utils.execute_modules(modules)

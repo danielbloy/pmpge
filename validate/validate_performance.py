@@ -4,6 +4,8 @@ import validate.performance.baseline_with_graphics_small_display as small_displa
 import validate.performance.huge_hierarchy as hh
 import validate.utils as utils
 
+# TODO: Add the z-order out of memory test
+
 modules = [baseline, with_graphics, small_display, hh]
 
 if utils.should_execute(__name__):

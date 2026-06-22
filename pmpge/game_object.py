@@ -519,38 +519,40 @@ class GameObject:
 #
 
 
+# noinspection PyProtectedMember
 def update_hierarchy(root: GameObject, dt: float):
     """
     Updates the GameObject (if `active` and `enabled`) and propagates to children (if `active`).
     Also removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
     """
-
     something_destroyed = GameObject.something_destroyed
 
-    # noinspection PyProtectedMember
-    def process(go: GameObject):
-        # Remove any destroyed children.
+    stack = [root]
+    while stack:
+        go = stack.pop()
+
+        # Remove any destroyed children (only when something was actually destroyed).
         if something_destroyed:
             children = go._children
             for child in [child for child in children if not child._alive]:
                 child._parent = None
                 children.remove(child)
 
-        if not go.active:
-            return
+        if not go._active:
+            continue
 
         if go.enabled:
             go.update(dt)
             for handler in go._update_handlers:
                 handler(go, dt)
 
-        for child in go._children:
-            process(child)
+        # TODO: Removing reversed() significantly improves performance
+        stack.extend(reversed(go._children))
 
-    process(root)
     GameObject.something_destroyed = False
 
 
+# noinspection PyProtectedMember
 def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = True):
     """
     Draws the GameObject (if `active` and `visible` - see below) and propagates to children
@@ -565,21 +567,21 @@ def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = Tru
     """
     draw_everything = not draw_only_visible
 
-    def process(go: GameObject):
-        if not go.active:
-            return
+    stack = [root]
+    while stack:
+        go = stack.pop()
+
+        if not go._active:
+            continue
 
         if draw_everything or go.visible:
-            # noinspection PyProtectedMember
             go._draw(surface)
 
-        # noinspection PyProtectedMember
-        for child in go._children:
-            process(child)
-
-    process(root)
+        # TODO: Removing reversed() significantly improves performance
+        stack.extend(reversed(go._children))
 
 
+# noinspection PyProtectedMember
 def traverse_hierarchy(
         root: GameObject, func: Callable[[GameObject, Any], tuple[bool, Any]], initial_state: Any = None):
     """
@@ -595,11 +597,11 @@ def traverse_hierarchy(
     The GameObject that `traverse_hierarchy` is called on is always processed.
     """
 
-    def process(go: GameObject, state: Any):
+    stack = [(root, initial_state)]
+    while stack:
+        go, state = stack.pop()
         process_children, new_state = func(go, state)
         if process_children:
-            # noinspection PyProtectedMember
-            for child in go._children:
-                process(child, new_state)
-
-    process(root, initial_state)
+            # TODO: Removing reversed() significantly improves performance
+            for child in reversed(go._children):
+                stack.append((child, new_state))

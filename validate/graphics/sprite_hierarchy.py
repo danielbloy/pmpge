@@ -1,15 +1,18 @@
 """
-Creates three rows of sprites (parents to the left, children to the right)
-to check the hierarchy works:
-* The first row of sprites are created parent first and added to the hierarchy parent first.
+Creates several rows of sprites (parents to the left, children to the right) to check the
+z-order drawing works:
+
+* Row 5: Siblings. This is a straight forward group of siblings to check the draw order.
+  Red (left most) should be on the bottom, purple (right most) should be on the top.
+* Row 2: Sprites are created parent first and added to the hierarchy parent first.
   If the parents are displayed on top of the children then the z-order does not work.
   Red (left most) should be on the bottom, purple (right most) should be on the top.
-* The second row of sprites are created child first and added to the hierarchy parent first.
+* Row 3: Sprites are created child first and added to the hierarchy parent first.
   If the parents are displayed on top of the children then the z-order does not work.
   Red (left most) should be on the bottom, purple (right most) should be on the top.
-* The third row is partially created at start-up and then later extra children
+* Row 4: This row is partially created at start-up and then later extra children
   are added.
-* The fourth row is completely created at start-up and then later the children
+* Row 5: This row is completely created at start-up and then later the children
   are destroyed.
 
 This also tests the game_object_hierarchy_changed() function.
@@ -23,64 +26,73 @@ from validate import test_data
 SCREEN_WIDTH = 160
 SCREEN_HEIGHT = 120
 
-create_parent_first_add_parent_first: list[test_data.SpriteData] = [
-    test_data.SpriteData(6, 6, "red-8x8.png"),  # Root most - drawn first (on bottom)
+siblings: list[test_data.SpriteData] = [
+    test_data.SpriteData(6, 6, "red-8x8.png"),  # First sibling drawn first (on bottom)
     test_data.SpriteData(11, 8, "orange-8x8.png"),
     test_data.SpriteData(16, 6, "yellow-8x8.png"),
     test_data.SpriteData(21, 8, "green-8x8.png"),
     test_data.SpriteData(26, 6, "blue-8x8.png"),
-    test_data.SpriteData(31, 8, "violet-8x8.png"),  # Leaf most - drawn last (on top)
+    test_data.SpriteData(31, 8, "violet-8x8.png"),  # Last sibling - drawn last (on top)
+]
+
+create_parent_first_add_parent_first: list[test_data.SpriteData] = [
+    test_data.SpriteData(6, 20, "red-8x8.png"),  # Root most - drawn first (on bottom)
+    test_data.SpriteData(11, 22, "orange-8x8.png"),
+    test_data.SpriteData(16, 20, "yellow-8x8.png"),
+    test_data.SpriteData(21, 22, "green-8x8.png"),
+    test_data.SpriteData(26, 20, "blue-8x8.png"),
+    test_data.SpriteData(31, 22, "violet-8x8.png"),  # Leaf most - drawn last (on top)
 ]
 
 create_child_first_add_parent_first: list[test_data.SpriteData] = [
-    test_data.SpriteData(31, 32, "violet-8x8.png"),  # Leaf most - drawn last (on top)
-    test_data.SpriteData(26, 30, "blue-8x8.png"),
-    test_data.SpriteData(21, 32, "green-8x8.png"),
-    test_data.SpriteData(16, 30, "yellow-8x8.png"),
-    test_data.SpriteData(11, 32, "orange-8x8.png"),
-    test_data.SpriteData(6, 30, "red-8x8.png"),  # Root most - drawn first (on bottom)
+    test_data.SpriteData(31, 36, "violet-8x8.png"),  # Leaf most - drawn last (on top)
+    test_data.SpriteData(26, 34, "blue-8x8.png"),
+    test_data.SpriteData(21, 36, "green-8x8.png"),
+    test_data.SpriteData(16, 34, "yellow-8x8.png"),
+    test_data.SpriteData(11, 36, "orange-8x8.png"),
+    test_data.SpriteData(6, 34, "red-8x8.png"),  # Root most - drawn first (on bottom)
 ]
 
 add_children_over_time: list[test_data.SpriteData] = [
-    test_data.SpriteData(6, 55, "red-8x8.png"),  # Root most - drawn first (on bottom)
-    test_data.SpriteData(11, 57, "orange-8x8.png"),
-    test_data.SpriteData(16, 55, "yellow-8x8.png"),
-    test_data.SpriteData(21, 57, "green-8x8.png"),
-    test_data.SpriteData(26, 55, "blue-8x8.png"),
-    test_data.SpriteData(31, 57, "violet-8x8.png"),
-    test_data.SpriteData(36, 55, "red-8x8.png"),
-    test_data.SpriteData(41, 57, "orange-8x8.png"),
-    test_data.SpriteData(46, 55, "yellow-8x8.png"),
-    test_data.SpriteData(51, 57, "green-8x8.png"),
-    test_data.SpriteData(56, 55, "blue-8x8.png"),
-    test_data.SpriteData(61, 57, "violet-8x8.png"),
-    test_data.SpriteData(66, 55, "red-8x8.png"),
-    test_data.SpriteData(71, 57, "orange-8x8.png"),
-    test_data.SpriteData(76, 55, "yellow-8x8.png"),
-    test_data.SpriteData(81, 57, "green-8x8.png"),
-    test_data.SpriteData(86, 55, "blue-8x8.png"),
-    test_data.SpriteData(91, 57, "violet-8x8.png"),  # Leaf most - drawn last (on top)
+    test_data.SpriteData(6, 48, "red-8x8.png"),  # Root most - drawn first (on bottom)
+    test_data.SpriteData(11, 50, "orange-8x8.png"),
+    test_data.SpriteData(16, 48, "yellow-8x8.png"),
+    test_data.SpriteData(21, 50, "green-8x8.png"),
+    test_data.SpriteData(26, 48, "blue-8x8.png"),
+    test_data.SpriteData(31, 50, "violet-8x8.png"),
+    test_data.SpriteData(36, 48, "red-8x8.png"),
+    test_data.SpriteData(41, 50, "orange-8x8.png"),
+    test_data.SpriteData(46, 48, "yellow-8x8.png"),
+    test_data.SpriteData(51, 50, "green-8x8.png"),
+    test_data.SpriteData(56, 48, "blue-8x8.png"),
+    test_data.SpriteData(61, 50, "violet-8x8.png"),
+    test_data.SpriteData(66, 48, "red-8x8.png"),
+    test_data.SpriteData(71, 50, "orange-8x8.png"),
+    test_data.SpriteData(76, 48, "yellow-8x8.png"),
+    test_data.SpriteData(81, 50, "green-8x8.png"),
+    test_data.SpriteData(86, 48, "blue-8x8.png"),
+    test_data.SpriteData(91, 59, "violet-8x8.png"),  # Leaf most - drawn last (on top)
 ]
 
 remove_children_over_time: list[test_data.SpriteData] = [
-    test_data.SpriteData(6, 82, "red-8x8.png"),  # Root most - drawn first (on bottom)
-    test_data.SpriteData(11, 85, "orange-8x8.png"),
-    test_data.SpriteData(16, 82, "yellow-8x8.png"),
-    test_data.SpriteData(21, 85, "green-8x8.png"),
-    test_data.SpriteData(26, 82, "blue-8x8.png"),
-    test_data.SpriteData(31, 85, "violet-8x8.png"),
-    test_data.SpriteData(36, 82, "red-8x8.png"),
-    test_data.SpriteData(41, 85, "orange-8x8.png"),
-    test_data.SpriteData(46, 82, "yellow-8x8.png"),
-    test_data.SpriteData(51, 85, "green-8x8.png"),
-    test_data.SpriteData(56, 82, "blue-8x8.png"),
-    test_data.SpriteData(61, 85, "violet-8x8.png"),
-    test_data.SpriteData(66, 82, "red-8x8.png"),
-    test_data.SpriteData(71, 85, "orange-8x8.png"),
-    test_data.SpriteData(76, 82, "yellow-8x8.png"),
-    test_data.SpriteData(81, 85, "green-8x8.png"),
-    test_data.SpriteData(86, 82, "blue-8x8.png"),
-    test_data.SpriteData(91, 85, "violet-8x8.png"),  # Leaf most - drawn last (on top)
+    test_data.SpriteData(6, 62, "red-8x8.png"),  # Root most - drawn first (on bottom)
+    test_data.SpriteData(11, 64, "orange-8x8.png"),
+    test_data.SpriteData(16, 62, "yellow-8x8.png"),
+    test_data.SpriteData(21, 64, "green-8x8.png"),
+    test_data.SpriteData(26, 62, "blue-8x8.png"),
+    test_data.SpriteData(31, 64, "violet-8x8.png"),
+    test_data.SpriteData(36, 62, "red-8x8.png"),
+    test_data.SpriteData(41, 64, "orange-8x8.png"),
+    test_data.SpriteData(46, 62, "yellow-8x8.png"),
+    test_data.SpriteData(51, 64, "green-8x8.png"),
+    test_data.SpriteData(56, 62, "blue-8x8.png"),
+    test_data.SpriteData(61, 64, "violet-8x8.png"),
+    test_data.SpriteData(66, 62, "red-8x8.png"),
+    test_data.SpriteData(71, 64, "orange-8x8.png"),
+    test_data.SpriteData(76, 62, "yellow-8x8.png"),
+    test_data.SpriteData(81, 64, "green-8x8.png"),
+    test_data.SpriteData(86, 62, "blue-8x8.png"),
+    test_data.SpriteData(91, 64, "violet-8x8.png"),  # Leaf most - drawn last (on top)
 ]
 
 
@@ -117,6 +129,9 @@ def destroy_children(_: float):
 def setup(game: Game):
     game.background_colour = (0, 0, 0)  # Black
     add_rate_limited_func(game, rebuild_graphics_hierarchy, rate=1)
+
+    # Create some siblings to check they draw correctly.
+    test_data.create_sprites(game, siblings, add_to_root=True)
 
     # The list contains the parent first, leaf most last. We add them tin parent order (forward).
     test_data.create_sprites(game, create_parent_first_add_parent_first, add_to_root=False)

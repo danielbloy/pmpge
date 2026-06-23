@@ -50,6 +50,8 @@ class GameObject:
     active is True and regardless of the visible and active properties (which only apply to this
     GameObject instance). i.e. a child can be enabled or visible even if the parent is not.
 
+    TODO: Note optimisation compromise.
+
     Destroy, activate and deactivate are propagated to all children irrespective of whether
     active is True or False. All handlers are called before passing to the children except for
     destroy which propagates to the children first.
@@ -517,6 +519,7 @@ class GameObject:
 #   * visible: If this is True and active is also True, the object will be drawn. This is not
 #              cascaded to children.
 #
+# TODO: Document traversal order and optimisation compromises.
 
 
 # noinspection PyProtectedMember
@@ -524,6 +527,9 @@ def update_hierarchy(root: GameObject, dt: float):
     """
     Updates the GameObject (if `active` and `enabled`) and propagates to children (if `active`).
     Also removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
+
+    TODO: This is as fast as possible and only guarantees that parents get updated before children. It
+          does not guarantee that siblings are processed in order.
     """
     something_destroyed = GameObject.something_destroyed
 
@@ -563,6 +569,8 @@ def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = Tru
 
     The surface is passed down through all objects but does not need to be a Pygame surface.
     This doesn't use traverse_hierarchy() as it is slower.
+
+    TODO: This needs to visit in z-order
     """
     draw_everything = not draw_only_visible
 
@@ -593,6 +601,9 @@ def traverse_hierarchy(
     * A new value for state to be passed to the children (which can be `None`)
 
     The GameObject that `traverse_hierarchy` is called on is always processed.
+
+    TODO: This needs to be done in the correct z-order
+    TODO: Maybe a traverse hierarchy fast and a traverse hierarchy z-order?
     """
 
     stack = [(root, initial_state)]

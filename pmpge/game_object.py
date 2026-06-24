@@ -612,10 +612,16 @@ def traverse_hierarchy(
     TODO: Maybe a traverse hierarchy fast and a traverse hierarchy z-order?
     """
 
-    stack = [(root, initial_state)]
-    while stack:
-        go, state = stack.pop()
-        process_children, new_state = func(go, state)
-        if process_children:
-            for child in reversed(go._children):
-                stack.append((child, new_state))
+    current = [(root, initial_state)]
+    next = []
+    while current:
+
+        for go, state in current:
+            process_children, new_state = func(go, state)
+            if process_children:
+                for child in go._children:
+                    next.append((child, new_state))
+
+        # Now populate the next level
+        current.clear()
+        current, next = next, current

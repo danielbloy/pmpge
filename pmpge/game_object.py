@@ -619,8 +619,7 @@ def traverse_hierarchy(
         for go, state in current:
             process_children, new_state = func(go, state)
             if process_children:
-                for child in go._children:
-                    next.append((child, new_state))
+                next.extend([(child, new_state) for child in go._children])
 
         # Now populate the next level
         current.clear()

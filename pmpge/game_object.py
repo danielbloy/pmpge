@@ -532,29 +532,33 @@ def update_hierarchy(root: GameObject, dt: float):
           does not guarantee that siblings are processed in order.
     """
     something_destroyed = GameObject.something_destroyed
+    current = [root]
+    children = []
+    while current:
+        for go in current:
 
-    stack = [root]
-    while stack:
-        go = stack.pop()
+            # Remove any destroyed children (only when something was actually destroyed).
+            if something_destroyed:
+                children = go._children
+                for child in [child for child in children if not child._alive]:
+                    child._parent = None
 
-        # Remove any destroyed children (only when something was actually destroyed).
-        if something_destroyed:
-            children = go._children
-            for child in [child for child in children if not child._alive]:
-                child._parent = None
+                # noinspection PyTypeChecker
+                go._children = [child for child in children if child._alive]
 
-            # noinspection PyTypeChecker
-            go._children = [child for child in children if child._alive]
+            if not go._active:
+                continue
 
-        if not go._active:
-            continue
+            if go.enabled:
+                go.update(dt)
+                for handler in go._update_handlers:
+                    handler(go, dt)
 
-        if go.enabled:
-            go.update(dt)
-            for handler in go._update_handlers:
-                handler(go, dt)
+            children.extend(go._children)
 
-        stack.extend(go._children)
+        # Now populate the next level
+        current.clear()
+        current, children = children, current
 
     GameObject.something_destroyed = False
 
@@ -577,7 +581,7 @@ def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = Tru
     draw_everything = not draw_only_visible
 
     current = [root]
-    next = []
+    children = []
 
     while current:
 
@@ -588,11 +592,11 @@ def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = Tru
 
             if draw_everything or go.visible:
                 go._draw(surface)
-                next.extend(go._children)
+                children.extend(go._children)
 
         # Now populate the next level
         current.clear()
-        current, next = next, current
+        current, children = children, current
 
 
 # noinspection PyProtectedMember
@@ -615,14 +619,14 @@ def traverse_hierarchy(
     """
 
     current = [(root, initial_state)]
-    next = []
+    children = []
     while current:
 
         for go, state in current:
             process_children, new_state = func(go, state)
             if process_children:
-                next.extend([(child, new_state) for child in go._children])
+                children.extend([(child, new_state) for child in go._children])
 
         # Now populate the next level
         current.clear()
-        current, next = next, current
+        current, children = children, current

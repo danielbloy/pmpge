@@ -363,7 +363,7 @@ class GraphicsDrawImageTrait:
         Draws the image at the specified position, offset from the GameObjects position.
         """
         image = self.image
-        if image.new_image_loaded or force_add_tile_grids:
+        if image.new_image_loaded or force_add_tile_grids:  # TODO: Test if changing the image adjusts z-order
             object_group.append(image.tile_grid)
             image.new_image_loaded = False
 

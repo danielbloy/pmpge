@@ -574,17 +574,23 @@ def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = Tru
     """
     draw_everything = not draw_only_visible
 
-    stack = [root]
-    while stack:
-        go = stack.pop()
+    current = [root]
+    next = []
 
-        if not go._active:
-            continue
+    while current:
 
-        if draw_everything or go.visible:
-            go._draw(surface)
+        # Cycle through this level
+        for go in current:
+            if not go._active:
+                continue
 
-        stack.extend(reversed(go._children))
+            if draw_everything or go.visible:
+                go._draw(surface)
+                next.extend(go._children)
+
+        # Now populate the next level
+        current.clear()
+        current, next = next, current
 
 
 # noinspection PyProtectedMember

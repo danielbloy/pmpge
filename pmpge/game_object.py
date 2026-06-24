@@ -542,7 +542,9 @@ def update_hierarchy(root: GameObject, dt: float):
             children = go._children
             for child in [child for child in children if not child._alive]:
                 child._parent = None
-                children.remove(child)
+
+            # noinspection PyTypeChecker
+            go._children = [child for child in children if child._alive]
 
         if not go._active:
             continue

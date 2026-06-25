@@ -326,7 +326,10 @@ class Hierarchy:
 
         # Now make sure the handlers were called in the correct order.
         expected_shared_called_order = []
-        items = [item for item in self.everyone if include(item)] if not reverse else []
+        traverse_order = [self.parent]
+        traverse_order.extend(self.children)
+        traverse_order.extend(self.grandchildren)
+        items = [item for item in traverse_order if include(item)] if not reverse else []
 
         # Reversing order is slightly more complicated as grandchildren come before children who
         # in turn come before the parent.

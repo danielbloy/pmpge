@@ -284,7 +284,8 @@ class Hierarchy:
                               reverse: bool = False,
                               interlace: bool = False,
                               debug: bool = False,
-                              exclude: list[GameObject] | None = None):
+                              exclude: list[GameObject] | None = None,
+                              level_traversal: bool = True):
         """
         Validates that the handlers were all invoked in the expected order.
 
@@ -298,6 +299,13 @@ class Hierarchy:
 
         An exclude list can be passed in which lists all GameObjects expected to be excluded from
         having the handlers called.
+
+        The level_traversal parameter is used to control the expected method that the hierarchy
+        will be traversed. If True, it is assumed that one of the update_hierarchy(), draw_hierarchy()
+        or traverse_hierarchy() methods are under test which traverse the hierarchy a layer at a time
+        (root, parents, children, grandchildren, great-grandchildren etc.). If False, we expect the
+        hierarchy to be traversed in the order that the objects have been added (this typically
+        corresponds to a recursive traversal of the hierarchy as per the GameObject methods).
         """
 
         def include(item: Hierarchy.Item):
@@ -325,34 +333,37 @@ class Hierarchy:
                 assert item.handlers.called_order == []
 
         # Now make sure the handlers were called in the correct order.
+        items_traverse_order = []
         expected_shared_called_order = []
-        traverse_order = [self.parent]
-        traverse_order.extend(self.children)
-        traverse_order.extend(self.grandchildren)
-        items = [item for item in traverse_order if include(item)] if not reverse else []
 
         # Reversing order is slightly more complicated as grandchildren come before children who
         # in turn come before the parent.
         if reverse:
-            items = []
             for child in self.children:
                 for grandchild in child.go.children:
                     if include(grandchild):
-                        items.append(self.find(grandchild.name))
+                        items_traverse_order.append(self.find(grandchild.name))
 
                 if include(child):
-                    items.append(child)
+                    items_traverse_order.append(child)
 
             if include(self.parent):
-                items.append(self.parent)
+                items_traverse_order.append(self.parent)
+        else:
+            all_items = [self.parent] if level_traversal else self.everyone
+            if level_traversal:
+                all_items.extend(self.children)
+                all_items.extend(self.grandchildren)
+
+            items_traverse_order = [item for item in all_items if include(item)] if not reverse else []
 
         if interlace:
-            for item in items:
+            for item in items_traverse_order:
                 calls = [f"{handler} {item.go.name}" for handler in expected_handler_order]
                 expected_shared_called_order.extend(calls)
         else:
             for handler in expected_handler_order:
-                calls = [f"{handler} {item.go.name}" for item in items]
+                calls = [f"{handler} {item.go.name}" for item in items_traverse_order]
                 expected_shared_called_order.extend(calls)
 
         if debug:

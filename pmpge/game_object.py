@@ -48,9 +48,8 @@ class GameObject:
 
     The `update_hierarchy()` and `draw_hierarchy()` functions propagate down the hierarchy if
     active is True and regardless of the visible and active properties (which only apply to this
-    GameObject instance). i.e. a child can be enabled or visible even if the parent is not.
-
-    TODO: Note optimisation compromise.
+    GameObject instance). i.e. a child can be enabled or visible even if the parent is not. See
+    those functions for more details on how they traverse the hierarchy.
 
     Destroy, activate and deactivate are propagated to all children irrespective of whether
     active is True or False. All handlers are called before passing to the children except for
@@ -519,7 +518,7 @@ class GameObject:
 #   * visible: If this is True and active is also True, the object will be drawn. This is not
 #              cascaded to children.
 #
-# TODO: Document traversal order and optimisation compromises.
+# TODO: Document traversal order.
 
 
 # noinspection PyProtectedMember
@@ -539,12 +538,11 @@ def update_hierarchy(root: GameObject, dt: float):
 
             # Remove any destroyed children (only when something was actually destroyed).
             if something_destroyed:
-                children = go._children
-                for child in [child for child in children if not child._alive]:
+                for child in [child for child in go._children if not child._alive]:
                     child._parent = None
 
                 # noinspection PyTypeChecker
-                go._children = [child for child in children if child._alive]
+                go._children = [child for child in go._children if child._alive]
 
             if not go._active:
                 continue
@@ -592,7 +590,8 @@ def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = Tru
 
             if draw_everything or go.visible:
                 go._draw(surface)
-                children.extend(go._children)
+
+            children.extend(go._children)
 
         # Now populate the next level
         current.clear()
@@ -615,7 +614,6 @@ def traverse_hierarchy(
     The GameObject that `traverse_hierarchy` is called on is always processed.
 
     TODO: This needs to be done in the correct z-order
-    TODO: Maybe a traverse hierarchy fast and a traverse hierarchy z-order?
     """
 
     current = [(root, initial_state)]

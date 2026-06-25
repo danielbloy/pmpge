@@ -48,7 +48,8 @@ class GameObject:
 
     The `update_hierarchy()` and `draw_hierarchy()` functions propagate down the hierarchy if
     active is True and regardless of the visible and active properties (which only apply to this
-    GameObject instance). i.e. a child can be enabled or visible even if the parent is not.
+    GameObject instance). i.e. a child can be enabled or visible even if the parent is not. See
+    those functions for more details on how they traverse the hierarchy.
 
     Destroy, activate and deactivate are propagated to all children irrespective of whether
     active is True or False. All handlers are called before passing to the children except for
@@ -517,6 +518,7 @@ class GameObject:
 #   * visible: If this is True and active is also True, the object will be drawn. This is not
 #              cascaded to children.
 #
+# TODO: Document traversal order.
 
 
 # noinspection PyProtectedMember
@@ -524,30 +526,37 @@ def update_hierarchy(root: GameObject, dt: float):
     """
     Updates the GameObject (if `active` and `enabled`) and propagates to children (if `active`).
     Also removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
+
+    TODO: This is as fast as possible and only guarantees that parents get updated before children. It
+          does not guarantee that siblings are processed in order.
     """
     something_destroyed = GameObject.something_destroyed
+    current = [root]
+    children = []
+    while current:
+        for go in current:
 
-    stack = [root]
-    while stack:
-        go = stack.pop()
+            # Remove any destroyed children (only when something was actually destroyed).
+            if something_destroyed:
+                for child in [child for child in go._children if not child._alive]:
+                    child._parent = None
 
-        # Remove any destroyed children (only when something was actually destroyed).
-        if something_destroyed:
-            children = go._children
-            for child in [child for child in children if not child._alive]:
-                child._parent = None
-                children.remove(child)
+                # noinspection PyTypeChecker
+                go._children = [child for child in go._children if child._alive]
 
-        if not go._active:
-            continue
+            if not go._active:
+                continue
 
-        if go.enabled:
-            go.update(dt)
-            for handler in go._update_handlers:
-                handler(go, dt)
+            if go.enabled:
+                go.update(dt)
+                for handler in go._update_handlers:
+                    handler(go, dt)
 
-        # TODO: Removing reversed() significantly improves performance
-        stack.extend(reversed(go._children))
+            children.extend(go._children)
+
+        # Now populate the next level
+        current.clear()
+        current, children = children, current
 
     GameObject.something_destroyed = False
 
@@ -564,21 +573,29 @@ def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = Tru
 
     The surface is passed down through all objects but does not need to be a Pygame surface.
     This doesn't use traverse_hierarchy() as it is slower.
+
+    TODO: This needs to visit in z-order
     """
     draw_everything = not draw_only_visible
 
-    stack = [root]
-    while stack:
-        go = stack.pop()
+    current = [root]
+    children = []
 
-        if not go._active:
-            continue
+    while current:
 
-        if draw_everything or go.visible:
-            go._draw(surface)
+        # Cycle through this level
+        for go in current:
+            if not go._active:
+                continue
 
-        # TODO: Removing reversed() significantly improves performance
-        stack.extend(reversed(go._children))
+            if draw_everything or go.visible:
+                go._draw(surface)
+
+            children.extend(go._children)
+
+        # Now populate the next level
+        current.clear()
+        current, children = children, current
 
 
 # noinspection PyProtectedMember
@@ -595,13 +612,19 @@ def traverse_hierarchy(
     * A new value for state to be passed to the children (which can be `None`)
 
     The GameObject that `traverse_hierarchy` is called on is always processed.
+
+    TODO: This needs to be done in the correct z-order
     """
 
-    stack = [(root, initial_state)]
-    while stack:
-        go, state = stack.pop()
-        process_children, new_state = func(go, state)
-        if process_children:
-            # TODO: Removing reversed() significantly improves performance
-            for child in reversed(go._children):
-                stack.append((child, new_state))
+    current = [(root, initial_state)]
+    children = []
+    while current:
+
+        for go, state in current:
+            process_children, new_state = func(go, state)
+            if process_children:
+                children.extend([(child, new_state) for child in go._children])
+
+        # Now populate the next level
+        current.clear()
+        current, children = children, current

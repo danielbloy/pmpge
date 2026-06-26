@@ -4,7 +4,7 @@ the root) and a single long chain of parent-child relationships which tests
 the capability of microcontrollers to handle deeper hierarchies.
 
 The aim of this performance test is to find the limits that the engine can
-cope with on a small microcontroller.
+cope with on a small microcontroller; specifically an Adafruit EdgeBadge.
 """
 import validate.utils as utils
 from pmpge.game import Game
@@ -134,8 +134,8 @@ oom_recursion_check: list[test_data.SpriteData] = [
     test_data.SpriteData(51, 94, "green-8x8.png"),
     test_data.SpriteData(56, 92, "blue-8x8.png"),
     test_data.SpriteData(61, 94, "violet-8x8.png"),
-    # test_data.SpriteData(66, 92, "red-8x8.png"),
-    # test_data.SpriteData(71, 94, "orange-8x8.png"),
+    test_data.SpriteData(66, 92, "red-8x8.png"),
+    test_data.SpriteData(71, 94, "orange-8x8.png"),
     # test_data.SpriteData(76, 92, "yellow-8x8.png"),
     # test_data.SpriteData(81, 94, "green-8x8.png"),
     # test_data.SpriteData(86, 92, "blue-8x8.png"),

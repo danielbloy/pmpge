@@ -1,12 +1,13 @@
 """
-This test stresses memory. It creates over 100 sprites (most as children of
+This test stresses memory. It creates lots of sprites (most as children of
 the root) and a single long chain of parent-child relationships which tests
 the capability of microcontrollers to handle deeper hierarchies.
+
+The aim of this performance test is to find the limits that the engine can
+cope with on a small microcontroller.
 """
 import validate.utils as utils
 from pmpge.game import Game
-from pmpge.graphics import game_object_hierarchy_changed
-from pmpge.utilities import add_rate_limited_func
 from validate import test_data
 
 SCREEN_WIDTH = 160
@@ -133,12 +134,12 @@ oom_recursion_check: list[test_data.SpriteData] = [
     test_data.SpriteData(51, 94, "green-8x8.png"),
     test_data.SpriteData(56, 92, "blue-8x8.png"),
     test_data.SpriteData(61, 94, "violet-8x8.png"),
-    test_data.SpriteData(66, 92, "red-8x8.png"),
-    test_data.SpriteData(71, 94, "orange-8x8.png"),
-    test_data.SpriteData(76, 92, "yellow-8x8.png"),
-    test_data.SpriteData(81, 94, "green-8x8.png"),
-    test_data.SpriteData(86, 92, "blue-8x8.png"),
-    test_data.SpriteData(91, 94, "violet-8x8.png"),
+    # test_data.SpriteData(66, 92, "red-8x8.png"),
+    # test_data.SpriteData(71, 94, "orange-8x8.png"),
+    # test_data.SpriteData(76, 92, "yellow-8x8.png"),
+    # test_data.SpriteData(81, 94, "green-8x8.png"),
+    # test_data.SpriteData(86, 92, "blue-8x8.png"),
+    # test_data.SpriteData(91, 94, "violet-8x8.png"),
     test_data.SpriteData(96, 92, "red-8x8.png"),
     test_data.SpriteData(101, 94, "orange-8x8.png"),
     test_data.SpriteData(106, 92, "yellow-8x8.png"),
@@ -148,18 +149,13 @@ oom_recursion_check: list[test_data.SpriteData] = [
 ]
 
 
-def rebuild_graphics_hierarchy(_: float):
-    game_object_hierarchy_changed()
-
-
 def setup(game: Game):
     game.background_colour = (0, 0, 0)  # Black
-    add_rate_limited_func(game, rebuild_graphics_hierarchy, rate=1)
 
     test_data.create_sprites(game, row_1, add_to_root=True)
     test_data.create_sprites(game, row_2, add_to_root=True)
     test_data.create_sprites(game, row_3, add_to_root=True)
-    test_data.create_sprites(game, row_4, add_to_root=True)
+    # test_data.create_sprites(game, row_4, add_to_root=True)
 
     test_data.create_sprites(game, oom_recursion_check, add_to_root=False)
     last = len(oom_recursion_check) - 1

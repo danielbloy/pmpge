@@ -505,20 +505,35 @@ class GameObject:
 
 
 # ********************************************************************************
-# H I E R A R C H Y    B A S E D    F U N C T I O N S
+# H I E R A R C H Y    T R A V E R S A L    B A S E D    F U N C T I O N S
 # ********************************************************************************
+#
+# The following functions are used to traverse the hierarchy. There is a general purpose
+# traversal function and two specific versions, optimised for either drawing or updating
+# the hierarchy. In all cases, the order of visiting each  GameObject in the hierarchy
+# is the same and represents the Z-order of the GameObjects (whilst still respecting the
+# active, enabled and visible properties as described below).
+#
+# The order of visiting the GameObjects is by "level" in the hierarchy: root, children,
+# grandchildren, great-grandchildren etc. So to explain, the root is visited first. Then
+# each of the children of the root in the order they were added to the root. Then each of
+# the grandchildren (children of the roots children). The order of visiting is taking
+# each child in turn and visiting their children (grandchildren) in the order they were
+# added to their parent. This same pattern follows for each subsequent layer. This does
+# mean each layer gets progressively larger than that before. It also means that each
+# level further from the root is drawn on top of all previous layers.
 #
 # A GameObject has the following built-in properties that interact:
 #
-#   * active: This has to be True for the GameObject to be updated or drawn (visible and
-#             enabled also need to be True). The value of a parents active property does affect
-#             its children; i.e., if the parent is inactive, the children as also inactive.
-#   * enabled: If this is True and active is also True, the object will be updated. This is not
-#              cascaded to children.
-#   * visible: If this is True and active is also True, the object will be drawn. This is not
-#              cascaded to children.
+#   * active: This has to be True for the GameObject to be updated or drawn (visible
+#             and enabled also need to be True). The value of a parents active property
+#             does affect its children; i.e., if the parent is inactive, the children
+#             as also inactive.
+#   * enabled: If this is True and active is also True, the object will be updated. This
+#              is not cascaded to children.
+#   * visible: If this is True and active is also True, the object will be drawn. This is
+#              not cascaded to children.
 #
-# TODO: Document traversal order.
 
 
 # noinspection PyProtectedMember
@@ -526,9 +541,6 @@ def update_hierarchy(root: GameObject, dt: float):
     """
     Updates the GameObject (if `active` and `enabled`) and propagates to children (if `active`).
     Also removes any destroyed children. This doesn't use traverse_hierarchy() as it is slower.
-
-    TODO: This is as fast as possible and only guarantees that parents get updated before children. It
-          does not guarantee that siblings are processed in order.
     """
     something_destroyed = GameObject.something_destroyed
     current = [root]
@@ -573,8 +585,6 @@ def draw_hierarchy(root: GameObject, surface: Any, draw_only_visible: bool = Tru
 
     The surface is passed down through all objects but does not need to be a Pygame surface.
     This doesn't use traverse_hierarchy() as it is slower.
-
-    TODO: This needs to visit in z-order
     """
     draw_everything = not draw_only_visible
 
@@ -612,8 +622,6 @@ def traverse_hierarchy(
     * A new value for state to be passed to the children (which can be `None`)
 
     The GameObject that `traverse_hierarchy` is called on is always processed.
-
-    TODO: This needs to be done in the correct z-order
     """
 
     current = [(root, initial_state)]

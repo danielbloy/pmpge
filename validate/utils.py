@@ -5,6 +5,7 @@ is execute() as it bootstraps everything else.
 """
 import gc
 import time
+import traceback
 
 from pmpge.environment import is_running_on_desktop, config
 from pmpge.game import Game
@@ -72,8 +73,9 @@ def execute_modules(modules: list[object]):
             execute(module.setup, screen_width=screen_width, screen_height=screen_height)
             del module
 
-        except MemoryError:
+        except MemoryError as err:
             print("Memory Error")
+            traceback.print_exception(err)
 
 
 def execute(

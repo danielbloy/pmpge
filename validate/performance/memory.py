@@ -3,9 +3,12 @@ This test stresses memory. It creates lots of sprites (most as children of
 the root) and a single long chain of parent-child relationships which tests
 the capability of microcontrollers to handle deeper hierarchies.
 
-The aim of this performance test is to find the limits that the engine can
-cope with on a small microcontroller; specifically an Adafruit EdgeBadge.
+The aim of this performance test is to find the memory limits of running the
+engine on a small microcontroller; specifically an Adafruit EdgeBadge with
+only 192 Kb of RAM.
 """
+import gc
+
 import validate.utils as utils
 from pmpge.game import Game
 from validate import test_data
@@ -36,8 +39,8 @@ row_1: list[test_data.SpriteData] = [
     test_data.SpriteData(101, 8, "orange-8x8.png"),
     test_data.SpriteData(106, 6, "yellow-8x8.png"),
     test_data.SpriteData(111, 8, "green-8x8.png"),
-    test_data.SpriteData(116, 6, "blue-8x8.png"),
-    test_data.SpriteData(121, 8, "violet-8x8.png"),  # Last sibling - drawn last (on top)
+    # test_data.SpriteData(116, 6, "blue-8x8.png"), Adding this in will exhaust RAM
+    # test_data.SpriteData(121, 8, "violet-8x8.png"),  # Last sibling - drawn last (on top)
 ]
 
 row_2: list[test_data.SpriteData] = [
@@ -63,8 +66,8 @@ row_2: list[test_data.SpriteData] = [
     test_data.SpriteData(101, 22, "orange-8x8.png"),
     test_data.SpriteData(106, 20, "yellow-8x8.png"),
     test_data.SpriteData(111, 22, "green-8x8.png"),
-    test_data.SpriteData(116, 20, "blue-8x8.png"),
-    test_data.SpriteData(121, 22, "violet-8x8.png"),  # Last sibling - drawn last (on top)
+    # test_data.SpriteData(116, 20, "blue-8x8.png"), Adding this in will exhaust RAM
+    # test_data.SpriteData(121, 22, "violet-8x8.png"),  # Last sibling - drawn last (on top)
 ]
 
 row_3: list[test_data.SpriteData] = [
@@ -90,8 +93,8 @@ row_3: list[test_data.SpriteData] = [
     test_data.SpriteData(101, 36, "orange-8x8.png"),
     test_data.SpriteData(106, 34, "yellow-8x8.png"),
     test_data.SpriteData(111, 36, "green-8x8.png"),
-    test_data.SpriteData(116, 34, "blue-8x8.png"),
-    test_data.SpriteData(121, 36, "violet-8x8.png"),  # Last sibling - drawn last (on top)
+    # test_data.SpriteData(116, 34, "blue-8x8.png"), Adding this in will exhaust RAM
+    # test_data.SpriteData(121, 36, "violet-8x8.png"),  # Last sibling - drawn last (on top)
 ]
 
 row_4: list[test_data.SpriteData] = [
@@ -117,8 +120,8 @@ row_4: list[test_data.SpriteData] = [
     test_data.SpriteData(101, 50, "orange-8x8.png"),
     test_data.SpriteData(106, 48, "yellow-8x8.png"),
     test_data.SpriteData(111, 50, "green-8x8.png"),
-    test_data.SpriteData(116, 48, "blue-8x8.png"),
-    test_data.SpriteData(121, 50, "violet-8x8.png"),  # Last sibling - drawn last (on top)
+    # test_data.SpriteData(116, 48, "blue-8x8.png"), Adding this in will exhaust RAM
+    # test_data.SpriteData(121, 50, "violet-8x8.png"),  # Last sibling - drawn last (on top)
 ]
 
 oom_recursion_check: list[test_data.SpriteData] = [
@@ -136,16 +139,16 @@ oom_recursion_check: list[test_data.SpriteData] = [
     test_data.SpriteData(61, 94, "violet-8x8.png"),
     test_data.SpriteData(66, 92, "red-8x8.png"),
     test_data.SpriteData(71, 94, "orange-8x8.png"),
-    # test_data.SpriteData(76, 92, "yellow-8x8.png"),
-    # test_data.SpriteData(81, 94, "green-8x8.png"),
-    # test_data.SpriteData(86, 92, "blue-8x8.png"),
-    # test_data.SpriteData(91, 94, "violet-8x8.png"),
+    test_data.SpriteData(76, 92, "yellow-8x8.png"),
+    test_data.SpriteData(81, 94, "green-8x8.png"),
+    test_data.SpriteData(86, 92, "blue-8x8.png"),
+    test_data.SpriteData(91, 94, "violet-8x8.png"),
     test_data.SpriteData(96, 92, "red-8x8.png"),
     test_data.SpriteData(101, 94, "orange-8x8.png"),
-    test_data.SpriteData(106, 92, "yellow-8x8.png"),
-    test_data.SpriteData(111, 94, "green-8x8.png"),
-    test_data.SpriteData(116, 92, "blue-8x8.png"),
-    test_data.SpriteData(121, 94, "violet-8x8.png"),  # Leaf most - drawn last (on top)
+    # test_data.SpriteData(106, 92, "yellow-8x8.png"), # Adding this in will exhaust the pystack.
+    # test_data.SpriteData(111, 94, "green-8x8.png"),
+    # test_data.SpriteData(116, 92, "blue-8x8.png"),
+    # test_data.SpriteData(121, 94, "violet-8x8.png"),  # Leaf most - drawn last (on top)
 ]
 
 
@@ -153,15 +156,28 @@ def setup(game: Game):
     game.background_colour = (0, 0, 0)  # Black
 
     test_data.create_sprites(game, row_1, add_to_root=True)
+    row_1.clear()
+    gc.collect()
+
     test_data.create_sprites(game, row_2, add_to_root=True)
+    row_2.clear()
+    gc.collect()
+
     test_data.create_sprites(game, row_3, add_to_root=True)
-    # test_data.create_sprites(game, row_4, add_to_root=True)
+    row_3.clear()
+    gc.collect()
+
+    test_data.create_sprites(game, row_4, add_to_root=True)
+    row_4.clear()
+    gc.collect()
 
     test_data.create_sprites(game, oom_recursion_check, add_to_root=False)
     last = len(oom_recursion_check) - 1
     game.root.add_child(oom_recursion_check[0].sprite)
     for i in range(last):
         oom_recursion_check[i].sprite.add_child(oom_recursion_check[i + 1].sprite)
+    oom_recursion_check.clear()
+    gc.collect()
 
 
 if utils.should_execute(__name__):

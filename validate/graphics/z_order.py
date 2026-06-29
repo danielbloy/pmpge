@@ -29,11 +29,16 @@ Sprites are created child first and added to the hierarchy parent first.
 If the parents are displayed on top of the children then the z-order does not work.
 Red (left most) should be on the bottom, purple (right most) should be on the top.
 
-Row 4
+Row 4a
 This is designed to demonstrate the full z order with siblings, children and
 grandchildren. Each "column" of sprites is at the same "level" in the hierarchy (
 parent, child or grandchild). The leftmost column should be at the bottom and the
 rightmost column at the top.
+
+Row 4b
+This tests that z-order is not affected when a sprites image is changed. This is
+a test specifically designed to validate how images are reloaded in graphics
+drivers such as the displayio driver.
 
 Row 5
 This row is partially created at start-up and then later extra children are added.
@@ -50,6 +55,7 @@ from validate import test_data
 SCREEN_WIDTH = 160
 SCREEN_HEIGHT = 120
 
+# Row 1
 siblings: list[test_data.SpriteData] = [
     test_data.SpriteData(6, 6, "red-8x8.png"),  # First sibling drawn first (on bottom)
     test_data.SpriteData(11, 8, "orange-8x8.png"),
@@ -59,6 +65,7 @@ siblings: list[test_data.SpriteData] = [
     test_data.SpriteData(31, 8, "violet-8x8.png"),  # Last sibling - drawn last (on top)
 ]
 
+# Row 2
 create_parent_first_add_parent_first: list[test_data.SpriteData] = [
     test_data.SpriteData(6, 20, "red-8x8.png"),  # Root most - drawn first (on bottom)
     test_data.SpriteData(11, 22, "orange-8x8.png"),
@@ -68,6 +75,7 @@ create_parent_first_add_parent_first: list[test_data.SpriteData] = [
     test_data.SpriteData(31, 22, "violet-8x8.png"),  # Leaf most - drawn last (on top)
 ]
 
+# Row 3
 create_child_first_add_parent_first: list[test_data.SpriteData] = [
     test_data.SpriteData(31, 36, "violet-8x8.png"),  # Leaf most - drawn last (on top)
     test_data.SpriteData(26, 34, "blue-8x8.png"),
@@ -77,12 +85,14 @@ create_child_first_add_parent_first: list[test_data.SpriteData] = [
     test_data.SpriteData(6, 34, "red-8x8.png"),  # Root most - drawn first (on bottom)
 ]
 
+# Row 4a
 full_tree_parents: list[test_data.SpriteData] = [
     test_data.SpriteData(6, 48, "red-8x8.png"),  # Parent 1
     test_data.SpriteData(8, 54, "orange-8x8.png"),  # Parent 2
     test_data.SpriteData(6, 60, "red-8x8.png"),  # Parent 3
     test_data.SpriteData(8, 66, "orange-8x8.png"),  # Parent 4
 ]
+
 full_tree_children: list[test_data.SpriteData] = [
     test_data.SpriteData(12, 47, "yellow-8x8.png"),  # Parent 1 - Child 1
     test_data.SpriteData(14, 51, "green-8x8.png"),  # Parent 1 - Child 2
@@ -91,6 +101,7 @@ full_tree_children: list[test_data.SpriteData] = [
     test_data.SpriteData(12, 63, "green-8x8.png"),  # Parent 3 - Child 5
     test_data.SpriteData(14, 67, "blue-8x8.png"),  # Parent 3 - Child 6
 ]
+
 full_tree_grandchildren: list[test_data.SpriteData] = [
     test_data.SpriteData(18, 48, "red-8x8.png"),  # Child 2 - Grandchild 1
     test_data.SpriteData(20, 54, "orange-8x8.png"),  # Child 2 - Grandchild 2
@@ -98,6 +109,15 @@ full_tree_grandchildren: list[test_data.SpriteData] = [
     test_data.SpriteData(20, 66, "orange-8x8.png"),  # Child 5 - Grandchild 4
 ]
 
+# Row 4b
+change_image_over_time: list[test_data.SpriteData] = [
+    test_data.SpriteData(41, 48, "red-8x8.png"),  # Root most - drawn first (on bottom)
+    test_data.SpriteData(46, 50, "orange-8x8.png"),
+    test_data.SpriteData(51, 48, "yellow-8x8.png"),
+    test_data.SpriteData(56, 50, "green-8x8.png"),  # Leaf most - drawn last (on top)
+]
+
+# Row 5
 add_children_over_time: list[test_data.SpriteData] = [
     test_data.SpriteData(6, 78, "red-8x8.png"),  # Root most - drawn first (on bottom)
     test_data.SpriteData(11, 80, "orange-8x8.png"),
@@ -119,6 +139,7 @@ add_children_over_time: list[test_data.SpriteData] = [
     test_data.SpriteData(91, 80, "violet-8x8.png"),  # Leaf most - drawn last (on top)
 ]
 
+# Row 6
 destroy_children_over_time: list[test_data.SpriteData] = [
     test_data.SpriteData(6, 92, "red-8x8.png"),  # Root most - drawn first (on bottom)
     test_data.SpriteData(11, 94, "orange-8x8.png"),
@@ -171,28 +192,39 @@ def destroy_children(_: float):
     destroy_index -= 1
 
 
+change_image_index: int = 0
+
+
+def change_image(_: float):
+    global change_image_index
+    change_image_index += 1
+    images = ["red-8x8.png", "blue-8x8.png"]
+    change_image_index = change_image_index % len(images)
+    change_image_over_time[0].sprite.image.name = images[change_image_index]
+
+
 def setup(game: Game):
     game.background_colour = (0, 0, 0)  # Black
     add_rate_limited_func(game, rebuild_graphics_hierarchy, rate=1)
 
-    # Create some siblings to check they draw correctly.
+    # Row 1: Create some siblings to check they draw correctly.
     test_data.create_sprites(game, siblings, add_to_root=True)
 
-    # The list contains the parent first, leaf most last. We add them in parent order (forward).
+    # Row 2: The list contains the parent first, leaf most last. We add them in parent order (forward).
     test_data.create_sprites(game, create_parent_first_add_parent_first, add_to_root=False)
     last = len(create_parent_first_add_parent_first) - 1
     game.root.add_child(create_parent_first_add_parent_first[0].sprite)
     for i in range(last):
         create_parent_first_add_parent_first[i].sprite.add_child(create_parent_first_add_parent_first[i + 1].sprite)
 
-    # The list contains the leaf most first, parent last. We add them in parent order (reverse).
+    # Row 3: The list contains the leaf most first, parent last. We add them in parent order (reverse).
     test_data.create_sprites(game, create_child_first_add_parent_first, add_to_root=False)
     last = len(create_child_first_add_parent_first) - 1
     game.root.add_child(create_child_first_add_parent_first[last].sprite)
     for i in range(last, 0, -1):
         create_child_first_add_parent_first[i].sprite.add_child(create_child_first_add_parent_first[i - 1].sprite)
 
-    # Create the full tree
+    # Row 4a: Create the full tree
     test_data.create_sprites(game, full_tree_parents, add_to_root=True)
 
     test_data.create_sprites(game, full_tree_children, add_to_root=False)
@@ -205,12 +237,21 @@ def setup(game: Game):
         parent = full_tree_children[1 if 1 < 2 else 4]
         parent.sprite.add_child(obj.sprite)
 
-    # The hierarchy for this set of sprites grows over time,
+    # Row 4b: Alternates the parents colour to validate it does not affect z-order.
+    test_data.create_sprites(game, change_image_over_time, add_to_root=False)
+    last = len(change_image_over_time) - 1
+    game.root.add_child(change_image_over_time[0].sprite)
+    for i in range(last):
+        change_image_over_time[i].sprite.add_child(change_image_over_time[i + 1].sprite)
+
+    add_rate_limited_func(game, change_image, rate=2)
+
+    # Row 5: The hierarchy for this set of sprites grows over time,
     add_rate_limited_func(game, add_children, rate=1)
     test_data.create_sprites(game, add_children_over_time, add_to_root=False)
     game.root.add_child(add_children_over_time[0].sprite)
 
-    # The hierarchy for this set of sprites shrinks over time,
+    # Row 6: The hierarchy for this set of sprites shrinks over time,
     add_rate_limited_func(game, destroy_children, rate=1)
     test_data.create_sprites(game, destroy_children_over_time, add_to_root=False)
     last = len(destroy_children_over_time) - 1

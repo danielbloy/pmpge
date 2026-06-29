@@ -40,6 +40,10 @@ This tests that z-order is not affected when a sprites image is changed. This is
 a test specifically designed to validate how images are reloaded in graphics
 drivers such as the displayio driver.
 
+Row 4c
+This does not test the z-order but moves a sprite whilst also changing the image.
+It helps with testing 4b as it can be used to check if the previous image is left behind.
+
 Row 5
 This row is partially created at start-up and then later extra children are added.
 
@@ -115,6 +119,11 @@ change_image_over_time: list[test_data.SpriteData] = [
     test_data.SpriteData(46, 50, "orange-8x8.png"),
     test_data.SpriteData(51, 48, "yellow-8x8.png"),
     test_data.SpriteData(56, 50, "green-8x8.png"),  # Leaf most - drawn last (on top)
+]
+
+# Row 4c
+change_image_and_move_over_time: list[test_data.SpriteData] = [
+    test_data.SpriteData(35, 66, "red-8x8.png"),  # Root most - drawn first (on bottom)
 ]
 
 # Row 5
@@ -198,9 +207,12 @@ change_image_index: int = 0
 def change_image(_: float):
     global change_image_index
     change_image_index += 1
-    images = ["red-8x8.png", "blue-8x8.png"]
+    images = ["red-8x8.png", "yellow-8x8.png", "green-8x8.png", "blue-8x8.png"]
     change_image_index = change_image_index % len(images)
     change_image_over_time[0].sprite.image.name = images[change_image_index]
+
+    change_image_and_move_over_time[0].sprite.image.name = images[change_image_index]
+    change_image_and_move_over_time[0].sprite.x += 6
 
 
 def setup(game: Game):
@@ -245,6 +257,9 @@ def setup(game: Game):
         change_image_over_time[i].sprite.add_child(change_image_over_time[i + 1].sprite)
 
     add_rate_limited_func(game, change_image, rate=2)
+
+    # Row 4c: Moves the object whilst also changing its image over time.
+    test_data.create_sprites(game, change_image_and_move_over_time)
 
     # Row 5: The hierarchy for this set of sprites grows over time,
     add_rate_limited_func(game, add_children, rate=1)

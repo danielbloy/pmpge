@@ -31,6 +31,8 @@ class DrawImage(GraphicsDrawImageTrait):
 
         When used with Sprites, the `centered` parameter should be `True`.
         """
+        GraphicsDrawImageTrait.__init__(self)
+
         # FUTURE: We could extract ImageResource to be passed in.
         image = ImageResource(image)
         image.centered = centered

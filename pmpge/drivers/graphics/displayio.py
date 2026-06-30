@@ -318,6 +318,10 @@ def load_image(image: str) -> tuple[Bitmap, Palette]:
     image_cache[image] = bitmap, palette
 
     # PERFORMANCE: This has a pretty harsh impact on fps, dropping EdgeBadge from 40 to 29 fps
+    # TODO: Make Transparency support for an image optional. Specifically, background graphics and
+    #       tilemaps will have better performance without the support of transparency.
+    # TODO: Tilemaps should have their own background layer - we could potentially support more than
+    #       one background layer to allow for parallax.
     palette.make_transparent(0)
 
     return bitmap, palette

@@ -17,6 +17,8 @@ SCREEN_WIDTH = 160
 SCREEN_HEIGHT = 120
 
 
+# TODO: Move this into test_data.py
+
 def setup(game: Game):
     row_1: list[test_data.SpriteData] = [
         test_data.SpriteData(6, 6, "red-8x8.png"),  # First sibling drawn first (on bottom)
@@ -152,7 +154,7 @@ def setup(game: Game):
         # test_data.SpriteData(116, 92, "blue-8x8.png"),
         # test_data.SpriteData(121, 94, "violet-8x8.png"),  # Leaf most - drawn last (on top)
     ]
-    
+
     game.background_colour = (0, 0, 0)  # Black
 
     test_data.create_sprites(game, row_1, add_to_root=True)

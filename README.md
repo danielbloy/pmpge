@@ -100,6 +100,19 @@ non-default driver requires setting of the following configuration properties:
 For more information on how to implement a driver, see the documentation in
 [drivers](./pmpge/drivers/README.md).
 
+### Note about images
+
+When executing in a CircuitPython environment, transparency can get confusing when
+loading PNG files as the function used to load images (`adafruit_imageload.load()`)
+does not directly load an alpha channel into the bitmaps. Instead, it loads the image
+data into a `Bitmap` and colour indices into a `Palette`. We then pick a specific
+colour from the Palette to be transparent; we always pick the first colour and this
+is often black. If your PNG file has an alpha channel, `adafruit_imageload.load()`
+typically assigns those pixels to the first colour in the palette; this is often Black.
+Therefore, if your sprites have transparent bits where you would not expect them to be
+transparent when executing in a CircuitPython environment, check the colour palette
+you have used.
+
 ## Alternative projects
 
 This project has specific goals of making it easier to write games in Python

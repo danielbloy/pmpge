@@ -523,6 +523,14 @@ class GameObject:
 # mean each layer gets progressively larger than that before. It also means that each
 # level further from the root is drawn on top of all previous layers.
 #
+# NOTE: Strictly speaking, Z-order is a little bit more finessed than the order we visit
+#       GameObjects in the hierarchy. The finesse is dependent on the graphics driver and
+#       how it is implemented. For example, considering a hierarchy that just has images,
+#       the Z-order for GameObjects is actually calculated after game initialisation based
+#       on the hierarchy at that time. Therefore, significantly changing the hierarchy
+#       structure by changing parent can mess up the z-order. This is why there is the
+#       game_object_hierarchy_changed() method to recalculate the hierarchy.
+#
 # A GameObject has the following built-in properties that interact:
 #
 #   * active: This has to be True for the GameObject to be updated or drawn (visible

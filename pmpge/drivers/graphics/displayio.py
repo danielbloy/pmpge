@@ -318,6 +318,10 @@ def load_image(image: str) -> tuple[Bitmap, Palette]:
     image_cache[image] = bitmap, palette
 
     # PERFORMANCE: This has a pretty harsh impact on fps, dropping EdgeBadge from 40 to 29 fps
+    # TODO: Make Transparency support for an image optional. Specifically, background graphics and
+    #       tilemaps will have better performance without the support of transparency.
+    # TODO: Tilemaps should have their own background layer - we could potentially support more than
+    #       one background layer to allow for parallax.
     palette.make_transparent(0)
 
     return bitmap, palette
@@ -327,9 +331,18 @@ class DriverImageResource:
     """
     Implementation specific class to load an image resource. The only mandatory
     method is load(). This class is designed to be combined with `ImageResource`.
+
+    NOTE: Instances of `DriverImageResource` are not intended to be sharable across
+          `GameObject` instances as they may contain `GameObject` specific state
+          required by the graphics driver.
     """
     tile_grid: TileGrid
+    tile_grid_index: int  # Holds the index that the image was added to the object_group
     new_image_loaded: bool  # Set to True when load is called.
+
+    def __init__(self):
+        # Indicate that this is the first time the image has been added but using -1
+        self.tile_grid_index = -1
 
     def load(self, image: str) -> tuple[int, int]:
         """
@@ -358,14 +371,25 @@ class GraphicsDrawImageTrait:
 
     image: DriverImageResource
 
+    def __init__(self):
+        pass
+
     def draw(self, _):
         """
         Draws the image at the specified position, offset from the GameObjects position.
         """
         image = self.image
-        if image.new_image_loaded or force_add_tile_grids:  # TODO: Test if changing the image adjusts z-order
+
+        # Either add a new image to the object_group or replace the existing one.
+        index = image.tile_grid_index
+        if force_add_tile_grids or index < 0:  # Add image
+            image.tile_grid_index = len(object_group)
             object_group.append(image.tile_grid)
-            image.new_image_loaded = False
+
+        elif image.new_image_loaded:  # Replace existing image
+            object_group[index] = image.tile_grid
+
+        image.new_image_loaded = False
 
         tile_grid = image.tile_grid
         tile_grid.hidden = not (self._active and self.visible)
@@ -382,11 +406,8 @@ class GraphicsDrawImageTrait:
 
     def destroyed(self):
         """
-        We hide the TileGrid and then remove it from the object group.
+        We hide the TileGrid but do not remove it from the object group to avoid invalidating
+        all the other index values. To free up memory of destroyed objects, call the function
+        game_object_hierarchy_changed().
         """
-        tile_grid = self.image.tile_grid
-        tile_grid.hidden = True
-
-        # Only remove from object group if it has previously been attached.
-        if not self.image.new_image_loaded:
-            object_group.remove(tile_grid)
+        self.image.tile_grid.hidden = True
